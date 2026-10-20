@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Damiën Zeller · Hart voor Den Haag</title>
+<meta name="description" content="Raadslid Hart voor Den Haag voor stadsdeel Leidschenveen-Ypenburg. Spreekuur, contact en video's.">
+<meta property="og:title" content="Damiën Zeller · Hart voor Den Haag">
+<meta property="og:description" content="Spreekuur, contact en de nieuwste video's.">
+<meta property="og:image" content="foto.jpg">
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+:root{
+  --green:#1E945A; --green-d:#13703F; --yellow:#FFD237; --ink:#15241B;
+  --bg:#F3F6F2; --card:#FFFFFF; --line:#DCE5DE; --muted:#56675C;
+  --display:"Poppins",system-ui,sans-serif; --body:"Source Sans 3",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root{--bg:#0F1712;--card:#17221B;--line:#2B3B31;--ink:#E9F0EB;--muted:#9DB0A3}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.5}
+.top{background:var(--green);color:#fff;padding:40px 16px 72px;text-align:center;position:relative;overflow:hidden}
+.top::after{content:"";position:absolute;inset:auto -10% -60px -10%;height:120px;background:var(--bg);border-radius:50% 50% 0 0}
+.logo{height:44px;width:auto;margin-bottom:22px;filter:brightness(0) invert(1)}
+.foto{width:128px;height:128px;border-radius:50%;object-fit:cover;border:5px solid var(--yellow);display:block;margin:0 auto 14px;background:#fff}
+h1{font-family:var(--display);font-size:1.9rem;line-height:1.15;margin:0}
+.rol{margin:6px 0 0;font-weight:600}
+.rol mark{background:var(--yellow);color:#15241B;padding:1px 8px;border-radius:5px}
+.wijk{margin:8px 0 0;opacity:.9}
+main{max-width:520px;margin:-40px auto 0;padding:0 16px 48px;position:relative;z-index:1;display:grid;gap:14px}
+.intro{margin:0 4px 6px;color:var(--muted);text-align:center}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
+.card h2{font-family:var(--display);font-size:1.05rem;margin:0 0 8px;display:flex;align-items:center;gap:8px}
+.card h2 span{width:28px;height:28px;border-radius:8px;background:var(--yellow);color:#15241B;display:grid;place-items:center;font-size:.95rem}
+.card p{margin:0}
+.volgende{margin-top:10px!important;font-weight:600;color:var(--green)}
+.plek{color:var(--muted);margin-top:4px!important}
+.btn{display:flex;align-items:center;justify-content:space-between;gap:12px;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px 18px;font-weight:600;transition:transform .12s,border-color .12s}
+.btn:hover{transform:translateY(-1px);border-color:var(--green)}
+.btn:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+.btn svg{width:22px;height:22px;flex:none;fill:currentColor}
+.btn .l{display:flex;align-items:center;gap:12px}
+.btn.hoofd{background:var(--green);border-color:var(--green);color:#fff}
+.btn.lid{background:var(--yellow);border-color:var(--yellow);color:#15241B}
+.pijl{opacity:.6}
+.vids{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:4px}
+.vid{display:block;text-decoration:none;color:var(--ink)}
+.vid img{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:10px;background:var(--line);display:block}
+.vid b{display:block;font-size:.82rem;line-height:1.25;margin-top:5px;font-weight:600}
+.vid.zonder{aspect-ratio:9/16;border-radius:10px;background:var(--green);color:#fff;padding:10px;display:flex;align-items:flex-end;font-weight:600;font-size:.85rem}
+footer{text-align:center;color:var(--muted);font-size:.85rem;margin-top:10px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header class="top">
+  <img class="logo" src="logo.png" alt="Hart voor Den Haag">
+  <img class="foto" src="foto.jpg" alt="" width="128" height="128">
+  <h1 id="naam">Damiën Zeller</h1>
+  <p class="rol"><mark id="functie">Raadslid Hart voor Den Haag</mark></p>
+  <p class="wijk" id="stadsdeel">Stadsdeel Leidschenveen-Ypenburg</p>
+</header>
+
+<main>
+  <p class="intro" id="intro"></p>
+
+  <a class="btn hoofd" id="mail" href="mailto:damien.zeller@denhaag.nl">
+    <span class="l"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm9 7.2L4.4 7H19.6zM4 8.7V17h16V8.7l-8 5.4z"/></svg>Stuur mij een bericht</span><span class="pijl">→</span>
+  </a>
+
+  <section class="card" aria-labelledby="sp">
+    <h2 id="sp"><span>☕</span>Spreekuur</h2>
+    <p id="sp-tekst"></p>
+    <p class="volgende" id="sp-volgende" hidden></p>
+    <p class="plek" id="sp-plek" hidden></p>
+  </section>
+
+  <section class="card" id="video-blok" aria-labelledby="vt" hidden>
+    <h2 id="vt"><span>▶</span>Nieuwste video's</h2>
+    <div class="vids" id="vids"></div>
+  </section>
+
+  <div id="socials" style="display:grid;gap:10px"></div>
+
+  <a class="btn lid" id="lid" href="https://hartvoordenhaag.nl">
+    <span class="l"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.5-9.2C1.2 8.6 3.3 5 6.8 5c2 0 3.4 1.1 4.2 2.4C11.8 6.1 13.2 5 15.2 5c3.5 0 5.6 3.6 4.3 6.8C19.5 16.4 12 21 12 21z"/></svg>Word lid van Hart voor Den Haag</span><span class="pijl">→</span>
+  </a>
+
+  <footer>Hart voor Den Haag · gemeenteraad Den Haag</footer>
+</main>
+
+<script>
+const ICONS={
+  tiktok:'<path d="M16.6 3c.4 2.2 1.8 3.7 4 4v3.1c-1.5 0-2.9-.4-4-1.2v6.3A6 6 0 1 1 10.5 9v3.2a2.9 2.9 0 1 0 2.9 2.9V3z"/>',
+  instagram:'<path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm5 3.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9zm0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM17.5 5.3a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4z"/>',
+  facebook:'<path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.8c0-.9.3-1.6 1.6-1.6h1.7V4.4c-.3 0-1.3-.1-2.5-.1-2.5 0-4.1 1.5-4.1 4.2v2.3H7.4V14h2.8v8z"/>',
+  x:'<path d="M17.8 3h3.1l-6.8 7.7L22 21h-6.2l-4.9-6.3L5.3 21H2.2l7.3-8.3L2 3h6.3l4.4 5.8zm-1.1 16.2h1.7L7.4 4.7H5.6z"/>',
+  linkedin:'<path d="M4.5 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM3 9h3v12H3zm6 0h2.9v1.7h.1c.4-.8 1.4-1.7 3-1.7 3.2 0 3.8 2.1 3.8 4.8V21h-3v-6.5c0-1.5 0-3.5-2.1-3.5s-2.5 1.7-2.5 3.4V21H9z"/>'
+};
+const NAMEN={tiktok:"TikTok",instagram:"Instagram",facebook:"Facebook",x:"X",linkedin:"LinkedIn"};
+const zet=(id,t)=>{const e=document.getElementById(id);if(e&&t){e.textContent=t;e.hidden=false}};
+fetch("links.json",{cache:"no-store"}).then(r=>r.json()).then(d=>{
+  zet("naam",d.naam);zet("functie",d.functie);zet("stadsdeel",d.stadsdeel);zet("intro",d.intro);
+  if(d.naam)document.title=d.naam+" · Hart voor Den Haag";
+  const s=d.spreekuur||{};zet("sp-tekst",s.tekst);
+  if(s.volgende)zet("sp-volgende","Volgende: "+s.volgende);
+  zet("sp-plek",s.plek);
+  if(d.mail)document.getElementById("mail").href="mailto:"+d.mail;
+  if(d.lid_worden)document.getElementById("lid").href=d.lid_worden;
+  const box=document.getElementById("socials");
+  Object.entries(d.socials||{}).forEach(([k,u])=>{
+    if(!u)return;
+    const a=document.createElement("a");a.className="btn";a.href=u;a.rel="me noopener";a.target="_blank";
+    a.innerHTML='<span class="l"><svg viewBox="0 0 24 24" aria-hidden="true">'+(ICONS[k]||"")+'</svg></span><span class="pijl">→</span>';
+    a.querySelector(".l").append(document.createTextNode("Volg mij op "+(NAMEN[k]||k)));
+    box.append(a);
+  });
+  const v=(d.videos||[]).filter(x=>x&&x.url).slice(0,6);
+  if(v.length){
+    const g=document.getElementById("vids");
+    v.forEach(x=>{
+      const a=document.createElement("a");a.href=x.url;a.target="_blank";a.rel="noopener";
+      if(x.beeld){a.className="vid";const i=document.createElement("img");i.src=x.beeld;i.alt="";i.loading="lazy";const b=document.createElement("b");b.textContent=x.titel||"";a.append(i,b)}
+      else{a.className="vid zonder";a.textContent=x.titel||"Bekijk video"}
+      g.append(a);
+    });
+    document.getElementById("video-blok").hidden=false;
+  }
+}).catch(()=>{});
+</script>
+</body>
+</html>
