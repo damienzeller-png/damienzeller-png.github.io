@@ -19,7 +19,7 @@ p{margin:0}
 .balk{background:var(--groen);color:#fff}
 .balk .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:64px}
 .merk{display:flex;align-items:center;gap:12px;text-decoration:none;font-family:var(--kop);font-weight:600}
-.merk img{height:30px;width:auto;filter:brightness(0) invert(1)}
+.merk img{height:34px;width:auto}
 nav{display:flex;gap:4px;align-items:center}
 nav a{text-decoration:none;font-weight:600;padding:8px 12px;border-radius:999px;white-space:nowrap}
 nav a:hover{background:rgba(255,255,255,.14)}
