@@ -1,7 +1,9 @@
-# Linkpagina Damiën Zeller
+# Website Damiën Zeller
 
-De link in de bio van TikTok en Instagram. Alles wat erop staat, pas je aan in `links.json`:
-socials invullen, de datum van het volgende spreekuur, en nieuwe video's bovenaan de lijst `videos`
-(per video `titel`, `url` en eventueel `beeld`, een plaatje in deze map).
+Raadslid Hart voor Den Haag, stadsdeel Leidschenveen-Ypenburg. Eén pagina: buurtkiezer met kaart, spreekuur, actueel, meldformulier, video's.
 
-Een lege link verdwijnt vanzelf van de pagina.
+- Basisgegevens (intro, mail, socials, lid worden, adres van het doorgeefluik): `links.json`.
+- Spreekuur, berichten en video's komen uit de Telegram-bot (`/website`) via het doorgeefluik (`/site`); `links.json` is de reserve.
+- Het meldformulier stuurt naar het doorgeefluik (`/melding`): de melding komt in Telegram bij Yasmina, het register krijgt alleen onderwerp en buurt.
+- Buurtgrenzen: `buurten.geojson` (CBS Wijk- en buurtkaart 2024 via PDOK). Ondergrond: BRT-Achtergrondkaart (PDOK).
+- Foto: `portret.jpg`; deelbeeld voor links: `deel.jpg`.

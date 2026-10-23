@@ -3,132 +3,483 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Damiën Zeller · Hart voor Den Haag</title>
-<meta name="description" content="Raadslid Hart voor Den Haag voor stadsdeel Leidschenveen-Ypenburg. Spreekuur, contact en video's.">
-<meta property="og:title" content="Damiën Zeller · Hart voor Den Haag">
-<meta property="og:description" content="Spreekuur, contact en de nieuwste video's.">
-<meta property="og:image" content="foto.jpg">
+<title>Damiën Zeller, raadslid Leidschenveen-Ypenburg</title>
+<meta name="description" content="Damiën Zeller is raadslid voor Hart voor Den Haag in stadsdeel Leidschenveen-Ypenburg. Meld iets in uw buurt, kom naar het spreekuur of lees wat hij doet.">
+<meta property="og:title" content="Damiën Zeller, raadslid Leidschenveen-Ypenburg">
+<meta property="og:description" content="Meld iets in uw buurt, kom naar het spreekuur of lees wat Damiën doet.">
+<meta property="og:image" content="https://damienzeller-png.github.io/deel.jpg">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#1E945A">
 <link rel="icon" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
 :root{
-  --green:#1E945A; --green-d:#13703F; --yellow:#FFD237; --ink:#15241B;
-  --bg:#F3F6F2; --card:#FFFFFF; --line:#DCE5DE; --muted:#56675C;
-  --display:"Poppins",system-ui,sans-serif; --body:"Source Sans 3",system-ui,sans-serif;
+  --groen:#1E945A; --diep:#0E4F31; --geel:#FFD237; --water:#2F6F94;
+  --bg:#F2F6F3; --vlak:#FFFFFF; --ink:#13261C; --zacht:#4E6357; --lijn:#D5E0D8;
+  --kop:"Poppins",system-ui,sans-serif; --tekst:"Source Sans 3",system-ui,sans-serif;
 }
-@media (prefers-color-scheme:dark){:root{--bg:#0F1712;--card:#17221B;--line:#2B3B31;--ink:#E9F0EB;--muted:#9DB0A3}}
+@media (prefers-color-scheme:dark){:root{--bg:#0E1813;--vlak:#15231B;--ink:#E7EFE9;--zacht:#9FB3A6;--lijn:#2A3C31;--diep:#0B3D26}}
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.5}
-.top{background:var(--green);color:#fff;padding:40px 16px 72px;text-align:center;position:relative;overflow:hidden}
-.top::after{content:"";position:absolute;inset:auto -10% -60px -10%;height:120px;background:var(--bg);border-radius:50% 50% 0 0}
-.logo{height:44px;width:auto;margin-bottom:22px;filter:brightness(0) invert(1)}
-.foto{width:128px;height:128px;border-radius:50%;object-fit:cover;border:5px solid var(--yellow);display:block;margin:0 auto 14px;background:#fff}
-h1{font-family:var(--display);font-size:1.9rem;line-height:1.15;margin:0}
-.rol{margin:6px 0 0;font-weight:600}
-.rol mark{background:var(--yellow);color:#15241B;padding:1px 8px;border-radius:5px}
-.wijk{margin:8px 0 0;opacity:.9}
-main{max-width:520px;margin:-40px auto 0;padding:0 16px 48px;position:relative;z-index:1;display:grid;gap:14px}
-.intro{margin:0 4px 6px;color:var(--muted);text-align:center}
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
-.card h2{font-family:var(--display);font-size:1.05rem;margin:0 0 8px;display:flex;align-items:center;gap:8px}
-.card h2 span{width:28px;height:28px;border-radius:8px;background:var(--yellow);color:#15241B;display:grid;place-items:center;font-size:.95rem}
-.card p{margin:0}
-.volgende{margin-top:10px!important;font-weight:600;color:var(--green)}
-.plek{color:var(--muted);margin-top:4px!important}
-.btn{display:flex;align-items:center;justify-content:space-between;gap:12px;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px 18px;font-weight:600;transition:transform .12s,border-color .12s}
-.btn:hover{transform:translateY(-1px);border-color:var(--green)}
-.btn:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
-.btn svg{width:22px;height:22px;flex:none;fill:currentColor}
-.btn .l{display:flex;align-items:center;gap:12px}
-.btn.hoofd{background:var(--green);border-color:var(--green);color:#fff}
-.btn.lid{background:var(--yellow);border-color:var(--yellow);color:#15241B}
-.pijl{opacity:.6}
-.vids{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:4px}
-.vid{display:block;text-decoration:none;color:var(--ink)}
-.vid img{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:10px;background:var(--line);display:block}
-.vid b{display:block;font-size:.82rem;line-height:1.25;margin-top:5px;font-weight:600}
-.vid.zonder{aspect-ratio:9/16;border-radius:10px;background:var(--green);color:#fff;padding:10px;display:flex;align-items:flex-end;font-weight:600;font-size:.85rem}
-footer{text-align:center;color:var(--muted);font-size:.85rem;margin-top:10px}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 18px/1.55 var(--tekst)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--geel);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:var(--kop);line-height:1.15;margin:0}
+h2{font-size:clamp(1.6rem,3.6vw,2.3rem);letter-spacing:-.01em}
+p{margin:0}
+
+/* balk */
+.balk{background:var(--groen);color:#fff}
+.balk .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:64px}
+.merk{display:flex;align-items:center;gap:12px;text-decoration:none;font-family:var(--kop);font-weight:600}
+.merk img{height:30px;width:auto;filter:brightness(0) invert(1)}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+nav a{text-decoration:none;font-weight:600;padding:8px 12px;border-radius:999px}
+nav a:hover{background:rgba(255,255,255,.14)}
+@media (max-width:640px){nav{display:none}}
+
+/* opening */
+.opening{background:var(--groen);color:#fff;padding:28px 0 0}
+.opening .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:end}
+.opening h1{font-size:clamp(2.4rem,6.4vw,4.4rem);letter-spacing:-.02em}
+.opening .rol{font:600 1.15rem/1.4 var(--kop);margin-top:12px;color:var(--geel)}
+.opening .intro{margin-top:18px;max-width:34em;font-size:1.1rem}
+.knoppen{display:flex;gap:12px;flex-wrap:wrap;margin:28px 0 44px}
+.knop{display:inline-block;text-decoration:none;font:600 1rem var(--kop);padding:14px 22px;border-radius:12px;border:2px solid transparent;cursor:pointer}
+.knop.geel{background:var(--geel);color:#13261C}
+.knop.rand{border-color:rgba(255,255,255,.7);color:#fff}
+.knop.groen{background:var(--groen);color:#fff}
+.knop:hover{filter:brightness(1.05)}
+.foto{position:relative;align-self:end;justify-self:end;width:min(100%,380px)}
+.foto::before{content:"";position:absolute;inset:28px -16px 0 28px;background:var(--geel);border-radius:28px 28px 0 0}
+.foto img{position:relative;display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:50% 12%;border-radius:28px 28px 0 0}
+@media (max-width:760px){
+  .opening .wrap{grid-template-columns:1fr;gap:8px}
+  .foto{justify-self:start;width:min(56%,230px);order:-1}
+  .foto img{aspect-ratio:1/1}
+  .wijk{grid-template-columns:1fr}
+  .knoppen{margin-bottom:36px}
+}
+
+section{padding:64px 0}
+.inleiding{color:var(--zacht);margin-top:10px;max-width:40em}
+
+/* buurt */
+.buurt-kies{margin-top:24px;display:grid;gap:14px}
+.wijk{display:grid;grid-template-columns:8em 1fr;gap:8px 12px;align-items:baseline}
+.wijk b{font:600 .95rem var(--kop);color:var(--zacht)}
+.wijk .bs{display:flex;flex-wrap:wrap;gap:8px}
+.wijk button{font:600 .98rem var(--tekst);border:1.5px solid var(--lijn);background:var(--vlak);color:var(--ink);padding:7px 14px;border-radius:999px;cursor:pointer}
+.wijk button:hover{border-color:var(--groen)}
+.wijk button[aria-pressed="true"]{background:var(--diep);border-color:var(--diep);color:#fff}
+.wijk button .n{display:inline-block;margin-left:6px;background:var(--geel);color:#13261C;border-radius:999px;padding:0 7px;font-size:.8rem}
+.buurt-vak{display:grid;grid-template-columns:1.2fr .8fr;gap:0;margin-top:22px;border:1.5px solid var(--lijn);border-radius:20px;overflow:hidden;background:var(--vlak)}
+#kaart{min-height:440px;background:#DCE7E0}
+.buurt-info{padding:24px;display:flex;flex-direction:column;gap:14px}
+.buurt-info h3{font-size:1.5rem}
+.buurt-info .wijknaam{color:var(--zacht);margin-top:-8px}
+.buurt-info ul{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.buurt-info li a{font-weight:600;text-decoration-color:var(--groen);text-underline-offset:3px}
+.buurt-info li small{display:block;color:var(--zacht)}
+.leeg{color:var(--zacht)}
+.lijst li.leeg{display:block}
+@media (max-width:760px){.buurt-vak{grid-template-columns:1fr}#kaart{min-height:320px}}
+.leaflet-container{font-family:var(--tekst)}
+
+/* spreekuur */
+.spreekuur{background:var(--diep);color:#fff}
+.spreekuur .wrap{display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:center}
+.datum{background:var(--geel);color:#13261C;border-radius:20px;padding:18px 26px;text-align:center;min-width:160px}
+.datum .dag{font:700 4rem/1 var(--kop)}
+.datum .maand{font:600 1.2rem var(--kop)}
+.datum .wd{font-size:1rem;margin-top:4px}
+.spreekuur .plek{font-size:1.15rem;margin-top:10px}
+.spreekuur .tekst{opacity:.85;margin-top:8px;max-width:36em}
+.spreekuur .knoppen{margin:22px 0 0}
+@media (max-width:640px){.spreekuur .wrap{grid-template-columns:1fr;gap:20px}.datum{justify-self:start}}
+
+/* actueel */
+.lijst{list-style:none;margin:26px 0 0;padding:0;border-top:1.5px solid var(--lijn)}
+.lijst li{display:grid;grid-template-columns:7.5em 1fr auto;gap:16px;padding:16px 0;border-bottom:1.5px solid var(--lijn);align-items:baseline}
+.lijst time{color:var(--zacht);font-variant-numeric:tabular-nums}
+.lijst a{font:600 1.1rem/1.35 var(--kop);text-decoration:none}
+.lijst a:hover{text-decoration:underline;text-decoration-color:var(--groen)}
+.lijst p{color:var(--zacht);margin-top:4px;font-size:1rem}
+.tag{font-size:.85rem;font-weight:600;color:var(--diep);background:#E3F1E8;border-radius:999px;padding:2px 10px;white-space:nowrap}
+@media (prefers-color-scheme:dark){.tag{background:#1F3A2A;color:#BFE3CC}}
+@media (max-width:640px){.lijst li{grid-template-columns:1fr}.lijst .tag{justify-self:start}}
+
+/* melden */
+.melden .wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:48px}
+form{display:grid;gap:16px}
+label{font-weight:600;display:grid;gap:6px}
+label small{font-weight:400;color:var(--zacht)}
+input,select,textarea{font:400 1rem var(--tekst);color:var(--ink);background:var(--vlak);border:1.5px solid var(--lijn);border-radius:10px;padding:12px 14px;width:100%}
+textarea{min-height:140px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--groen);outline:none;box-shadow:0 0 0 3px rgba(30,148,90,.25)}
+.twee{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.akkoord{display:flex;gap:10px;align-items:flex-start;font-weight:400}
+.akkoord input{width:auto;margin-top:5px}
+.hp{position:absolute;left:-9999px}
+#melding-uitslag{font-weight:600}
+#melding-uitslag.goed{color:var(--groen)}
+#melding-uitslag.fout{color:#B42318}
+@media (prefers-color-scheme:dark){#melding-uitslag.fout{color:#FF8A80}}
+@media (max-width:760px){.melden .wrap{grid-template-columns:1fr;gap:24px}.twee{grid-template-columns:1fr}}
+
+/* video's */
+.vids{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-top:22px}
+.vid{text-decoration:none}
+.vid img{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:14px;display:block;background:var(--lijn)}
+.vid span{display:block;font-weight:600;margin-top:6px;line-height:1.3}
+
+/* volgen */
+.volg .wrap{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.volg a.soc{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-weight:600;padding:12px 18px;border:1.5px solid var(--lijn);border-radius:12px;background:var(--vlak)}
+.volg svg{width:20px;height:20px;fill:currentColor}
+footer{padding:36px 0 48px;color:var(--zacht);font-size:.95rem}
+footer p+p{margin-top:8px}
 [hidden]{display:none!important}
 </style>
 </head>
 <body>
-<header class="top">
-  <img class="logo" src="logo.png" alt="Hart voor Den Haag">
-  <img class="foto" src="foto.jpg" alt="" width="128" height="128">
-  <h1 id="naam">Damiën Zeller</h1>
-  <p class="rol"><mark id="functie">Raadslid Hart voor Den Haag</mark></p>
-  <p class="wijk" id="stadsdeel">Stadsdeel Leidschenveen-Ypenburg</p>
+<header class="balk">
+  <div class="wrap">
+    <a class="merk" href="#top"><img src="logo.png" alt="">Damiën Zeller</a>
+    <nav aria-label="Op deze pagina">
+      <a href="#buurt">Uw buurt</a><a href="#spreekuur">Spreekuur</a><a href="#actueel">Actueel</a><a href="#melden">Melden</a>
+    </nav>
+  </div>
 </header>
 
+<div class="opening" id="top">
+  <div class="wrap">
+    <div>
+      <h1 id="naam">Damiën Zeller</h1>
+      <p class="rol">Raadslid voor Hart voor Den Haag in Leidschenveen-Ypenburg</p>
+      <p class="intro" id="intro">Ik ben uw raadslid voor Leidschenveen-Ypenburg en woordvoerder zorg, ouderen, volksgezondheid, onderwijs en sport. Loop binnen op mijn spreekuur of laat weten wat er speelt in uw buurt.</p>
+      <div class="knoppen">
+        <a class="knop geel" href="#melden">Meld iets in uw buurt</a>
+        <a class="knop rand" href="#spreekuur">Naar het spreekuur</a>
+      </div>
+    </div>
+    <div class="foto"><img src="portret.jpg" alt="Damiën Zeller" width="800" height="800"></div>
+  </div>
+</div>
+
 <main>
-  <p class="intro" id="intro"></p>
+<section id="buurt">
+  <div class="wrap">
+    <h2>Wat speelt er in uw buurt?</h2>
+    <p class="inleiding">Kies uw buurt. U ziet waar Damiën mee bezig is en u kunt meteen iets melden.</p>
+    <div class="buurt-kies" id="buurt-kies"></div>
+    <div class="buurt-vak">
+      <div id="kaart" role="img" aria-label="Kaart van stadsdeel Leidschenveen-Ypenburg"></div>
+      <div class="buurt-info" id="buurt-info" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
 
-  <a class="btn hoofd" id="mail" href="mailto:damien.zeller@denhaag.nl">
-    <span class="l"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm9 7.2L4.4 7H19.6zM4 8.7V17h16V8.7l-8 5.4z"/></svg>Stuur mij een bericht</span><span class="pijl">→</span>
-  </a>
+<section class="spreekuur" id="spreekuur">
+  <div class="wrap">
+    <div class="datum" id="sp-datum" hidden><div class="dag" id="sp-dag"></div><div class="maand" id="sp-maand"></div><div class="wd" id="sp-tijd"></div></div>
+    <div>
+      <h2>Spreekuur</h2>
+      <p class="plek" id="sp-plek"></p>
+      <p class="tekst" id="sp-tekst">Elke maand, afwisselend in Leidschenveen en Ypenburg. Gewoon binnenlopen, geen afspraak nodig.</p>
+      <div class="knoppen">
+        <button class="knop geel" id="sp-agenda" type="button" hidden>Zet in mijn agenda</button>
+        <a class="knop rand" id="sp-route" target="_blank" rel="noopener" hidden>Route</a>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <section class="card" aria-labelledby="sp">
-    <h2 id="sp"><span>☕</span>Spreekuur</h2>
-    <p id="sp-tekst"></p>
-    <p class="volgende" id="sp-volgende" hidden></p>
-    <p class="plek" id="sp-plek" hidden></p>
-  </section>
+<section id="actueel">
+  <div class="wrap">
+    <h2>Actueel</h2>
+    <p class="inleiding">Wat Damiën de afgelopen tijd in de raad en in het stadsdeel deed.</p>
+    <ul class="lijst" id="berichten"></ul>
+  </div>
+</section>
 
-  <section class="card" id="video-blok" aria-labelledby="vt" hidden>
-    <h2 id="vt"><span>▶</span>Nieuwste video's</h2>
+<section class="melden" id="melden">
+  <div class="wrap">
+    <div>
+      <h2>Meld iets</h2>
+      <p class="inleiding">Een losse stoeptegel, overlast, een vraag over zorg of school, of een goed idee voor de buurt. Damiën leest elke melding zelf. Wilt u antwoord, laat dan uw e-mailadres achter.</p>
+      <p class="inleiding">Liever mailen? <a id="mail-link" href="mailto:damien.zeller@denhaag.nl">damien.zeller@denhaag.nl</a></p>
+    </div>
+    <form id="meld-form" novalidate>
+      <label>Buurt
+        <select name="buurt" id="f-buurt"><option value="">Kies uw buurt (niet verplicht)</option></select>
+      </label>
+      <label>Onderwerp
+        <input name="onderwerp" required maxlength="120" placeholder="Bijvoorbeeld: kapotte lantaarnpaal bij het speelveld">
+      </label>
+      <label>Uw bericht
+        <textarea name="bericht" required maxlength="2000" placeholder="Wat is er aan de hand, en waar precies?"></textarea>
+      </label>
+      <div class="twee">
+        <label>Naam <small>niet verplicht</small><input name="naam" maxlength="80" autocomplete="name"></label>
+        <label>E-mailadres <small>als u antwoord wilt</small><input name="email" type="email" maxlength="120" autocomplete="email"></label>
+      </div>
+      <label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
+      <label class="akkoord"><input type="checkbox" name="toestemming" required>
+        <span>Damiën en zijn team mogen mijn melding lezen en mijn gegevens gebruiken om te antwoorden. Mijn naam en e-mailadres komen niet in lijsten en worden niet gedeeld.</span></label>
+      <div><button class="knop groen" type="submit">Melding versturen</button></div>
+      <p id="melding-uitslag" role="status"></p>
+    </form>
+  </div>
+</section>
+
+<section id="videos" hidden>
+  <div class="wrap">
+    <h2>Video's</h2>
     <div class="vids" id="vids"></div>
-  </section>
+  </div>
+</section>
 
-  <div id="socials" style="display:grid;gap:10px"></div>
-
-  <a class="btn lid" id="lid" href="https://hartvoordenhaag.nl">
-    <span class="l"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.5-9.2C1.2 8.6 3.3 5 6.8 5c2 0 3.4 1.1 4.2 2.4C11.8 6.1 13.2 5 15.2 5c3.5 0 5.6 3.6 4.3 6.8C19.5 16.4 12 21 12 21z"/></svg>Word lid van Hart voor Den Haag</span><span class="pijl">→</span>
-  </a>
-
-  <footer>Hart voor Den Haag · gemeenteraad Den Haag</footer>
+<section class="volg">
+  <div class="wrap" id="socials">
+    <a class="knop groen" id="lid" href="https://www.hartvoordenhaag.nl/ik-word-lid/">Word lid van Hart voor Den Haag</a>
+  </div>
+</section>
 </main>
 
+<footer>
+  <div class="wrap">
+    <p>Damiën Zeller, raadslid voor Hart voor Den Haag in de gemeenteraad van Den Haag.</p>
+    <p>Privacy: wat u via het formulier stuurt, komt rechtstreeks bij Damiën en zijn team binnen. Uw naam en e-mailadres gebruiken we alleen om u te antwoorden; ze komen niet in lijsten en worden niet gedeeld. Wilt u dat we uw bericht verwijderen, mail dan naar Damiën.</p>
+    <p>Buurtgrenzen: CBS Wijk- en buurtkaart 2024. Kaart: BRT-Achtergrondkaart van het Kadaster via PDOK.</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
-const ICONS={
-  tiktok:'<path d="M16.6 3c.4 2.2 1.8 3.7 4 4v3.1c-1.5 0-2.9-.4-4-1.2v6.3A6 6 0 1 1 10.5 9v3.2a2.9 2.9 0 1 0 2.9 2.9V3z"/>',
-  instagram:'<path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm5 3.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9zm0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM17.5 5.3a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4z"/>',
-  facebook:'<path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.8c0-.9.3-1.6 1.6-1.6h1.7V4.4c-.3 0-1.3-.1-2.5-.1-2.5 0-4.1 1.5-4.1 4.2v2.3H7.4V14h2.8v8z"/>',
-  x:'<path d="M17.8 3h3.1l-6.8 7.7L22 21h-6.2l-4.9-6.3L5.3 21H2.2l7.3-8.3L2 3h6.3l4.4 5.8zm-1.1 16.2h1.7L7.4 4.7H5.6z"/>',
-  linkedin:'<path d="M4.5 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM3 9h3v12H3zm6 0h2.9v1.7h.1c.4-.8 1.4-1.7 3-1.7 3.2 0 3.8 2.1 3.8 4.8V21h-3v-6.5c0-1.5 0-3.5-2.1-3.5s-2.5 1.7-2.5 3.4V21H9z"/>'
+(() => {
+const WIJKEN = {
+  "Ypenburg": ["Bosweide", "De Bras", "De Venen", "Morgenweide", "Singels", "Tedingerbroek", "Waterbuurt"],
+  "Hoornwijck": ["De Rivieren", "Vlietzoom-Oost"],
+  "Leidschenveen": ["De Lanen", "De Velden", "De Vissen", "Rietbuurt"]
 };
-const NAMEN={tiktok:"TikTok",instagram:"Instagram",facebook:"Facebook",x:"X",linkedin:"LinkedIn"};
-const zet=(id,t)=>{const e=document.getElementById(id);if(e&&t){e.textContent=t;e.hidden=false}};
-fetch("links.json",{cache:"no-store"}).then(r=>r.json()).then(d=>{
-  zet("naam",d.naam);zet("functie",d.functie);zet("stadsdeel",d.stadsdeel);zet("intro",d.intro);
-  if(d.naam)document.title=d.naam+" · Hart voor Den Haag";
-  const s=d.spreekuur||{};zet("sp-tekst",s.tekst);
-  if(s.volgende)zet("sp-volgende","Volgende: "+s.volgende);
-  zet("sp-plek",s.plek);
-  if(d.mail)document.getElementById("mail").href="mailto:"+d.mail;
-  if(d.lid_worden)document.getElementById("lid").href=d.lid_worden;
-  const box=document.getElementById("socials");
-  Object.entries(d.socials||{}).forEach(([k,u])=>{
-    if(!u)return;
-    const a=document.createElement("a");a.className="btn";a.href=u;a.rel="me noopener";a.target="_blank";
-    a.innerHTML='<span class="l"><svg viewBox="0 0 24 24" aria-hidden="true">'+(ICONS[k]||"")+'</svg></span><span class="pijl">→</span>';
-    a.querySelector(".l").append(document.createTextNode("Volg mij op "+(NAMEN[k]||k)));
-    box.append(a);
-  });
-  const v=(d.videos||[]).filter(x=>x&&x.url).slice(0,6);
-  if(v.length){
-    const g=document.getElementById("vids");
-    v.forEach(x=>{
-      const a=document.createElement("a");a.href=x.url;a.target="_blank";a.rel="noopener";
-      if(x.beeld){a.className="vid";const i=document.createElement("img");i.src=x.beeld;i.alt="";i.loading="lazy";const b=document.createElement("b");b.textContent=x.titel||"";a.append(i,b)}
-      else{a.className="vid zonder";a.textContent=x.titel||"Bekijk video"}
-      g.append(a);
-    });
-    document.getElementById("video-blok").hidden=false;
+const MAANDEN = ["jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"];
+const DAGEN = ["zondag","maandag","dinsdag","woensdag","donderdag","vrijdag","zaterdag"];
+let API = "https://telegram-doorgeefluik.damienzeller.workers.dev";
+let data = { berichten: [], spreekuur: {}, videos: [] };
+let gekozen = null, kaart = null, laag = null;
+const el = (t, cls, txt) => { const e = document.createElement(t); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
+const wijkVan = b => Object.keys(WIJKEN).find(w => WIJKEN[w].includes(b)) || (WIJKEN[b] ? b : "");
+const hoort = (bericht, buurt) => bericht.buurt && (bericht.buurt === buurt || bericht.buurt === wijkVan(buurt));
+const datumNL = iso => { const d = new Date(iso); return isNaN(d) ? "" : `${d.getDate()} ${MAANDEN[d.getMonth()]} ${d.getFullYear()}`; };
+
+function knoppenBuurt() {
+  const box = document.getElementById("buurt-kies"); box.textContent = "";
+  for (const [wijk, buurten] of Object.entries(WIJKEN)) {
+    const rij = el("div", "wijk"), bs = el("div", "bs"); rij.append(el("b", null, wijk), bs);
+    for (const b of buurten) {
+      const k = el("button", null, b); k.type = "button"; k.setAttribute("aria-pressed", String(gekozen === b));
+      const n = data.berichten.filter(x => hoort(x, b)).length;
+      if (n) { const s = el("span", "n", String(n)); s.setAttribute("aria-label", n + " berichten"); k.append(s); }
+      k.addEventListener("click", () => kies(gekozen === b ? null : b));
+      bs.append(k);
+    }
+    box.append(rij);
   }
-}).catch(()=>{});
+}
+
+function infoBuurt() {
+  const box = document.getElementById("buurt-info"); box.textContent = "";
+  if (!gekozen) {
+    const tot = laag ? laag.getLayers().reduce((s, l) => s + (l.feature.properties.inwoners || 0), 0) : 0;
+    box.append(el("h3", null, "Leidschenveen-Ypenburg"),
+      el("p", null, (tot ? `Ongeveer ${(Math.round(tot / 1000) * 1000).toLocaleString("nl-NL")} inwoners in ` : "") +
+        "dertien buurten, van Bosweide tot Rietbuurt. Kies een buurt op de kaart of hierboven."));
+    const alg = data.berichten.filter(x => !x.buurt).slice(0, 3);
+    if (alg.length) { box.append(el("p", "wijknaam", "Voor het hele stadsdeel")); box.append(lijstje(alg)); }
+    return;
+  }
+  const f = laag && laag.getLayers().find(l => l.feature.properties.buurt === gekozen);
+  const inw = f && f.feature.properties.inwoners;
+  box.append(el("h3", null, gekozen), el("p", "wijknaam", wijkVan(gekozen) + (inw ? `, ongeveer ${inw.toLocaleString("nl-NL")} inwoners` : "")));
+  const hier = data.berichten.filter(x => hoort(x, gekozen));
+  if (hier.length) box.append(lijstje(hier.slice(0, 5)));
+  else box.append(el("p", "leeg", "Nog niets gepubliceerd over deze buurt. Speelt er iets? Laat het weten."));
+  const sp = data.spreekuur || {};
+  if (sp.buurt && (sp.buurt === gekozen || sp.buurt === wijkVan(gekozen)) && sp.start) box.append(el("p", null, "Het volgende spreekuur is hier: " + datumNL(sp.start) + "."));
+  const m = el("a", "knop groen", "Meld iets in " + gekozen); m.href = "#melden";
+  m.addEventListener("click", () => { document.getElementById("f-buurt").value = gekozen; });
+  box.append(m);
+}
+
+function lijstje(items) {
+  const ul = el("ul");
+  for (const x of items) {
+    const li = el("li"), a = el(x.link ? "a" : "span", null, x.titel);
+    if (x.link) { a.href = x.link; a.target = "_blank"; a.rel = "noopener"; }
+    li.append(a, el("small", null, datumNL(x.datum))); ul.append(li);
+  }
+  return ul;
+}
+
+function stijl(f) {
+  const b = f.properties.buurt, n = data.berichten.filter(x => hoort(x, b)).length, actief = b === gekozen;
+  return { color: actief ? "#FFD237" : "#0E4F31", weight: actief ? 4 : 1.5, fillColor: "#1E945A",
+           fillOpacity: actief ? .55 : (n ? .38 : .16) };
+}
+
+function kies(b) {
+  gekozen = b; knoppenBuurt(); infoBuurt();
+  if (laag) {
+    laag.setStyle(stijl);
+    const l = b && laag.getLayers().find(x => x.feature.properties.buurt === b);
+    if (l) { l.bringToFront(); kaart.flyToBounds(l.getBounds(), { padding: [30, 30], maxZoom: 15, duration: .6 }); }
+    else kaart.flyToBounds(laag.getBounds(), { padding: [10, 10], duration: .6 });
+  }
+}
+
+function maakKaart() {
+  if (!window.L) return;
+  kaart = L.map("kaart", { scrollWheelZoom: false, attributionControl: true }).setView([52.06, 4.38], 13);
+  L.tileLayer("https://service.pdok.nl/brt/achtergrondkaart/wmts/v2_0/grijs/EPSG:3857/{z}/{x}/{y}.png", {
+    maxZoom: 19, attribution: 'Kaart: <a href="https://www.pdok.nl">PDOK</a> BRT-Achtergrondkaart, Kadaster'
+  }).addTo(kaart);
+  fetch("buurten.geojson").then(r => r.json()).then(g => {
+    laag = L.geoJSON(g, { style: stijl, onEachFeature: (f, l) => {
+      l.bindTooltip(f.properties.buurt, { sticky: true });
+      l.on("click", () => kies(f.properties.buurt));
+    } }).addTo(kaart);
+    kaart.fitBounds(laag.getBounds(), { padding: [10, 10] });
+    infoBuurt();
+  }).catch(() => {});
+}
+
+function spreekuur() {
+  const sp = data.spreekuur || {};
+  if (sp.tekst) document.getElementById("sp-tekst").textContent = sp.tekst;
+  if (sp.plek) {
+    document.getElementById("sp-plek").textContent = sp.plek;
+    const r = document.getElementById("sp-route"); r.href = "https://www.openstreetmap.org/search?query=" + encodeURIComponent(sp.plek + ", Den Haag"); r.hidden = false;
+  }
+  const d = sp.start ? new Date(sp.start) : null;
+  if (d && !isNaN(d) && d > new Date(Date.now() - 3 * 3600e3)) {
+    document.getElementById("sp-dag").textContent = d.getDate();
+    document.getElementById("sp-maand").textContent = MAANDEN[d.getMonth()];
+    document.getElementById("sp-tijd").textContent = DAGEN[d.getDay()] + " " + d.toTimeString().slice(0, 5);
+    document.getElementById("sp-datum").hidden = false;
+    const k = document.getElementById("sp-agenda"); k.hidden = false;
+    k.onclick = () => {
+      const e = sp.eind ? new Date(sp.eind) : new Date(d.getTime() + 90 * 60e3);
+      const f = x => x.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+      const ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Damien Zeller//Spreekuur//NL", "BEGIN:VEVENT",
+        "UID:spreekuur-" + f(d) + "@damienzeller", "DTSTAMP:" + f(new Date()), "DTSTART:" + f(d), "DTEND:" + f(e),
+        "SUMMARY:Spreekuur Damiën Zeller (Hart voor Den Haag)", "LOCATION:" + (sp.plek || "").replace(/,/g, "\\,"),
+        "END:VEVENT", "END:VCALENDAR"].join("\r\n");
+      const a = el("a"); a.href = URL.createObjectURL(new Blob([ics], { type: "text/calendar" })); a.download = "spreekuur.ics"; a.click();
+    };
+  } else if (sp.volgende) {
+    document.getElementById("sp-plek").textContent = "Volgende: " + sp.volgende + (sp.plek ? ", " + sp.plek : "");
+  }
+}
+
+function berichten() {
+  const ul = document.getElementById("berichten"); ul.textContent = "";
+  const lijst = [...data.berichten].sort((a, b) => (b.datum || "").localeCompare(a.datum || "")).slice(0, 12);
+  if (!lijst.length) { ul.append(el("li", "leeg", "Binnenkort staan hier de nieuwste berichten.")); return; }
+  for (const x of lijst) {
+    const li = el("li"), t = el("time", null, datumNL(x.datum)); t.dateTime = x.datum || "";
+    const midden = el("div"), a = el(x.link ? "a" : "span", null, x.titel);
+    if (x.link) { a.href = x.link; a.target = "_blank"; a.rel = "noopener"; }
+    midden.append(a); if (x.tekst) midden.append(el("p", null, x.tekst));
+    li.append(t, midden, x.buurt ? el("span", "tag", x.buurt) : el("span"));
+    ul.append(li);
+  }
+}
+
+function videos() {
+  const v = (data.videos || []).filter(x => x && x.url).slice(0, 8);
+  if (!v.length) return;
+  const g = document.getElementById("vids");
+  for (const x of v) {
+    const a = el("a", "vid"); a.href = x.url; a.target = "_blank"; a.rel = "noopener";
+    if (x.beeld) { const i = el("img"); i.src = x.beeld; i.alt = ""; i.loading = "lazy"; a.append(i); }
+    a.append(el("span", null, x.titel || "Bekijk de video")); g.append(a);
+  }
+  document.getElementById("videos").hidden = false;
+}
+
+const ICONS = {
+  tiktok: '<path d="M16.6 3c.4 2.2 1.8 3.7 4 4v3.1c-1.5 0-2.9-.4-4-1.2v6.3A6 6 0 1 1 10.5 9v3.2a2.9 2.9 0 1 0 2.9 2.9V3z"/>',
+  instagram: '<path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm5 3.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9zm0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM17.5 5.3a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4z"/>',
+  facebook: '<path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.8c0-.9.3-1.6 1.6-1.6h1.7V4.4c-.3 0-1.3-.1-2.5-.1-2.5 0-4.1 1.5-4.1 4.2v2.3H7.4V14h2.8v8z"/>',
+  x: '<path d="M17.8 3h3.1l-6.8 7.7L22 21h-6.2l-4.9-6.3L5.3 21H2.2l7.3-8.3L2 3h6.3l4.4 5.8zm-1.1 16.2h1.7L7.4 4.7H5.6z"/>',
+  linkedin: '<path d="M4.5 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4zM3 9h3v12H3zm6 0h2.9v1.7h.1c.4-.8 1.4-1.7 3-1.7 3.2 0 3.8 2.1 3.8 4.8V21h-3v-6.5c0-1.5 0-3.5-2.1-3.5s-2.5 1.7-2.5 3.4V21H9z"/>'
+};
+const NAMEN = { tiktok: "TikTok", instagram: "Instagram", facebook: "Facebook", x: "X", linkedin: "LinkedIn" };
+
+function basis(d) {
+  if (d.api) API = d.api;
+  if (d.intro) document.getElementById("intro").textContent = d.intro;
+  if (d.mail) { const m = document.getElementById("mail-link"); m.href = "mailto:" + d.mail; m.textContent = d.mail; }
+  if (d.lid_worden) document.getElementById("lid").href = d.lid_worden;
+  const box = document.getElementById("socials");
+  for (const [k, u] of Object.entries(d.socials || {})) {
+    if (!u) continue;
+    const a = el("a", "soc"); a.href = u; a.rel = "me noopener"; a.target = "_blank";
+    a.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">' + (ICONS[k] || "") + "</svg>";
+    a.append(document.createTextNode(NAMEN[k] || k)); box.append(a);
+  }
+  data.spreekuur = Object.assign({}, d.spreekuur || {});
+}
+
+function formulier() {
+  const sel = document.getElementById("f-buurt");
+  for (const [w, bs] of Object.entries(WIJKEN)) {
+    const g = el("optgroup"); g.label = w;
+    for (const b of bs) { const o = el("option", null, b); o.value = b; g.append(o); }
+    sel.append(g);
+  }
+  const start = Date.now(), f = document.getElementById("meld-form"), uit = document.getElementById("melding-uitslag");
+  f.addEventListener("submit", async e => {
+    e.preventDefault();
+    const v = Object.fromEntries(new FormData(f).entries());
+    v.toestemming = f.toestemming.checked; v.duur = Date.now() - start;
+    uit.className = ""; uit.textContent = "";
+    if (!v.onderwerp || (v.bericht || "").length < 10) { uit.className = "fout"; uit.textContent = "Vul een onderwerp en uw bericht in (minstens tien tekens)."; return; }
+    if (!v.toestemming) { uit.className = "fout"; uit.textContent = "Vink de toestemming aan, dan kan Damiën uw melding lezen."; return; }
+    const knop = f.querySelector("button[type=submit]"); knop.disabled = true; knop.textContent = "Bezig met versturen";
+    try {
+      const r = await fetch(API + "/melding", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(v) });
+      const j = await r.json().catch(() => ({}));
+      if (r.ok && j.ok) {
+        f.reset(); uit.className = "goed";
+        uit.textContent = "Uw melding is verstuurd. Damiën leest hem zelf" + (v.email ? " en antwoordt per mail." : ".");
+      } else { uit.className = "fout"; uit.textContent = j.fout || "Versturen lukte niet. Probeer het later nog eens of mail Damiën direct."; }
+    } catch { uit.className = "fout"; uit.textContent = "Versturen lukte niet. Controleer uw verbinding of mail Damiën direct."; }
+    knop.disabled = false; knop.textContent = "Melding versturen";
+  });
+}
+
+formulier();
+fetch("links.json", { cache: "no-cache" }).then(r => r.json()).catch(() => ({})).then(d => {
+  basis(d || {});
+  return fetch(API + "/site").then(r => r.json()).catch(() => ({}));
+}).then(s => {
+  if (s && typeof s === "object") {
+    if (Array.isArray(s.berichten)) data.berichten = s.berichten;
+    if (Array.isArray(s.videos)) data.videos = s.videos;
+    if (s.spreekuur && (s.spreekuur.start || s.spreekuur.plek)) data.spreekuur = Object.assign({}, data.spreekuur, s.spreekuur);
+  }
+  knoppenBuurt(); infoBuurt(); spreekuur(); berichten(); videos();
+  if (laag) laag.setStyle(stijl);
+});
+knoppenBuurt(); maakKaart();
+})();
 </script>
 </body>
 </html>

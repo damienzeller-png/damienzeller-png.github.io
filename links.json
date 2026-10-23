@@ -1,9 +1,9 @@
 {
-  "_uitleg": "Pas hier alles aan. Laat een link leeg (\"\") en hij verdwijnt van de pagina. Video's: nieuwste bovenaan, maximaal 6 worden getoond.",
+  "_uitleg": "Basisgegevens van de site. Spreekuur, berichten en video's komen uit de Telegram-bot (/website) via het doorgeefluik; wat hier staat is de reserve.",
   "naam": "Damiën Zeller",
   "functie": "Raadslid Hart voor Den Haag",
   "stadsdeel": "Stadsdeel Leidschenveen-Ypenburg",
-  "intro": "Ik ben uw raadslid voor Leidschenveen-Ypenburg en woordvoerder zorg, ouderen, volksgezondheid, onderwijs en sport. Loop binnen op mijn spreekuur of stuur me een bericht.",
+  "intro": "Ik ben uw raadslid voor Leidschenveen-Ypenburg en woordvoerder zorg, ouderen, volksgezondheid, onderwijs en sport. Loop binnen op mijn spreekuur of laat weten wat er speelt in uw buurt.",
   "spreekuur": {
     "tekst": "Elke maand, afwisselend in Leidschenveen en Ypenburg. Gewoon binnenlopen, geen afspraak nodig.",
     "volgende": "dinsdag 10 november, 19:00",
@@ -18,5 +18,6 @@
     "linkedin": ""
   },
   "lid_worden": "https://www.hartvoordenhaag.nl/ik-word-lid/",
-  "videos": []
+  "videos": [],
+  "api": "https://telegram-doorgeefluik.damienzeller.workers.dev"
 }
