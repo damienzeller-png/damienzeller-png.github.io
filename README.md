@@ -1,5 +1,7 @@
 # Website Damiën Zeller
 
+Adres: https://damienzeller.nl (domein bij Hostnet, DNS naar GitHub Pages; bestand CNAME).
+
 Raadslid Hart voor Den Haag, stadsdeel Leidschenveen-Ypenburg. Eén pagina: buurtkiezer met kaart, spreekuur, actueel, meldformulier, video's.
 
 - Basisgegevens (intro, mail, socials, lid worden, adres van het doorgeefluik): `links.json`.
