@@ -19,5 +19,9 @@
   },
   "lid_worden": "https://www.hartvoordenhaag.nl/ik-word-lid/",
   "videos": [],
-  "api": "https://telegram-doorgeefluik.damienzeller.workers.dev"
+  "api": "https://telegram-doorgeefluik.damienzeller.workers.dev",
+  "nieuws_verbergen": [
+    "hvdh-105756"
+  ],
+  "_uitleg_nieuws": "nieuws.json wordt elke ochtend opnieuw gemaakt uit hartvoordenhaag.nl (tools/nieuws.py). Zet een id in nieuws_verbergen om een bericht van de site te halen."
 }

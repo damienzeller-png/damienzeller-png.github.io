@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nieuws van Damiën Zeller, raadslid Hart voor Den Haag</title>
+<meta name="description" content="Alle nieuwsberichten van Hart voor Den Haag waarin raadslid Damiën Zeller voorkomt, van 2016 tot nu.">
+<meta property="og:title" content="Nieuws van Damiën Zeller">
+<meta property="og:description" content="Alle nieuwsberichten van Hart voor Den Haag met raadslid Damiën Zeller.">
+<meta property="og:image" content="https://damienzeller-png.github.io/deel.jpg">
+<meta name="theme-color" content="#1E945A">
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap">
+<link rel="stylesheet" href="stijl.css">
+</head>
+<body>
+<header class="balk">
+  <div class="wrap">
+    <a class="merk" href="./"><img src="logo.png" alt=""><span>Damiën Zeller</span></a>
+    <nav aria-label="Menu">
+      <a class="ver" href="./#buurt">Uw buurt</a><a class="ver" href="./#spreekuur">Spreekuur</a><a href="./#melden">Melden</a><a class="nieuws" href="nieuws.html" aria-current="page">Nieuws</a>
+    </nav>
+  </div>
+</header>
+
+<div class="pagina-kop">
+  <div class="wrap">
+    <h1>Nieuws</h1>
+    <p>Alle berichten van Hart voor Den Haag waarin Damiën voorkomt: uit de raad, uit het stadsdeel en van daarvoor.</p>
+  </div>
+</div>
+
+<main>
+<section style="padding-top:8px">
+  <div class="wrap">
+    <div class="filters">
+      <label>Zoeken
+        <input type="search" id="zoek" placeholder="Bijvoorbeeld: parkeren, school, Ypenburg" autocomplete="off">
+      </label>
+      <div class="chips" id="onderwerpen" role="group" aria-label="Onderwerp"></div>
+    </div>
+    <p class="teller" id="teller" role="status"></p>
+    <div id="lijst"></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Damiën Zeller, raadslid voor Hart voor Den Haag in de gemeenteraad van Den Haag.</p>
+    <p>Bron: hartvoordenhaag.nl. De berichten openen op de site van de partij.</p>
+  </div>
+</footer>
+
+<script>
+(() => {
+const MAANDEN = ["jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"];
+const el = (t, cls, txt) => { const e = document.createElement(t); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
+const datumNL = iso => { const d = new Date(iso); return isNaN(d) ? "" : `${d.getDate()} ${MAANDEN[d.getMonth()]}`; };
+let alles = [], onderwerp = "", zoek = "";
+
+function item(x) {
+  const li = el("li"), fig = el("a", "beeld");
+  fig.href = x.link; fig.target = "_blank"; fig.rel = "noopener"; fig.tabIndex = -1; fig.setAttribute("aria-hidden", "true");
+  if (x.beeld) { const i = el("img"); i.src = x.beeld; i.alt = ""; i.loading = "lazy"; fig.append(i); } else fig.classList.add("leeg-beeld");
+  const midden = el("div"), kop = el("div", "kop-regel"), t = el("time", null, datumNL(x.datum)); t.dateTime = x.datum;
+  kop.append(t);
+  if (x.buurt) kop.append(el("span", "tag", x.buurt));
+  if (x.onderwerp) kop.append(el("span", "tag", x.onderwerp));
+  const a = el("a", null, x.titel); a.href = x.link; a.target = "_blank"; a.rel = "noopener";
+  midden.append(kop, a);
+  if (x.tekst) midden.append(el("p", null, x.tekst.length > 220 ? x.tekst.slice(0, 217).trim() + "…" : x.tekst));
+  li.append(fig, midden);
+  return li;
+}
+
+function toon() {
+  const box = document.getElementById("lijst"); box.textContent = "";
+  const woorden = zoek.toLowerCase().split(/\s+/).filter(Boolean);
+  const lijst = alles.filter(x => (!onderwerp || x.onderwerp === onderwerp) &&
+    woorden.every(w => (x.titel + " " + x.tekst + " " + (x.buurt || "")).toLowerCase().includes(w)));
+  document.getElementById("teller").textContent = lijst.length === alles.length ? `${alles.length} berichten` :
+    `${lijst.length} van ${alles.length} berichten`;
+  if (!lijst.length) { box.append(el("p", "leeg", "Niets gevonden. Probeer een ander woord of kies Alle onderwerpen.")); return; }
+  let jaar = "", ul = null;
+  for (const x of lijst) {
+    const j = (x.datum || "").slice(0, 4);
+    if (j !== jaar) { jaar = j; box.append(el("h2", "jaar", j)); ul = el("ul", "lijst met-beeld"); box.append(ul); }
+    ul.append(item(x));
+  }
+}
+
+function chips() {
+  const box = document.getElementById("onderwerpen");
+  const namen = [...new Set(alles.map(x => x.onderwerp).filter(Boolean))].sort();
+  for (const n of ["", ...namen]) {
+    const b = el("button", null, n || "Alle onderwerpen"); b.type = "button"; b.setAttribute("aria-pressed", String(n === onderwerp));
+    b.addEventListener("click", () => { onderwerp = n; box.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); toon(); });
+    box.append(b);
+  }
+}
+
+let wacht = null;
+document.getElementById("zoek").addEventListener("input", e => { clearTimeout(wacht); wacht = setTimeout(() => { zoek = e.target.value; toon(); }, 150); });
+const q = new URLSearchParams(location.search).get("q");
+if (q) { document.getElementById("zoek").value = q; zoek = q; }
+
+fetch("nieuws.json", { cache: "no-cache" }).then(r => r.json()).then(d => {
+  alles = (d.berichten || []).sort((a, b) => (b.datum || "").localeCompare(a.datum || ""));
+  chips(); toon();
+}).catch(() => { document.getElementById("teller").textContent = "Het nieuws kon niet worden geladen. Probeer het later nog eens."; });
+})();
+</script>
+</body>
+</html>
