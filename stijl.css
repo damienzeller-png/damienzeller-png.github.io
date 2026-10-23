@@ -291,3 +291,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--hart);outline:none;bo
 .lijst p{color:var(--zacht);margin-top:6px;font-size:1rem;max-width:46em}
 .lijst li.leeg{display:block}
 @media (max-width:640px){.lijst li{grid-template-columns:92px 1fr;gap:14px}.lijst .beeld{width:92px;aspect-ratio:1}.lijst p{display:none}}
+
+/* privacy en voorwaarden */
+.tekstpagina .wrap{max-width:760px}
+.tekstpagina h2{font-size:clamp(1.7rem,3.4vw,2.2rem);margin:40px 0 10px}
+.tekstpagina p+p{margin-top:12px}
+.tekstpagina a{color:var(--hart);font-weight:700}
+footer a{color:#fff}
