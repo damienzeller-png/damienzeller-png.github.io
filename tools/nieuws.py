@@ -2,7 +2,7 @@
 """Haalt alle berichten van hartvoordenhaag.nl op waarin Damiën Zeller voorkomt en schrijft nieuws.json voor de site.
 
 Bron: de openbare WordPress-API van hartvoordenhaag.nl (zoekterm "Zeller"). Draait elke dag via
-.github/workflows/nieuws.yml. Berichten met Richard de Mos of Groep de Mos in de titel blijven weg; zinnen met zijn naam gaan uit de samenvatting (vaste regel).
+.github/workflows/nieuws.yml. Een bericht verbergen: zet zijn id in nieuws_verbergen in links.json.
 Per bericht: datum, titel, korte samenvatting, link, afbeelding, buurt of wijk (als die genoemd wordt) en onderwerp.
 """
 import html
@@ -21,9 +21,6 @@ ONDERWERPEN = [
     ("Verkeer en parkeren", r"parkeer|parkeren|verkeer|tram|bus|htm|randstadrail|openbaar vervoer|p\+r|fiets"),
     ("Wonen en buurt", r"woning|wonen|bouw|park bloom|speeltuin|groen|winkelcentrum|overlast|spreekuur"),
 ]
-
-
-MOS = re.compile(r"(?i)\b(de\s+mos|groep\s+de\s+mos)\b")
 
 
 def haal(url):
@@ -64,11 +61,7 @@ def main():
         if f"hvdh-{p['id']}" in verbergen:
             continue
         titel = schoon(p["title"]["rendered"])
-        if MOS.search(titel):
-            weg += 1
-            continue
-        zinnen = re.split(r"(?<=[.!?…])\s+", schoon(p["excerpt"]["rendered"]))
-        samenvatting = " ".join(z for z in zinnen if not MOS.search(z)).strip()
+        samenvatting = schoon(p["excerpt"]["rendered"])
         beeld = ""
         try:
             media = p["_embedded"]["wp:featuredmedia"][0]
@@ -88,7 +81,7 @@ def main():
     uit.sort(key=lambda x: x["datum"], reverse=True)
     with open("nieuws.json", "w", encoding="utf-8") as f:
         json.dump({"bron": "hartvoordenhaag.nl", "berichten": uit}, f, ensure_ascii=False, indent=0)
-    print(f"{len(uit)} berichten, {weg} weggelaten (De Mos in de titel)")
+    print(f"{len(uit)} berichten")
 
 
 if __name__ == "__main__":

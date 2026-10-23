@@ -22,7 +22,7 @@
   <div class="wrap">
     <a class="merk" href="./"><img src="logo.png" alt=""><span>Damiën Zeller</span></a>
     <nav aria-label="Menu">
-      <a class="ver" href="#buurt">Uw buurt</a><a class="ver" href="#spreekuur">Spreekuur</a><a href="#melden">Melden</a><a class="nieuws" href="nieuws.html">Nieuws</a>
+      <a class="ver" href="#buurt">Uw buurt</a><a class="ver" href="#spreekuur">Spreekuur</a><a class="ver" href="#vragen">Vragen</a><a href="#melden">Melden</a><a class="nieuws" href="nieuws.html">Nieuws</a>
     </nav>
   </div>
 </header>
@@ -79,18 +79,35 @@
   </div>
 </section>
 
+<section class="vragen" id="vragen" hidden>
+  <div class="wrap">
+    <h2>Wat ik het college vroeg</h2>
+    <p class="inleiding">Mijn schriftelijke vragen aan het college, met de stand van het antwoord. Het college heeft zes weken om te antwoorden; soms vraagt het uitstel.</p>
+    <ul class="vlijst" id="vlijst"></ul>
+  </div>
+</section>
+
 <section class="tiktok" id="tiktok">
   <div class="wrap">
     <div>
-      <h2>Op TikTok</h2>
-      <p class="inleiding">Korte video's uit de raad en het stadsdeel. Volg <a href="https://www.tiktok.com/@damienzeller" target="_blank" rel="noopener">@damienzeller</a>.</p>
+      <h2>Volg Damiën</h2>
+      <p class="inleiding">Korte video's uit de raad en het stadsdeel op TikTok, en korte berichten op X.</p>
     </div>
-    <div class="tt-vak" id="tt-vak">
-      <div>
-        <button class="knop geel" type="button" id="tt-laad">Toon mijn nieuwste video's</button>
-        <p>De video's komen van TikTok. TikTok plaatst daarbij eigen cookies; daarom laden ze pas als u op de knop drukt.</p>
+    <div class="feeds">
+      <div class="tt-vak" id="tt-vak">
+        <div>
+          <b class="feed-naam">TikTok @damienzeller</b>
+          <button class="knop geel" type="button" id="tt-laad">Toon video's</button>
+        </div>
+      </div>
+      <div class="tt-vak" id="x-vak">
+        <div>
+          <b class="feed-naam">X @DamienZeller</b>
+          <button class="knop geel" type="button" id="x-laad">Toon berichten</button>
+        </div>
       </div>
     </div>
+    <p class="feed-noot">TikTok en X plaatsen eigen cookies; daarom laden de berichten pas als u op de knop drukt.</p>
   </div>
 </section>
 
@@ -290,6 +307,29 @@ function berichten() {
   }
 }
 
+function vragen(lijst) {
+  if (!Array.isArray(lijst) || !lijst.length) return;
+  const ul = document.getElementById("vlijst"); ul.textContent = "";
+  const LAB = { beantwoord: ["Beantwoord", "klaar"], uitstel: ["Uitgesteld", "wacht"], open: ["Wacht op antwoord", "wacht"] };
+  for (const v of lijst) {
+    const li = el("li"), [lab, kl] = LAB[v.status] || LAB.open;
+    const kop = el("div", "kop-regel"); kop.append(el("span", "status " + kl, lab), el("span", "ris", v.ris));
+    const t = el(v.vraag_link ? "a" : "span", "vtitel", v.titel);
+    if (v.vraag_link) { t.href = v.vraag_link; t.target = "_blank"; t.rel = "noopener"; }
+    const regel = el("p", "vregel");
+    regel.append(document.createTextNode("Gesteld op " + datumNL(v.gesteld) + ". "));
+    if (v.antwoord_link) {
+      const a = el("a", null, "Lees het antwoord"); a.href = v.antwoord_link; a.target = "_blank"; a.rel = "noopener";
+      regel.append(document.createTextNode("Antwoord op " + datumNL(v.antwoord_datum) + ": ")); regel.append(a);
+    } else if (v.status !== "beantwoord" && v.gesteld) {
+      const d = new Date(v.gesteld); d.setDate(d.getDate() + 42);
+      regel.append(document.createTextNode(v.status === "uitstel" ? "Het college vroeg uitstel." : "Antwoord verwacht rond " + datumNL(d.toISOString().slice(0, 10)) + "."));
+    }
+    li.append(kop, t, regel); ul.append(li);
+  }
+  document.getElementById("vragen").hidden = false;
+}
+
 function samenvoegen(eigen, nieuws) {
   const sleutel = x => (x.link || x.titel || "").replace(/\/$/, "");
   const perLink = new Map(), uit = [];
@@ -300,6 +340,28 @@ function samenvoegen(eigen, nieuws) {
     const kopie = Object.assign({}, x); perLink.set(k, kopie); uit.push(kopie);
   }
   return uit;
+}
+
+function x() {
+  const k = document.getElementById("x-laad"); if (!k) return;
+  k.addEventListener("click", () => {
+    const vak = document.getElementById("x-vak"); vak.textContent = "";
+    const a = el("a", "twitter-timeline", "Berichten van @DamienZeller op X");
+    a.href = "https://x.com/DamienZeller"; a.dataset.height = "560"; a.dataset.lang = "nl"; a.dataset.dnt = "true";
+    if (matchMedia("(prefers-color-scheme: dark)").matches) a.dataset.theme = "dark";
+    vak.append(a);
+    const sc = el("script"); sc.async = true; sc.src = "https://platform.x.com/widgets.js"; sc.charset = "utf-8"; document.body.append(sc);
+    setTimeout(() => {
+      // X toont tijdlijnen vaak alleen aan wie is ingelogd: dan een gewone knop naar het profiel
+      const f = vak.querySelector("iframe");
+      if (f && f.offsetHeight > 150) return;
+      vak.textContent = "";
+      const d = el("div"); d.append(el("b", "feed-naam", "X @DamienZeller"));
+      const k2 = el("a", "knop geel", "Bekijk mijn berichten op X"); k2.href = "https://x.com/DamienZeller"; k2.target = "_blank"; k2.rel = "noopener";
+      d.append(k2, el("p", null, "X laat berichten hier alleen zien als u bij X bent ingelogd."));
+      vak.append(d);
+    }, 7000);
+  }, { once: true });
 }
 
 function tiktok() {
@@ -391,11 +453,12 @@ fetch("links.json", { cache: "no-cache" }).then(r => r.json()).catch(() => ({}))
     if (Array.isArray(s.berichten)) data.berichten = samenvoegen(s.berichten, nieuws);
     if (Array.isArray(s.videos)) data.videos = s.videos;
     if (s.spreekuur && (s.spreekuur.start || s.spreekuur.plek)) data.spreekuur = Object.assign({}, data.spreekuur, s.spreekuur);
+    vragen(s.vragen);
   }
   knoppenBuurt(); infoBuurt(); spreekuur(); berichten(); videos();
   if (laag) laag.setStyle(stijl);
 });
-knoppenBuurt(); maakKaart(); tiktok();
+knoppenBuurt(); maakKaart(); tiktok(); x();
 })();
 </script>
 </body>

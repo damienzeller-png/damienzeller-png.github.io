@@ -156,9 +156,25 @@ footer p+p{margin-top:8px}
 
 /* tiktok */
 .tiktok{background:#0E1B14;color:#fff}
-.tiktok .wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:40px;align-items:center}
+.tiktok .wrap{display:grid;gap:24px}
+.feeds{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+.feed-naam{display:block;font:600 1.05rem var(--kop);margin-bottom:14px}
+.feed-noot{color:#B9CCBF;font-size:.95rem}
 .tiktok .inleiding{color:#B9CCBF}
 .tt-vak{background:#15241B;border-radius:20px;min-height:320px;display:grid;place-items:center;padding:20px;text-align:center}
 .tt-vak p{color:#B9CCBF;font-size:.95rem;max-width:30em;margin:12px auto 0}
 .tt-vak blockquote{margin:0;width:100%}
-@media (max-width:760px){.tiktok .wrap{grid-template-columns:1fr;gap:20px}}
+@media (max-width:760px){.feeds{grid-template-columns:1fr}}
+
+/* vragen aan het college */
+.vlijst{list-style:none;margin:26px 0 0;padding:0;display:grid;gap:0;border-top:1.5px solid var(--lijn)}
+.vlijst li{padding:16px 0;border-bottom:1.5px solid var(--lijn)}
+.vtitel{font:600 1.1rem/1.35 var(--kop);text-decoration:none;display:block;margin-top:6px}
+a.vtitel:hover{text-decoration:underline;text-decoration-color:var(--groen)}
+.vregel{color:var(--zacht);margin-top:4px}
+.vregel a{font-weight:600;color:var(--groen)}
+.status{font-size:.85rem;font-weight:600;border-radius:999px;padding:2px 10px}
+.status.klaar{background:var(--groen);color:#fff}
+.status.wacht{background:var(--geel);color:#13261C}
+.ris{font-size:.85rem;color:var(--zacht);font-variant-numeric:tabular-nums}
+.vlijst .kop-regel{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
