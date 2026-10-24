@@ -378,8 +378,16 @@ function feeds() {
     const wie = el("div"); wie.append(el("b", null, "Damiën Zeller"), el("span", null, "@DamienZeller"));
     kop.append(foto, wie);
     const voet = el("div", "post-voet"), t = el("time", null, datumNL(x.datum)); t.dateTime = x.datum || "";
-    const a = nieuwTab(el("a", null, x.media ? "Met foto, bekijk op X" : "Bekijk op X")); a.href = x.link;
-    voet.append(t, a); li.append(kop, linkify(x.tekst), voet); ul.append(li);
+    const a = nieuwTab(el("a", null, "Bekijk op X")); a.href = x.link;
+    voet.append(t, a); li.append(kop, linkify(x.tekst));
+    if (x.media) {
+      const fa = nieuwTab(el("a", "post-beeld")); fa.href = x.link; fa.setAttribute("aria-label", "Bekijk de foto of video op X");
+      const fi = el("img"); fi.src = API + "/site/beeld/x/" + encodeURIComponent(x.id); fi.alt = ""; fi.loading = "lazy"; fi.decoding = "async";
+      fi.onerror = () => fa.remove();
+      if (x.video) fa.classList.add("video");
+      fa.append(fi); li.append(fa);
+    }
+    li.append(voet); ul.append(li);
   }
   if (!xs.length) {
     const li = el("li", "uitnodiging"), a = nieuwTab(el("a", "knop geel", "Lees mee op X"));
