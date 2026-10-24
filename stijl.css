@@ -205,7 +205,8 @@ section{padding:92px 0}
 .post-beeld.video::after{content:"";position:absolute;left:50%;top:50%;width:56px;height:56px;margin:-28px 0 0 -28px;border-radius:50%;
   background:var(--zon) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8 5.5v13l11-6.5z' fill='%2310251A'/%3E%3C/svg%3E") 55% 50%/26px no-repeat;
   box-shadow:0 10px 26px rgba(0,0,0,.35)}
-.post-beeld img{display:block;width:100%;max-height:300px;object-fit:cover}
+.post-beeld img{display:block;width:100%;max-height:220px;object-fit:cover}
+@media (min-width:961px){.volg-tt{position:sticky;top:96px}}
 .post-voet{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 12px;margin-top:12px;color:var(--op-donker);font-size:.92rem}
 .post-voet a{color:#fff;font-weight:700}
 .uitnodiging{background:var(--kaart-donker);border-radius:22px;padding:28px;display:grid;gap:18px;justify-items:start;align-content:center}
