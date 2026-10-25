@@ -439,7 +439,7 @@ footer a{color:#fff}
 .lege-staat{margin-top:22px;padding:18px 20px;border-radius:16px;background:var(--munt)}
 
 /* mobiel korter: X als één regel naar het kanaal, agenda hooguit twee */
-@media (max-width:640px){.volg-x .x-lijst{display:none}.volg-x .kanaal{margin-bottom:0}.agenda-lijst>li:nth-child(n+3){display:none}}
+@media (max-width:640px){.agenda-lijst>li:nth-child(n+3){display:none}}
 
 /* stadsdeelpagina: de dertien buurten als ingang */
 .buurt-ingang{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:28px;align-items:center;margin-top:26px;
@@ -476,4 +476,12 @@ footer a{color:#fff}
   .beeldrij{grid-template-columns:1fr;gap:18px}
   .beeldrij .doc-foto img{height:auto;aspect-ratio:4/3}
   .beeldrij .doc-foto:nth-child(2) img{object-position:50% 72%}
+}
+.melden .wrap>.melden-tekst{grid-column:1;grid-row:1}
+.melden .wrap>.meld-foto{grid-column:1;grid-row:2}
+.melden .wrap>form{grid-column:2;grid-row:1/span 2}
+@media (max-width:860px){
+  .melden .wrap>*{grid-column:auto!important;grid-row:auto!important}
+  .melden .meld-foto{order:3}
+  .held-foto .hart{left:5%;top:5%;width:88%}
 }

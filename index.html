@@ -116,7 +116,7 @@
     <div class="buurt-kop">
       <div>
         <h2>Wat speelt er in uw buurt?</h2>
-        <p class="inleiding">Kies uw buurt. U ziet waar Damiën mee bezig is en u kunt meteen iets melden. Het getal is het aantal berichten over die buurt.</p>
+        <p class="inleiding">Kies uw buurt. U ziet wat Damiën en Hart voor Den Haag er deden en u kunt meteen iets melden. Het getal is het aantal berichten over die buurt.</p>
       </div>
       <figure class="doc-foto">
         <img src="fotos/rietbuurt-flyeren-klein.jpg" srcset="fotos/rietbuurt-flyeren-klein.jpg 720w, fotos/rietbuurt-flyeren.jpg 1400w" sizes="(max-width: 760px) 100vw, 420px" width="1400" height="1050" alt="Selfie van Damiën met drie vrijwilligers in groene jassen, met flyers met de vraag Hoe gaat het in de Rietbuurt?, voor de witte kapel op de heuvel" loading="lazy">
@@ -144,6 +144,10 @@
       </ol>
       <p class="spoed"><b>Is het dringend?</b> Bel de gemeente op <a href="tel:14070">14070</a>. Bij gevaar belt u <a href="tel:112">112</a>.</p>
     </div>
+    <figure class="doc-foto meld-foto">
+      <img src="fotos/keukentafel-klein.jpg" srcset="fotos/keukentafel-klein.jpg 720w, fotos/keukentafel.jpg 1400w" sizes="(max-width: 860px) 100vw, 480px" width="1400" height="1050" alt="Damiën met zeven mensen rond een ronde tafel in een woonkamer, met koffie en een laptop" loading="lazy">
+      <figcaption class="bijschrift"><span>Aan de keukentafel: horen wat er speelt</span></figcaption>
+    </figure>
     <form id="meld-form" novalidate>
       <div class="veld">
         <label for="f-onderwerp">Onderwerp</label>
@@ -410,7 +414,7 @@ function beeld(x, cls) {
 function berichten() {
   const ol = document.getElementById("berichten"); ol.textContent = "";
   const spAan = !document.getElementById("held-sp").hidden;
-  const lijst = data.berichten.filter(x => (x.eigen || x.dossier) && !(spAan && /spreekuu?r/i.test(x.titel + " " + (x.tekst || ""))))
+  const lijst = data.berichten.filter(x => (x.eigen || (x.dossier && x.zeller !== false)) && !(spAan && /spreekuu?r/i.test(x.titel + " " + (x.tekst || ""))))
     .sort(nieuwste).slice(0, 4);
   if (!lijst.length) { ol.append(el("li", "leeg", "Binnenkort staan hier de nieuwste berichten.")); return; }
   lijst.forEach((x, i) => {

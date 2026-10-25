@@ -10,7 +10,20 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/10/Wijkcentrum-Piet-Vink-2-768x247.webp",
 "buurt": "Ypenburg",
 "dossier": "Leidschenveen-Ypenburg",
-"thema": "Stadsdeel Leidschenveen-Ypenburg"
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": true
+},
+{
+"id": "hvdh-114464",
+"datum": "2026-10-13",
+"titel": "Delft drukt azc door in achtertuin van Den Haag",
+"tekst": "Coen Bom: “Het is bizar. Ondanks bijna 3.000 handtekeningen en felle protesten van de sportclubs drukt Delft gewoon door.” Op Sportpark Brasserskade komt een asielzoekerscentrum voor 350 mensen, pal op de grens met Ypenburg, en dat vijftien jaar lang. De gemeenteraad mocht er niet over stemmen en de Haagse buren zijn n",
+"link": "https://www.hartvoordenhaag.nl/delft-drukt-azc-door-in-achtertuin-van-den-haag/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/10/Sportpark_Brasserskade_Delft-e1791899132793-768x398.jpg",
+"buurt": "Ypenburg",
+"dossier": "Sport, topsport en speelplaatsen",
+"thema": "Werk, Inkomen en Sport",
+"zeller": false
 },
 {
 "id": "hvdh-114430",
@@ -21,7 +34,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/03/Tommie-Beugelsdijk0008-1300x867-2-768x512.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-114392",
@@ -32,7 +46,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/leidschenveen-768x512.jpg",
 "buurt": "Leidschenveen",
 "dossier": "Leidschenveen-Ypenburg",
-"thema": "Stadsdeel Leidschenveen-Ypenburg"
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": true
 },
 {
 "id": "hvdh-114355",
@@ -43,7 +58,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/09/shutterstock_2282842673-768x483.jpg",
 "buurt": "",
 "dossier": "Wmo en informele zorg",
-"thema": "Zorg en Welzijn"
+"thema": "Zorg en Welzijn",
+"zeller": true
 },
 {
 "id": "hvdh-114144",
@@ -54,7 +70,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/08/Betaald-parkeren-nee-2-768x659.jpg",
 "buurt": "Ypenburg",
 "dossier": "Leidschenveen-Ypenburg",
-"thema": "Stadsdeel Leidschenveen-Ypenburg"
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": true
 },
 {
 "id": "hvdh-114064",
@@ -65,7 +82,20 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/07/Arjen-wethouder-scaled-e1785338118153-768x744.jpeg",
 "buurt": "Leidschenveen",
 "dossier": "Leidschenveen-Ypenburg",
-"thema": "Stadsdeel Leidschenveen-Ypenburg"
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": true
+},
+{
+"id": "hvdh-113908",
+"datum": "2026-07-13",
+"titel": "We presenteren onze 5 wethouders",
+"tekst": "Partijleider Richard de Mos: “Supertrots op dit geweldige topteam!” Hart voor Den Haag draagt met grote trots vijf kandidaten voor als wethouder in het nieuwe Haagse college. Met Richard de Mos, Henk Harms, Mariëtte van Leeuwen, Ralf Sluijs en Arjen Dubbelaar levert Hart voor Den Haag een topteam dat bestuurlijke ervar",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-presenteert-vijf-wethouders-voor-nieuw-haags-college/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/07/Wethouders-e1783961103956-768x672.jpeg",
+"buurt": "",
+"dossier": "",
+"thema": "",
+"zeller": false
 },
 {
 "id": "hvdh-113807",
@@ -76,7 +106,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/06/Damien-Zeller0016-1300x867-1-768x512.jpg",
 "buurt": "Leidschenveen",
 "dossier": "Leidschenveen-Ypenburg",
-"thema": "Stadsdeel Leidschenveen-Ypenburg"
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": true
 },
 {
 "id": "hvdh-113711",
@@ -87,7 +118,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/06/Damien-Zeller0016-1300x867-1-768x512.jpg",
 "buurt": "",
 "dossier": "Schoolveiligheid en pesten",
-"thema": "Jeugd en Onderwijs"
+"thema": "Jeugd en Onderwijs",
+"zeller": true
 },
 {
 "id": "hvdh-113596",
@@ -98,7 +130,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Singels-Ypenburg-scaled-1-768x576.jpg",
 "buurt": "Ypenburg",
 "dossier": "Leidschenveen-Ypenburg",
-"thema": "Stadsdeel Leidschenveen-Ypenburg"
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": true
 },
 {
 "id": "hvdh-113439",
@@ -109,7 +142,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/01/D7500-20260111-607_lrc-768x1152.jpg",
 "buurt": "",
 "dossier": "Taalaanpak, leesvaardigheid en bibliotheek",
-"thema": "Jeugd en Onderwijs"
+"thema": "Jeugd en Onderwijs",
+"zeller": true
 },
 {
 "id": "hvdh-113426",
@@ -120,7 +154,20 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/01/D7500-20260111-607_lrc-768x1152.jpg",
 "buurt": "",
 "dossier": "Onderwijsbeleid, leraren en kansen",
-"thema": "Jeugd en Onderwijs"
+"thema": "Jeugd en Onderwijs",
+"zeller": true
+},
+{
+"id": "hvdh-113369",
+"datum": "2026-03-07",
+"titel": "Petitie: Geen Delfste Asielopvang pal naast Ypenburg",
+"tekst": "Wij, Constateren dat, Overwegende dat, Verzoeken wij het college: En gaan over tot de orde van de dag.",
+"link": "https://www.hartvoordenhaag.nl/geen-delfste-asielopvang-pal-naast-ypenburg/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/03/shutterstock_2319314583-768x512.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-113346",
@@ -131,7 +178,20 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/auto-parkeren-scaled-1-768x512.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-105379",
+"datum": "2026-02-01",
+"titel": "Campagneteam Hart voor Den Haag zet winnaar ‘Poster van de Maand’ in het zonnetje",
+"tekst": "In de voortdurende campagne om de stad geel-groen te kleuren, heeft Hart voor Den Haag deze week een bijzondere mijlpaal gevierd. De heer Ebben is winnaar van de ‘Poster van de Maand’ en werd door het campagneteam verrast met een welverdiende prijs. De heer Ebben, een trouwe supporter uit Den Haag, voert al geruime tij",
+"link": "https://www.hartvoordenhaag.nl/campagneteam-hart-voor-den-haag-zet-winnaar-poster-van-de-maand-in-het-zonnetje/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Poster-vd-Maand-768x576.jpeg",
+"buurt": "",
+"dossier": "",
+"thema": "",
+"zeller": false
 },
 {
 "id": "hvdh-105278",
@@ -142,7 +202,20 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/01/en-nu-de-mos-768x529.webp",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-105189",
+"datum": "2026-01-16",
+"titel": "Hart voor Den Haag wil géén grootschalige asielopvang pal naast Ypenburg",
+"tekst": "Richard de Mos: “Delft plaatst asielopvang in de achtertuin van Den Haag” Hart voor Den Haag verzet zich tegen de plannen van de gemeente Delft (1) om een grootschalige, langdurige asielopvang voor circa 350 asielzoekers te realiseren aan de Brasserskade/Nootdorpsepad. Hoewel deze locatie formeel op Delfts grondgebied ",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-wil-geen-grootschalige-asielopvang-pal-naast-ypenburg/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2025/10/RPUklf7J-768x529.jpeg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-111099",
@@ -153,7 +226,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Waterbuurt-scaled-1-768x576.jpg",
 "buurt": "Waterbuurt",
 "dossier": "Leidschenveen-Ypenburg",
-"thema": "Stadsdeel Leidschenveen-Ypenburg"
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": true
 },
 {
 "id": "hvdh-111039",
@@ -164,7 +238,20 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Singels-Ypenburg-scaled-1-768x576.jpg",
 "buurt": "Singels",
 "dossier": "Leidschenveen-Ypenburg",
-"thema": "Stadsdeel Leidschenveen-Ypenburg"
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": true
+},
+{
+"id": "hvdh-111037",
+"datum": "2025-10-31",
+"titel": "Stop met ruziemaken en ga aan de slag!",
+"tekst": "De verkiezingen zijn voorbij, de stemmen zijn bijna allemaal geteld. D66 en PVV zijn (ongeveer) even groot en er is winst voor CDA, JA21, Forum voor Democratie en 50Plus. En nu? Nu is het tijd om eindelijk eens te gaan leveren. Maar wie de Haagse straten kent, wie door bijvoorbeeld Loosduinen, Ypenburg of Scheveningen ",
+"link": "https://www.hartvoordenhaag.nl/stop-met-ruziemaken-en-ga-aan-de-slag/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/RicharddeMos-119_Retouche-min-scaled-1-768x512.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-111009",
@@ -175,7 +262,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/RicharddeMos-119_Retouche-min-scaled-1-768x512.jpg",
 "buurt": "Leidschenveen",
 "dossier": "Leidschenveen-Ypenburg",
-"thema": "Stadsdeel Leidschenveen-Ypenburg"
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": true
 },
 {
 "id": "hvdh-111008",
@@ -186,7 +274,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/cid38162_HvDH_Damien-Zeller-1-768x435.jpeg",
 "buurt": "Leidschenveen",
 "dossier": "Leidschenveen-Ypenburg",
-"thema": "Stadsdeel Leidschenveen-Ypenburg"
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": true
 },
 {
 "id": "hvdh-110999",
@@ -197,7 +286,56 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/cid38162_HvDH_Damien-Zeller-1-768x435.jpeg",
 "buurt": "",
 "dossier": "Schoolveiligheid en pesten",
-"thema": "Jeugd en Onderwijs"
+"thema": "Jeugd en Onderwijs",
+"zeller": true
+},
+{
+"id": "hvdh-110951",
+"datum": "2025-08-13",
+"titel": "Hart voor Den Haag eist actie tegen ‘racebaan’ Zoetermeerse Rijweg",
+"tekst": "Raadslid Arjen Dubbelaar: “Bewoners Leidschenveen worden ’s nachts wakker getrild, tijd voor een geluidsflitspaal!” Hart voor Den Haag eist een harde aanpak van de extreme geluidsoverlast op de Zoetermeerse Rijweg in Leidschenveen. Bewoners klagen steen en been dat de weg, met name in de avond- en nachturen, wordt misb",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-eist-actie-tegen-racebaan-zoetermeerse-rijweg/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Zoetermeerse-Rijweg-768x576.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-110899",
+"datum": "2025-07-14",
+"titel": "Hart voor Den Haag: Provincie komt in actie tegen ganzenplaag, maar wanneer volgt het Haagse college?",
+"tekst": "Carlos Martinez van Andel: “De overlast door ganzen in onze stad moet eindelijk eens stoppen” De provincie Zuid-Holland wil het aantal ganzen drastisch terugdringen. Het plan: eieren vernietigen, ganzen afschieten en het vlees consumeren. Volgens Hart voor Den Haag is het hoog tijd dat ook het stadsbestuur van Den Haag",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-provincie-komt-in-actie-tegen-ganzenplaag-maar-wanneer-volgt-het-haagse-college/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/shutterstock_2013154046-2-768x512.jpg",
+"buurt": "",
+"dossier": "",
+"thema": "",
+"zeller": false
+},
+{
+"id": "hvdh-110852",
+"datum": "2025-06-26",
+"titel": "Stop mega-zonnepark naast Leidschenveen! Hart voor Den Haag steunt bewonersoproep tegen aantasting groene buffer",
+"tekst": "Raadslid Arjen Dubbelaar: “Zonnepanelen zijn voor op daken. Niet in deze groene buffer.” Hart voor Den Haag steunt de oproep van Stichting Bewonersorganisatie Leidschenveen (BOL) dat de gemeente Den Haag keihard stelling moet nemen tegen het geplande zonnepark aan de Roeleveenseweg. In een brief aan het college en de g",
+"link": "https://www.hartvoordenhaag.nl/stop-mega-zonnepark-naast-leidschenveen-hart-voor-den-haag-steunt-bewonersoproep-tegen-aantasting-groene-buffer/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/zonnepaneel2-scaled-1-768x468.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-110850",
+"datum": "2025-06-26",
+"titel": "Hart voor Den Haag: wooncrisis vraagt nú om keuzes, niet pas in december",
+"tekst": "Raadslid Arjen Dubbelaar: “Nu bouwen voor Hagenaars!” De wooncrisis is de grootste uitdaging waar Den Haag voor staat. Toch blijft het college vasthouden aan trage processen, vage plannen en onhaalbare ambities. Hart voor Den Haag roept het stadsbestuur op om nu eindelijk échte keuzes te maken, in het belang van Haagse",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-wooncrisis-vraagt-nu-om-keuzes-niet-pas-in-december/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/woning-scaled-1-768x539.jpg",
+"buurt": "",
+"dossier": "Wmo en informele zorg",
+"thema": "Zorg en Welzijn",
+"zeller": false
 },
 {
 "id": "hvdh-110842",
@@ -208,7 +346,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/leidschenveen-768x512.jpg",
 "buurt": "Leidschenveen",
 "dossier": "Leidschenveen-Ypenburg",
-"thema": "Stadsdeel Leidschenveen-Ypenburg"
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": true
 },
 {
 "id": "hvdh-110829",
@@ -219,7 +358,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/leidschenv-ypenb-768x576.jpeg",
 "buurt": "Leidschenveen",
 "dossier": "Leidschenveen-Ypenburg",
-"thema": "Stadsdeel Leidschenveen-Ypenburg"
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": true
 },
 {
 "id": "hvdh-110827",
@@ -228,9 +368,10 @@
 "tekst": "Fractievertegenwoordiger Damiën Zeller en raadslid Arjen Dubbelaar: “Als je als kind de straat oversteekt richting school, moet je niet bang hoeven zijn voor een auto die met meer dan 60 voorbijraast.” Hart voor Den Haag maakt zich zorgen over de verkeersveiligheid op de Ypenburgse Boslaan, met name ter hoogte van de d",
 "link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-wil-zebrapad-en-aanpak-gevaarlijke-uitvoegstrook-bij-ypenburgse-boslaan/",
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/zebrapad-ypenburg-300x173.png",
-"buurt": "",
+"buurt": "Morgenweide",
 "dossier": "Onderwijsbeleid, leraren en kansen",
-"thema": "Jeugd en Onderwijs"
+"thema": "Jeugd en Onderwijs",
+"zeller": true
 },
 {
 "id": "hvdh-110797",
@@ -241,7 +382,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/singels-768x430.jpg",
 "buurt": "Singels",
 "dossier": "Leidschenveen-Ypenburg",
-"thema": "Stadsdeel Leidschenveen-Ypenburg"
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": true
 },
 {
 "id": "hvdh-110776",
@@ -252,7 +394,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/ovchip2-scaled-1-768x497.jpg",
 "buurt": "",
 "dossier": "Toegankelijkheid en mensen met een beperking",
-"thema": "Zorg en Welzijn"
+"thema": "Zorg en Welzijn",
+"zeller": true
 },
 {
 "id": "hvdh-110751",
@@ -263,7 +406,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/auto-parkeren-scaled-1-768x512.jpg",
 "buurt": "Singels",
 "dossier": "Leidschenveen-Ypenburg",
-"thema": "Stadsdeel Leidschenveen-Ypenburg"
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": true
 },
 {
 "id": "hvdh-110723",
@@ -274,7 +418,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/leidschenveen-ypenburg-2-scaled-1-768x576.jpeg",
 "buurt": "Bosweide",
 "dossier": "Leidschenveen-Ypenburg",
-"thema": "Stadsdeel Leidschenveen-Ypenburg"
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": true
 },
 {
 "id": "hvdh-110704",
@@ -284,8 +429,9 @@
 "link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-zorgen-over-toekomst-basisschoolgebouw-ypenburg/",
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/IMG_3335-768x769.jpeg",
 "buurt": "Ypenburg",
-"dossier": "Onderwijshuisvesting",
-"thema": "Jeugd en Onderwijs"
+"dossier": "Onderwijsbeleid, leraren en kansen",
+"thema": "Jeugd en Onderwijs",
+"zeller": true
 },
 {
 "id": "hvdh-110688",
@@ -296,7 +442,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/parkeermeter2-scaled-1-768x483.jpg",
 "buurt": "Waterbuurt",
 "dossier": "Leidschenveen-Ypenburg",
-"thema": "Stadsdeel Leidschenveen-Ypenburg"
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": true
 },
 {
 "id": "hvdh-110687",
@@ -307,7 +454,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Nieuwe-tram-rood-zwart-300x169.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-110685",
@@ -318,7 +466,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/tram3-scaled-1-768x512.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-110651",
@@ -329,7 +478,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/leidschenveen-ypenburg-1-768x576.jpg",
 "buurt": "Leidschenveen",
 "dossier": "Leidschenveen-Ypenburg",
-"thema": "Stadsdeel Leidschenveen-Ypenburg"
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": true
 },
 {
 "id": "hvdh-110625",
@@ -340,7 +490,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/damien-768x514.jpeg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-110621",
@@ -351,7 +502,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/ly--768x576.jpg",
 "buurt": "Bosweide",
 "dossier": "Leidschenveen-Ypenburg",
-"thema": "Stadsdeel Leidschenveen-Ypenburg"
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": true
 },
 {
 "id": "hvdh-110593",
@@ -362,7 +514,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/de-bras-768x576.jpg",
 "buurt": "De Bras",
 "dossier": "Leidschenveen-Ypenburg",
-"thema": "Stadsdeel Leidschenveen-Ypenburg"
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": true
 },
 {
 "id": "hvdh-110588",
@@ -373,7 +526,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/metro2-scaled-1-768x476.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-110581",
@@ -384,7 +538,32 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/424d5b4a-727c-49cf-954b-261be93cc2ea-768x619.jpeg",
 "buurt": "",
 "dossier": "Volksgezondheid",
-"thema": "Zorg en Welzijn"
+"thema": "Zorg en Welzijn",
+"zeller": true
+},
+{
+"id": "hvdh-110579",
+"datum": "2024-12-17",
+"titel": "Hart voor Den Haag wil klopjacht op dierenbeulen",
+"tekst": "Raadslid Coen Bom: “Wij moeten opkomen voor de dieren. En wel nu!” Schandalige incidenten Deze week waren er ernstige incidenten met verwaarloosde dieren. Zo werden er in Duindorp twee honden aangetroffen onder erbarmelijke omstandigheden (1), één van de twee honden was al overleden, de andere was broodmager. Op vrijda",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-wil-klopjacht-op-dierenbeulen/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/hond-768x576.png",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-110550",
+"datum": "2024-11-22",
+"titel": "Spreektekst Arjen Dubbelaar Toegankelijkheid De Vissen",
+"tekst": "Voorzitter, Door verschillende wijkbewoners werd Hart voor Den Haag gevraagd om eens te komen kijken bij het wandelpad van de IJsduikerstraat in de buurt De Vissen in Leidschenveen. Naar aanleiding van dit wijkbezoek heb ik schriftelijke vragen gesteld over het ontbreken van straatverlichting en de ontoegankelijkheid v",
+"link": "https://www.hartvoordenhaag.nl/spreektekst-arjen-dubbelaar-toegankelijkheid-de-vissen/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/cid21376_Arjen-Dubbelaar-scaled-1-768x435.jpeg",
+"buurt": "De Vissen",
+"dossier": "Toegankelijkheid en mensen met een beperking",
+"thema": "Zorg en Welzijn",
+"zeller": false
 },
 {
 "id": "hvdh-110516",
@@ -395,7 +574,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/weg-den-haag-scaled-1-768x517.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-110515",
@@ -406,7 +586,32 @@
 "beeld": "",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-110500",
+"datum": "2024-10-09",
+"titel": "Hart voor Den Haag wil oplossing voor afsluiting fietspad Leidschenveen",
+"tekst": "Raadslid Dubbelaar: ‘Zorg voor een goede omleiding of gooi het fietspad open!’ Aan de Pijlkruidveld in Leidschenveen is het fietspad afgesloten tussen de Oude Middenweg en het Marjoleinveld. Afgelopen weekend zijn de hekken vernield en aan de kant gegooid door hoogstwaarschijnlijk ongeduldige fietsende bewoners van buu",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-wil-oplossing-voor-afsluiting-fietspad-leidschenveen/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/fietspad-l-y-768x344.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-110494",
+"datum": "2024-10-02",
+"titel": "Burgerinitiatief Referendum uitbreiding betaald parkeren heeft benodigde handtekeningen bijna binnen",
+"tekst": "De Mos positief: “81% van de handtekeningen op orde: nu 4 weken voor herstellen van de kleine foutmarge“ Op 12 september 2024 is door de heer A. van den Berg het burgerinitiatief ‘referendum uitbreiding betaald parkeren’ met de bijbehorende ondersteuningsverklaringen ingediend. Nu de Dienst Publiekszaken gekeken heeft ",
+"link": "https://www.hartvoordenhaag.nl/burgerinitiatief-referendum-uitbreiding-betaald-parkeren-heeft-benodigde-handtekeningen-bijna-binnen/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/shutterstock_189511184-scaled-1-768x576.jpg",
+"buurt": "",
+"dossier": "",
+"thema": "",
+"zeller": false
 },
 {
 "id": "hvdh-110482",
@@ -417,7 +622,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/damien-richard-768x512.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-110481",
@@ -428,7 +634,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/shutterstock_1401384431-1-scaled-1-768x512.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-110471",
@@ -439,7 +646,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/IMG-20240923-WA0024-768x769.jpg",
 "buurt": "",
 "dossier": "Joodse gemeenschap en antisemitisme",
-"thema": "Volkshuisvesting, Integratie en Vrijwilligers"
+"thema": "Volkshuisvesting, Integratie en Vrijwilligers",
+"zeller": true
 },
 {
 "id": "hvdh-110467",
@@ -450,7 +658,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/centraal-station-768x576.png",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-110463",
@@ -460,8 +669,9 @@
 "link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-pleit-ervoor-om-ehbo-cursussen-in-curriculum-middelbare-scholen-op-te-nemen/",
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/ehbo-768x371.png",
 "buurt": "",
-"dossier": "",
-"thema": ""
+"dossier": "Onderwijsbeleid, leraren en kansen",
+"thema": "Jeugd en Onderwijs",
+"zeller": true
 },
 {
 "id": "hvdh-110458",
@@ -472,7 +682,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/school-kinderen-scaled-1-768x512.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-110448",
@@ -482,8 +693,9 @@
 "link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-pleit-voor-meer-hondenuitlaatveldjes-en-hondenstrand-in-ypenburg/",
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/hond-768x576.png",
 "buurt": "Ypenburg",
-"dossier": "Leidschenveen-Ypenburg",
-"thema": "Stadsdeel Leidschenveen-Ypenburg"
+"dossier": "Toegankelijkheid en mensen met een beperking",
+"thema": "Zorg en Welzijn",
+"zeller": true
 },
 {
 "id": "hvdh-110432",
@@ -494,7 +706,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/scooter-2-scaled-1-768x458.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-110427",
@@ -505,7 +718,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/roltrap-tramtunnel-spui-300x142.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-110423",
@@ -516,7 +730,20 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/damien-bob-768x853.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-110419",
+"datum": "2024-08-15",
+"titel": "Hart voor partijen: ‘Metroverbinding naar Scheveningen moet écht op politieke agenda!’",
+"tekst": "Schriftelijke vragen in raad en Staten over slechte bereikbaarheid Scheveningen. De bereikbaarheid van Nederlands grootste badplaats, Scheveningen, is al jaren een groot probleem. Op warme dagen staat het verkeer helemaal vast en is er enorm veel overlast voor omwonenden. Een rechtstreekse metroverbinding naar de badpl",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-partijen-metroverbinding-naar-scheveningen-moet-echt-op-politieke-agenda/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Nieuwe-tram-rood-zwart-300x169.jpg",
+"buurt": "",
+"dossier": "",
+"thema": "",
+"zeller": false
 },
 {
 "id": "hvdh-110411",
@@ -527,7 +754,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/basketbal-768x512.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-110409",
@@ -538,7 +766,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/htm-bus-300x185.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-110401",
@@ -549,7 +778,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/trein1-768x514.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-110386",
@@ -560,7 +790,20 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/schoolreis2-scaled-1-768x583.jpg",
 "buurt": "",
 "dossier": "Onderwijsbeleid, leraren en kansen",
-"thema": "Jeugd en Onderwijs"
+"thema": "Jeugd en Onderwijs",
+"zeller": true
+},
+{
+"id": "hvdh-110380",
+"datum": "2024-07-17",
+"titel": "Hart voor Den Haag wil aandacht voor straatveiligheid De Vissen",
+"tekst": "Raadslid Dubbelaar: “Bewoners spreken over een groot donker gat omdat straatverlichting ontbreekt!’ Door verschillende wijkbewoners werd Hart voor Den Haag gevraagd om eens te komen kijken bij het wandelpad van de IJsduikerstraat in de buurt De Vissen in Leidschenveen. De lokale politieke partij Hart voor Den Haag gaat",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-wil-aandacht-voor-straatveiligheid-de-vissen/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/arjen-3-768x1024.jpg",
+"buurt": "De Vissen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-110356",
@@ -571,7 +814,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/scheveningen-zomerdag-768x512.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-110304",
@@ -582,7 +826,20 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/peutergym-scaled-1-768x611.jpg",
 "buurt": "Leidschenveen",
 "dossier": "Leidschenveen-Ypenburg",
-"thema": "Stadsdeel Leidschenveen-Ypenburg"
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": true
+},
+{
+"id": "hvdh-110277",
+"datum": "2024-05-07",
+"titel": "Hart voor Den Haag wil behoud zomerregeling restafval",
+"tekst": "Raadslid Dubbelaar: ‘Bewoners is beloofd om wekelijks restafval op te halen in de zomermaanden!’ Vanuit Leidschenveen-Ypenburg krijgt de lokale partij Hart voor Den Haag verontruste berichten van bewoners. Zij maken zich zorgen omdat de gemeente nog niks heeft laten horen over de jaarlijkse zomerregeling voor het huisv",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-wil-behoud-zomerregeling-restafval-2/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Copy-of-20160902_094541-768x432.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-110269",
@@ -593,7 +850,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/shutterstock_398371210-scaled-1-768x511.jpg",
 "buurt": "",
 "dossier": "Onderwijsbeleid, leraren en kansen",
-"thema": "Jeugd en Onderwijs"
+"thema": "Jeugd en Onderwijs",
+"zeller": true
 },
 {
 "id": "hvdh-110250",
@@ -604,7 +862,20 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/shutterstock_398371210-768x511.jpg",
 "buurt": "",
 "dossier": "Onderwijsbeleid, leraren en kansen",
-"thema": "Jeugd en Onderwijs"
+"thema": "Jeugd en Onderwijs",
+"zeller": true
+},
+{
+"id": "hvdh-110251",
+"datum": "2024-04-11",
+"titel": "De Mos velt keihard oordeel over oplossen woningnood: “Dit college laat kansen voor bouw duizenden woningen onbenut!",
+"tekst": "Hart voor Den Haag wil bouwen voor Hagenaars Hart voor Den Haag partijleider Richard de Mos is ongekend fel op de labbekakkerigheid waarmee het college het oplossen van de woningmarkt tegemoet treedt. “Uit de prognose van de woningbouwontwikkeling bleek dat de woningbouwambitie van dit college, 4.000 woningen per jaar,",
+"link": "https://www.hartvoordenhaag.nl/de-mos-velt-keihard-oordeel-over-oplossen-woningnood-dit-college-laat-kansen-voor-bouw-duizenden-woningen-onbenut/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/shutterstock_2200050927-2-scaled-1-768x481.jpg",
+"buurt": "",
+"dossier": "",
+"thema": "",
+"zeller": false
 },
 {
 "id": "hvdh-110247",
@@ -615,7 +886,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/tram9-e1510665153558-300x169.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-110240",
@@ -626,7 +898,20 @@
 "beeld": "",
 "buurt": "",
 "dossier": "Toegankelijkheid en mensen met een beperking",
-"thema": "Zorg en Welzijn"
+"thema": "Zorg en Welzijn",
+"zeller": true
+},
+{
+"id": "hvdh-110219",
+"datum": "2024-03-19",
+"titel": "Een loterij om een parkeerplek te verkrijgen",
+"tekst": "Gemeenteraadslid Jelle Meinesz vindt het ongelooflijk dat de gemeente bewoners van de Hofbadtoren opzadelt met een niet-bestaand parkeerprobleem! Jarenlang hadden bewoners van de Hofbadtoren geen enkel probleem met parkeren. Totdat er een college ten tonele verschijnt die een ongelooflijke autohaat tentoonspreidt en be",
+"link": "https://www.hartvoordenhaag.nl/een-loterij-om-een-parkeerplek-te-verkrijgen-2/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/shutterstock_189511184-scaled-1-768x576.jpg",
+"buurt": "",
+"dossier": "",
+"thema": "",
+"zeller": false
 },
 {
 "id": "hvdh-110183",
@@ -637,7 +922,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/shutterstock_2321513643-768x575.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-110173",
@@ -648,7 +934,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/87d47c98-efeb-4514-97c4-08fb2f340f94-768x439.jpeg",
 "buurt": "",
 "dossier": "Taalaanpak, leesvaardigheid en bibliotheek",
-"thema": "Jeugd en Onderwijs"
+"thema": "Jeugd en Onderwijs",
+"zeller": true
 },
 {
 "id": "hvdh-110126",
@@ -659,7 +946,44 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Image-3-300x300.jpeg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-110092",
+"datum": "2023-11-15",
+"titel": "Hart voor Den Haag: “Haags Parkeerbeleid is pure autohaat!",
+"tekst": "Raadslid Meinesz wil parkeergeld investeren in autobeleid: Actieplan P5000 Voor Hagenaars met de auto is het college van D66, GroenLinks/PvdA, CDA, PvdD en DENK een regelrechte ramp. Hogere lasten onder andere omdat in bijna alle wijken van de stad betaald parkeren wordt ingevoerd. Alleen de wijken Vroondaal, Waterings",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-haags-parkeerbeleid-is-pure-autohaat/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/kijkduin-parkeren-e1499164379240-768x510.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-110088",
+"datum": "2023-11-12",
+"titel": "Hart voor Den Haag wil aandacht voor verkeerssituatie Oude Middenweg",
+"tekst": "Raadslid Dubbelaar: ‘Oversteken naar de Gamma is levensgevaarlijk!’ Elke maand loopt Hart voor Den Haag-raadslid Arjen Dubbelaar met bewoners Jos Hania en Bob van Eikeren door Leidschenveen-Ypenburg. De heren zijn beide in het stadsdeel actief voor de lokale politieke partij. Tijdens afgelopen wijkschouw hebben ze met ",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-wil-aandacht-voor-verkeerssituatie-oude-middenweg/",
+"beeld": "",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-110084",
+"datum": "2023-11-09",
+"titel": "Honden in de stad; kan dat nog?",
+"tekst": "Honden in de stad; kan dat nog? We kunnen er niet omheen, Den Haag blijft maar groeien en naast al die nieuwe gebouwen komen vrije losloopgebieden voor honden steeds meer onder druk te staan. Terwijl die juist zo belangrijk zijn voor het belang van hond én baas. Een hond moet veilig kunnen rennen, spelen en…",
+"link": "https://www.hartvoordenhaag.nl/honden-in-de-stad-kan-dat-nog/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/image-300x225.png",
+"buurt": "",
+"dossier": "",
+"thema": "",
+"zeller": false
 },
 {
 "id": "hvdh-110079",
@@ -670,7 +994,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/voetbal-300x136.jpg",
 "buurt": "",
 "dossier": "Sport, topsport en speelplaatsen",
-"thema": "Werk, Inkomen en Sport"
+"thema": "Werk, Inkomen en Sport",
+"zeller": true
 },
 {
 "id": "hvdh-110075",
@@ -680,8 +1005,9 @@
 "link": "https://www.hartvoordenhaag.nl/bewoners-lorentzplein-pleiten-voor-permanente-gezelligheid/",
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Laak1-scaled-1-768x510.jpg",
 "buurt": "",
-"dossier": "",
-"thema": ""
+"dossier": "Volksgezondheid",
+"thema": "Zorg en Welzijn",
+"zeller": true
 },
 {
 "id": "hvdh-110073",
@@ -692,7 +1018,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Scherm­afbeelding-2023-11-01-om-10.25.31-300x169.png",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-110072",
@@ -703,7 +1030,8 @@
 "beeld": "",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-110012",
@@ -714,7 +1042,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Scherm­afbeelding-2023-09-11-om-09.15.38-768x1031.png",
 "buurt": "",
 "dossier": "Toegankelijkheid en mensen met een beperking",
-"thema": "Zorg en Welzijn"
+"thema": "Zorg en Welzijn",
+"zeller": true
 },
 {
 "id": "hvdh-109997",
@@ -725,7 +1054,44 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/IMG-20230901-WA0012-768x513.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-109989",
+"datum": "2023-08-29",
+"titel": "Hart voor Den Haag wil wijkbureau politie in Wateringse Veld",
+"tekst": "Raadslid Dubbelaar en Guernaoui: ‘Schietpartijen en steekpartijen zijn onacceptabel!’ Gisteren werd een vrouw neergestoken aan de Singel in Ypenburg. In het Wateringse Veld werd een man doodgeschoten op de hoek van de Orlandostraat en de Laan van Wateringse Veld. De politie is bezig met onderzoek en zoekt naar de dader",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-wil-wijkbureau-politie-in-wateringse-veld/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/20220901_144035-scaled-1-768x576.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-109966",
+"datum": "2023-08-01",
+"titel": "Hart voor Den Haag wil een gebiedsvisie voor Leidschenveen-Ypenburg",
+"tekst": "De Mos wil ondertunneling deel A12 om stadsdelen met elkaar te verbinden: “Andere steden doen hét al!” Na overleg met de Bewonersorganisatie Leidschenveen (BOL) pleit Hart voor Den Haag voorman Richard de Mos voor een duidelijke gebiedsvisie voor Leidschenveen-Ypenburg. “Een integrale gebiedsvisie voor Leidschenveen-Yp",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-wil-een-gebiedsvisie-voor-leidschenveen-ypenburg/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/shutterstock_1845811528-1-768x512.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-109958",
+"datum": "2023-07-20",
+"titel": "Hart voor Den Haag wil een jeu de boules/petanquebaan in Leidschenveen",
+"tekst": "Raadslid Coen Bom: “De plek is er, de behoefte is er dus ik zou zeggen: aanleggen die baan!” Schelpenhof. In de mailbox van Hart voor Den Haag kwam een mail binnen van Henk Ebben, de 74-jarige voorzitter van de bewonerscommissie aan het Schelpenhof in Leidschenveen. Naast het wooncomplex voor 55-plussers ligt een stukj",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-wil-een-jeu-de-boules-petanquebaan-in-leidschenveen/",
+"beeld": "",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-109953",
@@ -736,7 +1102,20 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Nieuwe-tram-rood-zwart-300x169.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-109951",
+"datum": "2023-07-13",
+"titel": "Hart voor Den Haag en Partij voor de Dieren willen opheldering over waterkwaliteit in Leidschenveen",
+"tekst": "Raadsleden Smit en Dubbelaar: “Achterhouden informatie over verontreiniging sloot in woonwijk is onacceptabel! Vandaag maakte Pointer bekend dat in een sloot in de Haagse woonwijk Leidschenveen de hoogte PFAS-overschrijding van Nederland gevonden is. Pointer is het platform voor onderzoeksjournalistiek van KRO-NCRV op ",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-en-partij-voor-de-dieren-willen-opheldering-over-waterkwaliteit-in-leidschenveen/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/IMG-20230713-WA0005-768x576.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Lokale media en persvrijheid",
+"thema": "Financiën, Cultuur en Scheveningen",
+"zeller": false
 },
 {
 "id": "hvdh-109938",
@@ -747,7 +1126,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/12E4CD38-B84E-45FE-930E-9541ED1D513D-scaled-2-768x512.jpeg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-109934",
@@ -758,7 +1138,20 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/12E4CD38-B84E-45FE-930E-9541ED1D513D-scaled-2-768x512.jpeg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-109894",
+"datum": "2023-05-31",
+"titel": "Hart voor Den Haag bezoek aan Ypenburg succesvol",
+"tekst": "Raadslid Dubbelaar: ‘Eén van de mooiste wijken in Den Haag en die verdient ook aandacht!’ Op zaterdag 13 mei 2023 kwam dé lokale politieke partij Hart voor Den Haag langs in Leidschenveen-Ypenburg om in gesprek te gaan met bewoners. De groengele bus van Hart voor Den Haag stond eerst bij Winkelcentrum Ypenburg en daarn",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-bezoek-aan-ypenburg-succesvol/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Afbeelding-van-WhatsApp-op-2023-05-13-om-16.48.09-768x576.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-109877",
@@ -769,7 +1162,32 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/fietsen-scheveningen-768x363.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-109874",
+"datum": "2023-05-05",
+"titel": "Hart voor Den Haag wil opheldering over rommelig oorlogsmonument Ypenburg",
+"tekst": "Raadslid Dubbelaar: ‘De militairen die hun leven verloren verdienen ons respect, zeker op 4 mei!” Door verschillende bewoners werd Hart voor Den Haag tijdens de Nationale Dodenherdeking gewezen op de slechte omstandigheden hoe het Monument Grenadiers en Jagers erbij stond. Het monument staat sinds 2010 bij het Böttgerw",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-wil-opheldering-over-rommelig-oorlogsmonument-ypenburg/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Ypenburg-1-768x1024.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-109816",
+"datum": "2023-03-23",
+"titel": "Raadsleden Hart voor Den Haag stellen raadsvragen onveilige verkeerssituatie scholen De Bras en De Zonnestraal",
+"tekst": "“In plaats van kordaat de problemen op te lossen en zowel het schoolbestuur als de kinderraad serieus te nemen, krijgt men een tranen trekkend antwoord, waarbij wordt gesteld dat de kinderen maar op de fiets of lopend moeten komen. Daarnaast wordt gesteld dat de school maar aan de ouders moet vragen om niet meer met…",
+"link": "https://www.hartvoordenhaag.nl/raadsleden-hart-voor-den-haag-stellen-raadsvragen-onveilige-verkeerssituatie-scholen-de-bras-en-de-zonnestraal/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/petietie-school-768x528.jpg",
+"buurt": "De Bras",
+"dossier": "Onderwijsbeleid, leraren en kansen",
+"thema": "Jeugd en Onderwijs",
+"zeller": false
 },
 {
 "id": "hvdh-109756",
@@ -780,7 +1198,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/3fcf8c36-01a7-4915-8057-7a820fd72737-768x432.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-109712",
@@ -791,7 +1210,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/tram9-e1510665153558-300x169.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-109672",
@@ -802,7 +1222,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Sint-768x432.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-109607",
@@ -813,7 +1234,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/hvdh-1922-x-1080-px-2-768x432.png",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-109594",
@@ -824,7 +1246,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/AfvalSegbroek-300x225.jpg",
 "buurt": "",
 "dossier": "Wmo en informele zorg",
-"thema": "Zorg en Welzijn"
+"thema": "Zorg en Welzijn",
+"zeller": true
 },
 {
 "id": "hvdh-109590",
@@ -835,7 +1258,80 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/htm-bus-300x185.jpg",
 "buurt": "",
 "dossier": "Volksgezondheid",
-"thema": "Zorg en Welzijn"
+"thema": "Zorg en Welzijn",
+"zeller": true
+},
+{
+"id": "hvdh-109537",
+"datum": "2022-07-06",
+"titel": "Hart voor Den Haag komt met meldpunt onveilige verkeerssituaties",
+"tekst": "De Mos: “Het is belabberd gesteld met de verkeersveiligheid” Hoe veilig ben je in het verkeer in Den Haag? Een onoverzichtelijke oversteekplaats, te hard rijdende auto’s of een gevaarlijk kruispunt: we horen steeds vaker over gevaarlijke situaties in het verkeer en zien het aantal ongelukken de laatste tijd flink toene",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-komt-met-meldpunt-onveilige-verkeerssituaties/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/aanrijding-768x512.jpg",
+"buurt": "",
+"dossier": "",
+"thema": "",
+"zeller": false
+},
+{
+"id": "hvdh-109518",
+"datum": "2022-06-16",
+"titel": "Hart voor Den Haag pleit voor behoud succesvol camperpark Leidschenveen-Ypenburg",
+"tekst": "Verplaatst het binnen de bestaande kavel! Het sinds 2016 aan het Valutapad 7 gevestigde “Camperpark Den Haag” dreigt haar deuren eind van het jaar te moeten sluiten. Het succesvolle camperpark dat officieel tot 31 december van de gemeente Den Haag door het echtpaar Romijn gehuurd wordt is razend populair onder camperre",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-pleit-voor-behoud-succesvol-camperpark-leidschenveen-ypenburg/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/camperpark-768x445.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-109505",
+"datum": "2022-06-10",
+"titel": "Hart voor Den Haag wil opheldering over ontwikkeling Langscheidingsdijk",
+"tekst": "Raadslid Dubbelaar: ‘Bezorgde bewoners in Leidschenveen moeten serieus genomen worden!’ Vorige maand was er een online bewonersbijeenkomst over de Landscheidingsdijk in de wijk Leidschenveen. Deze bijeenkomst werd georganiseerd door de gemeente Den Haag omdat zij plannen heeft met het langgerekte groene gebied tussen d",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-wil-opheldering-over-ontwikkeling-langscheidingsdijk/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/cid21376_Arjen-Dubbelaar-scaled-1-768x435.jpeg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-109495",
+"datum": "2022-06-07",
+"titel": "Hart voor Den Haag wil spoeddebat over totale verkeerschaos",
+"tekst": "Raadsleden De Mos en Meinesz willen met regieteam afstemming wegwerkzaamheden Hart voor Den Haag heeft geen goed woord over voor de totale verkeerschaos waaronder de stad gebukt gaat. De stad ziet geel van de omleidingsborden. “D66-wethouder Van Asten is volledig de weg kwijt. Op maar liefst 25 verschillende plekken zi",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-wil-spoeddebat-over-totale-verkeerschaos/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/C3381157-B16E-4406-930E-9E80C669001D-768x432.jpeg",
+"buurt": "",
+"dossier": "",
+"thema": "",
+"zeller": false
+},
+{
+"id": "hvdh-109419",
+"datum": "2022-03-21",
+"titel": "Hart voor Den Haag wil behoud zomerregeling restafval",
+"tekst": "Raadslid Dubbelaar: ‘Bewoners is beloofd om wekelijks restafval op te halen in de zomermaanden!’ Vanuit Leidschenveen-Ypenburg krijgt de lokale partij Hart voor Den Haag / Groep de Mos verontruste berichten van bewoners. In het stadsdeel hebben bewoners de huisvuilkalender 2022 ontvangen. Hieruit valt op te maken dat d",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-wil-behoud-zomerregeling-restafval/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Ypenburg-afval-scaled-1-768x432.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-109350",
+"datum": "2022-02-09",
+"titel": "Hart voor Den Haag start petitie tegen smeerpijp",
+"tekst": "De Mos mordicus tégen bomenkap en verkeerschaos Er is grote paniek in diverse Haagse wijken, zoals Transvaal, Energiekwartier, Moerwijk en Leidschenveen-Ypenburg over het plan om een omstreden warmteleiding vanuit de Rotterdamse haven naar Den Haag aan te leggen. De 80 centimeter dikke buizen, die huizen met restwarmte",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-start-petitie-tegen-smeerpijp/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/smeerpijp-768x573.png",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-109314",
@@ -846,7 +1342,80 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/KandidatenlijstHvDH2022-768x432.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-109296",
+"datum": "2022-01-07",
+"titel": "Hart voor Den Haag/Groep de Mos: Madeliefveld opgenomen in verkiezingsprogramma",
+"tekst": "Raadslid William De Blok: ‘Als onderzoek aantoont dat de wijk zo’n groot aantal woningen niet aan kan zal het aantal woningen worden bijgesteld’ Op het Madeliefveld in Leidschenveen wordt als het aan het huidige stadsbestuur ligt in 2022 gestart met het bouwen van maximaal 250 sociale huur woningen. Hart voor Den Haag ",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-groep-de-mos-madeliefveld-opgenomen-in-verkiezingsprogramma/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/William-Madeliefveld-267x300.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-109169",
+"datum": "2021-11-10",
+"titel": "Hart voor Den Haag motie regelt evaluatie aanpak tegen jeugdoverlast",
+"tekst": "Raadslid Dubbelaar: ‘Dit is wat ons betreft het begin voor een stevige aanpak!’ De motie ‘Haagse aanpak tegen jeugdoverlast’ van Hart voor Den Haag / Groep de Mos behaalde afgelopen donderdag een meerderheid bij de raadsvergadering over de Haagse begroting voor 2022. Het aantal meldingen van overlast door jongeren in D",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-motie-regelt-evaluatie-aanpak-tegen-jeugdoverlast/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/PHOTO-2021-11-04-18-21-15-768x576.jpg",
+"buurt": "",
+"dossier": "",
+"thema": "",
+"zeller": false
+},
+{
+"id": "hvdh-109153",
+"datum": "2021-11-03",
+"titel": "Hart voor Den Haag wil strengere aanpak tegen jeugdoverlast",
+"tekst": "Raadslid Dubbelaar: ‘Losgeslagen straattuig moet je keihard aanpakken!’ Het aantal meldingen van overlast door jongeren in Den Haag is meer dan verdubbeld. Dat blijkt uit analyse van cijfers van de politie. In 2018 waren er nog 1993 geregistreerde meldingen, in 2020 is dit gestegen naar 4289 meldingen (1). De politieke",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-wil-strengere-aanpak-tegen-jeugdoverlast/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/210616MB065_1-scaled-1-768x512.jpg",
+"buurt": "",
+"dossier": "",
+"thema": "",
+"zeller": false
+},
+{
+"id": "hvdh-109120",
+"datum": "2021-10-19",
+"titel": "Hart voor Den Haag wil spoeddebat: Ypenburg heeft al jarenlang stelselmatig overlast van jeugd",
+"tekst": "De Mos en Dubbelaar: “Dodelijk incident lijkt dramatisch dieptepunt in lange reeks van gesodemieter” Het dramatische incident in de Haagse wijk Ypenburg, waarbij een oudere man is overleden na een aanrijding met een tram, heeft in de buurt een schokgolf teweeggebracht. Volgens ooggetuigen zou het slachtoffer maandagavo",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-wil-spoeddebat-ypenburg-heeft-al-jarenlang-stelselmatig-overlast-van-jeugd/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/mos01-scaled-1-768x512.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-109103",
+"datum": "2021-10-13",
+"titel": "Hart voor Den Haag: Honderden nieuwe bewoners op Madeliefveld, maar hoe staat het met de voorzieningen?",
+"tekst": "Raadslid William De Blok: “Leefbaarheid moet op orde blijven” Op het Madeliefveld in Leidschenveen wordt in 2022 gestart met het bouwen van maximaal 250 woningen. Het gaat vooral om huizen in de sociale huursector. Hart voor Den Haag wil dat het stadsbestuur duidelijk maakt wat een toename van zo’n 500 nieuwe bewoners ",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-honderden-nieuwe-bewoners-op-madeliefveld-maar-hoe-staat-het-met-de-voorzieningen/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/William-1-4-300x185.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-108976",
+"datum": "2021-08-19",
+"titel": "Hart voor Den Haag: ‘Klaar met Mall-files’",
+"tekst": "Hart voor Den Haag: ‘Klaar met Mall-files’ De Mos: ‘Onderzoek Park & Ride voorzieningen’ Al sinds de opening is de Mall of the Netherlands erg druk. In Leidschenveen leidt dat vaak tot verkeersellende, bijvoorbeeld bij de Zoetermeerse Rijbaan. “Verkeerschaos en geluidsoverlast, dat is waar buurgemeente Leidschendam-Voo",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-klaar-met-mall-files/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/989C5A24-87BE-44CF-88D4-8DBC5E51B47B-768x576.jpeg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-108948",
@@ -857,7 +1426,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/jongeren-1-768x512.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-108935",
@@ -868,7 +1438,152 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/DNA-768x762.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-108923",
+"datum": "2021-07-23",
+"titel": "De Mos: ‘Stop waanzinnig parkeerbeleid bij gezondheidscentrum De Reef’",
+"tekst": "In het Gezondheidscentrum De Reef in Ypenburg bevinden zich verschillende soorten aanbieders van zorg, zoals een apotheek en fysiotherapeut. Maar ook een bloedbank, tandarts en fysiotherapeut. U kunt hier dus terecht voor diverse soorten zorg dichtbij huis. De Reef is makkelijk te bereiken per auto, openbaar vervoer of",
+"link": "https://www.hartvoordenhaag.nl/de-mos-stop-waanzinnig-parkeerbeleid-bij-gezondheidscentrum-de-reef/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/ypenburg-Richard-768x576.jpg",
+"buurt": "Ypenburg",
+"dossier": "Volksgezondheid",
+"thema": "Zorg en Welzijn",
+"zeller": false
+},
+{
+"id": "hvdh-108901",
+"datum": "2021-07-13",
+"titel": "Hart voor Den Haag: ‘Stadsbestuur negeert geluidsoverlast A13 bij Ypenburg’",
+"tekst": "Raadslid William de Blok: “Geluidswal wenselijk” Tijdens de online politieke avond van Bewonersplatform Ypenburg eerder dit jaar uitten bewoners van Ypenburg hun ongenoegen over het ontbreken van een geluidswal langs de A13. Tussen de oprit naar de A13 aan de Brasserskade ter hoogte van de Hornbach tot het viaduct over",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-stadsbestuur-negeert-geluidsoverlast-a13-bij-ypenburg/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/william-de-blok-768x435.jpeg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-108830",
+"datum": "2021-06-16",
+"titel": "Hart voor Den Haag woedend over negeren wens bewoners",
+"tekst": "Toch opvang Henri Faasdreef Ze hebben er echt alles aan gedaan om de Raad ervan te overtuigen dat het niet goed is om grote groepen kwetsbare mensen bij elkaar te huisvesten: Raadslid Janice Roopram en fractievertegenwoordiger Monique van Stuijvenberg van Hart voor Den Haag/Groep de Mos. “We begrijpen gewoon niet dat h",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-woedend-over-negeren-wens-bewoners/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Henri-Faasdreef-768x452.jpg",
+"buurt": "",
+"dossier": "",
+"thema": "",
+"zeller": false
+},
+{
+"id": "hvdh-108805",
+"datum": "2021-06-08",
+"titel": "Op aandringen van Hart voor Den Haag komen er voorzieningen voor jong en oud",
+"tekst": "Raadslid De Blok blij met positieve beantwoording raadsvragen Begin dit jaar betoogde Hart voor Den Haag raadslid William de Blok in deze krant dat er in Leidschenveen- Ypenburg te weinig voorzieningen voor jongeren zijn. Kleine kinderen worden groot. “In de VINEX wijken waar een decennium terug ouders met kleine kinde",
+"link": "https://www.hartvoordenhaag.nl/op-aandringen-van-hart-voor-den-haag-komen-er-voorzieningen-voor-jong-en-oud/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/william-de-blok-768x435.jpeg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-108779",
+"datum": "2021-05-30",
+"titel": "“Zorgen over komst 70 huurwoningen voor mensen uit de maatschappelijke opvang”",
+"tekst": "Hart voor Den Haag in de bres voor bewoners Leidschenveen “Zorgen over komst 70 huurwoningen voor mensen uit de maatschappelijke opvang” Het Haags stadsbestuur heeft besloten om op het leegstaande terrein aan de Henri Faasdreef/Oude Middenweg 70 huurwoningen te realiseren voor mensen die uitstromen uit de maatschappeli",
+"link": "https://www.hartvoordenhaag.nl/zorgen-over-komst-70-huurwoningen-voor-mensen-uit-de-maatschappelijke-opvang/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Henri-Faasdreef-768x452.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-108713",
+"datum": "2021-05-03",
+"titel": "Hart voor Den Haag doet oproep aan bewoners Leidschenveen",
+"tekst": "“Meld klachten over slechte verkeersontsluiting!” Hart voor Den Haag / Groep de Mos krijgt steeds vaker signalen dat er via de Zoetermeerse Rijweg en de Laan van Leidschenveen veel sluipverkeer plaatsvindt. “In 2011 trokken bewoners van de wijk De Lanen al met een burgerinitiatief aan de bel voor een betere ontsluiting",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-doet-oproep-aan-bewoners-leidschenveen/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Leidsch-768x504.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-108700",
+"datum": "2021-04-26",
+"titel": "Hart voor Den Haag blij met aangenomen voorstel campagne voor opruimen armetierige balkons",
+"tekst": "Raadslid William de Blok: “Rommelige balkons zorgen voor een verloederd straatbeeld” Veel balkons in sociale huurcomplexen in Den Haag, waaronder ook in Leidschenveen- Ypenburg, doen rommelig aan. Het leidt hier en daar zelfs tot een verpauperd en verloederd straatbeeld. “Een gemiste kans, zeker omdat bewoners er wat a",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-blij-met-aangenomen-voorstel-campagne-voor-opruimen-armetierige-balkons/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Screenshot_20210417-144451_Gallery-768x570.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-108666",
+"datum": "2021-04-12",
+"titel": "De Mos: “Nog steeds geen verbeteringen in water- en groenbeheer Waterwijk Ypenburg”",
+"tekst": "De Mos: “Nog steeds geen verbeteringen in water- en groenbeheer Waterwijk Ypenburg” Hart voor Den Haag fractievoorzitter Richard de Mos is ‘not amused’ over het uitblijven van verbeteringen inzake water- en groenbeheer in Waterwijk Ypenburg. “In het verleden heeft mijn fractie herhaaldelijk aandacht gevraagd voor het g",
+"link": "https://www.hartvoordenhaag.nl/de-mos-nog-steeds-geen-verbeteringen-in-water-en-groenbeheer-waterwijk-ypenburg/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Ypenburg-1-scaled-1-768x576.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-108647",
+"datum": "2021-04-01",
+"titel": "Hart voor Den Haag wil aandacht voor jongeren Ypenburg",
+"tekst": "Raadslid William de Blok: “Geef jongeren Ypenburg een plek. Er is weinig te doen in Ypenburg!” Begin dit jaar betoogde Hart voor Den Haag-raadslid William de Blok in deze krant dat er in Leidschenveen-Ypenburg te weinig voorzieningen voor jongeren zijn. Een door De Blok ingediende motie om op de kavel naast het ROC Mon",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-wil-aandacht-voor-jongeren-ypenburg/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/william-de-blok-768x435.jpeg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-108620",
+"datum": "2021-03-18",
+"titel": "Hart voor Den Haag vraagt aandacht voor geluidsoverlast A13 Ypenburg",
+"tekst": "Raadslid William de Blok: ‘Geluidsoverlast A13 moet aangepakt worden’ Op dinsdag 9 maart jongstleden organiseerde Bewonersplatform Ypenburg een online politieke avond. Bewoners uitten daarbij hun ongenoegen over het ontbreken van een geluidswal tussen de oprit naar de A13 aan de Brasserskade ter hoogte van de Hornbach ",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-vraagt-aandacht-voor-geluidsoverlast-a13-ypenburg/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/William-de-Blok-768x435.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-108561",
+"datum": "2021-02-12",
+"titel": "Hart voor Den Haag: blij met aandacht voor groen in Leidschenveen",
+"tekst": "William de Blok: “Het wandelpad en de ecologische zone krijgen eindelijk de aandacht die het verdient” Tijdens een bezoek van Hart voor Den Haag aan Leidschenveen, kwam de ecologische zone en het wandelpad tussen de Zoetermeerse Rijweg bij de A4 en de Leidschendamse weg aan de orde. De zone is ‘vergrast’ en van een div",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-blij-met-aandacht-voor-groen-in-leidschenveen/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/William-3-scaled-1-768x464.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-108526",
+"datum": "2021-01-27",
+"titel": "Hart voor Den Haag: Stadsbestuur geeft niet thuis, geen extra voorzieningen voor jongeren in Leidschenveen",
+"tekst": "Raadslid William de Blok: “Jongeren Leidschenveen kind van de rekening” Vanuit Leidschenveen-Ypenburg komen nog steeds signalen dat jonge gezinnen uit de wijken vertrekken en dat bewoners overlast hebben van jongeren. Jongeren zelf zeggen dat er te weinig te doen is voor hen. De kinderen die in de destijds nieuwe wijk ",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-stadsbestuur-geeft-niet-thuis-geen-extra-voorzieningen-voor-jongeren-in-leidschenveen/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/William-de-Blok-768x435.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-108519",
@@ -879,7 +1594,20 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/IMG-20210126-WA0023-300x200.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-108505",
+"datum": "2021-01-20",
+"titel": "Hart voor Den Haag: meer voorzieningen voor jongeren in Leidschenveen",
+"tekst": "William de Blok: “Ontwikkellocatie naast ROC Mondriaan is de perfecte plek” Vanuit Leidschenveen-Ypenburg komen nog steeds signalen dat jonge gezinnen uit de wijken vertrekken en dat bewoners overlast hebben van jongeren. Jongeren zelf zeggen dat er te weinig te doen is voor hen. De kinderen die in de destijds nieuwe w",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-meer-voorzieningen-voor-jongeren-in-leidschenveen/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/William-de-Blok-768x435.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-108500",
@@ -890,7 +1618,44 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/FB_IMG_1611083137637-768x768.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-108469",
+"datum": "2021-01-04",
+"titel": "Hart voor Den Haag: Benut ecologische zone Leidschenveen beter",
+"tekst": "Raadslid William de Blok: “Realiseer derde ontsluiting wandelpad met Driemanspolder” De ecologische zone en het wandelpad tussen de Zoetermeerse Rijweg bij de A4 en de Leidschendamse is uniek. De zone is ‘vergrast’ en van een diverse vegetatie is geen sprake. Tijdens een wijkbezoek van Hart voor Den Haag gaven bewoners",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-benut-ecologische-zone-leidschenveen-beter/",
+"beeld": "",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-108451",
+"datum": "2020-12-17",
+"titel": "Hart voor Den Haag: stadsbestuur moet afspraken met bewoners Henricuskade nakomen",
+"tekst": "William de Blok: “Ondanks goede voornemens is nog geen sprake van bewonersbetrokkenheid” Bewoners aan de Henricuskade worden onvoldoende betrokken bij de nieuwe plannen. De verruiming van het defensieterrein aan de Brasserskade tot een politiekantoor voor een ‘speciale’ eenheid van de politie met een schietbaan leidde ",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-stadsbestuur-moet-afspraken-met-bewoners-henricuskade-nakomen/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/William-1-768x432.jpeg",
+"buurt": "",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-108415",
+"datum": "2020-11-26",
+"titel": "Hart voor Den Haag wil duidelijkheid over bouwplannen in nieuwe Driemanspolder",
+"tekst": "William de Blok: Houd De Nieuwe Driemanspolder groen Tijdens een wijkschouw van Hart voor Den Haag/Groep de Mos aan de rand van Leidschenveen tussen de Veenweg en de Zoetermeerse Rijweg in De Nieuwe Driemanspolder uitten enkele buurtbewoners hun bezorgdheid over een mogelijke grondverkoop van het Hoogheemraadschap van ",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-wil-duidelijkheid-over-bouwplannen-in-nieuwe-driemanspolder/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/William-e1606389395984-300x146.png",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-108403",
@@ -901,7 +1666,32 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/800px-Interieur_overzicht_van_een_studentenkamer_in_de_aanbouw_-_Maastricht_-_20532211_-_RCE-768x512.jpg",
 "buurt": "",
 "dossier": "Mbo, hoger onderwijs en studenten",
-"thema": "Jeugd en Onderwijs"
+"thema": "Jeugd en Onderwijs",
+"zeller": true
+},
+{
+"id": "hvdh-108349",
+"datum": "2020-10-28",
+"titel": "Hart voor Den Haag wil maatregelen tegen overlastgevend tuig in Leidschenveen",
+"tekst": "Arjen Dubbelaar: “Het stadsbestuur heeft de onveiligheid in Leidschenveen veel te lang genegeerd” Hart voor Den Haag/Groep de Mos in de Haagse gemeenteraad wil dat het college maatregelen neemt tegen de onveiligheid rondom de OV-halte en het winkelcentrum in Leidschenveen. De Bewonersorganisatie slaat alarm na signalen",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-wil-maatregelen-tegen-overlastgevend-tuig-in-leidschenveen/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Leidschenveen-768x576.jpeg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-108257",
+"datum": "2020-09-23",
+"titel": "Hart voor Den Haag: Blij met behoud volkstuinencomplex in Ypenburg",
+"tekst": "Raadslid William De Blok: “Groene corridor zoveel mogelijk in stand houden” Enkele maanden geleden was er goed nieuws over de bomenrij aan de Henricuskade. Mede door de steun van Hart voor Den Haag in de Haagse gemeenteraad is de groene bomenrij aan de Henricuskade behouden. In hetoorspronkelijke ontwerp van de gemeent",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-blij-met-behoud-volkstuinencomplex-in-ypenburg/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/William-de-Blok-768x435.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-108281",
@@ -912,7 +1702,92 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/jongeren-Loosduinen-768x575.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-108254",
+"datum": "2020-06-15",
+"titel": "Hart voor Den Haag krijgt signalen van overlast door hangjongeren",
+"tekst": "Al geruime tijd ontvangt Hart voor Den Haag / Groep de Mos hardnekkige signalen van overlast door hangjongeren in Ypenburg en dan met name rondom de speeltuin aan de Van Campenvaart, ook wel De Koe genoemd. “Het zou gaan om jongeren tussen de 13 en 18 jaar oud. Bewoners zeggen al weken ‘geterroriseerd’ te worden….",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-krijgt-signalen-van-overlast-door-hangjongeren/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/richard-1-1-768x377.jpg",
+"buurt": "Ypenburg",
+"dossier": "Sport, topsport en speelplaatsen",
+"thema": "Werk, Inkomen en Sport",
+"zeller": false
+},
+{
+"id": "hvdh-108253",
+"datum": "2020-06-08",
+"titel": "Hart voor Den Haag wil opheldering stoppen subsidies leerwerk restaurants",
+"tekst": "De Mos: ‘Gemeente laat doek vallen voor Leerwerk Restaurants Héerlijk in Leidschenveen en Parkoers Zuiderpark Leerwerk Restaurant Heerlijk in Leidschenveen gaat sluiten. Per 17 juli gaat de deur van dit mooie project definitief dicht. De subsidie stopt. Bewoners Organisatie Leidschenveen (BOL) betreurt dit besluit ten ",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-wil-opheldering-stoppen-subsidies-leerwerk-restaurants/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/richard-1-1-768x377.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-108252",
+"datum": "2020-05-11",
+"titel": "De Mos krijgt mooie toezegging realisatie woningen Leidschenveen",
+"tekst": "Hart voor Den Haag heeft in antwoord op schriftelijke vragen over het transformeren van overbodige scholen naar (senioren-)woningen. “In Leidschenveen neemt het aantal kinderen en jongeren de komende jaren af. Op aandringen van Hart voor Den Haag wordt er nu bij vijf scholen onderzoek gedaan naar mogelijkheden om de ov",
+"link": "https://www.hartvoordenhaag.nl/de-mos-krijgt-mooie-toezegging-realisatie-woningen-leidschenveen/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/richard-1-1-768x377.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Wmo en informele zorg",
+"thema": "Zorg en Welzijn",
+"zeller": false
+},
+{
+"id": "hvdh-107945",
+"datum": "2020-05-01",
+"titel": "Hart voor Den Haag/Groep de Mos wil ook non-food terug op wijkmarkten",
+"tekst": "Jelle Meinesz: “ Waarom kan het zelfs wel in Brabant, maar niet in Den Haag?” Raadslid Jelle Meinesz is verbaasd dat overal in het land gemeenten beslissen om de non-rood afdelingen van de markt weer open te laten gaan en in Den Haag nog niet. Meinesz: “Er komen ieder dag berichten binnen van marktkooplui die…",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-groep-de-mos-wil-ook-non-food-terug-op-wijkmarkten/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Screen-Shot-2020-03-24-at-12.40.58-768x430.png",
+"buurt": "",
+"dossier": "",
+"thema": "",
+"zeller": false
+},
+{
+"id": "hvdh-108251",
+"datum": "2020-04-28",
+"titel": "Groeiend afvalprobleem in Leidschenveen – Ypenburg",
+"tekst": "Het is de laatste weken een flinke bende rondom de ondergrondse containers in de Haagse wijk Ypenburg. Bij de ondergrondse containers aan de Fluitschiplaan lag de grootste berg afval. Alle ondergrondse containers in de hele wijk zitten al twee dagen overvol. Het probleem doet zich inmiddels al enkele weken voor. “We si",
+"link": "https://www.hartvoordenhaag.nl/groeiend-afvalprobleem-in-leidschenveen-ypenburg/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/orac-768x460.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-108249",
+"datum": "2020-03-30",
+"titel": "Hart voor Den Haag: “Opheldering over sluiten groente en fruit handel”",
+"tekst": "Bewonersorganisatie Leidschenveen heeft aan de bel getrokken over het besluit van burgemeester Remkes om de particuliere verkoop van groente en fruit in het Forepark, op straffe van 10.000 euro aan boete, te verbieden. Verhoek groothandel levert normaal aan restaurants, strandpaviljoen, bakkerijen, slagerijen, vishande",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-opheldering-over-sluiten-groente-en-fruit-handel/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Richard-Ralf-768x524.png",
+"buurt": "Leidschenveen",
+"dossier": "Volksgezondheid",
+"thema": "Zorg en Welzijn",
+"zeller": false
+},
+{
+"id": "hvdh-107852",
+"datum": "2020-03-05",
+"titel": "Hart voor Den Haag breekt lans voor kleine zorgen in Leidschenveen",
+"tekst": "De Mos vertaalt zorgen over parkeren, vuil en toegankelijkheid in set raadsvragen Op zijn mailadres leidschenveenypenburg@hartvoordenhaag.nl blijft Richard de Mos, binnen Hart voor Den Haag verantwoordelijk voor het stadsdeel Leidschenveen Ypenburg, tips en suggesties krijgen van bewoners.“Afgelopen weken heb ik veel m",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-breekt-lans-voor-kleine-zorgen-in-leidschenveen/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Richard-300x170.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Toegankelijkheid en mensen met een beperking",
+"thema": "Zorg en Welzijn",
+"zeller": false
 },
 {
 "id": "hvdh-107628",
@@ -923,7 +1798,56 @@
 "beeld": "",
 "buurt": "",
 "dossier": "Sport, topsport en speelplaatsen",
-"thema": "Werk, Inkomen en Sport"
+"thema": "Werk, Inkomen en Sport",
+"zeller": true
+},
+{
+"id": "hvdh-107850",
+"datum": "2020-02-24",
+"titel": "Hart voor Den Haag: ‘Ypenburg moet leefbaarder worden voor haar bewoners’!",
+"tekst": "De Mos: ‘Gemeente moet inspelen op wensen, behoeften en verlangens van bewoners van dit nog jonge stadsdeel’ Hart voor Den Haag maakt zich al langer druk om het wat vergeten stadsdeel Ypenburg. Richard de Mos: ‘Er moet een update van de door bewoners geschreven visie komen die er voor zorgt dat Ypenburg er in zowel eco",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-ypenburg-moet-leefbaarder-worden-voor-haar-bewoners/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Ypenburg-1-scaled-1-768x576.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-107849",
+"datum": "2020-02-06",
+"titel": "Druk bezocht spreekuur Leidschenveen Ypenburg",
+"tekst": "Zorgen over herinrichting Bosweide, gedrag hangjongeren en leegstand winkelcentrum Afgelopen woensdag was er een behoorlijke opkomst bij het spreekuur van Hart voor Den Haag in het wijkcentrum Piet Vink. Bewoners hebben diverse zorgen geuit waarmee het stadsdeelteam aan de slag gaat. Onder andere over de toenemende lee",
+"link": "https://www.hartvoordenhaag.nl/druk-bezocht-spreekuur-leidschenveen-ypenburg/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/ypenburg-768x432.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-107848",
+"datum": "2020-01-30",
+"titel": "Bewoners Ypenburg: ‘Hou P+R gratis’",
+"tekst": "De Mos: ‘Ook zorgen parkeergelegenheid nabij het Hofbad’ In reactie op de hulplijn die Hart voor Den Haag raadslid Richard de Mos vorige week opengooide, is de wens van bewoners duidelijk: ‘De P+R bij station Ypenburg moet geen betaald parkeren worden’! Bewoners zijn bang dat zodra betaald parkeren bij de P+R voorzieni",
+"link": "https://www.hartvoordenhaag.nl/bewoners-ypenburg-hou-pr-gratis/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Richard-nieuw-300x179.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-107847",
+"datum": "2020-01-23",
+"titel": "De Mos vraagt bewoners Ypenburg om advies",
+"tekst": "“Gemeente wil geld zien voor gratis P+R parkeerplaatsen” De gemeente Den Haag wil de – nu nog – gratis P+R-parkeerplaatsen – omturnen in betaalde zones. “We gaan met verschillende tarieven werken. Een laag dagtarief voor treinreizigers en een hoog uurtarief voor niet treinreizigers”, aldus een woordvoerder van de gemee",
+"link": "https://www.hartvoordenhaag.nl/de-mos-vraagt-bewoners-ypenburg-om-advies/",
+"beeld": "",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-107577",
@@ -934,7 +1858,44 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/DSC_5193-768x510.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-107845",
+"datum": "2020-01-15",
+"titel": "Richard de Mos stadsdeelraadslid Leidschenveen Ypenburg",
+"tekst": "Sinds zijn terugtreden in de Haagse gemeenteraad is Richard de Mos weer fractievoorzitter van Hart voor Den Haag. Om dicht bij de burgers te staan en veel de wijken in te trekken heeft de grootste partij van de stad haar acht raadsleden elk een stadsdeel laten adopteren. Voor De Mos is dat Leidschenveen Ypenburg geword",
+"link": "https://www.hartvoordenhaag.nl/richard-de-mos-stadsdeelraadslid-leidschenveen-ypenburg/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/opruimen-768x463.png",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-107844",
+"datum": "2020-01-13",
+"titel": "Hart voor Den Haag: “Verbeter de leefbaarheid in Leidschenveen Ypenburg; Jeugdhonk voor pubers”!",
+"tekst": "De Mos: “Ga in gesprek met bewoners over de demografische ontwikkelingen” Vanuit Vinex-wijk Leidschenveen-Ypenburg komen steeds meer signalen dat jonge gezinnen uit de wijken verdwijnen en dat bewoners overlast hebben van jongeren. Jongeren zelf zeggen dat er te weinig te doen is voor hen. De kinderen die in de destijd",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-verbeter-de-leefbaarheid-in-leidschenveen-ypenburg-jeugdhonk-voor-pubers/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Richard-300x170.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-107546",
+"datum": "2019-12-09",
+"titel": "Hart voor Den Haag stelt raadsvragen over stroomstoring Leidschenveen",
+"tekst": "Hart voor Den Haag/Groep de Mos stelt raadsvragen over de zoveelste stroomstoring in Leidschenveen van ruim een week geleden. Postcodegebieden 2491 en 2492 werden zondagochtend getroffen door de stroomstoring, die zo’n kwartier duurde. Dit was de 3e stroomstoring in zo’n anderhalf jaar tijd, melden diverse bewoners aan",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-stelt-raadsvragen-over-stroomstoring-leidschenveen/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/logo-300x139.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-107704",
@@ -945,7 +1906,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Damien.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-107471",
@@ -956,7 +1918,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/F1-demonstratie-300x149.jpg",
 "buurt": "",
 "dossier": "Sport, topsport en speelplaatsen",
-"thema": "Werk, Inkomen en Sport"
+"thema": "Werk, Inkomen en Sport",
+"zeller": true
 },
 {
 "id": "hvdh-107466",
@@ -967,7 +1930,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Sinterklaas_zwarte_piet-768x511.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-107463",
@@ -978,7 +1942,32 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/sf-300x139.png",
 "buurt": "",
 "dossier": "Mbo, hoger onderwijs en studenten",
-"thema": "Jeugd en Onderwijs"
+"thema": "Jeugd en Onderwijs",
+"zeller": true
+},
+{
+"id": "hvdh-107843",
+"datum": "2019-08-28",
+"titel": "Hart voor Den Haag verbijsterd over mishandeling Leidschenveen en wil maatregelen",
+"tekst": "Hart voor Den Haag/Groep de Mos heeft met verbijstering kennis genomen van het bericht in het AD aangaande de zware mishandeling van 17 jarige jongen, bij OV-halte Leidschenveen. Op de bewuste zaterdagavond is een jongen door willekeur van een groep tuig op een brute manier mishandeld. Een vriend van de jongen was hier",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-verbijsterd-over-mishandeling-leidschenveen-en-wil-maatregelen/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/cid21375_GDM-Nino-Davitulani-1-768x512.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-107789",
+"datum": "2019-08-04",
+"titel": "Hart voor Den Haag-vrijwilligers maken Stichting Solidair blij",
+"tekst": "Fractievertegenwoordiger Monique van Stuijvenberg: ‘Mooie donatie voor Stichting Solidair. Dank je wel Bob, je bent een echte topper! De Stichting Solidair in stadsdeel Escamp werd afgelopen week blij gemaakt door Hart voor Den Haag/Groep de Mos-fractievertegenwoordiger Monique van Stuijvenberg en wijkvertegenwoordiger",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-vrijwilligers-maken-stichting-solidair-blij/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/stichting-solidair-768x1226.png",
+"buurt": "",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-107436",
@@ -989,7 +1978,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/ralf-damien-768x576.png",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-107434",
@@ -1000,7 +1990,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/school-768x682.png",
 "buurt": "",
 "dossier": "Onderwijsbeleid, leraren en kansen",
-"thema": "Jeugd en Onderwijs"
+"thema": "Jeugd en Onderwijs",
+"zeller": true
 },
 {
 "id": "hvdh-107435",
@@ -1011,7 +2002,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/zwembad-300x157.jpg",
 "buurt": "",
 "dossier": "Sport, topsport en speelplaatsen",
-"thema": "Werk, Inkomen en Sport"
+"thema": "Werk, Inkomen en Sport",
+"zeller": true
 },
 {
 "id": "hvdh-107422",
@@ -1022,7 +2014,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Legia-Warschau-300x298.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-107419",
@@ -1033,7 +2026,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Damien.jpg",
 "buurt": "",
 "dossier": "Joodse gemeenschap en antisemitisme",
-"thema": "Volkshuisvesting, Integratie en Vrijwilligers"
+"thema": "Volkshuisvesting, Integratie en Vrijwilligers",
+"zeller": true
 },
 {
 "id": "hvdh-107413",
@@ -1044,7 +2038,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/like-300x200.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-107402",
@@ -1055,7 +2050,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Groep_de_Mos-HvdH-logo@2x-1-300x139.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-107399",
@@ -1066,7 +2062,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/boeken-768x470.jpg",
 "buurt": "",
 "dossier": "Taalaanpak, leesvaardigheid en bibliotheek",
-"thema": "Jeugd en Onderwijs"
+"thema": "Jeugd en Onderwijs",
+"zeller": true
 },
 {
 "id": "hvdh-107391",
@@ -1077,7 +2074,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/ehbo-768x371.png",
 "buurt": "",
 "dossier": "Onderwijsbeleid, leraren en kansen",
-"thema": "Jeugd en Onderwijs"
+"thema": "Jeugd en Onderwijs",
+"zeller": true
 },
 {
 "id": "hvdh-107382",
@@ -1088,7 +2086,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Openluchtmuseum_Atlantikwall-768x510.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-107379",
@@ -1099,7 +2098,8 @@
 "beeld": "",
 "buurt": "",
 "dossier": "Mbo, hoger onderwijs en studenten",
-"thema": "Jeugd en Onderwijs"
+"thema": "Jeugd en Onderwijs",
+"zeller": true
 },
 {
 "id": "hvdh-107377",
@@ -1110,7 +2110,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/F1-demonstratie-300x149.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-107368",
@@ -1121,7 +2122,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Johan_van_Oldenbarnevelt-249x300.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-107363",
@@ -1132,7 +2134,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Damien.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-107362",
@@ -1143,7 +2146,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/voetbal-300x136.jpg",
 "buurt": "",
 "dossier": "Sport, topsport en speelplaatsen",
-"thema": "Werk, Inkomen en Sport"
+"thema": "Werk, Inkomen en Sport",
+"zeller": true
 },
 {
 "id": "hvdh-107360",
@@ -1153,8 +2157,9 @@
 "link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-groep-de-mos-haal-basketbal-op-topniveau-naar-zuiderpark/",
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/basketbal-768x512.jpg",
 "buurt": "",
-"dossier": "",
-"thema": ""
+"dossier": "Sport, topsport en speelplaatsen",
+"thema": "Werk, Inkomen en Sport",
+"zeller": true
 },
 {
 "id": "hvdh-107345",
@@ -1165,7 +2170,20 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/studentenboot-768x576.png",
 "buurt": "",
 "dossier": "Mbo, hoger onderwijs en studenten",
-"thema": "Jeugd en Onderwijs"
+"thema": "Jeugd en Onderwijs",
+"zeller": true
+},
+{
+"id": "hvdh-107344",
+"datum": "2019-04-12",
+"titel": "Hart voor Den Haag wil afgepakt crimineel geld inzetten voor de stad",
+"tekst": "Fractievoorzitter Dubbelaar: “Bij een politieactie in Ypenburg is heel veel geld in beslag genomen, laten we ervoor zorgen dat dit teruggaat naar Den Haag!” Bij een grootschalige politieactie in de Haagse wijk Ypenburg is begin maart voor miljoenen euro’s aan contant geld in beslag genomen (1). Naast de miljoenen euro’",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-wil-afgepakt-crimineel-geld-inzetten-voor-de-stad/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/geld-300x153.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-107343",
@@ -1176,7 +2194,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/leraren-300x281.png",
 "buurt": "",
 "dossier": "Onderwijsbeleid, leraren en kansen",
-"thema": "Jeugd en Onderwijs"
+"thema": "Jeugd en Onderwijs",
+"zeller": true
 },
 {
 "id": "hvdh-107337",
@@ -1187,7 +2206,20 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/sports-hall-768x512.jpg",
 "buurt": "",
 "dossier": "Sport, topsport en speelplaatsen",
-"thema": "Werk, Inkomen en Sport"
+"thema": "Werk, Inkomen en Sport",
+"zeller": true
+},
+{
+"id": "hvdh-107336",
+"datum": "2019-04-08",
+"titel": "Hart voor Den Haag: handen af van onze zwanen!",
+"tekst": "René Oudshoorn: “Nu actie, voordat al onze vijvers en grachten leeg zijn gevist!” Geharpoeneerde zwanen, doodgebeten zwanen, bekogelde zwanen op het nest en nu ook een groen geverfde broedende zwaan. Zo maar een greep uit het nieuws van afgelopen week. Niet alle berichten komen uit onze stad maar het is wel een tendens",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-handen-af-van-onze-zwanen/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/zwanen-768x360.jpg",
+"buurt": "",
+"dossier": "",
+"thema": "",
+"zeller": false
 },
 {
 "id": "hvdh-107320",
@@ -1198,7 +2230,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/hand-1832921_960_720-768x512.jpg",
 "buurt": "",
 "dossier": "Onderwijsbeleid, leraren en kansen",
-"thema": "Jeugd en Onderwijs"
+"thema": "Jeugd en Onderwijs",
+"zeller": true
 },
 {
 "id": "hvdh-107316",
@@ -1209,7 +2242,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Bunker-768x576.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-107302",
@@ -1220,7 +2254,20 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Damien.jpg",
 "buurt": "",
 "dossier": "Joodse gemeenschap en antisemitisme",
-"thema": "Volkshuisvesting, Integratie en Vrijwilligers"
+"thema": "Volkshuisvesting, Integratie en Vrijwilligers",
+"zeller": true
+},
+{
+"id": "hvdh-107285",
+"datum": "2019-02-20",
+"titel": "Hart voor Den Haag/Groep de Mos: eindelijk lief-en-leed-straten!",
+"tekst": "Raadslid Janice Roopram: “Waarom een pilot in Leidschenveen/Ypenburg? Moerwijk is een wijk met veel meer armoede en eenzaamheid!” Meer dan 200.000 Hagenaars voelen zich regelmatig eenzaam. In het Haagse coalitieakkoord is de bestrijding van eenzaamheid een prioriteit en er worden miljoenen voor vrijgemaakt. Vandaag in ",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-groep-de-mos-eindelijk-lief-en-leed-straten/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/395f61e4-c307-4148-bdc2-26659c2e0eba-768x576.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Wmo en informele zorg",
+"thema": "Zorg en Welzijn",
+"zeller": false
 },
 {
 "id": "hvdh-107283",
@@ -1231,7 +2278,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/honden-Damien-768x424.jpg",
 "buurt": "",
 "dossier": "Taalaanpak, leesvaardigheid en bibliotheek",
-"thema": "Jeugd en Onderwijs"
+"thema": "Jeugd en Onderwijs",
+"zeller": true
 },
 {
 "id": "hvdh-107266",
@@ -1242,7 +2290,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/DSC_5076-768x510.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-107255",
@@ -1253,7 +2302,20 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/school-768x682.png",
 "buurt": "",
 "dossier": "Onderwijsbeleid, leraren en kansen",
-"thema": "Jeugd en Onderwijs"
+"thema": "Jeugd en Onderwijs",
+"zeller": true
+},
+{
+"id": "hvdh-107241",
+"datum": "2018-12-18",
+"titel": "Hart voor Den Haag/Groep de Mos: Stop zwanenroof uit Haagse grachten",
+"tekst": "“Dit zijn gewoon zware criminelen die niets met dierenwelzijn op hebben”. Nadat raadslid René Oudshoorn van Hart voor Den Haag/Groep de Mos afgelopen zomer aan de bel trok over verdwenen zwanen op Ypenburg, bereiken ons signalen dat ook uit de Haagse grachten en singels zwanen in grote getale verdwijnen. De laatste 15 ",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-groep-de-mos-stop-zwanenroof-uit-haagse-grachten/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/zwanen-768x360.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-107842",
@@ -1264,7 +2326,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/park-6092_960_720-768x576.jpg",
 "buurt": "Morgenweide",
 "dossier": "Leidschenveen-Ypenburg",
-"thema": "Stadsdeel Leidschenveen-Ypenburg"
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": true
 },
 {
 "id": "hvdh-107738",
@@ -1275,7 +2338,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Damien.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-107217",
@@ -1286,7 +2350,32 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/straatartisten-768x512.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-107841",
+"datum": "2018-11-21",
+"titel": "Hart voor Den Haag/Groep de Mos wil goedkope parkeerzones uitbreiden na succes in Ypenburg!",
+"tekst": "Hart voor Den Haag/Groep de Mos in de Haagse gemeenteraad wil meer goedkope parkeerzones, waarbij kort geparkeerd kan worden, in de stad. Dit laat de partij weten na de evaluatie van de nieuwe parkeerregeling bij het winkelcentrum Ypenburg. Op 28 september 2017 is het nieuwe parkeerregime ingevoerd, met een maximum par",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-groep-de-mos-wil-goedkope-parkeerzones-uitbreiden-na-succes-in-ypenburg/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Parkeren1-768x432.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-107192",
+"datum": "2018-10-18",
+"titel": "Hart voor Den Haag: meer locaties statushouderopvang toevoegen aan sociale woningvoorraad",
+"tekst": "Hart voor Den Haag/Groep de Mos wil dat het Haagse stadsbestuur gaat bekijken of meer opvanglocaties voor statushouders kunnen worden omgeturnd tot reguliere huurwoningen. Recent werd bekend gemaakt dat er geen grootschalige opvang van statushouders meer zal plaatsvinden aan de Narcislaan, Boekweitkamp, Koperwerf en he",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-meer-locaties-statushouderopvang-toevoegen-aan-sociale-woningvoorraad/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/cid21375_GDM-Nino-Davitulani-1-768x512.jpg",
+"buurt": "",
+"dossier": "",
+"thema": "",
+"zeller": false
 },
 {
 "id": "hvdh-107730",
@@ -1297,7 +2386,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/kamakura-768x769.jpeg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-107160",
@@ -1308,7 +2398,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/WTC_smoking_on_9-11-768x576.jpg",
 "buurt": "",
 "dossier": "Onderwijsbeleid, leraren en kansen",
-"thema": "Jeugd en Onderwijs"
+"thema": "Jeugd en Onderwijs",
+"zeller": true
 },
 {
 "id": "hvdh-107156",
@@ -1319,7 +2410,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/paardenstal-768x512.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-107152",
@@ -1330,7 +2422,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/AmerEmbassNeth-768x576.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
 },
 {
 "id": "hvdh-107143",
@@ -1341,7 +2434,20 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/ADO-Thuis-uitshirt-768x574.jpg",
 "buurt": "",
 "dossier": "Sport, topsport en speelplaatsen",
-"thema": "Werk, Inkomen en Sport"
+"thema": "Werk, Inkomen en Sport",
+"zeller": true
+},
+{
+"id": "hvdh-107139",
+"datum": "2018-08-24",
+"titel": "Hart voor Den Haag/Groep de Mos: stop de Zwanenroof in Ypenburg",
+"tekst": "Raadslid René Oudshoorn: “Er zijn barbaarse dierenbeulen actief op Ypenburg” In de Haagse wijk Ypenburg worden volgens bewoners sinds enkele weken veel zwanen vermist. Zwanen zijn honkvaste dieren, sommige koppels verblijven daar al 15 jaar maar plots zijn acht koppels met hun jongen verdwenen. De Knobbelzwanenringgroe",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-groep-de-mos-stop-de-zwanenroof-in-ypenburg/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/zwanen-768x360.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-107127",
@@ -1352,7 +2458,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/leraren-300x281.png",
 "buurt": "",
 "dossier": "Onderwijsbeleid, leraren en kansen",
-"thema": "Jeugd en Onderwijs"
+"thema": "Jeugd en Onderwijs",
+"zeller": true
 },
 {
 "id": "hvdh-107091",
@@ -1363,7 +2470,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/school-768x682.png",
 "buurt": "",
 "dossier": "Onderwijsbeleid, leraren en kansen",
-"thema": "Jeugd en Onderwijs"
+"thema": "Jeugd en Onderwijs",
+"zeller": true
 },
 {
 "id": "hvdh-107069",
@@ -1374,7 +2482,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Damien.jpg",
 "buurt": "",
 "dossier": "Volksgezondheid",
-"thema": "Zorg en Welzijn"
+"thema": "Zorg en Welzijn",
+"zeller": true
 },
 {
 "id": "hvdh-107049",
@@ -1385,7 +2494,32 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Team-Segbroek-10-10-2017-768x510.jpg",
 "buurt": "",
 "dossier": "Leidschenveen-Ypenburg",
-"thema": "Stadsdeel Leidschenveen-Ypenburg"
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": true
+},
+{
+"id": "hvdh-107029",
+"datum": "2018-05-31",
+"titel": "Uit Hart voor Den Haag / Groep de Mos buurtonderzoek: ‘Maak werk van verlicht evenemententerrein Böttgerwater’!",
+"tekst": "Hart voor Den Haag stadsdeelvoorzitter Leidschen-Ypenburg Bas van Woesik heeft houdt opnieuw een buurtonderzoek. Eén van de grootste ergernissen dat daarbij naar bovenkomt is het niet verlichte Böttgerwaterterrein en daarbij omliggende straten. “Het terrein wordt veelal gebruikt voor de kermis, herdenkingen, sportdagen",
+"link": "https://www.hartvoordenhaag.nl/uit-hart-voor-den-haag-groep-de-mos-buurtonderzoek-maak-werk-van-verlicht-evenemententerrein-bottgerwater/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/ypenburg-768x432.jpg",
+"buurt": "Ypenburg",
+"dossier": "Sport, topsport en speelplaatsen",
+"thema": "Werk, Inkomen en Sport",
+"zeller": false
+},
+{
+"id": "hvdh-107016",
+"datum": "2018-05-22",
+"titel": "Hart voor Den Haag/Groep de Mos wil onderzoek naar Kavelwinkel",
+"tekst": "Raadslid Dubbelaar: “In een korte periode zijn er een aantal voorvallen met de Kavelwinkel geweest, die Den Haag veel geld kosten. Ik wil hier duidelijkheid over!” De woordvoerder Ruimtelijke Ordening van de lokale Haagse partij, raadslid Arjen Dubbelaar van Hart voor Den Haag / Groep de Mos, stelt vraagtekens bij de v",
+"link": "https://www.hartvoordenhaag.nl/hart-voor-den-haag-groep-de-mos-wil-onderzoek-naar-kavelwinkel/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Arjen-Dubbelaar-e1499008181701-768x372.jpg",
+"buurt": "",
+"dossier": "",
+"thema": "",
+"zeller": false
 },
 {
 "id": "hvdh-107000",
@@ -1396,7 +2530,32 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/bes19-768x512.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-106962",
+"datum": "2018-04-13",
+"titel": "Groep de Mos: Geef groeiende groep camperaars de ruimte in Den Haag",
+"tekst": "“Met meer dan 100.000 camperaars die 55 euro per dag uitgeven zijn ze van groot economisch belang” In AD Haagsche Courant stond afgelopen week het artikel ‘Niemand zit te wachten op campers in de binnenstad, maar waar moeten ze dan naartoe? ‘. In Nederland zijn 100.000 camperaars en dit aantal is nog steeds groeiende. ",
+"link": "https://www.hartvoordenhaag.nl/groep-de-mos-geef-groeiende-groep-camperaars-de-ruimte-in-den-haag/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/camper-768x576.jpg",
+"buurt": "",
+"dossier": "",
+"thema": "",
+"zeller": false
+},
+{
+"id": "hvdh-106959",
+"datum": "2018-04-12",
+"titel": "Eén keer per week het vuil ophalen blijft inzet Groep de Mos",
+"tekst": "Raadslid Oudshoorn: ‘Voor Leidschenveen ligt er nu een keiharde toezegging: wekelijks ophalen in de zomer’ In wijken waar nog geen ondergrondse vuilcontainers staan wil de gemeente het restafval nog maar één keer in de twee weken ophalen. Naar aanleiding van de inbreng van Groep de Mos tijdens de behandeling van de oph",
+"link": "https://www.hartvoordenhaag.nl/een-keer-per-week-het-vuil-ophalen-blijft-inzet-groep-de-mos/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/vuilcontainers-leidschenveen-300x168.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-106911",
@@ -1407,7 +2566,20 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Jelle.png",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-106853",
+"datum": "2018-01-30",
+"titel": "Groep de Mos: ‘Betaald parkeren Ypenburg De Venen mond nu al uit in problemen’",
+"tekst": "Ondernemers kampen al met omzetverliezen Groep de Mosser Bas van Woesik is met de ondernemers in Ypenburg de Venen in gesprek geweest over de gevolgen van de invoering van betaald parken in De Venen. De ondernemers zien nu al een omzetdaling van 20 tot 30% en vrezen dat ze het zeker niet langer dan een…",
+"link": "https://www.hartvoordenhaag.nl/groep-de-mos-betaald-parkeren-ypenburg-de-venen-mond-nu-al-uit-in-problemen/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Parkeren1-768x432.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-106837",
@@ -1418,7 +2590,20 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/50-258x300.png",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-106785",
+"datum": "2017-12-12",
+"titel": "Groep de Mos opent Meldpunt Parkeren",
+"tekst": "De Mos: ‘Onvrede over het parkeerbeleid is grenzeloos groot’! Groep de Mos ontvangt via social media en via de mail onophoudelijk signalen over de onvrede in de stad ten aanzien van het parkeerbeleid van dit stadsbestuur. De laatste weken kwam D66-wethouder Tom de Bruijn onder vuur te liggen over de uitbreiding van bet",
+"link": "https://www.hartvoordenhaag.nl/groep-de-mos-opent-meldpunt-parkeren/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/street-2701004_960_720-768x290.jpg",
+"buurt": "",
+"dossier": "",
+"thema": "",
+"zeller": false
 },
 {
 "id": "hvdh-106759",
@@ -1429,7 +2614,116 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Grote_Kerk_Den_Haag-768x576.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-106748",
+"datum": "2017-11-06",
+"titel": "Buurtonderzoek in Waterwijk Ypenburg",
+"tekst": "Groep de Mos stadsdeelvoorzitter Bas van Woesik: “Er kan hier heel wat beter; we gaan in gesprek met bewoners en ondernemers”! Groep de Mos stadsdeelcommissie Leidschenveen-Ypenburg is samen met de wijkvertegenwoordiging Waterrijk een buurtonderzoek in de Waterwijk gestart. Groep de Mos Stadsdeelvoorzitter Bas van Woes",
+"link": "https://www.hartvoordenhaag.nl/buurtonderzoek-in-waterwijk-ypenburg/",
+"beeld": "",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-106681",
+"datum": "2017-09-22",
+"titel": "Blij met invoering nieuw parkeerbeleid winkelcentrum Ypenburg",
+"tekst": "“Nu doorpakken met beter onderhoud van het winkelcentrum” Heel lang moest er gewacht worden op de invoering van het nieuwe parkeerbeleid bij winkelcentrum Ypenburg. “Echt heel vervelend dat het zo lang moest duren, omdat de aangenomen motie al op 1 augustus in had moeten gaan. Maar de vreugde er zeker niet minder om”, ",
+"link": "https://www.hartvoordenhaag.nl/blij-met-invoering-nieuw-parkeerbeleid-winkelcentrum-ypenburg/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/new-20170922-e1506084612129-300x169.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-106678",
+"datum": "2017-09-21",
+"titel": "Camperparkondernemer wordt weggetreiterd door VVD-wethouder Revis",
+"tekst": "Camperpark Den Haag is een nieuw camperpark aan de rand van Den Haag in de wijk Ypenburg langs de A4 en A12. Het camperpark is een uitstekend startpunt voor een bezoek aan Den Haag of Scheveningen. Na een flinke investering heeft eigenaar Erik Romijn een kale vlakte weten om te toveren tot een plek waar…",
+"link": "https://www.hartvoordenhaag.nl/camperparkondernemer-wordt-weggetreiterd-door-vvd-wethouder-revis/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Richard-nieuw-300x179.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-106666",
+"datum": "2017-09-13",
+"titel": "Groep de Mos heeft buurtonderzoek Leidschenveen afgerond",
+"tekst": "De afgelopen maanden trok Bas van Woesik, Groep de Mos stadsdeelvoorzitter Leidschenveen-Ypenburg, door Leidschenveen voor een buurtonderzoek. De bewoners omschrijven Leidschenveen als mooi, maar er zijn ook voldoende zorgen. Zo blijft het parkeerbeleid een grote doorn in het oog van de bewoners die week in week uit zi",
+"link": "https://www.hartvoordenhaag.nl/groep-de-mos-heeft-buurtonderzoek-leidschenveen-afgerond/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/ypen-300x182.png",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-106659",
+"datum": "2017-09-05",
+"titel": "Groep de Mos pleit voor Haags Deltaplan Bereikbaarheid",
+"tekst": "Raadsleden De Mos en Guernaoui willen Investeringsfonds Bereikbaarheid en snelle aanpak verkeersknelpunten Vrijwel dagelijks loopt het in de Haagse regio gierend vast. Volgens cijfers van TNO brachten files de Nederlandse economie meer dan een miljard euro schade toe. Hierbij heeft Den Haag de twijfelachtige eer om bij",
+"link": "https://www.hartvoordenhaag.nl/groep-de-mos-pleit-voor-haags-deltaplan-bereikbaarheid/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Richard-de-Mos-768x372.jpg",
+"buurt": "",
+"dossier": "",
+"thema": "",
+"zeller": false
+},
+{
+"id": "hvdh-106654",
+"datum": "2017-08-30",
+"titel": "Spreektekst Raadslid Arjen Dubbelaar 30 augustus 2017 voor het debat \"Voortgang Statushouders\"",
+"tekst": "Voorzitter, Ons stadsbestuur onder leiding van de PvdA, het CDA, de Haagse Stadspartij, D66 en de Haagse VVD vindt zichzelf stoer. Tenminste dat was de uitspraak van de verantwoordelijk wethouder Wijsmuller die het beleid uitvoert van deze vijf coalitiepartijen. Deze vijf partijen hebben namelijk onderling besloten om ",
+"link": "https://www.hartvoordenhaag.nl/spreektekst-raadslid-arjen-dubbelaar-30-augustus-2017-voor-het-debat-voortgang-statushouders/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Arjen-Dubbelaar-e1499008181701-768x372.jpg",
+"buurt": "",
+"dossier": "",
+"thema": "",
+"zeller": false
+},
+{
+"id": "hvdh-106626",
+"datum": "2017-07-24",
+"titel": "Ypenburg moet leefbaarder worden voor haar bewoners",
+"tekst": "De Mos: ‘Gemeente moet inspelen op wensen, behoeften en verlangens van bewoners van dit nog jonge stadsdeel’ Groep de Mos maakt zich al langer druk om het wat vergeten stadsdeel Ypenburg. Zo trekt Groep de Mos stadsdeelvoorzitter Bas van Woesik al maanden de wijken in om met Ypenburgers in gesprek te gaan over wat er…",
+"link": "https://www.hartvoordenhaag.nl/ypenburg-moet-leefbaarder-worden-voor-haar-bewoners/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Richard-nieuw-300x179.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-106573",
+"datum": "2017-06-21",
+"titel": "Gemeente laat bewoners Leidschenveen in de stank zitten",
+"tekst": "Raadslid Guernaoui: ‘Zeker met warm weer is de stank niet te harden’Groep de Mos raadslid Rachid Guernaoui is ‘not amused’ over de beantwoording van het stadsbestuur inzake het ophalen van afval in Leidschenveen. “Het stadsbestuur houdt vast aan het eens in de twee weken ophalen van restafval en laat daarmee de bewoner",
+"link": "https://www.hartvoordenhaag.nl/gemeente-laat-bewoners-leidschenveen-in-de-stank-zitten/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/vuilcontainers-leidschenveen-300x168.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-106557",
+"datum": "2017-06-07",
+"titel": "Raad wil parkeerpilot bij winkelcentrum Ypenburg uitbreiden",
+"tekst": "Raadslid Guernaoui: “De parkeerpilot die nu loopt werkt voor geen meter!” Een groot deel van de Haagse gemeenteraad wil dat de parkeerpilot Groengele-zone bij het winkelcentrum Ypenburg wordt uitgebreid. De Haagse PvdA, Groep de Mos, de Haagse VVD, de Haagse CDA, de Haagse PVV en de Haagse Stadspartij dienen hierover d",
+"link": "https://www.hartvoordenhaag.nl/raad-wil-parkeerpilot-bij-winkelcentrum-ypenburg-uitbreiden/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/winkelcentrum-ypenburg-300x205.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-106541",
@@ -1440,7 +2734,80 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Cultuurplan-publiek-300x145.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-106540",
+"datum": "2017-05-28",
+"titel": "Verwijt burgemeester en wethouder makke schapen gedrag inzake klagende vluchtelingen",
+"tekst": "De Mos: ‘Reprimande had meer op zijn plaats geweest dan begrip’ Groep de Mos in de Haagse gemeenteraad is ‘not amused’ over het optreden van burgemeester Krikke (VVD) en wethouder Wijsmuller (Haagse Stadspartij) bij het geklaag van de vluchtelingen. Vorige week kwamen beide bewindspersonen direct opdraven toen de heren",
+"link": "https://www.hartvoordenhaag.nl/verwijt-burgemeester-en-wethouder-makke-schapen-gedrag-inzake-klagende-vluchtelingen/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Richard-nieuw-300x179.jpg",
+"buurt": "",
+"dossier": "",
+"thema": "",
+"zeller": false
+},
+{
+"id": "hvdh-106513",
+"datum": "2017-05-10",
+"titel": "Koffietent Pleur Op bij Station Moerwijk nek omgedraaid",
+"tekst": "Groep de Mosser Rachid Guernaoui: “Stop pesten kioskhouders!” Het anti-kiosken-beleid van VVD-wethouder Boudewijn Revis lijkt geen grenzen te kennen. De laatste weken regent het bij Groep de Mos klachten van kleine ondernemers in nood. De verdwenen Haringkar aan de Badhuisweg, geen vergunning voor een haringkar bij een",
+"link": "https://www.hartvoordenhaag.nl/koffietent-pleur-op-bij-station-moerwijk-nek-omgedraaid/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/KoffietentPleurOp-300x169.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Schoolveiligheid en pesten",
+"thema": "Jeugd en Onderwijs",
+"zeller": false
+},
+{
+"id": "hvdh-106494",
+"datum": "2017-05-02",
+"titel": "Verzet tegen haringhaat in Den Haag en Scheveningen",
+"tekst": "Raadslid Rachid Guernaoui: ‘Harinkje happen schijnt ook in Leidschenveen straks niet meer te kunnen’ Nadat Groep de Mos vorige week aan de bel trok over het verdwijnen van de haringkar in de Badhuisstraat op Scheveningen, blijkt het stadsbestuur een fobie te hebben voor haring. Want ook de hardwerkende ondernemer Marce",
+"link": "https://www.hartvoordenhaag.nl/verzet-tegen-haringhaat-in-den-haag-en-scheveningen/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/HAring-e1493711540699-300x209.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-106487",
+"datum": "2017-04-16",
+"titel": "Enquête Ypenburg: Onveilige verkeerssituaties en wat te doen voor jongeren",
+"tekst": "De afgelopen maanden trok de Groep de Mos stadsdeelcommissie Ypenburg, bestaande uit Bas van Woesik en Dirk Boef, de wijken in met een enquête over hoe het beter kan in Ypenburg.“We hebben veel informatie van bewoners mogen ontvangen”, aldus Groep de Mos stadsdeelvoorzitter Van Woesik, die te horen heeft gekregen dat d",
+"link": "https://www.hartvoordenhaag.nl/enquete-ypenburg-onveilige-verkeerssituaties-en-wat-te-doen-voor-jongeren/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Groep_de_Mos-768x514.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-106485",
+"datum": "2017-04-15",
+"titel": "Een prijsvraag voor een nieuwe naam voor het fietsviaduct over de A4",
+"tekst": "Guernaoui: “Prijsvraag draagt bij aan de bekendheid van het Trekfietstracé” Het kersverse Groep de Mos raadslid Rachid Guernaoui heeft zijn eerste toezegging binnen; een prijsvraag voor een nieuwe naam voor het fietsviaduct over de A4.“Deze prijsvraag draagt bij aan de bekendheid van het nieuwe fietsviaduct en het Trek",
+"link": "https://www.hartvoordenhaag.nl/een-prijsvraag-voor-een-nieuwe-naam-voor-het-fietsviaduct-over-de-a4/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Rachid-300x170.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-106456",
+"datum": "2017-03-30",
+"titel": "Steun voor afval-actie van bewoners Leidschenveen",
+"tekst": "Raadslid Arjen Dubbelaar: “Het beleid van de gemeente Den Haag om één keer per twee weken het restafval op te halen in Leidschenveen stinkt ontzettend. Ik begrijp heel goed dat bewoners hier tegen in actie komen.” In de Haagse wijk Leidschenveen zijn bewoners gestart met het verspreiden van een poster. Met deze poster,",
+"link": "https://www.hartvoordenhaag.nl/steun-voor-afval-actie-van-bewoners-leidschenveen/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/vuilcontainers-leidschenveen-300x168.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-106454",
@@ -1451,7 +2818,56 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Clubvaan100-199x300.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-106441",
+"datum": "2017-03-28",
+"titel": "Paddenoversteek",
+"tekst": "Groep de Mos helpt padden oversteken Afgelopen vrijdag toonde leden van Groep de Mos in Ypenburg hun meest diervriendelijke gezicht: ze hielpen padden veilig oversteken! “We hebben vrijdag vrijwilligers geholpen met de jaarlijkse paddentrek, waarbij padden vanuit hun winterverblijven op weg gaan om zich in het water vo",
+"link": "https://www.hartvoordenhaag.nl/paddenoversteek/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/paddenoversteek-300x175.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-106419",
+"datum": "2017-03-14",
+"titel": "Bezorgd over toenemend gebruik van lachgas",
+"tekst": "Raadslid Kraft van Ermel: ‘Ook overlast in Leidschenveen moet aan banden gelegd worden’! Steeds meer bereiken ons klachten over overlast door het gebruik van lachgas. Behalve in de medische wereld wordt lachgas ook gebruikt in de industrie. Daarom is door Europese regelgeving lachgas in de vorm van slagroompatronen vri",
+"link": "https://www.hartvoordenhaag.nl/bezorgd-over-toenemend-gebruik-van-lachgas/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Slagroompatronen-300x124.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Volksgezondheid",
+"thema": "Zorg en Welzijn",
+"zeller": false
+},
+{
+"id": "hvdh-107722",
+"datum": "2017-02-28",
+"titel": "Gratis WiFi in alle sporthallen",
+"tekst": "Groep de Mos regelt gratis wifi in alle sporthallen De gemeente Den Haag gaat gratis internet aanbieden in de zestien sporthallen die de stad rijk is. Dat blijkt uit de beantwoording van schriftelijke vragen van de lokale Haagse partij Groep de Mos. Raadslid Arjen Dubbelaar is blij met de toezegging: “Als hockeyscheids",
+"link": "https://www.hartvoordenhaag.nl/gratis-wifi-in-alle-sporthallen/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Arjen-Dubbelaar-e1499008181701-768x372.jpg",
+"buurt": "",
+"dossier": "Sport, topsport en speelplaatsen",
+"thema": "Werk, Inkomen en Sport",
+"zeller": false
+},
+{
+"id": "hvdh-106386",
+"datum": "2017-02-21",
+"titel": "Zorgen Ypenburg weggehoond in Haagse gemeenteraad",
+"tekst": "Raad weigert extra toezicht statushouders Groep de Mos in de Haagse gemeenteraad is boos op de andere partijen in het stadhuis. Zij weigerden afgelopen donderdag twee moties van Groep de Mos te omarmen, die het toezicht op 120 statushouders, louter bestaande uit alleenstaande mannen, zou verscherpen. Groep de Mos raads",
+"link": "https://www.hartvoordenhaag.nl/zorgen-ypenburg-weggehoond-in-haagse-gemeenteraad/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Statushouders-Ypenburg-300x169.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-106371",
@@ -1462,7 +2878,32 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Richard-foots-300x146.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-106354",
+"datum": "2017-02-01",
+"titel": "24/7 beveiliging statushouders Ypenburg",
+"tekst": "Raadslid Arjen Dubbelaar: “Het stadsbestuur wil Ypenburg met 120 alleenstaande mannen opzadelen en vier uur per dag een huismeester. Onaanvaardbaar, wij willen 24 uur per dag beveiliging, voor zowel de buurtbewoners als de statushouders zelf!” De bewoners in de Haagse wijk Ypenburg hebben een brief ontvangen over de vo",
+"link": "https://www.hartvoordenhaag.nl/24-7-beveiliging-statushouders-ypenburg/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/camerabeveiliging-300x149.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-106306",
+"datum": "2016-12-20",
+"titel": "Gratis internet in Haagse sporthallen",
+"tekst": "Raadslid Arjen Dubbelaar: “Niet alleen gratis internet voor toeristen en bezoekers, maar ook voor de eigen inwoners!” Nu de koude wintermaanden weer zijn begonnen, sporten ook veel mensen weer in de vele Haagse sporthallen. Waar het in Haagse winkelstraten en op toeristische hotspots, zoals het strand of de boulevard, ",
+"link": "https://www.hartvoordenhaag.nl/gratis-internet-in-haagse-sporthallen/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Piet-Vink-sporthal-300x110.jpg",
+"buurt": "",
+"dossier": "Sport, topsport en speelplaatsen",
+"thema": "Werk, Inkomen en Sport",
+"zeller": false
 },
 {
 "id": "hvdh-105958",
@@ -1473,7 +2914,20 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/petitie-aow-leeftijd-65-768x189.jpg",
 "buurt": "",
 "dossier": "Wmo en informele zorg",
-"thema": "Zorg en Welzijn"
+"thema": "Zorg en Welzijn",
+"zeller": true
+},
+{
+"id": "hvdh-105775",
+"datum": "2016-11-23",
+"titel": "GroenGele-zone winkelcentrum Ypenburg moet beter",
+"tekst": "Verschillende partijen in de Haagse gemeenteraad willen een aanpassing van de groengele-zone rondom winkelcentrum Ypenburg. Naar aanleiding van inzet van de Haagse VVD, PvdA, HSP, CDA, Groep De Mos en SP is er bij het winkelcentrum Ypenburg in september een groengele-zone ingesteld. In Ypenburg wordt al jaren gezocht n",
+"link": "https://www.hartvoordenhaag.nl/groengele-zone-winkelcentrum-ypenburg-moet-beter/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/LexRichardBasYpenburg-300x166.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-105756",
@@ -1484,7 +2938,32 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Zwarte-Piet-protestlied-768x416.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-105546",
+"datum": "2016-09-07",
+"titel": "Ophaalfrequentie afval Leidschenveen blijft één keer per week",
+"tekst": "Groep de Mos lijkt succes te boeken in Leidschenveen: Ophaalfrequentie afval blijft één keer per week Naar aanleiding van de door bewoners gestarte petitie tegen het afvalbeleid van VVD-wethouder Revis; hij wilde de ophaalfrequentie in Leidschenveen terugbrengen naar eens in de twee weken en de bewoners aldaar opzadele",
+"link": "https://www.hartvoordenhaag.nl/ophaalfrequentie-afval-leidschenveen-blijft-een-keer-per-week/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/vuilcontainers-leidschenveen-300x168.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-105557",
+"datum": "2016-09-01",
+"titel": "Bezuiniging op vuilnisophaal Leidschenveen onbespreekbaar!",
+"tekst": "Raadslid Dubbelaar: “College probeert op slinkse wijze te bezuinigen met het minder vaak ophalen van vuilnis in Haagse Vinex-wijken. Eens in de twee weken afval ophalen is voor ons onbespreekbaar! Uit een brief van de gemeente Den Haag gericht aan bewoners in de Haagse wijk Leidschenveen blijkt dat de gemeente in septe",
+"link": "https://www.hartvoordenhaag.nl/bezuiniging-op-vuilnisophaal-leidschenveen-onbespreekbaar/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/vuilcontainers-leidschenveen-300x168.jpg",
+"buurt": "Leidschenveen",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-105586",
@@ -1495,7 +2974,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Bestuur-Jong-de-Mos-300x184.jpg",
 "buurt": "",
 "dossier": "Wmo en informele zorg",
-"thema": "Zorg en Welzijn"
+"thema": "Zorg en Welzijn",
+"zeller": true
 },
 {
 "id": "hvdh-105595",
@@ -1506,7 +2986,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/damienjdm-300x195.jpg",
 "buurt": "",
 "dossier": "Mbo, hoger onderwijs en studenten",
-"thema": "Jeugd en Onderwijs"
+"thema": "Jeugd en Onderwijs",
+"zeller": true
 },
 {
 "id": "hvdh-105621",
@@ -1517,7 +2998,8 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/damienjdm-300x195.jpg",
 "buurt": "",
 "dossier": "Mbo, hoger onderwijs en studenten",
-"thema": "Jeugd en Onderwijs"
+"thema": "Jeugd en Onderwijs",
+"zeller": true
 },
 {
 "id": "hvdh-105646",
@@ -1528,7 +3010,20 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Richard-300x170.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-105647",
+"datum": "2016-06-16",
+"titel": "Geschokt door miljoenen investering statushouders Ypenburg!",
+"tekst": "Raadslid Arjen Dubbelaar: “Wij zijn geschokt dat het college in Den Haag, haar ridicule ambitie, om honderden extra statushouders bovenop de wettelijke taakstelling te huisvesten in nieuwbouw woningen, wil financieren met miljoenen Haags belastinggeld!” In het raadsvoorstel (1) gestuurd aan de Haagse gemeenteraad is be",
+"link": "https://www.hartvoordenhaag.nl/geschokt-door-miljoenen-investering-statushouders-ypenburg/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Arjen-Dubbelaar-e1499008181701-768x372.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-105707",
@@ -1539,7 +3034,20 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Naamloos-300x129.png",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-105735",
+"datum": "2016-03-09",
+"titel": "Decathlon alleen toestaan in winkelgebied",
+"tekst": "Raadslid Dubbelaar: “Ons stadsbestuur in Den Haag moet beroep op het bezwaar van de provincie opgeven. Het College moet zich juist inzetten om leegstand aan te pakken en opkomen voor Haagse ondernemers en werknemers. Dit belachelijke plan is broodroof van MKB en kost banen”. De Haagse gemeenteraad praat komende week ov",
+"link": "https://www.hartvoordenhaag.nl/decathlon-alleen-toestaan-in-winkelgebied/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Naamloos-300x129.png",
+"buurt": "",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
 },
 {
 "id": "hvdh-105788",
@@ -1550,7 +3058,92 @@
 "beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Richard-de-Mos-768x372.jpg",
 "buurt": "",
 "dossier": "",
-"thema": ""
+"thema": "",
+"zeller": true
+},
+{
+"id": "hvdh-105798",
+"datum": "2016-02-09",
+"titel": "Haagse Stadspartij (HSP) gaat tekeer tegen Rotterdamsebaan en toont zich een onbetrouwbare coalitiepartner",
+"tekst": "Opvallend nieuws in de Haagse gemeenteraad vandaag: de fractievoorzitter van collegepartij HSP, Peter Bos, gaat tekeer tegen de aanleg van de Rotterdamsebaan. En dat terwijl de HSP gewoon op pagina 18 in het coalitieakkoord ‘Vertrouwen op Haagse Kracht’, heeft laten zetten dat de nieuwe zesbaansweg, met hun keus, wordt",
+"link": "https://www.hartvoordenhaag.nl/haagse-stadspartij-hsp-gaat-tekeer-tegen-rotterdamsebaan-en-toont-zich-een-onbetrouwbare-coalitiepartner/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Arjen-Dubbelaar-e1499008181701-768x372.jpg",
+"buurt": "",
+"dossier": "",
+"thema": "",
+"zeller": false
+},
+{
+"id": "hvdh-105839",
+"datum": "2016-01-12",
+"titel": "Maak van Leyweg geen ‘leydensweg’, snel gratis straatparkeren invoeren!",
+"tekst": "Het Haagse winkelcentrum Leyweg komt steeds leger te staan. Het winkelcentrum presteert het slechtst van Nederland met bijna 10 procent leegstand, blijkt uit onderzoek dat vandaag op Omroep West is verschenen. ‘Onacceptabel,’ vindt Arjen Dubbelaar van Groep de Mos / Ouderen Partij. Het stadsbestuur beloofde in het Coal",
+"link": "https://www.hartvoordenhaag.nl/maak-van-leyweg-geen-leydensweg-snel-gratis-straatparkeren-invoeren/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Arjen-Dubbelaar-e1499008181701-768x372.jpg",
+"buurt": "",
+"dossier": "Lokale media en persvrijheid",
+"thema": "Financiën, Cultuur en Scheveningen",
+"zeller": false
+},
+{
+"id": "hvdh-105938",
+"datum": "2015-10-09",
+"titel": "Voorkom vandalisme: kom met activiteiten voor pubers!",
+"tekst": "Groep de Mos / Ouderen Partij in de Haagse gemeenteraad wil dat het stadsbestuur stappen onderneemt naar aanleiding van de reportage van het AD over Ypenburg. De krant schetst een beeld dat pubers in deze Vinex-wijken bar weinig te doen hebben en hun heil, zo merken ook verzekeraars, zoeken in vandalisme. “Voorkomen is",
+"link": "https://www.hartvoordenhaag.nl/voorkom-vandalisme-kom-met-activiteiten-voor-pubers/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Richard-de-Mos-768x372.jpg",
+"buurt": "Ypenburg",
+"dossier": "Wmo en informele zorg",
+"thema": "Zorg en Welzijn",
+"zeller": false
+},
+{
+"id": "hvdh-106016",
+"datum": "2015-07-28",
+"titel": "Gemeentelijke Smaakpolitie?",
+"tekst": "Groep de Mos tegen gemeentelijke ‎Smaakpolitie‬; “Doe eens normaal; stop met het verjagen van soep en loempia’s van de Haagse Markt!” Richard de Mos: ”Het moet niet gekker worden; Gemeente verbiedt ‘buitenlandse snacks”. Groep de Mos / Ouderen Partij in de Haagse gemeenteraad strijdt al langer tegen de gemeentelijke re",
+"link": "https://www.hartvoordenhaag.nl/gemeentelijke-smaakpolitie/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Richard-haagse-markt2-300x136.jpg",
+"buurt": "",
+"dossier": "Wmo en informele zorg",
+"thema": "Zorg en Welzijn",
+"zeller": false
+},
+{
+"id": "hvdh-106045",
+"datum": "2015-06-16",
+"titel": "In de bres voor bewoners Ypenburg: “Plaats verkeerlichten terug!”",
+"tekst": "Groep de Mos in de Haagse gemeenteraad deelt de mening van de bewoners van de wijk Ypenburg: ‘Het weghalen van de verkeerslichten bij het kruispunt Brasserskade met de Brasserhoutweg leidt tot onnodige ongelukken’. Fractievoorzitter Richard de Mos: “Het is niet de eerste keer dat het stadsbestuur onnavolgbare stappen z",
+"link": "https://www.hartvoordenhaag.nl/in-de-bres-voor-bewoners-ypenburg-plaats-verkeerlichten-terug/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Richard-300x170.jpg",
+"buurt": "Ypenburg",
+"dossier": "Leidschenveen-Ypenburg",
+"thema": "Stadsdeel Leidschenveen-Ypenburg",
+"zeller": false
+},
+{
+"id": "hvdh-106054",
+"datum": "2015-06-07",
+"titel": "Neem maatregelen tegen dierenmishandeling, zet in op houdverbod!",
+"tekst": "Groep de Mos tegen Gemeente: Neem maatregelen tegen dierenmishandeling, zet in op houdverbod! Raadslid Lex Kraft van Ermel wil door wijzing in de APV sneller optreden ter bescherming dierenwelzijn. Een paar maanden geleden werd bericht over een verzameling van zeer verwaarloosde dieren in het Haagse Bezuidenhout. (1) I",
+"link": "https://www.hartvoordenhaag.nl/neem-maatregelen-tegen-dierenmishandeling-zet-in-op-houdverbod/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Lex-Kraft-van-Ermel-e1476991203702-300x145.jpg",
+"buurt": "",
+"dossier": "Onderwijsbeleid, leraren en kansen",
+"thema": "Jeugd en Onderwijs",
+"zeller": false
+},
+{
+"id": "hvdh-106229",
+"datum": "2014-05-29",
+"titel": "Vergunning voor de Satékoningin",
+"tekst": "Het heeft even geduurd, maar na druk van Groep de Mos / Ouderen Partij heeft de gemeente Den Haag in beantwoording op schriftelijke vragen van de lokale partij eindelijk besloten om de Satékoningin haar vergunning voor een standplaats op het terrein van de Praxis in Ypenburg te verlenen. De Mos: “Goed nieuws dat wij he",
+"link": "https://www.hartvoordenhaag.nl/vergunning-voor-de-satekoningin/",
+"beeld": "https://www.hartvoordenhaag.nl/wp-content/uploads/2026/02/Naamloos-300x129.png",
+"buurt": "Ypenburg",
+"dossier": "Wmo en informele zorg",
+"thema": "Zorg en Welzijn",
+"zeller": false
 }
 ]
 }

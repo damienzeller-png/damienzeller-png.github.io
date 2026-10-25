@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""Haalt alle berichten van hartvoordenhaag.nl op waarin Damiën Zeller voorkomt en schrijft nieuws.json voor de site.
+"""Haalt de berichten van hartvoordenhaag.nl op waarin Damiën Zeller of zijn stadsdeel voorkomt en schrijft nieuws.json.
 
-Bron: de openbare WordPress-API van hartvoordenhaag.nl (zoekterm "Zeller"). Draait elke dag via
+Bron: de openbare WordPress-API van hartvoordenhaag.nl (zoektermen in ZOEK). Berichten waarin Damiën genoemd wordt
+krijgen "zeller": true; alleen die komen bij Actueel ("wat ik deed"), de rest staat bij het nieuws en de buurten. Draait elke dag via
 .github/workflows/nieuws.yml. Een bericht verbergen: zet zijn id in nieuws_verbergen in links.json.
 Per bericht: datum, titel, korte samenvatting, link, afbeelding, buurt of wijk (als die genoemd wordt) en het dossier
 (uit dossiers.json, dezelfde indeling als de dossierkast). `python tools/nieuws.py --opnieuw` labelt alleen de
@@ -66,23 +67,37 @@ def schoon(t):
     return re.sub(r"\s*\[(…|&hellip;|\.\.\.)\]\s*$", "…", t)
 
 
-def main():
-    alles, pagina = [], 1
+ZOEK = ["Zeller", "Leidschenveen", "Ypenburg", "Hoornwijck"]
+
+
+def zoek(term):
+    uit, pagina = [], 1
     while True:
         try:
-            deel = haal(f"{API}?search=Zeller&per_page=100&page={pagina}&_embed=wp:featuredmedia"
+            deel = haal(f"{API}?search={term}&per_page=100&page={pagina}&_embed=wp:featuredmedia"
                         "&_fields=id,date,link,title,excerpt,_links,_embedded")
         except Exception as e:
-            if pagina == 1:
+            if pagina == 1 and term == "Zeller":
                 raise
-            print("Stop bij pagina", pagina, e)
+            print("Stop bij", term, "pagina", pagina, e)
             break
         if not isinstance(deel, list) or not deel:
             break
-        alles += deel
+        uit += deel
         if len(deel) < 100:
             break
         pagina += 1
+    return uit
+
+
+def main():
+    alles, zeller = [], set()
+    for term in ZOEK:
+        for p in zoek(term):
+            if term == "Zeller":
+                zeller.add(p["id"])
+            if all(p["id"] != q["id"] for q in alles):
+                alles.append(p)
     try:
         verbergen = set(json.load(open("links.json", encoding="utf-8")).get("nieuws_verbergen", []))
     except Exception:
@@ -102,11 +117,12 @@ def main():
             pass
         tekst = titel + " " + samenvatting
         dossier, thema = dossier_van(titel, samenvatting)
-        if (titel.lower(), p["date"][:10]) in gezien:
+        if p["date"][:4] < "2000" or (titel.lower(), p["date"][:10]) in gezien:
             continue
         gezien.add((titel.lower(), p["date"][:10]))
         uit.append({"id": f"hvdh-{p['id']}", "datum": p["date"][:10], "titel": titel, "tekst": samenvatting[:320],
-                    "link": p["link"], "beeld": beeld, "buurt": buurt_van(tekst), "dossier": dossier, "thema": thema})
+                    "link": p["link"], "beeld": beeld, "buurt": buurt_van(tekst), "dossier": dossier, "thema": thema,
+                    "zeller": p["id"] in zeller})
     uit.sort(key=lambda x: x["datum"], reverse=True)
     with open("nieuws.json", "w", encoding="utf-8") as f:
         json.dump({"bron": "hartvoordenhaag.nl", "berichten": uit}, f, ensure_ascii=False, indent=0)
