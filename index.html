@@ -199,7 +199,6 @@
       <h2>Over Damiën</h2>
       <p>Damiën Zeller is raadslid voor Hart voor Den Haag in de Haagse gemeenteraad (2026-2030) en het raadslid voor stadsdeel Leidschenveen-Ypenburg, waar hij zelf woont. Hart voor Den Haag zit sinds 2026 in de coalitie.</p>
       <p>Hij is woordvoerder zorg (Wmo, mantelzorg, beschermd wonen en zorginnovatie), volksgezondheid, toegankelijkheid en doelgroepenvervoer, onderwijs (ook mbo, hoger onderwijs en studenten), sport, voedselstrategie, lokale media en de Joodse gemeenschap.</p>
-      <nav class="onderwerpen" aria-label="Onderwerpen"><a href="zorg.html">Zorg en welzijn</a><a href="onderwijs.html">Onderwijs</a><a href="sport.html">Sport en bewegen</a><a href="media.html">Lokale media</a><a href="joodse-gemeenschap.html">Joodse gemeenschap</a><a href="leidschenveen-ypenburg.html">Leidschenveen-Ypenburg</a></nav>
       <div class="pers">
         <h3>Voor de pers</h3>
         <p>Mail Damiën op <a id="pers-mail" href="mailto:damien.zeller@denhaag.nl">damien.zeller@denhaag.nl</a>. De fractie bereikt u op <a href="mailto:hartvoordenhaag@denhaag.nl">hartvoordenhaag@denhaag.nl</a>.</p>
@@ -506,7 +505,7 @@ function vragen(lijst) {
   if (items.length > 3) {
     let open = false;
     const zet = () => { items.forEach((li, i) => { li.hidden = !open && i >= 3; }); knop.textContent = open ? "Toon minder" : `Toon alle vragen (${items.length})`; knop.setAttribute("aria-expanded", String(open)); };
-    knop.onclick = () => { open = !open; zet(); if (open) items[3].querySelector("a, span").focus?.(); };
+    knop.onclick = () => { open = !open; zet(); if (open) { items[3].tabIndex = -1; items[3].focus(); } };
     knop.hidden = false; zet();
   }
   document.getElementById("vragen").hidden = false;
@@ -606,11 +605,11 @@ function formulier() {
   });
   for (const naam of Object.keys(velden)) {
     const veld = document.getElementById(velden[naam]);
-    veld.addEventListener(naam === "toestemming" ? "change" : "blur", () => {
-      if (veld.getAttribute("aria-invalid") !== "true" && naam !== "email") return;
+    veld.addEventListener(naam === "toestemming" ? "change" : "input", () => {
+      if (veld.getAttribute("aria-invalid") !== "true") return;
       const v = Object.fromEntries(new FormData(f).entries()); v.toestemming = f.toestemming.checked;
       v.onderwerp = v.onderwerp || ""; v.bericht = v.bericht || ""; v.email = v.email || "";
-      zet(naam, controle(v)[naam]);
+      if (!controle(v)[naam]) zet(naam, "");
     });
   }
   f.addEventListener("submit", async e => {

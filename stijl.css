@@ -3,7 +3,7 @@
 :root{
   --hart:#1E945A; --veld:#137345; --woud:#0B3B25; --nacht:#072A1A; --zon:#FFD237; --zon-licht:#FFE27A;
   --bg:#F3F7F2; --vlak:#FFFFFF; --munt:#E3F1E7; --ink:#10251A; --zacht:#4F6A5B; --lijn:#D6E3D9;
-  --link:#116B42; --op-donker:#C9E2D2; --kaart-donker:#114330; --fout:#B42318;
+  --link:#116B42; --veldrand:#7A9585; --op-donker:#C9E2D2; --kaart-donker:#114330; --fout:#B42318;
   --kop:"Archivo",system-ui,sans-serif;
   --tekst:"Lexend",system-ui,sans-serif;
   --schaduw:0 30px 60px -34px rgba(11,59,37,.5);
@@ -11,7 +11,7 @@
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){
-  :root{--bg:#0C1A12;--vlak:#13251A;--munt:#10261A;--ink:#E8F1EA;--zacht:#A3BAAB;--lijn:#284033;--link:#7BD3A2;--fout:#FF8A80;
+  :root{--bg:#0C1A12;--vlak:#13251A;--munt:#10261A;--ink:#E8F1EA;--zacht:#A3BAAB;--lijn:#284033;--link:#7BD3A2;--veldrand:#5B7A69;--fout:#FF8A80;
         --schaduw:0 30px 60px -34px rgba(0,0,0,.85);color-scheme:dark}
 }
 *{box-sizing:border-box}
@@ -289,7 +289,7 @@ form{display:grid;gap:18px}
 .veld{display:grid;gap:6px}
 .veld label,.veld>span{font-weight:700}
 .veld small{font-weight:400;color:var(--zacht)}
-input,select,textarea{font:400 1rem var(--tekst);color:var(--ink);background:var(--bg);border:1.5px solid var(--lijn);border-radius:12px;
+input,select,textarea{font:400 1rem var(--tekst);color:var(--ink);background:var(--bg);border:1.5px solid var(--veldrand);border-radius:12px;
   padding:13px 15px;width:100%;min-height:48px}
 input::placeholder,textarea::placeholder{color:#5B7466}
 @media (prefers-color-scheme:dark){input::placeholder,textarea::placeholder{color:#93AB9C}}
@@ -426,3 +426,13 @@ footer a{color:#fff}
 .meer-blok{margin-top:12px}
 .meer-blok>summary{cursor:pointer;font-weight:700;color:var(--link);min-height:44px;display:inline-flex;align-items:center}
 .nieuws-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+
+/* onderwerppagina's: leesbaar en met sprongmenu */
+.op-pagina{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:22px}
+.op-pagina a{color:#fff;font-weight:600;display:inline-flex;align-items:center;min-height:40px}
+.onderwerp-deel .vregel,.onderwerp-deel .vtitel,.opgeleverd li{max-width:65ch}
+.bijschrift .soort{font-weight:600;color:var(--zacht)}
+.onderwerp-kop .held-kaart{right:-6%;top:-30%;height:170%;opacity:.25}
+.onderwerp-kop{position:relative;overflow:hidden;isolation:isolate}
+.onderwerp-kop .wrap{position:relative;z-index:1}
+.lege-staat{margin-top:22px;padding:18px 20px;border-radius:16px;background:var(--munt)}

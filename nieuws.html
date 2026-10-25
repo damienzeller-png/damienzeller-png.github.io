@@ -129,6 +129,10 @@ function keuzes() {
   }
   const q = new URLSearchParams(location.search).get("dossier");
   if (q && geteld.has(q)) { sel.value = q; dossier = q; }
+  else if (q) {
+    const p = el("p", "lege-staat", `Er staan nog geen nieuwsberichten over ${q} op deze site. Hieronder ziet u alle berichten.`);
+    document.getElementById("teller").before(p);
+  }
   sel.addEventListener("change", () => { dossier = sel.value; toon(); });
 }
 
