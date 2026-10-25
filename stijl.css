@@ -323,7 +323,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--veld);outline:none;bo
 .pers h3{font-size:1.35rem}
 .pers a{color:var(--link);font-weight:700}
 .pers .knop{margin-top:6px;justify-self:start}
-@media (max-width:860px){.over .wrap{grid-template-columns:1fr;gap:28px}.over figure{max-width:360px;order:2}}
+@media (max-width:860px){.over .wrap{grid-template-columns:1fr;gap:28px}.over figure{max-width:360px;order:2}.over .wrap>*{grid-column:auto!important;grid-row:auto!important}.over .over-foto{max-width:none;order:3}}
 
 /* voet */
 .voet,footer{background:var(--nacht);color:#C6DCCD;padding:52px 0 calc(60px + var(--onderbalk));font-size:.95rem}
@@ -456,3 +456,24 @@ footer a{color:#fff}
 .buurt-ingang .wijk a:hover{background:var(--zon);color:#10251A}
 .onderwerp-kop .held-sp{margin-top:20px}
 @media (max-width:760px){.buurt-ingang{grid-template-columns:1fr;padding:14px}.ingang-kaart{max-height:260px}}
+
+/* Eigen foto's uit de wijk (aangeleverd door Damiën): documentair, met hetzelfde bijschrift als de berichten */
+.doc-foto{margin:0;display:grid;gap:10px;align-content:start}
+.doc-foto img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:18px;background:var(--munt)}
+.buurt-kop{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,420px);gap:40px;align-items:end}
+.over .wrap>figure:first-child{grid-column:1;grid-row:1}
+.over .wrap>.over-foto{grid-column:1;grid-row:2}
+.over .over-tekst{grid-column:2;grid-row:1/span 2}
+.over .over-foto img{aspect-ratio:4/3;object-position:50% 45%;border-radius:18px}
+.over .over-foto figcaption{margin-top:0}
+.buurt-kop .doc-foto img{object-position:50% 35%}
+.beeldrij{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px;margin-top:26px;max-width:860px}
+.beeldrij .doc-foto img{height:clamp(220px,30vw,340px);aspect-ratio:auto}
+.onderwerp-kop .doc-foto .bijschrift{color:inherit;opacity:.85}
+.onderwerp-kop .doc-foto .bijschrift .plek{color:inherit}
+@media (max-width:760px){
+  .buurt-kop{grid-template-columns:1fr;gap:18px}
+  .beeldrij{grid-template-columns:1fr;gap:18px}
+  .beeldrij .doc-foto img{height:auto;aspect-ratio:4/3}
+  .beeldrij .doc-foto:nth-child(2) img{object-position:50% 72%}
+}

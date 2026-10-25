@@ -113,8 +113,16 @@
 
 <section id="buurt">
   <div class="wrap">
-    <h2>Wat speelt er in uw buurt?</h2>
-    <p class="inleiding">Kies uw buurt. U ziet waar Damiën mee bezig is en u kunt meteen iets melden. Het getal is het aantal berichten over die buurt.</p>
+    <div class="buurt-kop">
+      <div>
+        <h2>Wat speelt er in uw buurt?</h2>
+        <p class="inleiding">Kies uw buurt. U ziet waar Damiën mee bezig is en u kunt meteen iets melden. Het getal is het aantal berichten over die buurt.</p>
+      </div>
+      <figure class="doc-foto">
+        <img src="fotos/rietbuurt-flyeren-klein.jpg" srcset="fotos/rietbuurt-flyeren-klein.jpg 720w, fotos/rietbuurt-flyeren.jpg 1400w" sizes="(max-width: 760px) 100vw, 420px" width="1400" height="1050" alt="Selfie van Damiën met drie vrijwilligers in groene jassen, met flyers met de vraag Hoe gaat het in de Rietbuurt?, voor de witte kapel op de heuvel" loading="lazy">
+        <figcaption class="bijschrift"><span class="plek">Rietbuurt</span><span>Langs de deuren: hoe gaat het in de buurt?</span></figcaption>
+      </figure>
+    </div>
     <div class="buurt-kies" id="buurt-kies"></div>
     <div class="buurt-vak">
       <div id="kaart" role="img" aria-label="Kaart van stadsdeel Leidschenveen-Ypenburg"></div>
@@ -194,6 +202,10 @@
       <img src="portret.jpg" alt="Portret van Damiën Zeller" width="800" height="800" loading="lazy">
       <figcaption>Deze foto mag u gebruiken bij berichtgeving over Damiën.</figcaption>
     </figure>
+    <figure class="doc-foto over-foto">
+        <img src="fotos/politieke-avond-klein.jpg" srcset="fotos/politieke-avond-klein.jpg 720w, fotos/politieke-avond.jpg 1400w" sizes="(max-width: 860px) 100vw, 560px" width="1400" height="1050" alt="Acht kandidaten van verschillende partijen op een rij stoelen tijdens een politieke avond in een buurtzaal" loading="lazy">
+        <figcaption class="bijschrift"><span>Politieke avond met kandidaten van verschillende partijen</span></figcaption>
+      </figure>
     <div class="over-tekst">
       <h2>Over Damiën</h2>
       <p>Damiën Zeller is raadslid voor Hart voor Den Haag in de Haagse gemeenteraad (2026-2030) en het raadslid voor stadsdeel Leidschenveen-Ypenburg, waar hij zelf woont. Hart voor Den Haag zit sinds 2026 in de coalitie.</p>
@@ -682,6 +694,15 @@ if (vraagBuurt && Object.values(WIJKEN).flat().includes(vraagBuurt)) {
   const wacht = setInterval(() => { if (laag) { clearInterval(wacht); kies(vraagBuurt); } }, 150);
   setTimeout(() => clearInterval(wacht), 8000);
   gekozen = vraagBuurt; knoppenBuurt(); infoBuurt();
+  /* de secties erboven laden later en duwen de buurt omlaag: blijf bij de buurt tot de bezoeker zelf scrolt */
+  let zelf = false;
+  ["wheel", "touchstart", "keydown", "mousedown"].forEach(ev => addEventListener(ev, () => { zelf = true; }, { once: true, passive: true }));
+  const vak = document.getElementById("buurt");
+  const plak = () => { if (!zelf && Math.abs(vak.getBoundingClientRect().top) > 4) vak.scrollIntoView({ block: "start" }); };
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  const ro = new ResizeObserver(plak); ro.observe(document.body);
+  setTimeout(() => ro.disconnect(), 6000);
+  plak();
 }
 })();
 </script>
