@@ -70,7 +70,7 @@
     </div>
     <div class="sp-knoppen">
       <button class="knop groen" id="sp-agenda" type="button" hidden>Zet in mijn agenda</button>
-      <a class="knop lijn" id="sp-route" target="_blank" rel="noopener" hidden>Route</a>
+      <a class="knop lijn" id="sp-route" hidden>Route</a>
     </div>
   </aside>
 </div>
@@ -97,7 +97,6 @@
     <button class="knop lijn meer-knop" id="vragen-meer" type="button" aria-expanded="false" aria-controls="vlijst" hidden></button>
     <div class="bereikt" id="bereikt" hidden>
       <p class="bereikt-zin" id="bereikt-zin"></p>
-      <nav class="onderwerpen" aria-label="Per onderwerp"><a href="zorg.html">Zorg en welzijn</a><a href="onderwijs.html">Onderwijs</a><a href="sport.html">Sport en bewegen</a><a href="media.html">Lokale media</a><a href="joodse-gemeenschap.html">Joodse gemeenschap</a><a href="leidschenveen-ypenburg.html">Leidschenveen-Ypenburg</a></nav>
       <ul class="vlijst" id="bereikt-lijst"></ul>
     </div>
   </div>
@@ -199,6 +198,7 @@
       <h2>Over Damiën</h2>
       <p>Damiën Zeller is raadslid voor Hart voor Den Haag in de Haagse gemeenteraad (2026-2030) en het raadslid voor stadsdeel Leidschenveen-Ypenburg, waar hij zelf woont. Hart voor Den Haag zit sinds 2026 in de coalitie.</p>
       <p>Hij is woordvoerder zorg (Wmo, mantelzorg, beschermd wonen en zorginnovatie), volksgezondheid, toegankelijkheid en doelgroepenvervoer, onderwijs (ook mbo, hoger onderwijs en studenten), sport, voedselstrategie, lokale media en de Joodse gemeenschap.</p>
+      <nav class="onderwerpen" aria-label="Onderwerpen"><a href="zorg.html">Zorg en welzijn</a><a href="onderwijs.html">Onderwijs</a><a href="sport.html">Sport en bewegen</a><a href="media.html">Lokale media</a><a href="joodse-gemeenschap.html">Joodse gemeenschap</a><a href="leidschenveen-ypenburg.html">Leidschenveen-Ypenburg</a></nav>
       <div class="pers">
         <h3>Voor de pers</h3>
         <p>Mail Damiën op <a id="pers-mail" href="mailto:damien.zeller@denhaag.nl">damien.zeller@denhaag.nl</a>. De fractie bereikt u op <a href="mailto:hartvoordenhaag@denhaag.nl">hartvoordenhaag@denhaag.nl</a>.</p>
@@ -252,7 +252,7 @@ const inBuurt = (bericht, buurt) => bericht.buurt === buurt;
 const datumNL = iso => { const d = new Date(iso); return isNaN(d) ? "" : `${d.getDate()} ${MAANDEN[d.getMonth()]} ${d.getFullYear()}`; };
 const nieuwste = (a, b) => (b.datum || "").localeCompare(a.datum || "");
 /* alleen video's en berichten op TikTok en X openen in een nieuw tabblad; bronnen openen gewoon, zodat Terug werkt */
-const nieuwTab = a => { a.rel = "noopener"; if (/tiktok\.com|x\.com/.test(a.href || "")) a.target = "_blank"; return a; };
+const nieuwTab = a => { a.rel = "noopener"; if (/tiktok\.com|x\.com|instagram\.com|facebook\.com|linkedin\.com/.test(a.href || "")) a.target = "_blank"; return a; };
 const socialTab = a => { a.target = "_blank"; a.rel = "noopener"; return a; };
 
 const bijschrift = (x, o) => Dossiers.bijschrift(x, o);
@@ -676,6 +676,13 @@ fetch("links.json", { cache: "no-cache" }).then(r => r.json()).catch(() => ({}))
   if (laag) laag.setStyle(stijl);
 });
 knoppenBuurt(); maakKaart();
+/* ?buurt=Bosweide (vanaf de stadsdeelpagina): die buurt meteen kiezen */
+const vraagBuurt = new URLSearchParams(location.search).get("buurt");
+if (vraagBuurt && Object.values(WIJKEN).flat().includes(vraagBuurt)) {
+  const wacht = setInterval(() => { if (laag) { clearInterval(wacht); kies(vraagBuurt); } }, 150);
+  setTimeout(() => clearInterval(wacht), 8000);
+  gekozen = vraagBuurt; knoppenBuurt(); infoBuurt();
+}
 })();
 </script>
 </body>

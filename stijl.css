@@ -440,3 +440,19 @@ footer a{color:#fff}
 
 /* mobiel korter: X als één regel naar het kanaal, agenda hooguit twee */
 @media (max-width:640px){.volg-x .x-lijst{display:none}.volg-x .kanaal{margin-bottom:0}.agenda-lijst>li:nth-child(n+3){display:none}}
+
+/* stadsdeelpagina: de dertien buurten als ingang */
+.buurt-ingang{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:28px;align-items:center;margin-top:26px;
+  padding:20px;border-radius:24px;background:rgba(7,42,26,.35)}
+.ingang-kaart{width:100%;max-height:360px}
+.ingang-kaart path{fill:rgba(155,224,184,.18);stroke:#9BE0B8;stroke-width:1.4;stroke-linejoin:round;transition:fill .15s ease}
+.ingang-kaart a:hover path,.ingang-kaart a:focus-visible path{fill:var(--zon);stroke:#10251A}
+.ingang-kaart a:focus-visible{outline:none}
+.buurt-ingang .buurt-kies{margin:0}
+.buurt-ingang .ingang-kop{font:800 1.4rem/1 var(--kop);font-stretch:82%;margin:0 0 6px!important;color:#fff!important}
+.buurt-ingang .wijk b{color:#D7EDDF}
+.buurt-ingang .wijk a{display:inline-flex;align-items:center;min-height:44px;padding:8px 14px;border-radius:999px;background:var(--vlak);
+  color:var(--ink);text-decoration:none;font-weight:600}
+.buurt-ingang .wijk a:hover{background:var(--zon);color:#10251A}
+.onderwerp-kop .held-sp{margin-top:20px}
+@media (max-width:760px){.buurt-ingang{grid-template-columns:1fr;padding:14px}.ingang-kaart{max-height:260px}}

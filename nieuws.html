@@ -95,8 +95,18 @@ function item(x) {
   return li;
 }
 
+/* het filter staat in de adresbalk, zodat Terug na het openen van een bron hetzelfde lijstje geeft */
+function bewaar() {
+  const u = new URL(location.href);
+  dossier ? u.searchParams.set("dossier", dossier) : u.searchParams.delete("dossier");
+  zoek ? u.searchParams.set("q", zoek) : u.searchParams.delete("q");
+  history.replaceState(null, "", u);
+}
+
 function toon() {
   const box = document.getElementById("lijst"); box.textContent = "";
+  const leeg = document.querySelector(".lege-staat"); if (leeg && (dossier || zoek)) leeg.remove();
+  bewaar();
   const woorden = zoek.toLowerCase().split(/\s+/).filter(Boolean);
   const lijst = alles.filter(x => (!dossier || x.dossier === dossier) &&
     woorden.every(w => (x.titel + " " + x.tekst + " " + (x.buurt || "") + " " + (x.dossier || "")).toLowerCase().includes(w)));
@@ -124,7 +134,7 @@ function keuzes() {
     const ds = Dossiers.alle().filter(d => d.thema === th && geteld.get(d.naam));
     if (!ds.length) continue;
     const g = el("optgroup"); g.label = th;
-    for (const d of ds) { const o = el("option", null, `${d.naam} (${geteld.get(d.naam)})`); o.value = d.naam; g.append(o); }
+    for (const d of ds) { const o = el("option", null, `${d.kort} (${geteld.get(d.naam)})`); o.value = d.naam; g.append(o); }
     sel.append(g);
   }
   const q = new URLSearchParams(location.search).get("dossier");
@@ -134,6 +144,12 @@ function keuzes() {
     document.getElementById("teller").before(p);
   }
   sel.addEventListener("change", () => { dossier = sel.value; toon(); });
+  window.addEventListener("pageshow", e => {
+    if (!e.persisted) return;
+    const u = new URLSearchParams(location.search);
+    dossier = geteld.has(u.get("dossier")) ? u.get("dossier") : ""; sel.value = dossier;
+    zoek = u.get("q") || ""; document.getElementById("zoek").value = zoek; toon();
+  });
 }
 
 let wacht = null;
