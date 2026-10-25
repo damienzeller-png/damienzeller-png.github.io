@@ -57,7 +57,7 @@
   <div class="wrap">
     <nav class="onderwerpen-voet" aria-label="Onderwerpen"><a href="zorg.html">Zorg en welzijn</a><a href="onderwijs.html">Onderwijs</a><a href="sport.html">Sport en bewegen</a><a href="media.html">Lokale media</a><a href="joodse-gemeenschap.html">Joodse gemeenschap</a><a href="leidschenveen-ypenburg.html">Leidschenveen-Ypenburg</a></nav>
     <p>Damiën Zeller, raadslid voor Hart voor Den Haag in de gemeenteraad van Den Haag.</p>
-    <p>Bron: hartvoordenhaag.nl. De berichten openen op de site van de partij. <a href="privacy.html">Privacy</a> en <a href="voorwaarden.html">voorwaarden</a>.</p>
+    <p>Bron: hartvoordenhaag.nl. De berichten staan op de site van de partij. <a href="privacy.html">Privacy</a> en <a href="voorwaarden.html">voorwaarden</a>.</p>
   </div>
 </footer>
 
@@ -81,14 +81,14 @@ const bijschrift = x => Dossiers.bijschrift(x);
 
 function item(x) {
   const li = el("li"), fig = el("a", "beeld");
-  fig.href = x.link; fig.target = "_blank"; fig.rel = "noopener"; fig.tabIndex = -1; fig.setAttribute("aria-hidden", "true");
+  fig.href = x.link; fig.tabIndex = -1; fig.setAttribute("aria-hidden", "true");
   if (x.beeld) {
     const i = el("img"); i.src = x.beeld; i.alt = ""; i.loading = "lazy"; i.decoding = "async";
     i.onerror = () => { i.remove(); fig.classList.add("kaart-beeld"); fig.append(Dossiers.kaartje(x.buurt)); };
     fig.append(i);
   } else { fig.classList.add("kaart-beeld"); fig.append(Dossiers.kaartje(x.buurt)); }
   const midden = el("div");
-  const a = el("a", "titel", x.titel); a.href = x.link; a.target = "_blank"; a.rel = "noopener";
+  const a = el("a", "titel", x.titel); a.href = x.link;
   midden.append(bijschrift(x), a);
   if (x.tekst) midden.append(el("p", null, x.tekst.length > 220 ? x.tekst.slice(0, 217).trim() + "…" : x.tekst));
   li.append(fig, midden);

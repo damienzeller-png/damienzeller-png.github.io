@@ -251,7 +251,9 @@ const wijkVan = b => Object.keys(WIJKEN).find(w => WIJKEN[w].includes(b)) || (WI
 const inBuurt = (bericht, buurt) => bericht.buurt === buurt;
 const datumNL = iso => { const d = new Date(iso); return isNaN(d) ? "" : `${d.getDate()} ${MAANDEN[d.getMonth()]} ${d.getFullYear()}`; };
 const nieuwste = (a, b) => (b.datum || "").localeCompare(a.datum || "");
-const nieuwTab = a => { a.target = "_blank"; a.rel = "noopener"; return a; };
+/* alleen video's en berichten op TikTok en X openen in een nieuw tabblad; bronnen openen gewoon, zodat Terug werkt */
+const nieuwTab = a => { a.rel = "noopener"; if (/tiktok\.com|x\.com/.test(a.href || "")) a.target = "_blank"; return a; };
+const socialTab = a => { a.target = "_blank"; a.rel = "noopener"; return a; };
 
 const bijschrift = (x, o) => Dossiers.bijschrift(x, o);
 
@@ -418,7 +420,7 @@ function linkify(tekst) {
     if (/^https?:\/\//.test(deel)) href = deel;
     else if (deel[0] === "#") href = "https://x.com/hashtag/" + encodeURIComponent(deel.slice(1));
     else if (deel[0] === "@") href = "https://x.com/" + deel.slice(1);
-    if (href) { const a = nieuwTab(el("a", null, deel)); a.href = href; p.append(a); }
+    if (href) { const a = socialTab(el("a", null, deel)); a.href = href; p.append(a); }
     else p.append(document.createTextNode(deel));
   }
   return p;
@@ -446,11 +448,11 @@ function feeds() {
     knop.append(i, s); knop.addEventListener("click", () => speel(knop, x), { once: true });
     scherm.append(knop);
     const bij = el("div", "bij"), t = el("time", null, datumNL(x.datum)); t.dateTime = x.datum || "";
-    const a = nieuwTab(el("a", null, x.titel || "Bekijk op TikTok")); a.href = x.link || "https://www.tiktok.com/@damienzeller";
+    const a = socialTab(el("a", null, x.titel || "Bekijk op TikTok")); a.href = x.link || "https://www.tiktok.com/@damienzeller";
     bij.append(t, a); li.append(scherm, bij); rij.append(li);
   }
   if (!tt.length) {
-    const li = el("li", "uitnodiging"), a = nieuwTab(el("a", "knop geel", "Bekijk mijn video's op TikTok"));
+    const li = el("li", "uitnodiging"), a = socialTab(el("a", "knop geel", "Bekijk mijn video's op TikTok"));
     a.href = "https://www.tiktok.com/@damienzeller";
     li.append(el("p", null, "Mijn nieuwste video's staan op TikTok."), a); rij.append(li);
   }
@@ -459,10 +461,10 @@ function feeds() {
   for (const x of xs) {
     const li = el("li", "post");
     const voet = el("div", "post-voet"), t = el("time", null, datumNL(x.datum)); t.dateTime = x.datum || "";
-    const a = nieuwTab(el("a", null, "Bekijk op X")); a.href = x.link;
+    const a = socialTab(el("a", null, "Bekijk op X")); a.href = x.link;
     voet.append(t, a); li.append(linkify(x.tekst));
     if (x.media) {
-      const fa = nieuwTab(el("a", "post-beeld")); fa.href = x.link; fa.setAttribute("aria-label", "Bekijk de foto of video op X");
+      const fa = socialTab(el("a", "post-beeld")); fa.href = x.link; fa.setAttribute("aria-label", "Bekijk de foto of video op X");
       const fi = el("img"); fi.src = API + "/site/beeld/x/" + encodeURIComponent(x.id); fi.alt = ""; fi.loading = "lazy"; fi.decoding = "async";
       fi.onerror = () => fa.remove();
       if (x.video) fa.classList.add("video");
@@ -471,7 +473,7 @@ function feeds() {
     li.append(voet); ul.append(li);
   }
   if (!xs.length) {
-    const li = el("li", "uitnodiging"), a = nieuwTab(el("a", "knop geel", "Lees mee op X"));
+    const li = el("li", "uitnodiging"), a = socialTab(el("a", "knop geel", "Lees mee op X"));
     a.href = "https://x.com/DamienZeller";
     li.append(el("p", null, "Korte berichten uit de raadszaal en de buurt."), a); ul.append(li);
   }
@@ -517,9 +519,9 @@ function bereikt(b) {
     (b.vragen ? ` Zelf stelde ik deze raadsperiode ${b.vragen} keer schriftelijke vragen; ${b.beantwoord} daarvan zijn beantwoord.` : "");
   document.getElementById("bereikt-zin").textContent = zin;
   const ul = document.getElementById("bereikt-lijst"); ul.textContent = "";
-  const ST = { "afgedaan": ["Afgedaan", "klaar"], "reactie college": ["Reactie college", "wacht"] };
+  const ST = { "afgedaan": ["Afgedaan", "klaar"], "reactie college": ["Reactie college", "aangenomen"] };
   for (const x of b.recent || []) {
-    const li = el("li"), kop = el("p", "bijschrift"), [lab, kl] = ST[x.status] || ["Aangenomen", "wacht"];
+    const li = el("li"), kop = el("p", "bijschrift"), [lab, kl] = ST[x.status] || ["Aangenomen", "aangenomen"];
     kop.append(el("span", "status " + kl, lab));
     if (x.dossier) kop.append(Dossiers.dosLink(x.dossier));
     const t = el("time", null, datumNL(x.datum)); t.dateTime = x.datum; kop.append(t);
