@@ -107,6 +107,8 @@ p{margin:0;text-wrap:pretty}
 .held-foto .hart{position:absolute;z-index:0;left:-6%;top:3%;width:98%;fill:var(--zon);transform:rotate(-8deg)}
 @media (prefers-reduced-motion:reduce){.held-kaart path{animation:none;stroke-dashoffset:0}}
 @media (min-width:1500px){.held-foto{right:calc((100vw - 1500px) / 2);-webkit-mask-image:linear-gradient(to left,transparent 0,#000 7%);mask-image:linear-gradient(to left,transparent 0,#000 7%)}}
+/* een masker knipt de schaduw af tot een rechthoek; waar het masker staat dus geen schaduw */
+@media (min-width:1500px),(max-width:860px){.held-foto img{filter:none}}
 @media (min-width:861px){.held-tekst{max-width:min(590px,calc(54vw - 72px))}}
 @media (max-width:860px){
   .held{display:block;min-height:0}
