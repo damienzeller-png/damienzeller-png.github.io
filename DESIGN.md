@@ -49,3 +49,8 @@ Eén moment: de buurtlijnen tekenen zich in de opening. Knoppen schuiven 2px op 
 ## Dossiers
 
 dossiers.json is de enige bron voor de zeventien dossiers, de thema's en de herkenningspatronen. tools/nieuws.py (Python) en dossiers.js (browser) rekenen op dezelfde manier.
+
+## Herkomst van beelden
+
+- deel/*.jpg (deelbeeld per onderwerppagina): gerenderd met Chromium uit portret-uit.webp, het gele hart en de buurtlijnen van de opening, met Archivo; geen gegenereerde beelden.
+- portret-uit.webp, portret.jpg, foto.jpg, deel.jpg en logo.png: aangeleverd door Damiën.

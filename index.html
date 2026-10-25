@@ -11,6 +11,16 @@
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#137345">
 <link rel="icon" href="logo.png">
+<link rel="canonical" href="https://damienzeller.nl/">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person","name":"Damiën Zeller","jobTitle":"Gemeenteraadslid","url":"https://damienzeller.nl/",
+ "image":"https://damienzeller.nl/portret.jpg","email":"mailto:damien.zeller@denhaag.nl",
+ "affiliation":{"@type":"PoliticalParty","name":"Hart voor Den Haag","url":"https://www.hartvoordenhaag.nl/"},
+ "memberOf":{"@type":"GovernmentOrganization","name":"Gemeenteraad Den Haag"},
+ "knowsAbout":["Zorg en Wmo","Volksgezondheid","Onderwijs","Sport","Lokale media","Joodse gemeenschap","Leidschenveen-Ypenburg"],
+ "sameAs":["https://www.tiktok.com/@damienzeller","https://www.instagram.com/damienzeller/","https://www.facebook.com/damienzeller","https://x.com/DamienZeller"]}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Lexend:wght@400;600;700&display=swap">
@@ -81,9 +91,23 @@
 
 <section class="vragen" id="vragen" hidden>
   <div class="wrap">
-    <h2>Wat ik het college vroeg</h2>
-    <p class="inleiding">Mijn schriftelijke vragen aan het college, met de stand van het antwoord. Het college heeft zes weken om te antwoorden en vraagt soms uitstel. Het RIS-nummer is het nummer van het stuk in het raadsinformatiesysteem van de gemeente.</p>
+    <h2>Wat ik vroeg en bereikte</h2>
+    <p class="inleiding">Mijn schriftelijke vragen aan het college en de stand van het antwoord. Het college heeft zes weken; het RIS-nummer is het nummer in het raadsinformatiesysteem.</p>
     <ul class="vlijst" id="vlijst"></ul>
+    <button class="knop lijn meer-knop" id="vragen-meer" type="button" aria-expanded="false" aria-controls="vlijst" hidden></button>
+    <div class="bereikt" id="bereikt" hidden>
+      <p class="bereikt-zin" id="bereikt-zin"></p>
+      <nav class="onderwerpen" aria-label="Per onderwerp"><a href="zorg.html">Zorg en welzijn</a><a href="onderwijs.html">Onderwijs</a><a href="sport.html">Sport en bewegen</a><a href="media.html">Lokale media</a><a href="joodse-gemeenschap.html">Joodse gemeenschap</a><a href="leidschenveen-ypenburg.html">Leidschenveen-Ypenburg</a></nav>
+      <ul class="vlijst" id="bereikt-lijst"></ul>
+    </div>
+  </div>
+</section>
+
+<section class="agenda" id="agenda" hidden>
+  <div class="wrap">
+    <h2>Binnenkort in de raad</h2>
+    <p class="inleiding">Vergaderingen van de commissie Samenleving en de gemeenteraad waar het over mijn onderwerpen gaat. U kunt meekijken, en als inwoner kunt u ook <a href="https://denhaag.nl/stadinderaad">inspreken</a>.</p>
+    <ol class="agenda-lijst" id="agenda-lijst"></ol>
   </div>
 </section>
 
@@ -175,6 +199,7 @@
       <h2>Over Damiën</h2>
       <p>Damiën Zeller is raadslid voor Hart voor Den Haag in de Haagse gemeenteraad (2026-2030) en het raadslid voor stadsdeel Leidschenveen-Ypenburg, waar hij zelf woont. Hart voor Den Haag zit sinds 2026 in de coalitie.</p>
       <p>Hij is woordvoerder zorg (Wmo, mantelzorg, beschermd wonen en zorginnovatie), volksgezondheid, toegankelijkheid en doelgroepenvervoer, onderwijs (ook mbo, hoger onderwijs en studenten), sport, voedselstrategie, lokale media en de Joodse gemeenschap.</p>
+      <nav class="onderwerpen" aria-label="Onderwerpen"><a href="zorg.html">Zorg en welzijn</a><a href="onderwijs.html">Onderwijs</a><a href="sport.html">Sport en bewegen</a><a href="media.html">Lokale media</a><a href="joodse-gemeenschap.html">Joodse gemeenschap</a><a href="leidschenveen-ypenburg.html">Leidschenveen-Ypenburg</a></nav>
       <div class="pers">
         <h3>Voor de pers</h3>
         <p>Mail Damiën op <a id="pers-mail" href="mailto:damien.zeller@denhaag.nl">damien.zeller@denhaag.nl</a>. De fractie bereikt u op <a href="mailto:hartvoordenhaag@denhaag.nl">hartvoordenhaag@denhaag.nl</a>.</p>
@@ -193,6 +218,7 @@
       <div class="socials" id="socials"></div>
       <a class="knop geel" id="lid" href="https://www.hartvoordenhaag.nl/ik-word-lid/">Word lid van Hart voor Den Haag</a>
     </div>
+    <nav class="onderwerpen-voet" aria-label="Onderwerpen"><a href="zorg.html">Zorg en welzijn</a><a href="onderwijs.html">Onderwijs</a><a href="sport.html">Sport en bewegen</a><a href="media.html">Lokale media</a><a href="joodse-gemeenschap.html">Joodse gemeenschap</a><a href="leidschenveen-ypenburg.html">Leidschenveen-Ypenburg</a></nav>
     <p>Wat u via het formulier stuurt, komt rechtstreeks bij Damiën en zijn team binnen. Uw naam en e-mailadres gebruiken we alleen om u te antwoorden. Video's en berichten van TikTok en X staan hier zonder cookies; een video speelt pas via TikTok als u op afspelen drukt.</p>
     <p>Nieuws: hartvoordenhaag.nl. Buurtgrenzen: CBS Wijk- en buurtkaart 2024. Kaart: BRT-Achtergrondkaart van het Kadaster via PDOK. <a href="privacy.html">Privacy</a> en <a href="voorwaarden.html">voorwaarden</a>.</p>
   </div>
@@ -252,8 +278,15 @@ function infoBuurt() {
     box.append(el("h3", null, "Leidschenveen-Ypenburg"),
       el("p", null, (tot ? `Ongeveer ${(Math.round(tot / 1000) * 1000).toLocaleString("nl-NL")} inwoners in ` : "") +
         "dertien buurten, van Bosweide tot Rietbuurt. Kies een buurt op de kaart of hierboven."));
+    const sp = data.spreekuur || {}, spd = sp.start ? new Date(sp.start) : null;
     const alg = data.berichten.filter(x => x.dossier === STADSDEEL || WIJKEN[x.buurt]).sort(nieuwste).slice(0, 3);
-    if (alg.length) { box.append(el("p", "wijknaam", "Voor het hele stadsdeel")); box.append(lijstje(alg)); }
+    if (alg.length || spd) box.append(el("p", "wijknaam", "Voor het hele stadsdeel"));
+    if (spd && !isNaN(spd) && spd > new Date()) {
+      const a = el("a", "sp-regel"); a.href = "#spreekuur";
+      a.append(el("b", null, "Spreekuur " + datumNL(sp.start)), document.createTextNode(" " + (sp.plek || "").split(",")[0]));
+      box.append(a);
+    }
+    if (alg.length) box.append(lijstje(alg));
     return;
   }
   const f = laag && laag.getLayers().find(l => l.feature.properties.buurt === gekozen);
@@ -351,11 +384,12 @@ function spreekuur() {
 function beeld(x, cls) {
   const fig = el(x.link ? "a" : "span", cls);
   if (x.link) { fig.href = x.link; nieuwTab(fig); fig.tabIndex = -1; fig.setAttribute("aria-hidden", "true"); }
+  const kaart = () => { fig.classList.add("kaart-beeld"); fig.append(Dossiers.kaartje(x.buurt || (x.dossier === STADSDEEL ? "Ypenburg" : ""))); };
   if (x.beeld) {
     const i = el("img"); i.src = x.beeld; i.alt = ""; i.loading = "lazy"; i.decoding = "async";
-    i.onerror = () => { i.remove(); fig.classList.add("leeg-beeld"); };
+    i.onerror = () => { i.remove(); kaart(); };
     fig.append(i);
-  } else fig.classList.add("leeg-beeld");
+  } else kaart();
   return fig;
 }
 
@@ -446,6 +480,7 @@ function feeds() {
 
 function vragen(lijst) {
   if (!Array.isArray(lijst) || !lijst.length) return;
+  lijst = [...lijst].sort((a, b) => (b.gesteld || "").localeCompare(a.gesteld || ""));
   const ul = document.getElementById("vlijst"); ul.textContent = "";
   const LAB = { beantwoord: ["Beantwoord", "klaar"], uitstel: ["Uitgesteld", "wacht"], open: ["Wacht op antwoord", "wacht"] };
   for (const v of lijst) {
@@ -467,7 +502,53 @@ function vragen(lijst) {
     }
     li.append(kop, t, regel); ul.append(li);
   }
+  const knop = document.getElementById("vragen-meer"), items = [...ul.children];
+  if (items.length > 3) {
+    let open = false;
+    const zet = () => { items.forEach((li, i) => { li.hidden = !open && i >= 3; }); knop.textContent = open ? "Toon minder" : `Toon alle vragen (${items.length})`; knop.setAttribute("aria-expanded", String(open)); };
+    knop.onclick = () => { open = !open; zet(); if (open) items[3].querySelector("a, span").focus?.(); };
+    knop.hidden = false; zet();
+  }
   document.getElementById("vragen").hidden = false;
+}
+
+function bereikt(b) {
+  if (!b || !b.aangenomen) return;
+  const zin = `Sinds ${b.sinds || 2018} nam de gemeenteraad ${b.aangenomen} moties en voorstellen van Hart voor Den Haag op mijn onderwerpen aan; ${b.afgedaan} daarvan heeft het college uitgevoerd of afgedaan.` +
+    (b.vragen ? ` Zelf stelde ik deze raadsperiode ${b.vragen} keer schriftelijke vragen; ${b.beantwoord} daarvan zijn beantwoord.` : "");
+  document.getElementById("bereikt-zin").textContent = zin;
+  const ul = document.getElementById("bereikt-lijst"); ul.textContent = "";
+  const ST = { "afgedaan": ["Afgedaan", "klaar"], "reactie college": ["Reactie college", "wacht"] };
+  for (const x of b.recent || []) {
+    const li = el("li"), kop = el("p", "bijschrift"), [lab, kl] = ST[x.status] || ["Aangenomen", "wacht"];
+    kop.append(el("span", "status " + kl, lab));
+    if (x.dossier) kop.append(Dossiers.dosLink(x.dossier));
+    const t = el("time", null, datumNL(x.datum)); t.dateTime = x.datum; kop.append(t);
+    const a = el(x.link ? "a" : "span", "vtitel", (x.soort === "motie" ? "Motie: " : x.soort === "amendement" ? "Amendement: " : "Voorstel: ") + x.titel);
+    if (x.link) { a.href = x.link; nieuwTab(a); }
+    li.append(kop, a); ul.append(li);
+  }
+  document.getElementById("bereikt").hidden = false;
+  document.getElementById("vragen").hidden = false;
+}
+
+function agenda(lijst) {
+  const nu = new Date().toISOString().slice(0, 10);
+  lijst = (Array.isArray(lijst) ? lijst : []).filter(v => v.datum >= nu).slice(0, 3);
+  if (!lijst.length) return;
+  const ol = document.getElementById("agenda-lijst"); ol.textContent = "";
+  for (const v of lijst) {
+    const d = new Date(v.datum + "T12:00"), li = el("li");
+    const blok = el("div", "agenda-datum"); blok.append(el("span", "dag", String(d.getDate())), el("span", "maand", MAANDEN[d.getMonth()]));
+    const tekst = el("div", "agenda-tekst");
+    const h = el("h3"), a = el(v.link ? "a" : "span", null, v.titel); if (v.link) { a.href = v.link; nieuwTab(a); }
+    h.append(a);
+    tekst.append(h, el("p", "bijschrift", `${DAGEN[d.getDay()]} ${v.tijd ? "om " + v.tijd : ""}`.trim()));
+    if (v.punten && v.punten.length) { const ul = el("ul", "punten"); v.punten.forEach(p => ul.append(el("li", null, p))); tekst.append(ul); }
+    else if (!v.gepubliceerd) tekst.append(el("p", "leeg", "De agenda volgt."));
+    li.append(blok, tekst); ol.append(li);
+  }
+  document.getElementById("agenda").hidden = false;
 }
 
 function samenvoegen(eigen, nieuws) {
@@ -577,7 +658,8 @@ fetch("links.json", { cache: "no-cache" }).then(r => r.json()).catch(() => ({}))
   return Promise.all([
     fetch(API + "/site").then(r => r.json()).catch(() => ({})),
     fetch("nieuws.json", { cache: "no-cache" }).then(r => r.json()).catch(() => ({})),
-    window.Dossiers ? Dossiers.laad() : null
+    window.Dossiers ? Dossiers.laad() : null,
+    window.Dossiers ? Dossiers.laadKaart() : null
   ]);
 }).then(([s, n]) => {
   const nieuws = (n && Array.isArray(n.berichten)) ? n.berichten : [];
@@ -587,7 +669,7 @@ fetch("links.json", { cache: "no-cache" }).then(r => r.json()).catch(() => ({}))
     if (Array.isArray(s.tiktok)) data.tiktok = s.tiktok;
     if (Array.isArray(s.x)) data.x = s.x;
     if (s.spreekuur && (s.spreekuur.start || s.spreekuur.plek)) data.spreekuur = Object.assign({}, data.spreekuur, s.spreekuur);
-    vragen(s.vragen);
+    vragen(s.vragen); bereikt(s.bereikt); agenda(s.agenda);
   }
   spreekuur(); knoppenBuurt(); infoBuurt(); berichten(); feeds();
   if (laag) laag.setStyle(stijl);

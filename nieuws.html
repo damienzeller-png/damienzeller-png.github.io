@@ -55,6 +55,7 @@
 
 <footer class="voet">
   <div class="wrap">
+    <nav class="onderwerpen-voet" aria-label="Onderwerpen"><a href="zorg.html">Zorg en welzijn</a><a href="onderwijs.html">Onderwijs</a><a href="sport.html">Sport en bewegen</a><a href="media.html">Lokale media</a><a href="joodse-gemeenschap.html">Joodse gemeenschap</a><a href="leidschenveen-ypenburg.html">Leidschenveen-Ypenburg</a></nav>
     <p>Damiën Zeller, raadslid voor Hart voor Den Haag in de gemeenteraad van Den Haag.</p>
     <p>Bron: hartvoordenhaag.nl. De berichten openen op de site van de partij. <a href="privacy.html">Privacy</a> en <a href="voorwaarden.html">voorwaarden</a>.</p>
   </div>
@@ -83,9 +84,9 @@ function item(x) {
   fig.href = x.link; fig.target = "_blank"; fig.rel = "noopener"; fig.tabIndex = -1; fig.setAttribute("aria-hidden", "true");
   if (x.beeld) {
     const i = el("img"); i.src = x.beeld; i.alt = ""; i.loading = "lazy"; i.decoding = "async";
-    i.onerror = () => { i.remove(); fig.classList.add("leeg-beeld"); };
+    i.onerror = () => { i.remove(); fig.classList.add("kaart-beeld"); fig.append(Dossiers.kaartje(x.buurt)); };
     fig.append(i);
-  } else fig.classList.add("leeg-beeld");
+  } else { fig.classList.add("kaart-beeld"); fig.append(Dossiers.kaartje(x.buurt)); }
   const midden = el("div");
   const a = el("a", "titel", x.titel); a.href = x.link; a.target = "_blank"; a.rel = "noopener";
   midden.append(bijschrift(x), a);
@@ -136,7 +137,7 @@ document.getElementById("zoek").addEventListener("input", e => { clearTimeout(wa
 const q = new URLSearchParams(location.search).get("q");
 if (q) { document.getElementById("zoek").value = q; zoek = q; }
 
-Promise.all([fetch("nieuws.json", { cache: "no-cache" }).then(r => r.json()), Dossiers.laad()]).then(([d]) => {
+Promise.all([fetch("nieuws.json", { cache: "no-cache" }).then(r => r.json()), Dossiers.laad(), Dossiers.laadKaart()]).then(([d]) => {
   alles = (d.berichten || []).sort((a, b) => (b.datum || "").localeCompare(a.datum || ""));
   for (const x of alles) if (x.dossier === undefined) x.dossier = Dossiers.label(x.titel || "", x.tekst || "");
   keuzes(); toon();

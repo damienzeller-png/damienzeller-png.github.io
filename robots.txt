@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /.impeccable/
+Sitemap: https://damienzeller.nl/sitemap.xml

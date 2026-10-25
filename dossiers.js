@@ -45,6 +45,33 @@ window.Dossiers = (() => {
       a.setAttribute("aria-label", "Alle berichten over " + naam);
       return a;
     },
+    /* kaartje van het stadsdeel als beeld bij een bericht zonder foto: alle buurten als lijn, de buurt van het bericht in groen */
+    laadKaart() {
+      if (!this._kaart) this._kaart = fetch("buurten.geojson").then(r => r.json()).then(g => (this._geo = g)).catch(() => null);
+      return this._kaart;
+    },
+    kaartje(buurt) {
+      const g = this._geo, ns = "http://www.w3.org/2000/svg";
+      const svg = document.createElementNS(ns, "svg"); svg.setAttribute("class", "kaartje-svg"); svg.setAttribute("aria-hidden", "true");
+      if (!g) return svg;
+      const WIJK = { Ypenburg: ["Bosweide", "De Bras", "De Venen", "Morgenweide", "Singels", "Tedingerbroek", "Waterbuurt"],
+                     Hoornwijck: ["De Rivieren", "Vlietzoom-Oost"], Leidschenveen: ["De Lanen", "De Velden", "De Vissen", "Rietbuurt"] };
+      const doel = WIJK[buurt] || (buurt ? [buurt] : []);
+      const ringen = f => (f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates).map(p => p[0]);
+      let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+      const kx = Math.cos(52.06 * Math.PI / 180);
+      for (const f of g.features) for (const r of ringen(f)) for (const [x, y] of r) { x0 = Math.min(x0, x * kx); x1 = Math.max(x1, x * kx); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
+      const W = 300, H = 200, pad = 14, s = Math.min((W - 2 * pad) / (x1 - x0), (H - 2 * pad) / (y1 - y0));
+      const ox = (W - (x1 - x0) * s) / 2, oy = (H - (y1 - y0) * s) / 2;
+      svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+      for (const f of g.features) {
+        const d = ringen(f).map(r => "M" + r.map(([x, y]) => `${((x * kx - x0) * s + ox).toFixed(1)} ${((y1 - y) * s + oy).toFixed(1)}`).join("L") + "Z").join("");
+        const p = document.createElementNS(ns, "path"); p.setAttribute("d", d);
+        if (doel.includes(f.properties.buurt)) p.setAttribute("class", "aan");
+        svg.append(p);
+      }
+      return svg;
+    },
     kort(naam) { const d = lijst.find(x => x.naam === naam); return d ? d.kort : naam; },
     thema(naam) { const d = lijst.find(x => x.naam === naam); return d ? d.thema : ""; },
     alle() { return lijst.slice(); },

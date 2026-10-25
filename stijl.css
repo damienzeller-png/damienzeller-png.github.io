@@ -159,7 +159,7 @@ section{padding:88px 0}
 .bijschrift .plek::before{content:"";display:inline-block;width:8px;height:8px;margin-right:6px;border-radius:2px;background:var(--hart);transform:rotate(45deg) translateY(-1px)}
 .bijschrift .dos{font-weight:600;color:var(--link);text-decoration:none}
 .bijschrift a.dos:hover{text-decoration:underline}
-.bijschrift>*:not(:last-child)::after{content:"·";margin-left:10px;color:var(--zacht);font-weight:400}
+.bijschrift>*:not(:last-child):not(.status)::after{content:"·";margin-left:10px;color:var(--zacht);font-weight:400}
 
 /* actueel: een logboek, geen kaartjesraster */
 .actueel{background:var(--vlak)}
@@ -371,3 +371,58 @@ footer a{color:#fff}
 .tekstpagina h2{font-size:clamp(1.7rem,3.4vw,2.2rem);margin:40px 0 10px}
 .tekstpagina p+p{margin-top:12px}
 .tekstpagina a{color:var(--link);font-weight:700}
+
+/* kaartje van het stadsdeel als beeld bij een bericht zonder foto */
+.kaart-beeld{display:grid!important;place-items:center;background:var(--munt)!important}
+.kaartje-svg{width:86%;height:86%}
+.kaartje-svg path{fill:none;stroke:var(--hart);stroke-width:1.1;stroke-linejoin:round;opacity:.55}
+.kaartje-svg path.aan{fill:var(--hart);fill-opacity:.85;stroke:var(--woud);opacity:1}
+@media (prefers-color-scheme:dark){.kaartje-svg path.aan{stroke:#9BE0B8}}
+
+/* buurtinfo: spreekuur bovenaan */
+.sp-regel{display:grid;gap:2px;padding:12px 14px;border-radius:14px;background:var(--zon);color:#10251A;text-decoration:none;width:100%}
+.sp-regel:hover b{text-decoration:underline}
+
+/* vragen en bereikt */
+.meer-knop{margin-top:16px}
+.bereikt{margin-top:40px;padding-top:28px;border-top:1.5px solid var(--lijn)}
+.bereikt-zin{font:600 clamp(1.08rem,1.8vw,1.25rem)/1.5 var(--tekst);max-width:40em;text-wrap:pretty}
+.bereikt .onderwerpen{margin-top:16px}
+@media (max-width:640px){#bereikt-lijst{display:none}}
+
+/* binnenkort in de raad */
+.agenda{background:var(--munt)}
+.agenda .inleiding a{color:var(--link);font-weight:700}
+.agenda-lijst{list-style:none;margin:26px 0 0;padding:0;display:grid;gap:14px}
+.agenda-lijst>li{display:grid;grid-template-columns:76px minmax(0,1fr);gap:18px;align-items:start;background:var(--vlak);border-radius:20px;padding:16px 18px}
+.agenda-datum{display:grid;justify-items:center;background:var(--woud);color:#fff;border-radius:14px;padding:10px 6px}
+.agenda-datum .dag{font:900 2.2rem/.9 var(--kop);font-stretch:66%;color:var(--zon)}
+.agenda-datum .maand{font:800 1rem/1 var(--kop);font-stretch:85%;margin-top:2px}
+.agenda-tekst{display:grid;gap:4px}
+.agenda-tekst h3{font-size:1.4rem;font-stretch:82%}
+.agenda-tekst h3 a{text-decoration:none}
+.agenda-tekst h3 a:hover{text-decoration:underline;text-decoration-color:var(--hart)}
+.agenda-tekst .punten{margin:6px 0 0;padding-left:1.1em;color:var(--zacht)}
+.agenda-tekst .punten li+li{margin-top:2px}
+
+/* onderwerpen */
+.onderwerpen{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.onderwerpen a{display:inline-flex;align-items:center;min-height:44px;padding:8px 16px;border-radius:999px;border:1.5px solid var(--lijn);
+  background:var(--vlak);text-decoration:none;font-weight:600}
+.onderwerpen a:hover{border-color:var(--veld)}
+.onderwerpen-voet{display:flex;flex-wrap:wrap;gap:6px 20px;margin-bottom:22px;padding-bottom:22px;border-bottom:1px solid rgba(255,255,255,.12)}
+.onderwerpen-voet a{color:#fff;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;min-height:40px}
+.onderwerpen-voet a:hover,.onderwerpen-voet a[aria-current]{text-decoration:underline;text-decoration-color:var(--zon);text-decoration-thickness:2px}
+.onderwerp-kop p{max-width:38em}
+.onderwerp-kop p+p{margin-top:10px}
+.kruimel{font-size:.95rem!important;margin:0 0 14px!important;color:#D7EDDF!important}
+.kruimel a{color:#fff}
+.onderwerp-deel{padding:64px 0 0}
+.onderwerp-deel:last-of-type{padding-bottom:88px}
+.onderwerp-deel h3{font-size:1.35rem;margin:28px 0 8px}
+.opgeleverd{margin:14px 0 0;padding:0;list-style:none;border-top:1.5px solid var(--lijn)}
+.opgeleverd li{padding:14px 0 14px 26px;border-bottom:1.5px solid var(--lijn);position:relative;max-width:62em}
+.opgeleverd li::before{content:"";position:absolute;left:4px;top:23px;width:9px;height:9px;border-radius:2px;background:var(--hart);transform:rotate(45deg)}
+.meer-blok{margin-top:12px}
+.meer-blok>summary{cursor:pointer;font-weight:700;color:var(--link);min-height:44px;display:inline-flex;align-items:center}
+.nieuws-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
