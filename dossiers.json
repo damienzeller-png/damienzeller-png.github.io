@@ -1,0 +1,24 @@
+{
+  "_uitleg": "De zeventien dossiers van Damiën (portefeuillebesluit RIS326037). tools/nieuws.py en de pagina's geven elk bericht het dossier met de meeste treffers (een treffer in de titel telt drie keer, een treffer voor een specifiek dossier telt dubbel tegenover de algemene dossiers met \"algemeen\"; bij gelijke stand wint het dossier dat hoger staat). Het stadsdeel staat onderaan en telt alleen als geen onderwerp past. Berichten die op partijnieuws lijken krijgen geen dossier en staan dan alleen op de nieuwspagina.",
+  "partijnieuws": "stopt als (gemeente)?raadslid|kandidatenlijst|volgt hem op|volgt haar op|lijsttrekker|beëdigd|geïnstalleerd als",
+  "themas": ["Zorg en Welzijn", "Jeugd en Onderwijs", "Werk, Inkomen en Sport", "Financiën, Cultuur en Scheveningen", "Volkshuisvesting, Integratie en Vrijwilligers", "Stadsdeel Leidschenveen-Ypenburg"],
+  "dossiers": [
+    {"naam": "Zwemonderwijs", "kort": "Zwemles", "thema": "Jeugd en Onderwijs", "patroon": "zwemles|schoolzwemmen|zwemdiploma|leren zwemmen|zwemvaardig"},
+    {"naam": "Huiselijk geweld en Veilig Thuis", "kort": "Huiselijk geweld", "thema": "Zorg en Welzijn", "patroon": "huiselijk geweld|veilig thuis|kindermishandeling|ouderenmishandeling"},
+    {"naam": "Doelgroepenvervoer", "kort": "Doelgroepenvervoer", "thema": "Zorg en Welzijn", "patroon": "doelgroepenvervoer|regiotaxi|leerlingenvervoer|wmo-vervoer|aanvullend vervoer"},
+    {"naam": "Toegankelijkheid en mensen met een beperking", "kort": "Toegankelijkheid", "thema": "Zorg en Welzijn", "patroon": "toegankelijkheid|ontoegankelijk|beperking|rolstoel|gehandicapt|mindervalide|autisme"},
+    {"naam": "Beschermd wonen", "kort": "Beschermd wonen", "thema": "Zorg en Welzijn", "patroon": "beschermd wonen|\\bggz\\b|verward|verslaving|psychiatri"},
+    {"naam": "Zorginnovatie en voedselstrategie", "kort": "Zorginnovatie en voedsel", "thema": "Zorg en Welzijn", "patroon": "zorginnovatie|zorgtechnologie|domotica|voedselstrategie|voedselbeleid|stadslandbouw"},
+    {"naam": "Volksgezondheid", "kort": "Volksgezondheid", "thema": "Zorg en Welzijn", "patroon": "gezondheid|\\bggd\\b|preventie|rookvrij|\\broken\\b|vape|vapen|alcohol|lachgas|overgewicht|vaccin|corona|ambulance|sekswerk"},
+    {"naam": "Wmo en informele zorg", "algemeen": true, "kort": "Wmo en ouderen", "thema": "Zorg en Welzijn", "patroon": "\\bwmo\\b|mantelzorg|ouderen|senioren|dementie|eenzaam|thuiszorg|huishoudelijke hulp|verpleeghuis|zorgverlen|zorginstelling|zorgaanbieder"},
+    {"naam": "Schoolveiligheid en pesten", "kort": "Schoolveiligheid", "thema": "Jeugd en Onderwijs", "patroon": "pesten|schoolveilig|veilig naar school|veiligere scholen|schoolzone|schoolomgeving|ronselen"},
+    {"naam": "Onderwijshuisvesting", "kort": "Schoolgebouwen", "thema": "Jeugd en Onderwijs", "patroon": "schoolgebouw|onderwijshuisvesting|nieuwe school|schoollocatie|noodlokal|sluiting .{0,30}school"},
+    {"naam": "Mbo, hoger onderwijs en studenten", "kort": "Mbo en studenten", "thema": "Jeugd en Onderwijs", "patroon": "\\bmbo\\b|\\bhbo\\b|student|hogeschool|universiteit|\\bstage"},
+    {"naam": "Taalaanpak, leesvaardigheid en bibliotheek", "kort": "Lezen en bibliotheek", "thema": "Jeugd en Onderwijs", "patroon": "bibliotheek|leesvaardig|voorlees|voorlezen|leesbevordering|laaggeletterd|taalachterstand|taalaanpak"},
+    {"naam": "Onderwijsbeleid, leraren en kansen", "algemeen": true, "kort": "Onderwijs", "thema": "Jeugd en Onderwijs", "patroon": "onderwijs|leraar|leraren|leerkracht|school|leerling|kansengelijk|lerarentekort"},
+    {"naam": "Sport, topsport en speelplaatsen", "algemeen": true, "kort": "Sport en spelen", "thema": "Werk, Inkomen en Sport", "patroon": "sport|voetbal|zwembad|speeltuin|speelplaats|speelplek|\\bado\\b|korfbal|hockey|atletiek|bewegen"},
+    {"naam": "Lokale media en persvrijheid", "kort": "Lokale media", "thema": "Financiën, Cultuur en Scheveningen", "patroon": "lokale media|omroep|persvrijheid|journalist|den haag fm"},
+    {"naam": "Joodse gemeenschap en antisemitisme", "kort": "Joodse gemeenschap", "thema": "Volkshuisvesting, Integratie en Vrijwilligers", "patroon": "joods|antisemitis|synagoge|rabbijn|holocaust|jodenvervolging"},
+    {"naam": "Leidschenveen-Ypenburg", "algemeen": true, "kort": "Stadsdeel", "thema": "Stadsdeel Leidschenveen-Ypenburg", "patroon": "leidschenveen|ypenburg|hoornwijck|forepark|morgenweide|bosweide|tedingerbroek|de venen|singels|waterbuurt|de bras|vlietzoom|de rivieren|de lanen|de velden|de vissen|rietbuurt|park bloom|madeliefveld|stadsdeel"}
+  ]
+}

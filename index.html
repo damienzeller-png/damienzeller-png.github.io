@@ -2,14 +2,14 @@
 <html lang="nl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Damiën Zeller, raadslid Leidschenveen-Ypenburg</title>
-<meta name="description" content="Damiën Zeller is raadslid voor Hart voor Den Haag in stadsdeel Leidschenveen-Ypenburg. Lees wat hij doet, kom naar het spreekuur of meld iets.">
+<meta name="description" content="Damiën Zeller is raadslid voor Hart voor Den Haag en woont zelf in stadsdeel Leidschenveen-Ypenburg. Kom naar het spreekuur, meld iets of lees wat hij doet.">
 <meta property="og:title" content="Damiën Zeller, raadslid Leidschenveen-Ypenburg">
-<meta property="og:description" content="Lees wat Damiën doet, kom naar het spreekuur of meld iets.">
+<meta property="og:description" content="Kom naar het spreekuur, meld iets of lees wat Damiën doet.">
 <meta property="og:image" content="https://damienzeller.nl/deel.jpg">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#1E945A">
+<meta name="theme-color" content="#137345">
 <link rel="icon" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,12 +19,13 @@
 <link rel="stylesheet" href="stijl.css">
 </head>
 <body>
-<a class="naar-inhoud" href="#actueel">Naar de inhoud</a>
+<a class="naar-inhoud" href="#inhoud">Naar de inhoud</a>
 <header class="balk">
   <div class="wrap">
     <a class="merk" href="./"><img src="logo.png" alt="" width="44" height="23"><span>Damiën Zeller</span></a>
-    <nav aria-label="Menu">
-      <a class="ver" href="#actueel">Actueel</a><a class="ver" href="#spreekuur">Spreekuur</a><a class="ver" href="#volg">Video's</a><a class="ver" href="#vragen" id="nav-vragen" hidden>Vragen</a><a class="ver" href="#buurt">Stadsdeel</a><a href="#melden">Melden</a><a class="nieuws" href="nieuws.html">Nieuws</a>
+    <a class="kop-over" href="#over">Over en pers</a>
+    <nav class="menu" aria-label="Menu">
+      <a href="#spreekuur">Spreekuur</a><a href="nieuws.html">Nieuws</a><a href="#buurt">Uw buurt</a><a href="#over">Over Damiën</a><a class="meld" href="#melden">Meld iets</a>
     </nav>
   </div>
 </header>
@@ -39,7 +40,8 @@
     <div class="held-tekst">
       <h1 id="naam">Damiën<br>Zeller</h1>
       <p class="held-rol">Uw raadslid in Leidschenveen-Ypenburg</p>
-      <p class="intro" id="intro">Ik ben uw raadslid voor Leidschenveen-Ypenburg en woordvoerder zorg, ouderen, volksgezondheid, onderwijs en sport. Loop binnen op mijn spreekuur of laat weten wat er speelt.</p>
+      <a class="held-sp" id="held-sp" href="#spreekuur" hidden><span>Volgende spreekuur</span><b id="held-sp-wanneer"></b><span id="held-sp-waar"></span></a>
+      <p class="intro" id="intro">Ik ben uw raadslid voor Leidschenveen-Ypenburg en woordvoerder zorg, volksgezondheid, onderwijs, sport, media en de Joodse gemeenschap. Loop binnen op mijn spreekuur of laat weten wat er speelt.</p>
       <div class="knoppen">
         <a class="knop geel" href="#melden">Meld iets</a>
         <a class="knop rand" href="#spreekuur">Kom naar het spreekuur</a>
@@ -63,49 +65,33 @@
   </aside>
 </div>
 
-<main>
+<main id="inhoud">
 <section id="actueel" class="actueel">
   <div class="wrap">
     <div class="kop-rij">
-      <h2>Actueel</h2>
-      <a class="meer" href="nieuws.html">Alle nieuwsberichten</a>
-    </div>
-    <div id="uitgelicht"></div>
-    <ul class="raster" id="berichten"></ul>
-  </div>
-</section>
-
-<section class="volg" id="volg">
-  <div class="wrap">
-    <div class="kop-rij">
-      <h2>Volg Damiën</h2>
-      <p class="inleiding">Korte video's uit de raad en het stadsdeel, en wat er onderweg opvalt.</p>
-    </div>
-    <div class="volg-raster">
-      <div class="volg-tt">
-        <p class="kanaal"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.6 3c.4 2.2 1.8 3.7 4 4v3.1c-1.5 0-2.9-.4-4-1.2v6.3A6 6 0 1 1 10.5 9v3.2a2.9 2.9 0 1 0 2.9 2.9V3z"/></svg><a href="https://www.tiktok.com/@damienzeller" target="_blank" rel="noopener">@damienzeller op TikTok</a></p>
-        <ul class="tt-rij" id="tt-rij"></ul>
+      <div>
+        <h2>Actueel</h2>
+        <p class="inleiding">Wat ik de laatste tijd deed, met de buurt en het dossier erbij.</p>
       </div>
-      <div class="volg-x">
-        <p class="kanaal"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.8 3h3.1l-6.8 7.7L22 21h-6.2l-4.9-6.3L5.3 21H2.2l7.3-8.3L2 3h6.3l4.4 5.8zm-1.1 16.2h1.7L7.4 4.7H5.6z"/></svg><a href="https://x.com/DamienZeller" target="_blank" rel="noopener">@DamienZeller op X</a></p>
-        <ul class="x-lijst" id="x-lijst"></ul>
-      </div>
+      <a class="meer" href="nieuws.html">Alle nieuws</a>
     </div>
+    <ol class="log" id="berichten"></ol>
   </div>
 </section>
 
 <section class="vragen" id="vragen" hidden>
   <div class="wrap">
     <h2>Wat ik het college vroeg</h2>
-    <p class="inleiding">Mijn schriftelijke vragen aan het college, met de stand van het antwoord. Het college heeft zes weken om te antwoorden; soms vraagt het uitstel.</p>
+    <p class="inleiding">Mijn schriftelijke vragen aan het college, met de stand van het antwoord. Het college heeft zes weken om te antwoorden en vraagt soms uitstel. Het RIS-nummer is het nummer van het stuk in het raadsinformatiesysteem van de gemeente.</p>
     <ul class="vlijst" id="vlijst"></ul>
   </div>
 </section>
 
+
 <section id="buurt">
   <div class="wrap">
     <h2>Wat speelt er in uw buurt?</h2>
-    <p class="inleiding">Kies uw buurt. U ziet waar Damiën mee bezig is en u kunt meteen iets melden.</p>
+    <p class="inleiding">Kies uw buurt. U ziet waar Damiën mee bezig is en u kunt meteen iets melden. Het getal is het aantal berichten over die buurt.</p>
     <div class="buurt-kies" id="buurt-kies"></div>
     <div class="buurt-vak">
       <div id="kaart" role="img" aria-label="Kaart van stadsdeel Leidschenveen-Ypenburg"></div>
@@ -125,25 +111,76 @@
         <li><div><b>Damiën leest hem zelf</b><span>En kijkt wat er nodig is.</span></div></li>
         <li><div><b>U hoort wat er gebeurt</b><span>Als u uw e-mailadres achterlaat.</span></div></li>
       </ol>
-      <p class="spoed"><b>Is het dringend?</b> Bel de gemeente op 14070. Bij gevaar belt u 112.</p>
+      <p class="spoed"><b>Is het dringend?</b> Bel de gemeente op <a href="tel:14070">14070</a>. Bij gevaar belt u <a href="tel:112">112</a>.</p>
     </div>
     <form id="meld-form" novalidate>
-      <label>Onderwerp
-        <input name="onderwerp" required maxlength="120" placeholder="Bijvoorbeeld: kapotte lantaarnpaal bij het speelveld">
-      </label>
-      <label>Uw bericht
-        <textarea name="bericht" required maxlength="2000" placeholder="Wat is er aan de hand, en waar precies?"></textarea>
-      </label>
+      <div class="veld">
+        <label for="f-onderwerp">Onderwerp</label>
+        <input id="f-onderwerp" name="onderwerp" maxlength="120" placeholder="Bijvoorbeeld: kapotte lantaarnpaal bij het speelveld" aria-describedby="fout-onderwerp">
+        <p class="veld-fout" id="fout-onderwerp" hidden></p>
+      </div>
+      <div class="veld">
+        <label for="f-bericht">Uw bericht</label>
+        <textarea id="f-bericht" name="bericht" maxlength="2000" placeholder="Wat is er aan de hand, en waar precies?" aria-describedby="fout-bericht"></textarea>
+        <p class="veld-fout" id="fout-bericht" hidden></p>
+      </div>
       <div class="twee">
-        <label>Naam <small>niet verplicht</small><input name="naam" maxlength="80" autocomplete="name"></label>
-        <label>E-mailadres <small>als u antwoord wilt</small><input name="email" type="email" maxlength="120" autocomplete="email"></label>
+        <div class="veld"><label for="f-naam">Naam <small>niet verplicht</small></label><input id="f-naam" name="naam" maxlength="80" autocomplete="name"></div>
+        <div class="veld">
+          <label for="f-email">E-mailadres <small>als u antwoord wilt</small></label>
+          <input id="f-email" name="email" type="email" inputmode="email" maxlength="120" autocomplete="email" aria-describedby="fout-email">
+          <p class="veld-fout" id="fout-email" hidden></p>
+        </div>
       </div>
       <label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off"></label>
-      <label class="akkoord"><input type="checkbox" name="toestemming" required>
-        <span>Damiën en zijn team mogen mijn melding lezen en mijn gegevens gebruiken om te antwoorden. Mijn naam en e-mailadres komen niet in lijsten en worden niet gedeeld.</span></label>
+      <div class="veld">
+        <label class="akkoord"><input type="checkbox" name="toestemming" id="f-toestemming" aria-describedby="fout-toestemming">
+          <span>Damiën en zijn team mogen mijn melding lezen en mijn gegevens gebruiken om te antwoorden. Mijn naam en e-mailadres komen niet in lijsten en worden niet gedeeld.</span></label>
+        <p class="veld-fout" id="fout-toestemming" hidden></p>
+      </div>
       <div><button class="knop groen" type="submit">Melding versturen</button></div>
-      <p id="melding-uitslag" role="status"></p>
+      <p id="melding-uitslag" role="status" tabindex="-1"></p>
     </form>
+  </div>
+</section>
+
+<section class="volg" id="volg">
+  <div class="wrap">
+    <div class="kop-rij">
+      <div>
+        <h2>Volg Damiën</h2>
+        <p class="inleiding">Korte video's uit de raad en het stadsdeel.</p>
+      </div>
+    </div>
+    <div class="volg-raster">
+      <div class="volg-tt">
+        <p class="kanaal"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.6 3c.4 2.2 1.8 3.7 4 4v3.1c-1.5 0-2.9-.4-4-1.2v6.3A6 6 0 1 1 10.5 9v3.2a2.9 2.9 0 1 0 2.9 2.9V3z"/></svg><a href="https://www.tiktok.com/@damienzeller" target="_blank" rel="noopener">@damienzeller op TikTok</a></p>
+        <ul class="tt-rij" id="tt-rij"></ul>
+      </div>
+      <div class="volg-x">
+        <p class="kanaal"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.8 3h3.1l-6.8 7.7L22 21h-6.2l-4.9-6.3L5.3 21H2.2l7.3-8.3L2 3h6.3l4.4 5.8zm-1.1 16.2h1.7L7.4 4.7H5.6z"/></svg><a href="https://x.com/DamienZeller" target="_blank" rel="noopener">@DamienZeller op X</a></p>
+        <ul class="x-lijst" id="x-lijst"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="over" id="over">
+  <div class="wrap">
+    <figure>
+      <img src="portret.jpg" alt="Portret van Damiën Zeller" width="800" height="800" loading="lazy">
+      <figcaption>Deze foto mag u gebruiken bij berichtgeving over Damiën.</figcaption>
+    </figure>
+    <div class="over-tekst">
+      <h2>Over Damiën</h2>
+      <p>Damiën Zeller is raadslid voor Hart voor Den Haag in de Haagse gemeenteraad (2026-2030) en het raadslid voor stadsdeel Leidschenveen-Ypenburg, waar hij zelf woont. Hart voor Den Haag zit sinds 2026 in de coalitie.</p>
+      <p>Hij is woordvoerder zorg (Wmo, mantelzorg, beschermd wonen en zorginnovatie), volksgezondheid, toegankelijkheid en doelgroepenvervoer, onderwijs (ook mbo, hoger onderwijs en studenten), sport, voedselstrategie, lokale media en de Joodse gemeenschap.</p>
+      <div class="pers">
+        <h3>Voor de pers</h3>
+        <p>Mail Damiën op <a id="pers-mail" href="mailto:damien.zeller@denhaag.nl">damien.zeller@denhaag.nl</a>. De fractie bereikt u op <a href="mailto:hartvoordenhaag@denhaag.nl">hartvoordenhaag@denhaag.nl</a>.</p>
+        <a class="knop lijn" href="portret.jpg" download="Damien-Zeller-portret.jpg">Download portretfoto (JPG)</a>
+      </div>
+    </div>
   </div>
 </section>
 </main>
@@ -156,12 +193,20 @@
       <div class="socials" id="socials"></div>
       <a class="knop geel" id="lid" href="https://www.hartvoordenhaag.nl/ik-word-lid/">Word lid van Hart voor Den Haag</a>
     </div>
-    <p>Privacy: wat u via het formulier stuurt, komt rechtstreeks bij Damiën en zijn team binnen. Uw naam en e-mailadres gebruiken we alleen om u te antwoorden; ze komen niet in lijsten en worden niet gedeeld. Wilt u dat we uw bericht verwijderen, mail dan naar Damiën. Video's en berichten van TikTok en X staan hier zonder cookies; een video speelt pas via TikTok als u op afspelen drukt.</p>
+    <p>Wat u via het formulier stuurt, komt rechtstreeks bij Damiën en zijn team binnen. Uw naam en e-mailadres gebruiken we alleen om u te antwoorden. Video's en berichten van TikTok en X staan hier zonder cookies; een video speelt pas via TikTok als u op afspelen drukt.</p>
     <p>Nieuws: hartvoordenhaag.nl. Buurtgrenzen: CBS Wijk- en buurtkaart 2024. Kaart: BRT-Achtergrondkaart van het Kadaster via PDOK. <a href="privacy.html">Privacy</a> en <a href="voorwaarden.html">voorwaarden</a>.</p>
   </div>
 </footer>
 
+<nav class="onderbalk" aria-label="Snel naar">
+  <a href="#spreekuur"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>Spreekuur</a>
+  <a href="#buurt"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Uw buurt</a>
+  <a href="nieuws.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h11.5v15H6.5A1.5 1.5 0 0 1 5 18z"/><path d="M16.5 8.5H19v9.5a1.5 1.5 0 0 1-3 0M8 8.5h5.5M8 12h5.5M8 15.5h3.5"/></svg>Nieuws</a>
+  <a class="meld" href="#melden"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h15v10h-8l-4.5 4v-4h-2.5z"/><path d="M9 10.5h6"/></svg>Meld iets</a>
+</nav>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="dossiers.js"></script>
 <script>
 (() => {
 const WIJKEN = {
@@ -171,15 +216,19 @@ const WIJKEN = {
 };
 const MAANDEN = ["jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"];
 const DAGEN = ["zondag","maandag","dinsdag","woensdag","donderdag","vrijdag","zaterdag"];
+const KORTE_DAG = ["zo","ma","di","wo","do","vr","za"];
+const STADSDEEL = "Leidschenveen-Ypenburg";
 let API = "https://telegram-doorgeefluik.damienzeller.workers.dev";
 let data = { berichten: [], spreekuur: {}, tiktok: [], x: [] };
 let gekozen = null, kaart = null, laag = null;
 const el = (t, cls, txt) => { const e = document.createElement(t); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
 const wijkVan = b => Object.keys(WIJKEN).find(w => WIJKEN[w].includes(b)) || (WIJKEN[b] ? b : "");
-const hoort = (bericht, buurt) => bericht.buurt && (bericht.buurt === buurt || bericht.buurt === wijkVan(buurt));
+const inBuurt = (bericht, buurt) => bericht.buurt === buurt;
 const datumNL = iso => { const d = new Date(iso); return isNaN(d) ? "" : `${d.getDate()} ${MAANDEN[d.getMonth()]} ${d.getFullYear()}`; };
 const nieuwste = (a, b) => (b.datum || "").localeCompare(a.datum || "");
 const nieuwTab = a => { a.target = "_blank"; a.rel = "noopener"; return a; };
+
+const bijschrift = (x, o) => Dossiers.bijschrift(x, o);
 
 function knoppenBuurt() {
   const box = document.getElementById("buurt-kies"); box.textContent = "";
@@ -187,8 +236,8 @@ function knoppenBuurt() {
     const rij = el("div", "wijk"), bs = el("div", "bs"); rij.append(el("b", null, wijk), bs);
     for (const b of buurten) {
       const k = el("button", null, b); k.type = "button"; k.setAttribute("aria-pressed", String(gekozen === b));
-      const n = data.berichten.filter(x => hoort(x, b)).length;
-      if (n) { const s = el("span", "n", String(n)); s.setAttribute("aria-label", n + " berichten"); k.append(s); }
+      const n = data.berichten.filter(x => inBuurt(x, b)).length;
+      if (n) { k.append(el("span", "n", String(n))); k.setAttribute("aria-label", `${b}, ${n} ${n === 1 ? "bericht" : "berichten"}`); }
       k.addEventListener("click", () => kies(gekozen === b ? null : b));
       bs.append(k);
     }
@@ -203,34 +252,35 @@ function infoBuurt() {
     box.append(el("h3", null, "Leidschenveen-Ypenburg"),
       el("p", null, (tot ? `Ongeveer ${(Math.round(tot / 1000) * 1000).toLocaleString("nl-NL")} inwoners in ` : "") +
         "dertien buurten, van Bosweide tot Rietbuurt. Kies een buurt op de kaart of hierboven."));
-    const alg = data.berichten.filter(x => !x.buurt).sort(nieuwste).slice(0, 3);
+    const alg = data.berichten.filter(x => x.dossier === STADSDEEL || WIJKEN[x.buurt]).sort(nieuwste).slice(0, 3);
     if (alg.length) { box.append(el("p", "wijknaam", "Voor het hele stadsdeel")); box.append(lijstje(alg)); }
     return;
   }
   const f = laag && laag.getLayers().find(l => l.feature.properties.buurt === gekozen);
   const inw = f && f.feature.properties.inwoners;
   box.append(el("h3", null, gekozen), el("p", "wijknaam", wijkVan(gekozen) + (inw ? `, ongeveer ${inw.toLocaleString("nl-NL")} inwoners` : "")));
-  const hier = data.berichten.filter(x => hoort(x, gekozen)).sort(nieuwste);
-  if (hier.length) box.append(lijstje(hier.slice(0, 5)));
+  const hier = data.berichten.filter(x => inBuurt(x, gekozen)).sort(nieuwste);
+  if (hier.length) box.append(lijstje(hier.slice(0, 5), true));
   else box.append(el("p", "leeg", "Nog niets gepubliceerd over deze buurt. Speelt er iets? Laat het weten."));
   const sp = data.spreekuur || {};
   if (sp.buurt && (sp.buurt === gekozen || sp.buurt === wijkVan(gekozen)) && sp.start) box.append(el("p", null, "Het volgende spreekuur is hier: " + datumNL(sp.start) + "."));
-  const m = el("a", "knop groen", "Meld iets"); m.href = "#melden";
+  const m = el("a", "knop groen", "Meld iets over " + gekozen); m.href = "#melden";
+  m.addEventListener("click", () => { const o = document.getElementById("f-onderwerp"); if (o && !o.value) o.value = gekozen + ": "; });
   box.append(m);
 }
 
-function lijstje(items) {
+function lijstje(items, zonderPlek) {
   const ul = el("ul");
   for (const x of items) {
     const li = el("li"), a = el(x.link ? "a" : "span", null, x.titel);
     if (x.link) { a.href = x.link; nieuwTab(a); }
-    li.append(a, el("small", null, datumNL(x.datum))); ul.append(li);
+    li.append(a, bijschrift(x, { zonderPlek })); ul.append(li);
   }
   return ul;
 }
 
 function stijl(f) {
-  const b = f.properties.buurt, n = data.berichten.filter(x => hoort(x, b)).length, actief = b === gekozen;
+  const b = f.properties.buurt, n = data.berichten.filter(x => inBuurt(x, b)).length, actief = b === gekozen;
   return { color: actief ? "#FFD237" : "#0B3B25", weight: actief ? 4 : 1.5, fillColor: "#1E945A",
            fillOpacity: actief ? .55 : (n ? .38 : .16) };
 }
@@ -264,19 +314,25 @@ function maakKaart() {
 function spreekuur() {
   const sp = data.spreekuur || {};
   if (sp.tekst) document.getElementById("sp-tekst").textContent = sp.tekst;
+  const kortePlek = (sp.plek || "").split(",")[0];
   if (sp.plek) {
     document.getElementById("sp-plek").textContent = sp.plek;
     const r = document.getElementById("sp-route"); r.href = "https://www.openstreetmap.org/search?query=" + encodeURIComponent(sp.plek + ", Den Haag"); r.hidden = false;
   }
+  const held = document.getElementById("held-sp");
   const d = sp.start ? new Date(sp.start) : null;
   if (d && !isNaN(d) && d > new Date(Date.now() - 3 * 3600e3)) {
+    const tijd = d.toTimeString().slice(0, 5);
     document.getElementById("sp-dag").textContent = d.getDate();
     document.getElementById("sp-maand").textContent = MAANDEN[d.getMonth()];
-    document.getElementById("sp-tijd").textContent = DAGEN[d.getDay()] + " " + d.toTimeString().slice(0, 5);
+    document.getElementById("sp-tijd").textContent = DAGEN[d.getDay()] + " " + tijd;
     document.getElementById("sp-datum").hidden = false;
+    document.getElementById("held-sp-wanneer").textContent = `${KORTE_DAG[d.getDay()]} ${d.getDate()} ${MAANDEN[d.getMonth()]}, ${tijd}`;
+    document.getElementById("held-sp-waar").textContent = kortePlek;
+    held.hidden = false;
     const k = document.getElementById("sp-agenda"); k.hidden = false;
     k.onclick = () => {
-      const e = sp.eind ? new Date(sp.eind) : new Date(d.getTime() + 90 * 60e3);
+      const e = sp.eind ? new Date(sp.eind) : new Date(d.getTime() + 60 * 60e3);
       const f = x => x.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
       const ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Damien Zeller//Spreekuur//NL", "BEGIN:VEVENT",
         "UID:spreekuur-" + f(d) + "@damienzeller", "DTSTAMP:" + f(new Date()), "DTSTART:" + f(d), "DTEND:" + f(e),
@@ -286,6 +342,9 @@ function spreekuur() {
     };
   } else if (sp.volgende) {
     document.getElementById("sp-plek").textContent = "Volgende: " + sp.volgende + (sp.plek ? ", " + sp.plek : "");
+    document.getElementById("held-sp-wanneer").textContent = sp.volgende;
+    document.getElementById("held-sp-waar").textContent = kortePlek;
+    held.hidden = false;
   }
 }
 
@@ -300,26 +359,22 @@ function beeld(x, cls) {
   return fig;
 }
 
+/* Actueel: alleen wat over Damiëns dossiers of het stadsdeel gaat; de aankondiging van het spreekuur staat al bovenaan */
 function berichten() {
-  const box = document.getElementById("uitgelicht"), ul = document.getElementById("berichten");
-  box.textContent = ""; ul.textContent = "";
-  const lijst = [...data.berichten].sort(nieuwste).slice(0, 7);
-  if (!lijst.length) { ul.append(el("li", "leeg", "Binnenkort staan hier de nieuwste berichten.")); return; }
-  const [eerste, ...rest] = lijst;
-  const art = el("article", "uitgelicht"), tekst = el("div", "uitgelicht-tekst"), kop = el("div", "kop-regel");
-  const t = el("time", null, datumNL(eerste.datum)); t.dateTime = eerste.datum || ""; kop.append(t);
-  if (eerste.buurt) kop.append(el("span", "tag", eerste.buurt));
-  const h = el("h3"), a = el(eerste.link ? "a" : "span", null, eerste.titel);
-  if (eerste.link) { a.href = eerste.link; nieuwTab(a); }
-  h.append(a); tekst.append(kop, h);
-  if (eerste.tekst) tekst.append(el("p", null, eerste.tekst.length > 260 ? eerste.tekst.slice(0, 257).trim() + "…" : eerste.tekst));
-  art.append(beeld(eerste, "beeld"), tekst); box.append(art);
-  for (const x of rest) {
-    const li = el("li", "kaart"), k = el("div", "kop-regel"), tt = el("time", null, datumNL(x.datum)); tt.dateTime = x.datum || "";
-    k.append(tt); if (x.buurt) k.append(el("span", "tag", x.buurt));
-    const at = el(x.link ? "a" : "span", "titel", x.titel); if (x.link) { at.href = x.link; nieuwTab(at); }
-    li.append(beeld(x, "beeld"), k, at); ul.append(li);
-  }
+  const ol = document.getElementById("berichten"); ol.textContent = "";
+  const spAan = !document.getElementById("held-sp").hidden;
+  const lijst = data.berichten.filter(x => (x.eigen || x.dossier) && !(spAan && /spreekuu?r/i.test(x.titel + " " + (x.tekst || ""))))
+    .sort(nieuwste).slice(0, 4);
+  if (!lijst.length) { ol.append(el("li", "leeg", "Binnenkort staan hier de nieuwste berichten.")); return; }
+  lijst.forEach((x, i) => {
+    const li = el("li", "log-item" + (i ? "" : " eerste")), tekst = el("div", "log-tekst");
+    const h = el("h3"), a = el(x.link ? "a" : "span", null, x.titel);
+    if (x.link) { a.href = x.link; nieuwTab(a); }
+    h.append(a); tekst.append(bijschrift(x), h);
+    const lim = i ? 170 : 260;
+    if (x.tekst) tekst.append(el("p", "sam", x.tekst.length > lim ? x.tekst.slice(0, lim - 3).trim() + "…" : x.tekst));
+    li.append(tekst, beeld(x, "log-beeld")); ol.append(li);
+  });
 }
 
 function linkify(tekst) {
@@ -369,13 +424,10 @@ function feeds() {
   const xs = (data.x || []).filter(x => x && x.id).sort(nieuwste).slice(0, 3);
   const ul = document.getElementById("x-lijst"); ul.textContent = "";
   for (const x of xs) {
-    const li = el("li", "post"), kop = el("div", "post-kop"), foto = el("img");
-    foto.src = "portret.jpg"; foto.alt = ""; foto.width = 40; foto.height = 40; foto.loading = "lazy";
-    const wie = el("div"); wie.append(el("b", null, "Damiën Zeller"), el("span", null, "@DamienZeller"));
-    kop.append(foto, wie);
+    const li = el("li", "post");
     const voet = el("div", "post-voet"), t = el("time", null, datumNL(x.datum)); t.dateTime = x.datum || "";
     const a = nieuwTab(el("a", null, "Bekijk op X")); a.href = x.link;
-    voet.append(t, a); li.append(kop, linkify(x.tekst));
+    voet.append(t, a); li.append(linkify(x.tekst));
     if (x.media) {
       const fa = nieuwTab(el("a", "post-beeld")); fa.href = x.link; fa.setAttribute("aria-label", "Bekijk de foto of video op X");
       const fi = el("img"); fi.src = API + "/site/beeld/x/" + encodeURIComponent(x.id); fi.alt = ""; fi.loading = "lazy"; fi.decoding = "async";
@@ -398,7 +450,10 @@ function vragen(lijst) {
   const LAB = { beantwoord: ["Beantwoord", "klaar"], uitstel: ["Uitgesteld", "wacht"], open: ["Wacht op antwoord", "wacht"] };
   for (const v of lijst) {
     const li = el("li"), [lab, kl] = LAB[v.status] || LAB.open;
-    const kop = el("div", "kop-regel"); kop.append(el("span", "status " + kl, lab), el("span", "ris", v.ris));
+    const kop = el("p", "bijschrift"); kop.append(el("span", "status " + kl, lab));
+    if (v.ris) kop.append(el("span", "ris", v.ris));
+    const dos = window.Dossiers ? Dossiers.label(v.titel || "", "") : "";
+    if (dos) kop.append(Dossiers.dosLink(dos));
     const t = el(v.vraag_link ? "a" : "span", "vtitel", v.titel);
     if (v.vraag_link) { t.href = v.vraag_link; nieuwTab(t); }
     const regel = el("p", "vregel");
@@ -413,18 +468,18 @@ function vragen(lijst) {
     li.append(kop, t, regel); ul.append(li);
   }
   document.getElementById("vragen").hidden = false;
-  document.getElementById("nav-vragen").hidden = false;
 }
 
 function samenvoegen(eigen, nieuws) {
   const sleutel = x => (x.link || x.titel || "").replace(/\/$/, "");
   const perLink = new Map(), uit = [];
-  for (const x of [...(eigen || []), ...(nieuws || [])]) {
+  for (const x of [...(eigen || []).map(e => Object.assign({ eigen: true }, e)), ...(nieuws || [])]) {
     const k = sleutel(x); if (!k) continue;
     const al = perLink.get(k);
-    if (al) { for (const v of ["beeld", "tekst", "buurt", "onderwerp"]) if (!al[v] && x[v]) al[v] = x[v]; continue; }
+    if (al) { for (const v of ["beeld", "tekst", "buurt", "dossier"]) if (!al[v] && x[v]) al[v] = x[v]; continue; }
     const kopie = Object.assign({}, x); perLink.set(k, kopie); uit.push(kopie);
   }
+  if (window.Dossiers) for (const x of uit) if (!x.dossier) x.dossier = Dossiers.label(x.titel || "", x.tekst || "");
   return uit;
 }
 
@@ -440,7 +495,7 @@ const NAMEN = { tiktok: "TikTok", instagram: "Instagram", facebook: "Facebook", 
 function basis(d) {
   if (d.api) API = d.api;
   if (d.intro) document.getElementById("intro").textContent = d.intro;
-  if (d.mail) { const m = document.getElementById("mail-link"); m.href = "mailto:" + d.mail; m.textContent = d.mail; }
+  if (d.mail) for (const id of ["mail-link", "pers-mail"]) { const m = document.getElementById(id); m.href = "mailto:" + d.mail; m.textContent = d.mail; }
   if (d.lid_worden) document.getElementById("lid").href = d.lid_worden;
   const box = document.getElementById("socials");
   for (const [k, u] of Object.entries(d.socials || {})) {
@@ -452,37 +507,81 @@ function basis(d) {
   data.spreekuur = Object.assign({}, d.spreekuur || {});
 }
 
+/* meldformulier: fouten bij het veld zelf, en een e-mailadres moet een e-mailadres zijn */
 function formulier() {
   const start = Date.now(), f = document.getElementById("meld-form"), uit = document.getElementById("melding-uitslag");
+  const MAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  const velden = { onderwerp: "f-onderwerp", bericht: "f-bericht", email: "f-email", toestemming: "f-toestemming" };
+  const zet = (naam, tekst) => {
+    const veld = document.getElementById(velden[naam]), p = document.getElementById("fout-" + naam);
+    if (tekst) { veld.setAttribute("aria-invalid", "true"); p.textContent = tekst; p.hidden = false; }
+    else { veld.removeAttribute("aria-invalid"); p.textContent = ""; p.hidden = true; }
+  };
+  const controle = v => ({
+    onderwerp: v.onderwerp.trim() ? "" : "Vul een onderwerp in, bijvoorbeeld waar het over gaat.",
+    bericht: v.bericht.trim().length >= 10 ? "" : "Schrijf in een paar woorden wat er aan de hand is (minstens tien tekens).",
+    email: !v.email.trim() || MAIL.test(v.email.trim()) ? "" : "Dit lijkt geen e-mailadres. Controleer het, of laat het veld leeg als u geen antwoord wilt.",
+    toestemming: v.toestemming ? "" : "Vink dit aan, dan mag Damiën uw melding lezen."
+  });
+  for (const naam of Object.keys(velden)) {
+    const veld = document.getElementById(velden[naam]);
+    veld.addEventListener(naam === "toestemming" ? "change" : "blur", () => {
+      if (veld.getAttribute("aria-invalid") !== "true" && naam !== "email") return;
+      const v = Object.fromEntries(new FormData(f).entries()); v.toestemming = f.toestemming.checked;
+      v.onderwerp = v.onderwerp || ""; v.bericht = v.bericht || ""; v.email = v.email || "";
+      zet(naam, controle(v)[naam]);
+    });
+  }
   f.addEventListener("submit", async e => {
     e.preventDefault();
     const v = Object.fromEntries(new FormData(f).entries());
     v.toestemming = f.toestemming.checked; v.duur = Date.now() - start;
+    v.onderwerp = v.onderwerp || ""; v.bericht = v.bericht || ""; v.email = (v.email || "").trim();
     uit.className = ""; uit.textContent = "";
-    if (!v.onderwerp || (v.bericht || "").length < 10) { uit.className = "fout"; uit.textContent = "Vul een onderwerp en uw bericht in (minstens tien tekens)."; return; }
-    if (!v.toestemming) { uit.className = "fout"; uit.textContent = "Vink de toestemming aan, dan kan Damiën uw melding lezen."; return; }
+    const fouten = controle(v);
+    let eerste = null;
+    for (const naam of Object.keys(velden)) { zet(naam, fouten[naam]); if (fouten[naam] && !eerste) eerste = naam; }
+    if (eerste) { document.getElementById(velden[eerste]).focus(); return; }
     const knop = f.querySelector("button[type=submit]"); knop.disabled = true; knop.textContent = "Bezig met versturen";
     try {
       const r = await fetch(API + "/melding", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(v) });
       const j = await r.json().catch(() => ({}));
       if (r.ok && j.ok) {
         f.reset(); uit.className = "goed";
-        uit.textContent = "Uw melding is verstuurd. Damiën leest hem zelf" + (v.email ? " en antwoordt per mail." : ".");
+        uit.textContent = "Uw melding is verstuurd. Damiën leest hem zelf" + (v.email ? " en antwoordt per mail op " + v.email + "." : ".");
+        uit.focus();
       } else { uit.className = "fout"; uit.textContent = j.fout || "Versturen lukte niet. Probeer het later nog eens of mail Damiën direct."; }
     } catch { uit.className = "fout"; uit.textContent = "Versturen lukte niet. Controleer uw verbinding of mail Damiën direct."; }
     knop.disabled = false; knop.textContent = "Melding versturen";
   });
 }
 
-formulier();
+/* waar ben ik: het menu en de onderbalk lichten op bij de sectie in beeld */
+function plaatsbepaling() {
+  if (!("IntersectionObserver" in window)) return;
+  const links = [...document.querySelectorAll('.menu a[href^="#"], .onderbalk a[href^="#"]')];
+  const ids = [...new Set(links.map(a => a.getAttribute("href").slice(1)))];
+  const zicht = new Map();
+  const obs = new IntersectionObserver(items => {
+    for (const it of items) zicht.set(it.target.id, it.isIntersecting ? it.intersectionRatio : 0);
+    const best = [...zicht.entries()].sort((a, b) => b[1] - a[1])[0];
+    const actief = best && best[1] > 0 ? best[0] : "";
+    for (const a of links) { if (a.getAttribute("href") === "#" + actief) a.setAttribute("aria-current", "location"); else a.removeAttribute("aria-current"); }
+  }, { rootMargin: "-30% 0px -45% 0px", threshold: [0, .1, .3, .6] });
+  for (const id of ids) { const s = document.getElementById(id); if (s) obs.observe(s); }
+}
+
+formulier(); plaatsbepaling();
 fetch("links.json", { cache: "no-cache" }).then(r => r.json()).catch(() => ({})).then(d => {
   basis(d || {});
-  return fetch(API + "/site").then(r => r.json()).catch(() => ({}));
-}).then(s => {
-  return fetch("nieuws.json", { cache: "no-cache" }).then(r => r.json()).catch(() => ({})).then(n => [s, n]);
+  return Promise.all([
+    fetch(API + "/site").then(r => r.json()).catch(() => ({})),
+    fetch("nieuws.json", { cache: "no-cache" }).then(r => r.json()).catch(() => ({})),
+    window.Dossiers ? Dossiers.laad() : null
+  ]);
 }).then(([s, n]) => {
   const nieuws = (n && Array.isArray(n.berichten)) ? n.berichten : [];
-  data.berichten = nieuws;
+  data.berichten = samenvoegen([], nieuws);
   if (s && typeof s === "object") {
     if (Array.isArray(s.berichten)) data.berichten = samenvoegen(s.berichten, nieuws);
     if (Array.isArray(s.tiktok)) data.tiktok = s.tiktok;
@@ -490,7 +589,7 @@ fetch("links.json", { cache: "no-cache" }).then(r => r.json()).catch(() => ({}))
     if (s.spreekuur && (s.spreekuur.start || s.spreekuur.plek)) data.spreekuur = Object.assign({}, data.spreekuur, s.spreekuur);
     vragen(s.vragen);
   }
-  knoppenBuurt(); infoBuurt(); spreekuur(); berichten(); feeds();
+  spreekuur(); knoppenBuurt(); infoBuurt(); berichten(); feeds();
   if (laag) laag.setStyle(stijl);
 });
 knoppenBuurt(); maakKaart();

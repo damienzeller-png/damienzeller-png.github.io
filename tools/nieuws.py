@@ -3,24 +3,55 @@
 
 Bron: de openbare WordPress-API van hartvoordenhaag.nl (zoekterm "Zeller"). Draait elke dag via
 .github/workflows/nieuws.yml. Een bericht verbergen: zet zijn id in nieuws_verbergen in links.json.
-Per bericht: datum, titel, korte samenvatting, link, afbeelding, buurt of wijk (als die genoemd wordt) en onderwerp.
+Per bericht: datum, titel, korte samenvatting, link, afbeelding, buurt of wijk (als die genoemd wordt) en het dossier
+(uit dossiers.json, dezelfde indeling als de dossierkast). `python tools/nieuws.py --opnieuw` labelt alleen de
+bestaande nieuws.json opnieuw, zonder iets op te halen.
 """
 import html
 import json
 import re
+import sys
 import urllib.request
 
 API = "https://www.hartvoordenhaag.nl/wp-json/wp/v2/posts"
 BUURTEN = ["Bosweide", "Tedingerbroek", "De Venen", "Morgenweide", "Singels", "Waterbuurt", "De Bras", "Vlietzoom-Oost",
            "De Rivieren", "De Lanen", "De Velden", "De Vissen", "Rietbuurt", "Hoornwijck", "Leidschenveen", "Ypenburg"]
-ONDERWERPEN = [
-    ("Veiligheid en overlast", r"overlast|gebiedsverbod|handhaving|boa's?\b|onveilig|criminel|politie"),
-    ("Zorg en ouderen", r"zorg|ouderen|wmo|mantelzorg|dementie|gezondheid|ggd|ggz|eenzaam"),
-    ("Onderwijs en jongeren", r"school|onderwijs|leraar|leerling|student|jongeren|jeugd"),
-    ("Sport", r"sport|zwembad|voetbal|vereniging"),
-    ("Verkeer en parkeren", r"parkeer|parkeren|verkeer|tram|bus|htm|randstadrail|openbaar vervoer|p\+r|fiets"),
-    ("Wonen en buurt", r"woning|wonen|bouw|park bloom|speeltuin|groen|winkelcentrum|overlast|spreekuur"),
-]
+_D = json.load(open("dossiers.json", encoding="utf-8"))
+DOSSIERS = [(d["naam"], d["thema"], re.compile(d["patroon"], re.I), 1 if d.get("algemeen") else 2) for d in _D["dossiers"]]
+PARTIJ = re.compile(_D["partijnieuws"], re.I)
+STADSDEEL = DOSSIERS[-1][0]
+
+
+def dossier_van(titel, tekst=""):
+    """Het dossier met de meeste treffers (een treffer in de titel telt drie keer, een specifiek dossier dubbel), met zijn thema. Het stadsdeel
+    telt alleen als geen enkel onderwerp past. Partijnieuws (wie stopt, kandidatenlijsten) krijgt geen dossier."""
+    if PARTIJ.search(titel + " " + tekst):
+        return "", ""
+    beste, score = ("", ""), 0
+    for n, t, p, w in DOSSIERS:
+        s = w * (3 * len(p.findall(titel)) + len(p.findall(tekst)))
+        if n == STADSDEEL and score:
+            break
+        if s > score:
+            beste, score = (n, t), s
+    return beste
+
+
+def buurt_van(tekst):
+    # hoofdlettergevoelig: "op de velden" (voetbal) is niet de buurt De Velden
+    posities = [(m.start(), b) for b in BUURTEN for m in [re.search(r"\b" + re.escape(b) + r"\b", tekst)] if m]
+    return min(posities)[1] if posities else ""
+
+
+def opnieuw():
+    d = json.load(open("nieuws.json", encoding="utf-8"))
+    for x in d["berichten"]:
+        x.pop("onderwerp", None)
+        x["dossier"], x["thema"] = dossier_van(x["titel"], x.get("tekst", ""))
+        x["buurt"] = buurt_van(x["titel"] + " " + x.get("tekst", ""))
+    with open("nieuws.json", "w", encoding="utf-8") as f:
+        json.dump(d, f, ensure_ascii=False, indent=0)
+    print(sum(1 for x in d["berichten"] if x["dossier"]), "van", len(d["berichten"]), "berichten met een dossier")
 
 
 def haal(url):
@@ -70,14 +101,12 @@ def main():
         except (KeyError, IndexError, TypeError):
             pass
         tekst = titel + " " + samenvatting
-        posities = [(m.start(), b) for b in BUURTEN for m in [re.search(r"(?i)\b" + re.escape(b) + r"\b", tekst)] if m]
-        buurt = min(posities)[1] if posities else ""
-        onderwerp = next((n for n, r in ONDERWERPEN if re.search(r"(?i)" + r, tekst)), "")
+        dossier, thema = dossier_van(titel, samenvatting)
         if (titel.lower(), p["date"][:10]) in gezien:
             continue
         gezien.add((titel.lower(), p["date"][:10]))
         uit.append({"id": f"hvdh-{p['id']}", "datum": p["date"][:10], "titel": titel, "tekst": samenvatting[:320],
-                    "link": p["link"], "beeld": beeld, "buurt": buurt, "onderwerp": onderwerp})
+                    "link": p["link"], "beeld": beeld, "buurt": buurt_van(tekst), "dossier": dossier, "thema": thema})
     uit.sort(key=lambda x: x["datum"], reverse=True)
     with open("nieuws.json", "w", encoding="utf-8") as f:
         json.dump({"bron": "hartvoordenhaag.nl", "berichten": uit}, f, ensure_ascii=False, indent=0)
@@ -85,4 +114,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    opnieuw() if "--opnieuw" in sys.argv else main()
