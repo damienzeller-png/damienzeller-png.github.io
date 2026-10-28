@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..100,600..900&family=Lexend:wght@400;600;700&display=swap">
-<link rel="stylesheet" href="app.css?v=2">
+<link rel="stylesheet" href="app.css?v=3">
 </head>
 <body>
 <a class="naar-inhoud" href="#inhoud">Naar de inhoud</a>
@@ -32,36 +32,36 @@
         <li><a href="#stadsdelen" data-sectie="stadsdelen">Uw stadsdeel</a></li>
         <li class="uitklap"><button type="button" aria-expanded="false" aria-controls="m-raad" data-sectie="raadswerk successen petities">Raadswerk</button>
           <div class="uitklap-paneel" id="m-raad"><div>
-            <a href="#raadswerk"><b>Moties</b><span>Wat we het college vragen</span></a>
-            <a href="#raadswerk/amendementen"><b>Amendementen</b><span>Wijzigingen op raadsvoorstellen</span></a>
-            <a href="#raadswerk/vragen"><b>Schriftelijke vragen</b><span>Problemen uit de wijk op tafel</span></a>
-            <a href="#raadswerk/spreekteksten"><b>Spreekteksten</b><span>Wat we zeggen in de raad</span></a>
+            <a href="#raadswerk"><b>Moties</b></a>
+            <a href="#raadswerk/amendementen"><b>Amendementen</b></a>
+            <a href="#raadswerk/vragen"><b>Schriftelijke vragen</b></a>
+            <a href="#raadswerk/spreekteksten"><b>Spreekteksten</b></a>
           </div><div>
-            <a href="#successen"><b>Successen</b><span>Wat ombudspolitiek opleverde</span></a>
-            <a href="#petities"><b>Petities</b><span>Teken mee</span></a>
-            <a href="#agenda"><b>Agenda</b><span>Spreekuren en schouwen</span></a>
+            <a href="#successen"><b>Successen</b></a>
+            <a href="#petities"><b>Petities</b></a>
+            <a href="#agenda"><b>Agenda</b></a>
           </div></div></li>
         <li class="uitklap"><button type="button" aria-expanded="false" aria-controls="m-wie" data-sectie="standpunten fractie wethouders bestuur">Wie we zijn</button>
           <div class="uitklap-paneel" id="m-wie"><div>
-            <a href="#standpunten"><b>Standpunten</b><span>En het verkiezingsprogramma</span></a>
-            <a href="#fractie"><b>Fractie</b><span>Zestien raadsleden</span></a>
-            <a href="#wethouders"><b>Wethouders</b><span>Vijf in het college</span></a>
-            <a href="#bestuur"><b>Bestuur</b><span>Met jaarverslagen</span></a>
+            <a href="#standpunten"><b>Standpunten</b></a>
+            <a href="#fractie"><b>Fractie</b></a>
+            <a href="#wethouders"><b>Wethouders</b></a>
+            <a href="#bestuur"><b>Bestuur</b></a>
           </div></div></li>
         <li class="uitklap"><button type="button" aria-expanded="false" aria-controls="m-mee" data-sectie="lid doneren doe-mee vacatures">Doe mee</button>
           <div class="uitklap-paneel" id="m-mee"><div>
-            <a href="#lid"><b>Word lid</b><span>Vanaf € 12,50 per jaar</span></a>
-            <a href="#doneren"><b>Doneren</b><span>Eenmalig of maandelijks</span></a>
-            <a href="#doe-mee"><b>Vrijwilliger worden</b><span>In uw eigen stadsdeel</span></a>
-            <a href="#vacatures"><b>Vacatures</b><span>Werken voor de partij</span></a>
-            <a href="https://webshop.hartvoordenhaag.nl/" target="_blank" rel="noopener"><b>Webshop</b><span>Posters, speldjes en meer</span></a>
+            <a href="#lid"><b>Word lid</b></a>
+            <a href="#doneren"><b>Doneren</b></a>
+            <a href="#doe-mee"><b>Vrijwilliger worden</b></a>
+            <a href="#vacatures"><b>Vacatures</b></a>
+            <a href="https://webshop.hartvoordenhaag.nl/" target="_blank" rel="noopener"><b>Webshop</b></a>
           </div></div></li>
         <li><a href="#contact" data-sectie="contact">Contact</a></li>
       </ul>
     </nav>
     <div class="balk-rechts">
       <button class="ikoon-knop" type="button" id="zoek-knop" aria-label="Zoeken" aria-expanded="false" aria-controls="zoekbalk"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg></button>
-      <a class="knop geel klein balk-lid" href="#lid">Word lid</a>
+      <a class="knop rand klein balk-lid" href="#lid">Word lid</a>
     </div>
   </div>
   <div class="zoekbalk" id="zoekbalk" hidden>
@@ -78,7 +78,7 @@
 <div class="lade" id="lade" hidden>
   <nav class="lade-paneel" aria-label="Menu" role="dialog" aria-modal="true">
     <div class="lade-kop"><img src="beeld/logo-wit.svg" alt="" height="30"><button class="ikoon-knop" type="button" id="lade-dicht" aria-label="Menu sluiten"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
-    <a class="hoofd" href="#nieuws">Nieuws</a><a class="hoofd" href="#stadsdelen">Uw stadsdeel</a><a class="hoofd" href="#agenda">Agenda</a><a class="hoofd" href="#contact">Contact en melden</a>
+    <a class="hoofd" href="#nieuws">Nieuws</a><a class="hoofd" href="#stadsdelen">Uw stadsdeel</a><a class="hoofd" href="#agenda">Agenda</a><a class="hoofd" href="#contact/melding">Meld een probleem</a><a class="hoofd" href="#contact">Contact</a>
     <p class="lade-groep">Raadswerk</p>
     <div class="lade-links"><a href="#raadswerk">Moties</a><a href="#raadswerk/amendementen">Amendementen</a><a href="#raadswerk/vragen">Schriftelijke vragen</a><a href="#raadswerk/spreekteksten">Spreekteksten</a><a href="#successen">Successen</a><a href="#petities">Petities</a></div>
     <p class="lade-groep">Wie we zijn</p>
@@ -119,10 +119,10 @@
 
 <nav class="onderbalk" aria-label="Snel naar">
   <a href="#nieuws" data-sectie="nieuws"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11l3 3v13H5z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>Nieuws</a>
-  <a href="#stadsdelen" data-sectie="stadsdelen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Mijn buurt</a>
-  <a class="meld" href="#contact/melding" data-sectie="contact"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/></svg>Meld iets</a>
+  <a href="#stadsdelen" data-sectie="stadsdelen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Uw stadsdeel</a>
+  <a class="meld" href="#contact/melding" data-sectie="contact"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/></svg>Meld een probleem</a>
   <button type="button" id="menu-knop" aria-expanded="false" aria-controls="lade"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Menu</button>
 </nav>
-<script src="app.js?v=2"></script>
+<script src="app.js?v=3"></script>
 </body>
 </html>

@@ -85,9 +85,11 @@ function bijschrift(i, opties = {}) {
   const delen = [];
   if (i.stadsdelen && i.stadsdelen.length) delen.push(`<span class="plek">${esc(i.stadsdelen.join(" en "))}</span>`);
   if (opties.soort) delen.push(`<span>${esc(SOORT[i.soort]?.naam || i.soort)}</span>`);
+  if (i.indiener) delen.push(`<span>${esc(i.indiener)}</span>`);
   if (i.status) delen.push(`<span class="status">${esc(i.status)}</span>`);
   if (i.handtekeningen) delen.push(`<span>${fmt.format(i.handtekeningen)} handtekeningen</span>`);
   delen.push(`<time datetime="${esc(i.datum)}">${datum(i.datum)}</time>`);
+  if (i.ris && opties.ris !== false) delen.push(`<span>${esc(i.ris)}</span>`);
   if (i.eigen) delen.push(`<span class="nieuw">Net geplaatst</span>`);
   return `<p class="bijschrift">${delen.join("")}</p>`;
 }
@@ -110,7 +112,7 @@ function portret(f, opties = {}) {
   return `<figure>${f.beeld ? `<img src="${esc(f.beeld)}" alt="Portret van ${naam}" loading="lazy" decoding="async">` : `<div class="leeg-foto" aria-hidden="true">${initialen(f.naam)}</div>`}
     <figcaption>${opties.link === false ? `<b>${naam}</b>` : `<a href="#fractie/${slug(f.naam)}"><b>${naam}</b></a>`}${onder ? `<span>${onder}</span>` : ""}${pf}</figcaption></figure>`;
 }
-const paginaKop = (titel, tekst, kruimel = "", extra = "") => `<div class="pagina-kop"><div class="wrap">${kruimel ? `<p class="kruimel">${kruimel}</p>` : ""}<h1 tabindex="-1">${titel}</h1>${tekst ? `<p>${tekst}</p>` : ""}${extra}</div></div>`;
+const paginaKop = (titel, tekst, kruimel = "", extra = "") => `<div class="pagina-kop"><svg class="kop-lijnen" aria-hidden="true"></svg><div class="wrap">${kruimel ? `<p class="kruimel">${kruimel}</p>` : ""}<h1 tabindex="-1">${titel}</h1>${tekst ? `<p>${tekst}</p>` : ""}${extra}</div></div>`;
 const stadsdeelOpties = (gekozen = "") => `<option value="">Kies uw stadsdeel</option>` + STADSDELEN.map(s => `<option${s === gekozen ? " selected" : ""}>${s}</option>`).join("");
 const leestijd = h => Math.max(1, Math.round((h || "").replace(/<[^>]+>/g, " ").split(/\s+/).filter(Boolean).length / 200));
 
@@ -119,11 +121,13 @@ const akkoordVeld = (id = "akkoord") => `<label class="vink"><input type="checkb
   <div class="valkuil" aria-hidden="true"><label for="${id}-w">Laat leeg</label><input type="text" id="${id}-w" name="website" tabindex="-1" autocomplete="off"></div>`;
 const EMAIL = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
 function zetFout(veld, tekst) {
-  const w = veld.closest(".veld, .vink") || veld.parentElement;
-  let f = w.querySelector(".fout-tekst");
+  const na = veld.closest(".vink, .nb-rij");
+  const w = na || veld.closest(".veld") || veld.parentElement;
+  const fid = (veld.id || "v") + "-fout";
+  let f = document.getElementById(fid);
   if (!tekst) { veld.removeAttribute("aria-invalid"); if (f) f.remove(); return; }
   veld.setAttribute("aria-invalid", "true");
-  if (!f) { f = document.createElement("p"); f.className = "fout-tekst"; f.id = (veld.id || "v") + "-fout"; w.appendChild(f); }
+  if (!f) { f = document.createElement("p"); f.className = "fout-tekst"; f.id = fid; if (na) na.insertAdjacentElement("afterend", f); else w.appendChild(f); }
   f.textContent = tekst; veld.setAttribute("aria-describedby", f.id);
 }
 function controleer(form, eisen) {
@@ -158,11 +162,11 @@ function koppelFormulier(form, opties) {
     try {
       const r = await fetch(API + "/formulier", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
       const d = await r.json().catch(() => ({ ok: false }));
-      if (!d.ok) throw new Error(d.fout && /[a-z]/.test(d.fout) && !/token|fetch|json/i.test(d.fout) ? d.fout : "");
+      if (!d.ok) { const fout = new Error(""); fout.nl = d.fout && !/token|fetch|json|error/i.test(d.fout) ? d.fout : ""; throw fout; }
       form.reset(); form.dispatchEvent(new Event("change")); form.dispatchEvent(new Event("input"));
       toon(uit, opties.bedankt(data));
     } catch (err) {
-      toon(uit, (err.message ? err.message + " " : "Versturen lukte niet. ") + `Probeer het zo nog eens, of bel ${TEL}.`, true);
+      toon(uit, (err.nl ? err.nl + " " : "Versturen lukte niet. ") + `Probeer het zo nog eens, of bel ${TEL}.`, true);
     }
     knop.disabled = false; knop.textContent = label;
   });
@@ -208,7 +212,7 @@ pagina.home = async () => {
 
   <section>
     <div class="wrap">
-      <div class="kop"><h2>Wie is uw raadslid?</h2><p class="inleiding">${isTouch ? "Tik" : "Klik"} op uw stadsdeel. U ziet wie er voor u in de raad zit en wat er bij u in de buurt speelt.</p></div>
+      <div class="kop"><h2>Uw stadsdeel</h2><p class="inleiding">${isTouch ? "Tik" : "Klik"} op uw stadsdeel. U ziet wie uw raadsleden zijn en wat er bij u in de buurt speelt.</p></div>
       ${kaartBlok(kaart)}
     </div>
   </section>
@@ -321,7 +325,7 @@ async function activeerKaart(kaart, start) {
   kies(start && kaart.sd[start] ? start : "", false);
 }
 
-pagina.stadsdelen = async () => paginaKop("Wie is uw raadslid?", "Acht stadsdelen, elk met eigen raadsleden. Kies uw stadsdeel op de kaart of met de knoppen.") +
+pagina.stadsdelen = async () => paginaKop("Uw stadsdeel", "Acht stadsdelen, elk met eigen raadsleden. Kies uw stadsdeel op de kaart of met de knoppen.") +
   `<section><div class="wrap">${kaartBlok(await laad("kaart"))}</div></section>`;
 pagina.stadsdelen.na = async ([naam]) => activeerKaart(await laad("kaart"), naam ? decodeURIComponent(naam) : opslag.lees("stadsdeel"));
 
@@ -369,16 +373,18 @@ async function detail(s, id, terugNaam, terugPad) {
   if (!i) return paginaKop("Niet gevonden", "Dit stuk bestaat niet (meer).") + `<section><div class="wrap"><a class="knop groen" href="#${terugPad}">Terug naar ${esc(terugNaam.toLowerCase())}</a></div></section>`;
   document.title = i.titel + " | Hart voor Den Haag (proef)";
   const zelfde = alles.filter(x => x.id !== i.id && x.stadsdelen.some(sd => i.stadsdelen.includes(sd))).slice(0, 4);
-  const meer = zelfde.length ? zelfde : alles.filter(x => x.id !== i.id).slice(0, 4);
+  const meer = zelfde;
   const isPetitie = s === "petitie";
+  const open = isPetitie && (i.eigen || (Date.now() - new Date(i.datum)) / 864e5 < 365);
   const lees = leestijd(i.html);
   return paginaKop(esc(i.titel), "", `<a href="#">Home</a> / <a href="#${terugPad}">${esc(terugNaam)}</a>`,
-    bijschrift({ ...i }, { soort: !["nieuws", "succes", "petitie"].includes(s) }).replace("</p>", `<span>${lees} min lezen</span>${i.ris ? `<span>${esc(i.ris)}</span>` : ""}</p>`)) + `
+    bijschrift({ ...i }, { soort: !["nieuws", "succes", "petitie"].includes(s) }).replace("</p>", `<span>${lees} min lezen</span></p>`)) + `
   <section class="wit"><div class="wrap"><article class="artikel">
     ${i.beeld ? `<img class="artikel-beeld" src="${esc(i.beeld)}" alt="">` : ""}
     ${isPetitie ? `<div class="teken-teller">${i.handtekeningen ? `<b>${fmt.format(i.handtekeningen)}</b><span>handtekeningen op hartvoordenhaag.nl</span>` : ""}</div>` : ""}
     <div class="artikel-tekst" style="margin-top:18px">${i.html || `<p>${esc(i.samenvatting)}</p>`}</div>
-    ${isPetitie ? `<form class="formulier" id="teken" style="margin-top:36px" novalidate><h2 style="font-size:2rem">Teken deze petitie</h2>
+    ${isPetitie && !open ? `<p class="melding" style="margin-top:32px">Deze petitie is gesloten. Bekijk <a href="#petities">de petities die nu lopen</a>.</p>` : ""}
+    ${open ? `<form class="formulier" id="teken" style="margin-top:36px" novalidate><h2 style="font-size:2rem">Teken deze petitie</h2>
       <input type="hidden" name="petitie" value="${esc(i.titel)}">
       <div class="velden"><div class="veld"><label for="p-naam">Naam</label><input type="text" id="p-naam" name="naam" autocomplete="name"></div>
       <div class="veld"><label for="p-email">E-mailadres</label><input type="email" id="p-email" name="email" autocomplete="email"></div>
@@ -386,8 +392,7 @@ async function detail(s, id, terugNaam, terugPad) {
       ${akkoordVeld()}<button class="knop groen" type="submit">Teken de petitie</button><p class="uitslag" hidden></p></form>` : ""}
     <div class="na-artikel">
       <div class="deelrij"><button class="knop lijn klein" type="button" id="deel">Deel dit stuk</button>${i.link ? `<a class="meer" href="${esc(i.link)}" target="_blank" rel="noopener">Op hartvoordenhaag.nl ${UIT}</a>` : ""}</div>
-      ${meer.length ? `<div><h2 style="font-size:1.8rem">${zelfde.length ? "Meer uit " + esc(i.stadsdelen.join(" en ")) : "Ook gelezen"}</h2><ul class="stukken" style="margin-top:10px">${meer.map(x => stukItem({ ...x, samenvatting: "" })).join("")}</ul></div>` : ""}
-      <div class="lid-regel"><p>Steun dit werk: word lid vanaf € 12,50 per jaar.</p><a class="knop groen klein" href="#lid">Word lid</a></div>
+      ${meer.length ? `<div><h2 style="font-size:1.8rem">Meer uit ${esc(i.stadsdelen.join(" en "))}</h2><ul class="stukken" style="margin-top:10px">${meer.map(x => stukItem({ ...x, samenvatting: "" }, { ris: false })).join("")}</ul></div>` : ""}
     </div>
   </article></div></section>`;
 }
@@ -408,7 +413,7 @@ detail.na = () => {
 
 // raadswerk
 const TABS = {
-  moties: { s: "motie", titel: "Moties", uitleg: `<ol class="uitleg"><li><b>Debat in de raad</b><span>Tijdens een debat ziet de fractie iets dat beter moet in de stad.</span></li><li><b>Wij dienen een motie in</b><span>Daarin staat wat we zien, wat we vinden en wat we het college vragen.</span></li><li><b>De raad stemt</b><span>Neemt de raad de motie aan, dan moet het college ermee aan de slag.</span></li></ol>` },
+  moties: { s: "motie", titel: "Moties", uitleg: `<details class="hoe"><summary>Hoe werkt een motie?</summary><ol class="uitleg"><li><b>Debat in de raad</b><span>Tijdens een debat ziet de fractie iets dat beter moet in de stad.</span></li><li><b>Wij dienen een motie in</b><span>Daarin staat wat we zien, wat we vinden en wat we het college vragen.</span></li><li><b>De raad stemt</b><span>Neemt de raad de motie aan, dan moet het college ermee aan de slag.</span></li></ol></details>` },
   amendementen: { s: "amendement", titel: "Amendementen", uitleg: `<p class="inleiding" style="margin:0 0 28px">Met een amendement verandert de raad een voorstel van het college voordat erover wordt gestemd. Zo passen we plannen aan, in plaats van ze alleen af te keuren.</p>` },
   vragen: { s: "raadsvraag", titel: "Schriftelijke vragen", uitleg: `<p class="inleiding" style="margin:0 0 28px">Met schriftelijke vragen zetten we een probleem uit de wijk op de agenda. Het college moet binnen een paar weken antwoorden.</p>` },
   spreekteksten: { s: "spreektekst", titel: "Spreekteksten", uitleg: `<p class="inleiding" style="margin:0 0 28px">Wat onze raadsleden zeggen in de raad en in commissies, zoals bij de begroting.</p>` },
@@ -646,7 +651,7 @@ pagina.lid.na = () => {
   });
 };
 
-pagina.doneren = async () => paginaKop("Doneer", "Geen lid, wel steunen? Elke bijdrage gaat naar acties in de wijk, het ombudsteam en campagnemateriaal.") + `
+pagina.doneren = async () => paginaKop("Doneren", "Geen lid, wel steunen? Elke bijdrage gaat naar acties in de wijk, het ombudsteam en campagnemateriaal.") + `
   <section><div class="wrap formulier-raster">
     <form class="formulier" id="form" novalidate>
       <fieldset><legend>Hoe vaak?</legend><div class="keuzes kort">
@@ -724,7 +729,7 @@ pagina.toegankelijkheid = async () => paginaKop("Toegankelijkheid", "Deze site m
   </div></div></section>`;
 
 // ---------- router ----------
-const TITELS = { nieuws: "Nieuws", successen: "Successen", raadswerk: "Raadswerk", petities: "Petities", standpunten: "Standpunten", fractie: "Fractie", wethouders: "Wethouders", bestuur: "Bestuur", agenda: "Agenda", vacatures: "Vacatures", "doe-mee": "Doe mee", contact: "Contact", lid: "Word lid", doneren: "Doneer", zoeken: "Zoeken", stadsdelen: "Uw stadsdeel", privacy: "Privacy", toegankelijkheid: "Toegankelijkheid" };
+const TITELS = { nieuws: "Nieuws", successen: "Successen", raadswerk: "Raadswerk", petities: "Petities", standpunten: "Standpunten", fractie: "Fractie", wethouders: "Wethouders", bestuur: "Bestuur", agenda: "Agenda", vacatures: "Vacatures", "doe-mee": "Doe mee", contact: "Contact", lid: "Word lid", doneren: "Doneren", zoeken: "Zoeken", stadsdelen: "Uw stadsdeel", privacy: "Privacy", toegankelijkheid: "Toegankelijkheid" };
 let vorige = location.hash, viaLink = false;
 function gaNaar(h) { viaLink = true; location.hash = h; }
 document.addEventListener("click", e => {
@@ -748,6 +753,7 @@ async function route() {
     console.error(e);
     app.innerHTML = paginaKop("Er ging iets mis", "Laad de pagina opnieuw. Lukt het niet? Bel " + TEL + ".");
   }
+  laad("kaart").then(k => $$(".kop-lijnen").forEach(svg => { svg.setAttribute("viewBox", `0 0 ${k.w} ${k.h}`); svg.innerHTML = Object.values(k.sd).map(x => `<path d="${x.d}"/>`).join(""); }));
   const sectie = naam;
   $$(".menu a[data-sectie], .onderbalk [data-sectie]").forEach(a => a.dataset.sectie.split(" ").includes(sectie) ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
   $$(".menu button[data-sectie]").forEach(b => b.classList.toggle("actief", b.dataset.sectie.split(" ").includes(sectie)));

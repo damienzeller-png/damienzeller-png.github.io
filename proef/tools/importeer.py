@@ -18,6 +18,10 @@ UIT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data")
 STADSDEEL = {48: "Centrum", 52: "Escamp", 49: "Haagse Hout", 53: "Laak", 50: "Leidschenveen-Ypenburg",
              54: "Loosduinen", 51: "Scheveningen", 55: "Segbroek"}
 PETITIES = 82
+BEKENDE_NAMEN = ["Richard de Mos", "Jelle Meinesz", "Coen Bom", "Carlos Martinez van Andel", "Ralf Sluijs", "Arjen Dubbelaar",
+                 "Mairan Sewtahal", "Abdoel Haryouli", "Gerard Kroon", "Cynthia Langbroek", "Necati Akbas", "Damiën Zeller",
+                 "Amanda Lock", "Ismet Bingöl", "Martin van den Goorbergh", "Tom Beugelsdijk", "Diego Canter Visscher",
+                 "Mert Karadoğan", "Angela Biseswar", "Rita Verdonk", "Rachid Guernaoui", "Henk Harms", "Mariëtte van Leeuwen", "Arjan van den Berg"]
 SPREEKTEKSTEN = 68
 PREFIX = {"nieuws": "n", "succes": "s", "motie": "m", "amendement": "am", "raadsvraag": "r", "petitie": "p", "spreektekst": "t"}
 MAANDEN = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"]
@@ -108,11 +112,11 @@ def bestuur():
 # Plekken in titel of tekst die bij een stadsdeel horen, voor stukken die op de partijsite niet getagd zijn.
 PLEKKEN = {
     "Escamp": r"escamp|moerwijk|morgenstond|zuiderpark|bouwlust|vrederust|leyenburg|wateringse veld|rustenburg|oostbroek|leyweg|melis stokelaan|loevesteinlaan|zuidwest",
-    "Centrum": r"schilderswijk|transvaal|stationsbuurt|zeeheldenkwartier|willemspark|archipel|haagse markt|hobbemaplein|hollands spoor|binnenstad|centrum den haag|grote markt|plein\b|bierkade|spui\b|groente- en fruitmarkt",
+    "Centrum": r"schilderswijk|transvaal|stationsbuurt|zeeheldenkwartier|willemspark|archipel|haagse markt|hobbemaplein|hollands spoor|binnenstad|centrum den haag|grote markt|het plein\b|bierkade|groente- en fruitmarkt",
     "Laak": r"\blaak\b|laakkwartier|spoorwijk|binckhorst|laakhaven|\bcid\b",
     "Haagse Hout": r"haagse hout|bezuidenhout|benoordenhout|mariahoeve|marlot|haagse bos",
     "Leidschenveen-Ypenburg": r"ypenburg|leidschenveen|forepark|hoornwijck|piet vink|park bloom",
-    "Loosduinen": r"loosduinen|kijkduin|ockenburgh|waldeck|bohemen|kraayenstein|vroondaal|houtwijk",
+    "Loosduinen": r"loosduin|kijkduin|ockenburgh|waldeck|bohemen|kraayenstein|vroondaal|houtwijk",
     "Scheveningen": r"scheveningen|duindorp|statenkwartier|geuzenkwartier|belgisch park|duinoord|westbroekpark|zorgvliet|boulevard|haven scheveningen|kranenburgweg|houtrust",
     "Segbroek": r"segbroek|vogelwijk|bomenbuurt|bloemenbuurt|vruchtenbuurt|regentesse|valkenbos|kwartellaan|heesterbuurt|fahrenheitstraat",
 }
@@ -159,6 +163,15 @@ def item(x, soort, met_html=True):
     samen = tekst(x.get("excerpt", {}).get("rendered", "")) or platte
     samen = re.sub(r"\s*(Lees verder|verder lezen)\s*»?$", "", samen)
     samen = re.sub(r"(?i)^aan de voorzitter van de gemeenteraad,?\s*", "", samen)
+    indiener = ""
+    m = re.search(r"(?i)overeenkomstig art(ikel|\.)?\s*3[02].*?stelt (het raadslid|de raadsleden|raadslid)\s+(.+?),?\s*((van\s+)?hart voor den haag,?\s*)?de volgende vragen", platte)
+    if m and len(m.group(3)) < 60:
+        indiener = m.group(3).strip(" ,")
+    samen = re.sub(r"(?is)^overeenkomstig art(ikel|\.)?\s*3[02].*?de volgende vragen\s*:?\s*", "", samen)
+    if not indiener:
+        m = re.search(r"([A-Z][\w.'’-]+(?:\s+(?:van|de|der|den|ten|te|van den|van der)?\s*[A-Z][\w.'’-]+){1,3})\s+Hart voor Den Haag\s*$", platte)
+        if m and len(m.group(1)) < 40 and not re.search(r"Den Haag|Hart", m.group(1)):
+            indiener = m.group(1)
     if soort in ("motie", "amendement"):
         for kop in ("verzoekt het college", "draagt het college op", "roept het college op", "spreekt uit", "besluit"):
             m = re.search(r"(?is)\b(" + kop + r")\b\s*(dat)?\s*[,:]?\s*(.*?)(en gaat over tot|en gaan over tot|$)", platte)
@@ -178,7 +191,13 @@ def item(x, soort, met_html=True):
     ris = re.findall(r"RIS\s?(\d{6})", platte)
     if ris:
         d["ris"] = "RIS" + ris[0]
-    if raad:
+    if indiener and raad:
+        for vol in BEKENDE_NAMEN:
+            if vol.lower().endswith(indiener.lower()) and vol.lower() != indiener.lower():
+                indiener = vol
+                break
+        d["indiener"] = indiener
+    if soort in ("motie", "amendement"):
         if re.search(r"(?i)\b(is|werd|wordt)?\s*(unaniem\s+)?aangenomen\b", platte) and not re.search(r"(?i)niet aangenomen", platte):
             d["status"] = "Aangenomen"
         elif re.search(r"(?i)\bverworpen\b", platte):

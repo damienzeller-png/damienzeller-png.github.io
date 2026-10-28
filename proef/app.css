@@ -86,7 +86,7 @@ section{padding-block:80px}
 .ikoon-knop:hover{background:rgba(255,255,255,.22)}
 .ikoon-knop svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 @media (max-width:1060px){.menu{display:none}}
-@media (max-width:420px){.balk-lid{display:none}}
+@media (max-width:420px){.merk img{height:28px}.balk-lid{padding:8px 12px}}
 .zoekbalk{background:var(--woud);padding-block:14px}
 .zoekbalk form{display:flex;gap:10px;max-width:720px}
 .zoekbalk input{flex:1;min-width:0}
@@ -99,7 +99,7 @@ section{padding-block:80px}
   .onderbalk{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;z-index:1200;left:0;right:0;bottom:0;
     padding:6px max(6px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px));background:var(--vlak);border-top:1px solid var(--lijn);box-shadow:0 -10px 30px -18px rgba(11,59,37,.45)}
   .onderbalk a,.onderbalk button{display:grid;justify-items:center;align-content:center;gap:3px;min-height:54px;border-radius:14px;border:0;background:none;
-    text-decoration:none;font:600 .8rem/1.1 var(--tekst);color:var(--ink);cursor:pointer}
+    text-decoration:none;font:600 .78rem/1.1 var(--tekst);color:var(--ink);cursor:pointer;text-align:center;padding:0 4px}
   .onderbalk svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
   .onderbalk [aria-current="page"]{color:var(--link)}
   .onderbalk a.meld{background:var(--zon);color:#10251A}
@@ -267,14 +267,15 @@ section{padding-block:80px}
 @media (max-width:640px){.succes-kop{grid-template-columns:1fr}}
 
 /* standpunten */
-.punten{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 48px;border-top:1.5px solid var(--lijn)}
-.punten article{padding:24px 0;border-bottom:1.5px solid var(--lijn);display:grid;gap:8px}
+.punten{display:grid;border-top:1.5px solid var(--lijn)}
+.punten article{padding:22px 0;border-bottom:1.5px solid var(--lijn);display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:8px 48px;align-items:baseline}
 .punten h3{font-size:1.65rem;font-stretch:74%}
 .punten p{color:var(--zacht)}
-@media (max-width:760px){.punten{grid-template-columns:1fr}}
+@media (max-width:760px){.punten article{grid-template-columns:1fr}}
 
 /* gezichten */
 .gezichten{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:26px 22px}
+@media (max-width:640px){.gezichten{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 14px}}
 .gezichten figure{position:relative;margin:0;display:grid;gap:8px;min-width:0;align-content:start}
 .gezichten img,.gezichten .leeg-foto{width:100%;aspect-ratio:21/23;object-fit:cover;object-position:50% 25%;border-radius:18px;display:block}
 .gezichten .leeg-foto{font-size:3rem;font-weight:900;font-stretch:70%}
@@ -301,7 +302,10 @@ section{padding-block:80px}
 .agenda-lijst p{color:var(--zacht);font-size:.95rem;margin-top:4px}
 
 /* paginakop */
-.pagina-kop{background:var(--veld);color:#fff;padding-block:44px 52px}
+.pagina-kop{position:relative;overflow:hidden;isolation:isolate;background:var(--veld);color:#fff;padding-block:44px 52px}
+.pagina-kop .wrap{position:relative;z-index:1}
+.kop-lijnen{position:absolute;z-index:0;right:-6%;top:-30%;height:170%;width:auto;fill:none;stroke:#9BE0B8;stroke-width:1.6;stroke-linejoin:round;opacity:.22;pointer-events:none}
+@media (max-width:700px){.kop-lijnen{right:-45%}}
 .pagina-kop h1{font-size:clamp(2.8rem,7.4vw,5.4rem);font-weight:900;font-stretch:64%;line-height:.9}
 .pagina-kop p{margin-top:14px;max-width:38em;font-size:1.08rem;color:#EAF6EF}
 .kruimel{font-size:.92rem;color:#E3F1E7;margin-bottom:12px}
@@ -406,3 +410,12 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--veld);bo
 .voet-onder a{color:#fff;min-height:36px;display:inline-flex;align-items:center}
 .voet-onder span{margin-left:auto;align-self:center}
 @media (max-width:860px){.voet-kolommen{grid-template-columns:1fr 1fr}.voet-kolommen>div:first-child{grid-column:1/-1}.voet-onder span{margin-left:0}}
+
+/* inklapbare uitleg */
+.hoe{margin:0 0 26px;border-bottom:1.5px solid var(--lijn)}
+.hoe summary{cursor:pointer;min-height:48px;display:flex;align-items:center;font-weight:700;color:var(--link)}
+.hoe[open] summary{margin-bottom:12px}
+.hoe .uitleg{margin-bottom:24px}
+.fout-tekst{color:var(--fout);font-size:.9rem;font-weight:600;margin:4px 0 0}
+.voet .fout-tekst{color:#FFB4AB}
+.uitklap-paneel a{padding:12px 14px}
