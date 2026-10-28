@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Redactie | Hart voor Den Haag (proef)</title>
+<meta name="theme-color" content="#137345">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..100,600..900&family=Lexend:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="app.css?v=1">
+<style>
+.beheer{padding-block:40px 80px}
+.inlog{max-width:480px;margin:0 auto}
+.inlog .formulier+.formulier{margin-top:22px}
+.tabbalk{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:24px}
+.tabbalk .wie{margin-left:auto;color:var(--zacht);font-size:.92rem;display:flex;gap:10px;align-items:center}
+.rij{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:16px;align-items:center;padding:14px 0;border-bottom:1.5px solid var(--lijn)}
+.rij img,.rij .geen{width:72px;height:54px;border-radius:10px;object-fit:cover;background:var(--munt);display:grid;place-items:center;font-size:.75rem;color:var(--zacht)}
+.rij h3{font-size:1.2rem}
+.rij .acties{display:flex;gap:8px}
+.concept{opacity:.65}
+.foto-voorbeeld{max-width:260px;border-radius:14px;display:block}
+.postvak .rij{grid-template-columns:minmax(0,1fr) auto}
+.postvak dl{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:8px 0 0;font-size:.92rem}
+.postvak dt{color:var(--zacht)}.postvak dd{margin:0;overflow-wrap:anywhere}
+@media (max-width:640px){.rij{grid-template-columns:56px minmax(0,1fr)}.rij .acties{grid-column:1/-1}.rij img,.rij .geen{width:56px;height:44px}}
+</style>
+</head>
+<body>
+<div class="proef" role="note"><div class="wrap"><b>Redactie</b><span>Beheeromgeving van de proefsite. Wat u hier plaatst, staat direct op de proefsite.</span></div></div>
+<header class="balk"><div class="wrap"><a class="merk" href="./" aria-label="Naar de proefsite"><img src="beeld/logo-wit.svg" alt="Hart voor Den Haag" width="146" height="34"></a><a class="knop rand klein" href="./">Naar de site</a></div></header>
+<main class="beheer"><div class="wrap" id="app"></div></main>
+<script src="beheer.js?v=1"></script>
+</body>
+</html>

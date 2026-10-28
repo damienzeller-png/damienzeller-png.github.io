@@ -1,0 +1,29 @@
+[
+{
+"id": "a1",
+"datum": "2026-10-31",
+"tijd": "10.00",
+"titel": "Gesprek met bezoekers en ondernemers van Winkelcentrum Leyweg",
+"plek": "Leyweg",
+"stadsdeel": "Escamp",
+"samenvatting": "Kom langs en vertel wat er beter kan rond het winkelcentrum."
+},
+{
+"id": "a2",
+"datum": "2026-10-31",
+"tijd": "13.30",
+"titel": "Wijkschouw Zuiderpark",
+"plek": "Zuiderpark",
+"stadsdeel": "Escamp",
+"samenvatting": "Loop mee en laat zien wat er beter moet in en rond het park."
+},
+{
+"id": "a3",
+"datum": "2026-11-10",
+"tijd": "",
+"titel": "Spreekuur in Ypenburg: komt u met de ideeën, wij zorgen voor de koffie",
+"plek": "Wijkcentrum Piet Vink, Laan van Hoornwijck",
+"stadsdeel": "Leidschenveen-Ypenburg",
+"samenvatting": "Loop binnen met uw vraag, idee of zorg over de buurt."
+}
+]
