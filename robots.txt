@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 Disallow: /.impeccable/
+Disallow: /proef/
 Sitemap: https://damienzeller.nl/sitemap.xml
