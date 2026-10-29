@@ -790,3 +790,11 @@ li:hover .lees-meer,.lead:hover .lees-meer{text-decoration:underline}
 /* filmknop rechts, zodat de zwevende knop links er nooit overheen valt */
 .speel{left:auto;right:14px}
 @media (max-width:640px){.speel{width:44px;padding:0;justify-content:center}.speel span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}}
+
+/* kop: het stadsdeel waar het stuk over gaat ingekleurd in de lijnenkaart (in plaats van een los silhouet) */
+.kop-lijnen path.aan{fill:var(--hart);fill-opacity:.55;stroke:var(--veld);stroke-width:2.4}
+.kop-lijnen path{vector-effect:non-scaling-stroke}
+.pagina-kop.met-plek .kop-lijnen{opacity:.55}
+.pagina-kop.met-plek h1{padding-right:0}
+.pagina-kop.met-plek .kop-lijnen{right:max(0px,calc((100vw - 1240px)/2));top:-8%;height:116%}
+@media (max-width:640px){.pagina-kop.met-plek .kop-lijnen{right:-28%;opacity:.28}}

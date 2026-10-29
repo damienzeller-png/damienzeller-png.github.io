@@ -144,7 +144,7 @@ function portret(f, opties = {}) {
   return `<figure>${f.beeld ? `<img src="${esc(f.beeld)}" alt="Portret van ${naam}" loading="lazy" decoding="async">` : `<div class="leeg-foto" aria-hidden="true">${initialen(f.naam)}</div>`}
     <figcaption>${opties.link === false ? `<b>${naam}</b>` : `<a href="#fractie/${slug(f.naam)}"><b>${naam}</b></a>`}${onder ? `<span>${onder}</span>` : ""}${pf}</figcaption></figure>`;
 }
-const paginaKop = (titel, tekst, kruimel = "", extra = "", plek = "") => `<div class="pagina-kop${plek ? " met-plek" : ""}"><svg class="kop-lijnen" aria-hidden="true"></svg>${plek ? silhouet(plek).replace('class="sil"', 'class="kop-sil"') : ""}<div class="wrap">${kruimel ? `<p class="kruimel">${kruimel}</p>` : ""}<h1 tabindex="-1">${titel}</h1>${tekst ? `<p>${tekst}</p>` : ""}${extra}</div></div>`;
+const paginaKop = (titel, tekst, kruimel = "", extra = "", plek = "") => `<div class="pagina-kop${plek ? " met-plek" : ""}"><svg class="kop-lijnen" aria-hidden="true"${plek ? ` data-plek="${esc(plek)}"` : ""}></svg><div class="wrap">${kruimel ? `<p class="kruimel">${kruimel}</p>` : ""}<h1 tabindex="-1">${titel}</h1>${tekst ? `<p>${tekst}</p>` : ""}${extra}</div></div>`;
 const stadsdeelOpties = (gekozen = "") => `<option value="">Kies uw stadsdeel</option>` + STADSDELEN.map(s => `<option${s === gekozen ? " selected" : ""}>${s}</option>`).join("");
 const leestijd = h => Math.max(1, Math.round((h || "").replace(/<[^>]+>/g, " ").split(/\s+/).filter(Boolean).length / 200));
 
@@ -1075,7 +1075,10 @@ async function route() {
     console.error(e);
     app.innerHTML = paginaKop("Er ging iets mis", "Laad de pagina opnieuw. Lukt het niet? Bel " + TEL + ".");
   }
-  laad("kaart").then(k => $$(".kop-lijnen").forEach(svg => { svg.setAttribute("viewBox", `0 0 ${k.w} ${k.h}`); svg.innerHTML = Object.values(k.sd).map(x => `<path d="${x.d}"/>`).join(""); }));
+  laad("kaart").then(k => $$(".kop-lijnen").forEach(svg => { const plek = svg.dataset.plek, bb = plek && k.sd[plek] && k.sd[plek].bb;
+    // gaat het stuk over één stadsdeel, dan zoomt de kaart in op dat stadsdeel en kleurt het in
+    if (bb) { const m = Math.max(bb[2], bb[3] * 1.25) * 1.9, cx = bb[0] + bb[2] / 2, cy = bb[1] + bb[3] / 2; svg.setAttribute("viewBox", `${(cx - m / 2).toFixed(1)} ${(cy - m * .4).toFixed(1)} ${m.toFixed(1)} ${(m * .8).toFixed(1)}`); }
+    else svg.setAttribute("viewBox", `0 0 ${k.w} ${k.h}`); svg.innerHTML = Object.entries(k.sd).sort(([n]) => n === plek ? 1 : -1).map(([n, x]) => `<path d="${x.d}"${n === plek ? ' class="aan"' : ""}/>`).join(""); }));
   const sectie = naam;
   $$(".menu a[data-sectie], .onderbalk [data-sectie]").forEach(a => a.dataset.sectie.split(" ").includes(sectie) ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
   const meld = $(".onderbalk a.meld"); if (meld) location.hash.startsWith("#contact/melding") ? meld.setAttribute("aria-current", "page") : meld.removeAttribute("aria-current");
