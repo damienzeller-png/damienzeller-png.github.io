@@ -45,23 +45,25 @@ Er zijn drie delen. Geen framework, geen bouwstap, geen database-server.
 
 | Adres | Wie | Wat |
 | --- | --- | --- |
-| `GET /inhoud` | iedereen | eigen berichten die gepubliceerd zijn |
-| `GET /aanpassingen` | iedereen | aanpassingen op overgenomen berichten |
-| `GET /tellers` | iedereen | handtekeningen via deze site, per petitie |
-| `GET /foto/<id>` | iedereen | een geüploade foto |
-| `POST /formulier` | iedereen | contact, melding, doe mee, aanmelding, petitie, nieuwsbrief |
-| `POST /betaling`, `POST /mollie` | iedereen, Mollie | lid worden en doneren via Mollie |
-| `POST /login`, `/login/code`, `/login/eigenaar`, `/login/herstel` | iedereen | inloggen |
+| `GET /inhoud`, `GET /aanpassingen`, `GET /tellers` | iedereen | eigen berichten, aanpassingen op overgenomen berichten, handtekeningen per petitie (30 seconden gecachet) |
+| `GET /foto/<id>` | iedereen | een foto bij een bericht |
+| `POST /formulier` | iedereen | contact, melding (met foto en plek), doe mee, aanmelding, petitie, nieuwsbrief; antwoord met een kenmerk (`M-26-0042`) |
+| `POST /bezoek` | iedereen | bezoekersteller zonder cookies of IP-adres |
+| `GET /nieuwsbrief/bevestig`, `/nieuwsbrief/af` | iedereen | nieuwsbrief bevestigen of afmelden (links uit de mail) |
+| `POST /betaling`, `POST /mollie` | iedereen, Mollie | lid worden en doneren via Mollie (bedragen voor leden komen altijd van de server) |
+| `POST /login`, `/login/2fa`, `/login/code`, `/login/eigenaar`, `/login/herstel` | iedereen | inloggen (met tweestapsverificatie als die aan staat) |
+| `GET /sessie`, `POST /wachtwoord`, `POST /2fa/start`, `/2fa/aan`, `/2fa/uit` | ingelogd | eigen account |
 | `GET/POST /items`, `DELETE /items/<id>` | ingelogd | eigen berichten |
 | `GET /aanpassingen/alles`, `POST /aanpassingen`, `DELETE /aanpassingen/<id>` | ingelogd | overgenomen berichten aanpassen of terugzetten |
 | `POST /foto` | ingelogd | foto uploaden (JPG, PNG, WebP, max. 3 MB) |
-| `GET /inbox`, `POST /inbox/<id>/status`, `DELETE /inbox/<id>` | ingelogd | postvak |
-| `GET /logboek` | ingelogd | wie wat deed |
-| `POST /wachtwoord` | ingelogd | eigen wachtwoord wijzigen |
-| `GET/POST /gebruikers`, `DELETE /gebruikers/<naam>` | beheerder | mensen met toegang |
-| `GET /export` | beheerder | reservekopie van alles |
+| `GET /inbox` (filters `soort`, `status`, `q`, `petitie`, `activiteit`, bladeren met `n` en `voor`), `GET /inbox/telling`, `GET /inbox/export` (CSV), `GET /inbox/<id>/foto`, `POST /inbox/<id>/status`, `DELETE /inbox/<id>` | ingelogd | postvak |
+| `GET /logboek`, `GET /statistiek` | ingelogd | wie wat deed, bezoek en formulieren per dag |
+| `GET/POST /gebruikers`, `DELETE /gebruikers/<naam>`, `GET /export` | beheerder | mensen met toegang, reservekopie |
+| `GET /backup`, `POST /backup/terugzetten` | met de back-upsleutel | volledige back-up en terugzetten (zie hieronder) |
 
-Opslag in KV, per sleutel: `items`, `aanpassingen`, `inbox`, `tellers`, `gebruikers` (wachtwoorden alleen als PBKDF2-hash), `logboek`, `sessie:<token>` (7 dagen), `foto:<id>`, `code` (10 minuten), `mollie-klaar`.
+**Opslag.** In Cloudflare KV (`hvdh-proef-inhoud`): `items`, `aanpassingen`, `gebruikers` (wachtwoorden alleen als PBKDF2-hash, 100.000 rondes), `sessie:<token>` (7 dagen), `foto:<id>`, `code`. Alles wat bezoekers insturen staat in een Durable Object met SQLite (`Postvak`): inzendingen met kenmerk, handtekeningen, nieuwsbriefadressen, het logboek, de bezoekersteller en de snelheidsgrenzen. Daar loopt elke dag een bewaartermijn: inzendingen ouder dan een jaar gaan weg, nieuwsbriefaanmeldingen niet. De oude KV-sleutels `inbox` en `tellers` zijn bij de overstap overgenomen en blijven staan als kopie.
+
+**Mails.** De teksten van de bevestigingsmails staan bovenin `worker.js` in `MAILTEKSTEN`. Ze gaan pas de deur uit als `BREVO_KEY` en `MAIL_AFZENDER` zijn gezet.
 
 ## Lokaal testen
 
@@ -86,14 +88,27 @@ Botst een push met de importrobot, doe dan eerst `git pull --rebase`.
 
 De code van de Worker staat nu in de privérepository `damienzeller-png/agents-damien`, in `cloudflare-hvdh/worker.js`. Een push daar zet hem via `.github/workflows/hvdh-proef.yml` automatisch online. Zonder toegang tot die repository kunt u de Worker niet wijzigen; zie hieronder hoe dat wordt opgelost.
 
-Geheimen staan als GitHub Secrets bij die repository, nooit in de code:
+Geheimen staan als GitHub Secrets bij die repository, nooit in de code. Alles behalve de eerste drie is optioneel: zonder het geheim staat dat onderdeel uit.
 
 | Geheim | Waarvoor |
 | --- | --- |
 | `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` | de Worker uitrollen |
 | `TELEGRAM_TOKEN` | inlogcode en meldingen naar de eigenaar |
-| `MOLLIE_KEY` | betalen echt aanzetten (zonder sleutel draait betalen als demo) |
+| `MOLLIE_KEY` | betalen echt aanzetten (zonder sleutel draait betalen als proef) |
 | `HVDH_HERSTEL` | noodtoegang, zie hieronder |
+| `BREVO_KEY`, `MAIL_AFZENDER`, `MAIL_ANTWOORD` | bevestigingsmails via Brevo (eerst SPF, DKIM en DMARC voor het domein regelen, en in Brevo het volgen van kliks en openen uitzetten) |
+| `MAILCHIMP_KEY`, `MAILCHIMP_LIJST` | nieuwsbriefaanmeldingen ook naar Mailchimp (met dubbele bevestiging) |
+| `TURNSTILE_GEHEIM` | robotcontrole op formulieren. Zet eerst de sitesleutel in `kader.js` (`HVDH.TURNSTILE`), anders weigert de achterkant alle formulieren |
+| `BACKUP_SLEUTEL`, `HVDH_BACKUP_PUBKEY` | de nachtelijke versleutelde back-up (zie hieronder) |
+
+Een geheim dat u uit GitHub haalt, blijft in de Worker staan tot u het daar ook verwijdert (Cloudflare-dashboard, Workers, hvdh-proef, Settings, Variables).
+
+## Back-up en terugzetten
+
+- De workflow `hvdh-backup.yml` haalt elke nacht om 3:17 UTC `GET /backup` op, versleutelt het met `age` voor de publieke sleutel in `HVDH_BACKUP_PUBKEY` en bewaart het 35 dagen als artifact van die workflow. Onversleuteld komt het nergens. Zet in de repository-instellingen de bewaartermijn van artifacts op minstens 35 dagen.
+- Sleutelpaar maken (eenmalig, door het bestuur, op een eigen computer): `age-keygen -o hvdh-backup.key`. De regel die met `age1` begint is de publieke sleutel: die gaat in `HVDH_BACKUP_PUBKEY`. Het bestand `hvdh-backup.key` is de geheime sleutel: bewaar het in een wachtwoordmanager en op papier, nooit in GitHub.
+- Terugzetten staat stap voor stap bovenin `hvdh-backup.yml`. De achterkant bewaart vóór het terugzetten eerst de huidige stand in KV (`backup:voor-terugzetten`).
+- Een noodversie van de oude achterkant staat in agents-damien, `werkmap/Website-proef/noodversie-achterkant-worker.js`. Cloudflare laat na de overstap naar het Durable Object geen terugdraaien met één klik meer toe; zet dan die versie van `worker.js` terug en push.
 
 ## Noodtoegang
 
@@ -109,7 +124,7 @@ Elke keer dat de noodsleutel wordt gebruikt, komt er een bericht naar de eigenaa
 
 | Onderdeel | Nu | Wat nodig is |
 | --- | --- | --- |
-| Inloggen eigenaar | Telegram van Damiën | minstens twee beheerders met wachtwoord (kan nu al, tab Mensen) |
+| Inloggen eigenaar | Telegram van Damiën | minstens twee beheerders met wachtwoord en tweestapsverificatie (kan nu al, tab Mensen en Mijn account) |
 | Meldingen van nieuwe leden en giften | Telegram van Damiën | een partijadres of de ledenadministratie |
 | Code van de site | GitHub-account van Damiën | overzetten naar een GitHub-organisatie van de partij met twee eigenaren |
 | Code van de achterkant en de geheimen | privérepository van Damiën | meeverhuizen naar die organisatie |
