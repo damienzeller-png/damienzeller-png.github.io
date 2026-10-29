@@ -12,7 +12,10 @@ import os
 import re
 import sys
 import unicodedata
+import urllib.error
 import urllib.request
+import time
+import bisect
 
 API = "https://www.hartvoordenhaag.nl/wp-json/wp/v2/"
 UIT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data")
@@ -51,10 +54,21 @@ import datetime
 SINDS = (datetime.date.today() - datetime.timedelta(days=365)).isoformat()  # het afgelopen jaar; de import gaat verder terug
 
 
-def haal(pad):
+def haal(pad, pogingen=4):
     req = urllib.request.Request(API + pad, headers={"User-Agent": "proefsite-hvdh/1.0"})
-    with urllib.request.urlopen(req, timeout=60) as r:
-        return json.load(r)
+    for poging in range(pogingen):
+        try:
+            with urllib.request.urlopen(req, timeout=90) as r:
+                return json.load(r)
+        except urllib.error.HTTPError as e:
+            if e.code == 400 and "page" in pad:
+                return []  # voorbij de laatste pagina
+            if poging == pogingen - 1:
+                raise
+        except (urllib.error.URLError, TimeoutError, ConnectionError):
+            if poging == pogingen - 1:
+                raise
+        time.sleep(3 * (poging + 1))
 
 
 def tekst(s):
@@ -274,8 +288,9 @@ def item(x, soort, met_html=True):
         titel = m.group(1)[:1].upper() + m.group(1)[1:] if m else t
     if spreker and not indiener:
         indiener = spreker
+    geplaatst = x["date"][:10]
     d = {"id": f"{PREFIX[soort]}{x['id']}", "soort": soort, "slug": x["slug"], "titel": titel,
-         "datum": vergaderdatum(t, x["date"][:10]) if raad else x["date"][:10],
+         "datum": vergaderdatum(t, geplaatst) if raad else geplaatst,
          "samenvatting": afkappen(samen), "beeld": echt_beeld(beeld(x)), "link": x["link"],
          "stadsdelen": [STADSDEEL[s] for s in x.get("stadsdeel", []) if s in STADSDEEL]}
     if not d["stadsdelen"]:
@@ -297,6 +312,12 @@ def item(x, soort, met_html=True):
         d["handtekeningen"] = int(re.sub(r"[.,]", "", hand.group(1)))
     if dictum:
         d["dictum"] = {"kop": dictum[0], "tekst": dictum[1]}
+    d["geplaatst"] = geplaatst
+    if geplaatst.startswith("1970"):
+        # bij de verhuizing van de oude site raakte de datum van een deel van de stukken kwijt; herstel_datums() lost dat op
+        d["_kapot"] = True
+        d["_titel"] = t
+        d["_tekst"] = platte[:600]
     if met_html:
         d["html"] = schoon_html(x["content"]["rendered"])
     d["onderwerpen"] = onderwerpen(t + " " + t + " " + tekst(x["content"]["rendered"]))
@@ -329,25 +350,189 @@ def lijst(pad, aantal):
 SPELLING = {"Karadogan": "Karadoğan"}  # namen zoals de raadsleden ze zelf schrijven
 
 
-def schrijf(naam, data):
-    tekst_ = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
+def spelling(tekst_):
     for fout, goed in SPELLING.items():
         tekst_ = tekst_.replace(fout, goed)
-    with open(os.path.join(UIT, naam), "w", encoding="utf-8") as f:
+    return tekst_
+
+
+def schrijf(naam, data, stil=False):
+    pad = os.path.join(UIT, naam)
+    os.makedirs(os.path.dirname(pad), exist_ok=True)
+    tekst_ = spelling(json.dumps(data, ensure_ascii=False, separators=(",", ":")))
+    if os.path.exists(pad):
+        with open(pad, encoding="utf-8") as f:
+            if f.read() == tekst_:
+                return False
+    with open(pad, "w", encoding="utf-8") as f:
         f.write(tekst_)
-    print(f"{naam}: {len(data) if isinstance(data, list) else 'ok'}")
+    if not stil:
+        print(f"{naam}: {len(data) if isinstance(data, list) else 'ok'} ({len(tekst_.encode()) // 1024} kB)")
+    return True
+
+
+# ---------- het hele archief ----------
+# Elk stuk krijgt een eigen bestand data/stuk/<id>.json met de volledige tekst. De site laadt dat pas als iemand het stuk opent.
+# Per soort is er een lichte lijst zonder tekst: data/<bron>.json met het recente werk en data/lijst/<bron>-<jaar>.json per jaar.
+# Elke ochtend komen alleen nieuwe en gewijzigde stukken binnen; op zondag (of met --alles) haalt de import alles opnieuw op
+# en verdwijnen stukken die op hartvoordenhaag.nl niet meer bestaan.
+SOORTEN = [
+    ("nieuws", "nieuws", f"posts?categories_exclude={PETITIES},{SPREEKTEKSTEN}"),
+    ("succes", "successen", "succes_post"),
+    ("motie", "moties", "motie"),
+    ("raadsvraag", "raadsvragen", "raadsvraag"),
+    ("amendement", "amendementen", "amendement"),
+    ("spreektekst", "spreekteksten", f"posts?categories={SPREEKTEKSTEN}"),
+    ("petitie", "petities", f"posts?categories={PETITIES}"),
+]
+STUK = os.path.join(UIT, "stuk")
+RAAD = ("motie", "amendement", "raadsvraag", "spreektekst")
+NIET_IN_LIJST = {"html", "dictum", "link", "slug", "geplaatst", "_kapot", "_titel", "_tekst"}
+RECENT_DAGEN, RECENT_MIN = 400, 100
+VOLLE_DATUM = r"(\d{1,2})\s+(" + "|".join(MAANDEN) + r")\s+(\d{4})"
+
+
+def met_param(pad, param):
+    return pad + ("&" if "?" in pad else "?") + param
+
+
+def wpnummer(d):
+    return int(re.sub(r"^\D+", "", d["id"]))
+
+
+def lees_stukken():
+    uit = {}
+    if os.path.isdir(STUK):
+        for naam in os.listdir(STUK):
+            if naam.endswith(".json"):
+                with open(os.path.join(STUK, naam), encoding="utf-8") as f:
+                    d = json.load(f)
+                uit[d["id"]] = d
+    return uit
+
+
+def herstel_datums(stukken):
+    """Stukken met datum 1 januari 1970: eerst een volledige datum in de titel, dan in de tekst.
+    Lukt dat niet, dan de datum van het stuk met het dichtstbijzijnde nummer, en heet de datum geschat."""
+    goed = sorted((wpnummer(d), d["geplaatst"]) for d in stukken.values() if not d.get("_kapot"))
+    nummers = [n for n, _ in goed]
+    for d in stukken.values():
+        if not d.get("_kapot"):
+            continue
+        m = re.search(r"(?i)" + VOLLE_DATUM, d.get("_titel", "")) or re.search(r"(?i)" + VOLLE_DATUM, d.get("_tekst", ""))
+        if m:
+            datum = f"{int(m.group(3)):04d}-{MAANDEN.index(m.group(2).lower()) + 1:02d}-{int(m.group(1)):02d}"
+            d.pop("datum_geschat", None)
+        else:
+            k = bisect.bisect_left(nummers, wpnummer(d))
+            buren = [goed[j][1] for j in (k - 1, k) if 0 <= j < len(goed)]
+            datum = buren[0] if buren else "2014-01-01"
+            d["datum_geschat"] = True
+        d["geplaatst"] = datum
+        d["datum"] = vergaderdatum(d["_titel"], datum) if d["soort"] in RAAD and not d.get("datum_geschat") else datum
+
+
+def licht(d):
+    return {k: v for k, v in d.items() if k not in NIET_IN_LIJST}
+
+
+def fractiewerk(fractie, index):
+    """Per raadslid de tien nieuwste stukken en het aantal vragen, moties en amendementen van het afgelopen jaar."""
+    jaar = (datetime.date.today() - datetime.timedelta(days=365)).isoformat()
+    for f in fractie:
+        zelf, delen = plat(f["naam"]), plat(f["naam"]).split()
+        voornaam, achternaam = delen[0], delen[-1]
+        def van(i):
+            if i.get("i"):
+                return zelf in plat(i["i"])
+            t = plat(i["t"] + " " + i["x"])
+            return achternaam in t and voornaam in t
+        mijn = sorted((i for i in index if van(i)), key=lambda i: i["d"], reverse=True)
+        f["werk"] = [{k: i[k] for k in ("id", "s", "t", "d", "sd", "st") if k in i} for i in mijn[:10]]
+        recent = [i for i in mijn if i.get("i") and i["d"] >= jaar]
+        f["telling"] = {s_: sum(1 for i in recent if i["s"] == s_) for s_ in ("raadsvraag", "motie", "amendement")}
+
+
+def archief_extra():
+    """Pagina's en kandidaten van de oude site: alleen bewaard voor de verhuizing, de proef toont ze (nog) niet."""
+    paginas = [{"id": x["id"], "titel": tekst(x["title"]["rendered"]), "slug": x["slug"], "link": x["link"],
+                "html": schoon_html(x["content"]["rendered"])} for x in lijst("pages", 10 ** 6)]
+    kandidaten = [{"id": x["id"], "naam": tekst(x["title"]["rendered"]), "slug": x["slug"], "link": x["link"], "beeld": beeld(x),
+                   "html": schoon_html(x["content"]["rendered"])} for x in lijst("kandidaat", 10 ** 6)]
+    schrijf("archief/paginas.json", paginas)
+    schrijf("archief/kandidaten.json", kandidaten)
 
 
 def main():
-    os.makedirs(UIT, exist_ok=True)
-    nieuws = uniek([item(x, "nieuws") for x in lijst(f"posts?categories_exclude={PETITIES},{SPREEKTEKSTEN}", 200)])
-    schrijf("nieuws.json", nieuws)
-    schrijf("successen.json", uniek([item(x, "succes") for x in lijst("succes_post", 200)]))
-    schrijf("moties.json", uniek([item(x, "motie") for x in lijst("motie", 200)]))
-    schrijf("raadsvragen.json", uniek([item(x, "raadsvraag") for x in lijst("raadsvraag", 200)]))
-    schrijf("amendementen.json", uniek([item(x, "amendement") for x in lijst("amendement", 100)]))
-    schrijf("spreekteksten.json", uniek([item(x, "spreektekst") for x in lijst(f"posts?categories={SPREEKTEKSTEN}", 60)]))
-    schrijf("petities.json", uniek([item(x, "petitie") for x in lijst(f"posts?categories={PETITIES}", 30)]))
+    os.makedirs(STUK, exist_ok=True)
+    info_pad = os.path.join(UIT, "archief.json")
+    vorige = json.load(open(info_pad, encoding="utf-8")) if os.path.exists(info_pad) else {}
+    alles = "--alles" in sys.argv or not vorige.get("opgehaald") or not os.listdir(STUK)
+    begin = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
+    sinds = None if alles else (datetime.datetime.fromisoformat(vorige["opgehaald"]) - datetime.timedelta(days=2)).strftime("%Y-%m-%dT%H:%M:%S")
+    print("Alles ophalen" if alles else f"Alleen wat sinds {sinds} veranderde")
+
+    stukken = lees_stukken()
+    gezien, opgehaald = set(), 0
+    for soort, bron, pad in SOORTEN:
+        ruw = lijst(met_param(pad, f"modified_after={sinds}") if sinds else pad, 10 ** 6)
+        for x in ruw:
+            d = item(x, soort)
+            stukken[d["id"]] = d
+            gezien.add(d["id"])
+        opgehaald += len(ruw)
+        print(f"  {bron}: {len(ruw)} opgehaald")
+    if alles:
+        for weg in [k for k in stukken if k not in gezien]:
+            del stukken[weg]
+            os.remove(os.path.join(STUK, weg + ".json"))
+            print("  weg:", weg)
+    herstel_datums(stukken)
+
+    # dubbele stukken (zelfde titel en datum) één keer
+    per_soort = {soort: [] for soort, _, _ in SOORTEN}
+    for d in sorted(stukken.values(), key=lambda d: (d["datum"], wpnummer(d)), reverse=True):
+        per_soort[d["soort"]].append(d)
+    for soort in per_soort:
+        per_soort[soort] = uniek(per_soort[soort])
+    houden = {d["id"] for lijst_ in per_soort.values() for d in lijst_}
+    veranderd = 0
+    for d in stukken.values():
+        if d["id"] in houden:
+            veranderd += schrijf(f"stuk/{d['id']}.json", d, stil=True)
+    print(f"stuk/: {len(houden)} stukken, {veranderd} nieuw of gewijzigd")
+
+    # lichte lijsten: recent per soort en alles per jaar
+    grens = (datetime.date.today() - datetime.timedelta(days=RECENT_DAGEN)).isoformat()
+    info = {"opgehaald": begin, "soorten": {}}
+    geldige_jaarbestanden = set()
+    for soort, bron, _ in SOORTEN:
+        alle = [licht(d) for d in per_soort[soort]]
+        recent = [d for k, d in enumerate(alle) if d["datum"] >= grens or k < RECENT_MIN]
+        schrijf(f"{bron}.json", recent)
+        jaren = {}
+        for d in alle:
+            jaren.setdefault(d["datum"][:4], []).append(d)
+        for j, rij in jaren.items():
+            schrijf(f"lijst/{bron}-{j}.json", rij, stil=True)
+            geldige_jaarbestanden.add(f"{bron}-{j}.json")
+        info["soorten"][soort] = {"bron": bron, "totaal": len(alle), "recent": len(recent), "jaren": {j: len(r) for j, r in sorted(jaren.items(), reverse=True)}}
+        print(f"  {bron}: {len(alle)} in totaal, {len(recent)} recent, jaren {min(jaren) if jaren else '-'} tot {max(jaren) if jaren else '-'}")
+    lijstmap = os.path.join(UIT, "lijst")
+    for naam in os.listdir(lijstmap):
+        if naam not in geldige_jaarbestanden:
+            os.remove(os.path.join(lijstmap, naam))
+
+    # zoekindex over alles: titel, soort, datum en het begin van de tekst
+    index = []
+    for soort, _, _ in SOORTEN:
+        for i in per_soort[soort]:
+            index.append({"id": i["id"], "s": i["soort"], "t": i["titel"], "d": i["datum"],
+                          "x": tekst(i.get("html", ""))[:200], "sd": i["stadsdelen"], "o": i.get("onderwerpen", []),
+                          **({"i": i["indiener"]} if i.get("indiener") else {}), **({"st": i["status"]} if i.get("status") else {})})
+    index.sort(key=lambda i: i["d"], reverse=True)
+    schrijf("zoekindex.json", index)
+
     fractie = []
     for x in lijst("fractielid", 30):
         naam = re.sub(r"^\d+\.\s*", "", tekst(x["title"]["rendered"]))
@@ -362,28 +547,28 @@ def main():
                         "functie": veld("Functie"), "commissie": veld("Commissie"),
                         "portefeuilles": [p.strip(" .") for p in re.split(r",\s*(?![^()]*\))", veld("Portefeuilles")) if p.strip(" .")]})
     fractie.sort(key=lambda f: f["positie"])
+    fractiewerk(fractie, index)
     schrijf("fractie.json", fractie)
     schrijf("bestuur.json", bestuur())
-    # zoekindex: titel, soort, datum en een stuk tekst, voor alles wat hierboven staat
-    index = []
-    for naam in ("nieuws", "successen", "moties", "amendementen", "raadsvragen", "spreekteksten", "petities"):
-        for i in json.load(open(os.path.join(UIT, naam + ".json"), encoding="utf-8")):
-            index.append({"id": i["id"], "s": i["soort"], "t": i["titel"], "d": i["datum"],
-                          "x": tekst(i.get("html", ""))[:600], "sd": i["stadsdelen"], "o": i.get("onderwerpen", []), **({"i": i["indiener"]} if i.get("indiener") else {}),
-                          **({"st": i["status"]} if i.get("status") else {})})
-    schrijf("zoekindex.json", index)
+    if alles:
+        archief_extra()
+
     # bewijs bij de standpunten: hoeveel vragen, moties en amendementen sinds SINDS, en het laatste succes
     bewijs = {}
     for punt, onderw in BEWIJS.items():
-        stukken = [i for i in index if i["d"] >= SINDS and set(i["o"]) & set(onderw)]
-        tel = lambda s_: sum(1 for i in stukken if i["s"] == s_)
-        succes = next((i for i in sorted(stukken, key=lambda i: i["d"], reverse=True) if i["s"] == "succes" and i["o"] and i["o"][0] in onderw), None)
+        stukken_ = [i for i in index if i["d"] >= SINDS and set(i["o"]) & set(onderw)]
+        tel = lambda s_: sum(1 for i in stukken_ if i["s"] == s_)
+        succes = next((i for i in sorted(stukken_, key=lambda i: i["d"], reverse=True) if i["s"] == "succes" and i["o"] and i["o"][0] in onderw), None)
         bewijs[punt] = {"onderwerp": onderw[0], "vragen": tel("raadsvraag"), "moties": tel("motie"), "amendementen": tel("amendement"),
                         "succes": {"id": succes["id"], "t": succes["t"], "d": succes["d"]} if succes else None}
     succ = sorted((i for i in index if i["s"] == "succes" and i["d"] >= SINDS), key=lambda i: i["d"], reverse=True)
     bewijs["Echte ombudspolitiek"] = {"successen": len(succ), "succes": {"id": succ[0]["id"], "t": succ[0]["t"], "d": succ[0]["d"]} if succ else None}
     bewijs["sinds"] = SINDS
     schrijf("bewijs.json", bewijs)
+
+    # pas aan het eind: zo begint een afgebroken run de volgende keer bij de vorige stand
+    info["volledig"] = begin if alles else vorige.get("volledig", "")
+    schrijf("archief.json", info)
 
 
 if __name__ == "__main__":

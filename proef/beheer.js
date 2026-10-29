@@ -70,10 +70,12 @@ async function overgenomen() {
   ];
 }
 async function origineel(soort, id) {
-  const lijst = await bestand(BRON[soort]);
-  const x = lijst.find(y => y.id === id);
-  if (!x) return null;
-  return soort === "agenda" ? { ...x, stadsdelen: x.stadsdeel ? [x.stadsdeel] : [], onderwerpen: [] } : x;
+  if (soort === "agenda") {
+    const x = (await bestand("agenda")).find(y => y.id === id);
+    return x ? { ...x, stadsdelen: x.stadsdeel ? [x.stadsdeel] : [], onderwerpen: [] } : null;
+  }
+  // elk overgenomen stuk heeft een eigen bestand met de volledige tekst
+  return fetch(`data/stuk/${encodeURIComponent(id)}.json`, { cache: "no-cache" }).then(r => r.ok ? r.json() : null).catch(() => null);
 }
 const siteLink = r => r.bron === "eigen" ? (r.concept ? "" : `./#${SITEPAD[r.soort]}/w${r.id}`) : r.verborgen ? "" : `./#${SITEPAD[r.soort]}/${r.id}`;
 const fotoUrl = id => `${API}/foto/${id}`;
@@ -364,7 +366,7 @@ const bewaarAanpassing = (r, v) => vraag("/aanpassingen", { method: "POST", body
 async function importEditor(r) {
   app.innerHTML = kader(`<p class="leeg">Bericht laden…</p>`); koppelKader();
   const o = await origineel(r.soort, r.id);
-  if (!o) { app.innerHTML = kader(`${H1("Niet gevonden")}<p class="inleiding">Dit bericht staat niet meer in de import van hartvoordenhaag.nl. Alleen de nieuwste 200 per soort worden overgenomen.</p><button class="knop lijn" type="button" id="terug">Terug naar de lijst</button>`); koppelKader(); $("#terug").onclick = () => gaNaar("berichten"); return; }
+  if (!o) { app.innerHTML = kader(`${H1("Niet gevonden")}<p class="inleiding">Dit bericht staat niet meer op hartvoordenhaag.nl, of de import van vannacht heeft het nog niet opgehaald.</p><button class="knop lijn" type="button" id="terug">Terug naar de lijst</button>`); koppelKader(); $("#terug").onclick = () => gaNaar("berichten"); return; }
   const a = velden(r.aanp);
   const nu = { ...o, ...a, stadsdelen: a.stadsdelen || o.stadsdelen || [], onderwerpen: a.onderwerpen || o.onderwerpen || [] };
   const isAgenda = r.soort === "agenda", isRaad = RAAD.includes(r.soort);

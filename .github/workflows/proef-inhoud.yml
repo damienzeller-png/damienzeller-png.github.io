@@ -1,28 +1,40 @@
 name: Proefsite partij bijwerken
-# Haalt elke ochtend nieuws, successen, moties, raadsvragen, petities, fractie en bestuur op van hartvoordenhaag.nl
-# en zet ze in proef/data. Wat redacteuren in de beheeromgeving plaatsen, staat apart in de Worker.
+# Haalt het hele archief van hartvoordenhaag.nl op (nieuws, successen, moties, amendementen, raadsvragen, spreekteksten,
+# petities, fractie en bestuur) en zet het in proef/data. Elke ochtend alleen wat nieuw of gewijzigd is; op zondag alles,
+# zodat ook verwijderde stukken verdwijnen. Wat redacteuren in de beheeromgeving plaatsen, staat apart in de Worker.
 on:
   schedule:
     - cron: "37 4 * * *"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      alles:
+        description: "Alles opnieuw ophalen (duurt ongeveer tien minuten)"
+        type: boolean
+        default: false
 permissions:
   contents: write
 concurrency: proef-inhoud
 jobs:
   bijwerken:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: python proef/tools/importeer.py
+      - name: Ophalen
+        run: |
+          if [ "$(date -u +%u)" = "7" ] || [ "${{ inputs.alles }}" = "true" ]; then
+            python proef/tools/importeer.py --alles
+          else
+            python proef/tools/importeer.py
+          fi
       - name: Opslaan
         run: |
           git config user.name "data-robot"
           git config user.email "actions@users.noreply.github.com"
-          git add proef/data
+          git add -A proef/data
           git diff --cached --quiet && exit 0
           git commit -qm "Proefsite: inhoud bijgewerkt $(date +%F)"
           for i in 1 2 3 4 5; do git pull --rebase -q && git push -q && exit 0; git rebase --abort 2>/dev/null; sleep $((RANDOM % 10 + 3)); done

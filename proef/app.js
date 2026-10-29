@@ -92,11 +92,42 @@ function pasAan(naam, lijst, a) {
 }
 function laad(naam) {
   if (!cache[naam]) {
-    const bestand = fetch(`data/${naam}.json?v=4`).then(r => r.ok ? r.json() : []).catch(() => []);
-    cache[naam] = MET_AANPASSING.has(naam) ? Promise.all([bestand, aanpassingen()]).then(([d, a]) => pasAan(naam, d, a)) : bestand;
+    const bestand = fetch(`data/${naam}.json?v=5`).then(r => r.ok ? r.json() : []).catch(() => []);
+    cache[naam] = MET_AANPASSING.has(naam) || naam.startsWith("lijst/") ? Promise.all([bestand, aanpassingen()]).then(([d, a]) => pasAan(naam, d, a)) : bestand;
   }
   return cache[naam];
 }
+// één stuk met de volledige tekst (data/stuk/<id>.json), pas geladen als iemand het opent
+function stuk(id) {
+  const k = "stuk/" + id;
+  if (!cache[k]) cache[k] = Promise.all([fetch(`data/stuk/${encodeURIComponent(id)}.json?v=5`).then(r => r.ok ? r.json() : null).catch(() => null), aanpassingen()])
+    .then(([d, a]) => d ? (pasAan("stuk", [d], a)[0] || null) : null);
+  return cache[k];
+}
+// het hele archief van één soort: eerst het recente werk, ouder werk jaar voor jaar zodra iemand verder wil
+function stroom(s) {
+  const st = { items: [], ids: new Set(), klaar: true, totaal: 0 };
+  let jaren = [];
+  st.start = async () => {
+    const [r, info] = await Promise.all([soort(s), laad("archief")]);
+    r.forEach(i => { st.ids.add(i.id); st.items.push(i); });
+    const inf = info && info.soorten && info.soorten[s];
+    jaren = inf ? Object.keys(inf.jaren).sort().reverse() : [];
+    st.totaal = inf ? inf.totaal + r.filter(i => i.eigen).length : r.length;
+    st.klaar = !inf || inf.recent >= inf.totaal;
+    return st;
+  };
+  st.ouder = async () => {
+    if (st.klaar) return false;
+    const extra = await laad(`lijst/${inf_bron(s)}-${jaren.shift()}`);
+    for (const i of extra) if (!st.ids.has(i.id)) { st.ids.add(i.id); st.items.push(i); }
+    st.items.sort(opVolgorde);
+    if (!jaren.length) st.klaar = true;
+    return true;
+  };
+  return st;
+}
+const inf_bron = s => SOORT[s].bron;
 const platAlinea = t => String(t || "").split(/\n{2,}/).filter(p => p.trim()).map(p => `<p>${esc(p).replace(/\n/g, "<br>")}</p>`).join("");
 const zonderTags = h => String(h || "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/\s+/g, " ").trim();
 let apiItems = null;
@@ -162,7 +193,7 @@ function bijschrift(i, opties = {}) {
   if (i.indiener) delen.push(`<span>${esc(i.indiener)}</span>`);
   if (i.status) delen.push(`<span class="status">${esc(i.status)}</span>`);
   if (i.handtekeningen) delen.push(`<span>${fmt.format(i.handtekeningen)} handtekeningen</span>`);
-  delen.push(`<time datetime="${esc(i.datum)}">${datum(i.datum)}</time>`);
+  delen.push(i.datum_geschat ? `<span title="De oude site gaf hier geen datum">datum onbekend, rond ${dt(i.datum).y}</span>` : `<time datetime="${esc(i.datum)}">${datum(i.datum)}</time>`);
   if (i.ris && opties.ris !== false) delen.push(`<span>${esc(i.ris)}</span>`);
   if (i.eigen) delen.push(`<span class="nieuw">Net geplaatst</span>`);
   return `<p class="bijschrift">${delen.join("")}</p>`;
@@ -512,6 +543,31 @@ pagina.stadsdelen = async () => paginaKop("Uw stadsdeel", "Acht stadsdelen, elk 
   `<section><div class="wrap">${kaartBlok(await laad("kaart"))}</div></section>`;
 pagina.stadsdelen.na = async ([naam]) => activeerKaart(await laad("kaart"), naam ? decodeURIComponent(naam) : opslag.lees("stadsdeel"));
 
+// lijsten uit het hele archief: "Meer laden" haalt zo nodig een ouder jaar op; bij Terug blijft het aantal staan
+async function meerLadenStroom(lijst, st, past, maak, stap, filterActief, leeg) {
+  const sleutel = "n:" + location.hash;
+  let n = Math.max(stap, Number(opslag.sLees(sleutel)) || stap);
+  const knop = $(lijst.knop), teller = $(lijst.teller);
+  const beurt = String((Number(($(lijst.doel) || {}).dataset?.beurt) || 0) + 1);
+  if ($(lijst.doel)) $(lijst.doel).dataset.beurt = beurt;
+  const teken = async () => {
+    let zicht = st.items.filter(past);
+    while (zicht.length < n && !st.klaar) {
+      if (knop) { knop.hidden = false; knop.disabled = true; knop.textContent = "Ouder werk laden…"; }
+      await st.ouder(); zicht = st.items.filter(past);
+    }
+    const doel = $(lijst.doel); if (!doel || doel.dataset.beurt !== beurt) return;
+    if (knop) { knop.disabled = false; knop.textContent = "Meer laden"; }
+    if (!zicht.length && st.klaar) { doel.innerHTML = leeg; if (teller) teller.textContent = ""; if (knop) knop.hidden = true; return; }
+    doel.innerHTML = maak(zicht.slice(0, n));
+    const getoond = Math.min(n, zicht.length);
+    if (teller) teller.textContent = st.klaar ? `${getoond} van ${zicht.length}` : filterActief ? `${getoond} getoond, ouder werk komt erbij met Meer laden` : `${getoond} van ${st.totaal}`;
+    if (knop) knop.hidden = st.klaar && n >= zicht.length;
+  };
+  await teken();
+  if (knop) knop.onclick = async () => { n += stap; opslag.sZet(sleutel, n); await teken(); };
+  return teken;
+}
 // lijsten met "Meer laden" die bij Terug het aantal onthouden
 function meerLaden(lijst, alles, maak, stap) {
   const sleutel = "n:" + location.hash;
@@ -536,14 +592,14 @@ function lijstPagina(s, titel, tekst, pad) {
       <nav class="filters" aria-label="Kies een stadsdeel">${knoppen}</nav>
       <p class="teller" id="teller" aria-live="polite"></p><ol class="log" id="lijst"></ol>
       <button class="knop lijn meer-laden" type="button" id="meer">Meer laden</button>
-      <p class="leeg" style="margin-top:22px">Ouder werk staat op <a href="https://www.hartvoordenhaag.nl/${s === "succes" ? "successen" : "nieuws"}/" target="_blank" rel="noopener">hartvoordenhaag.nl</a>.</p></div></section>`;
+      <p class="leeg" style="margin-top:22px">Alles sinds ${s === "succes" ? "2014" : "2013"} staat hier. Met Meer laden gaat u verder terug in de tijd.</p></div></section>`;
   };
   f.na = async (args) => {
     if (args[0] && args[0] !== "stadsdeel") return detail.na(args);
     const sd = args[0] === "stadsdeel" ? decodeURIComponent(args[1] || "") : "";
-    const alles = (await soort(s)).filter(i => !sd || i.stadsdelen.includes(sd));
-    if (!alles.length) { $("#lijst").outerHTML = `<p class="leeg">Nog geen berichten uit ${esc(sd)}.</p>`; $("#meer").hidden = true; return; }
-    meerLaden({ doel: "#lijst", teller: "#teller", knop: "#meer" }, alles, rij => rij.map((n, i) => logItem(n, i === 0 && !sd)).join(""), 20);
+    const st = await stroom(s).start();
+    await meerLadenStroom({ doel: "#lijst", teller: "#teller", knop: "#meer" }, st, i => !sd || i.stadsdelen.includes(sd),
+      rij => rij.map((n, i) => logItem(n, i === 0 && !sd)).join(""), 20, !!sd, `<li class="leeg">Nog geen berichten uit ${esc(sd)}.</li>`);
   };
   return f;
 }
@@ -551,8 +607,9 @@ pagina.nieuws = lijstPagina("nieuws", "Nieuws", "Wat Hart voor Den Haag doet in 
 pagina.successen = lijstPagina("succes", "Successen", "Wat ombudspolitiek opleverde: besluiten, oplossingen en opgeknapte plekken.", "successen");
 
 async function detail(s, id, terugNaam, terugPad) {
-  const [alles, tel] = await Promise.all([soort(s), s === "petitie" ? tellers() : {}]);
-  const i = alles.find(x => String(x.id) === id);
+  const eigenStuk = /^w/.test(id);
+  const [alles, tel, vol] = await Promise.all([soort(s), s === "petitie" ? tellers() : {}, eigenStuk ? null : stuk(id)]);
+  const i = eigenStuk ? alles.find(x => String(x.id) === id) : vol;
   if (!i) return paginaKop("Niet gevonden", "Dit stuk bestaat niet (meer).") + `<section><div class="wrap"><a class="knop groen" href="#${terugPad}">Terug naar ${esc(terugNaam.toLowerCase())}</a></div></section>`;
   document.title = i.titel + " | Hart voor Den Haag (proef)";
   const zelfde = alles.filter(x => x.id !== i.id && x.stadsdelen.some(sd => i.stadsdelen.includes(sd))).slice(0, 4);
@@ -644,14 +701,15 @@ pagina.raadswerk = async ([tab = "moties", ...rest]) => {
         <p class="teller" id="teller" aria-live="polite"></p></div>
       <div id="lijst"></div>
       <button class="knop lijn meer-laden" type="button" id="meer">Meer laden</button>
-      <p class="leeg" style="margin-top:22px">Onderwerpen zijn automatisch toegekend op basis van de tekst. Ouder werk staat op <a href="https://www.hartvoordenhaag.nl/" target="_blank" rel="noopener">hartvoordenhaag.nl</a>.</p>
+      <p class="leeg" style="margin-top:22px">Onderwerpen zijn automatisch toegekend op basis van de tekst. Al het raadswerk sinds 2012 staat hier; met Meer laden gaat u verder terug.</p>
     </div></section>`;
 };
 pagina.raadswerk.na = async ([tab = "moties", ...rest]) => {
   if (DETAILTAB[tab] && rest[0]) return detail.na();
   const t = TABS[tab] || TABS.moties; const tabNaam = TABS[tab] ? tab : "moties";
   const { onderwerp = "" } = rwOpties(rest);
-  const basis = (await soort(t.s)).filter(i => !onderwerp || (i.onderwerpen || []).includes(onderwerp));
+  const st = await stroom(t.s).start();
+  const opOnderwerp = i => !onderwerp || (i.onderwerpen || []).includes(onderwerp);
   const perMaand = rij => {
     let html = "", huidig = "";
     for (const i of rij) {
@@ -659,12 +717,13 @@ pagina.raadswerk.na = async ([tab = "moties", ...rest]) => {
       if (m !== huidig) { if (huidig) html += "</ul>"; html += `<h2 class="maand-kop">${m[0].toUpperCase() + m.slice(1)}</h2><ul class="stukken">`; huidig = m; }
       html += stukItem(i);
     }
-    return html + (huidig ? "</ul>" : `<p class="leeg" style="padding-top:18px">Niets gevonden. Probeer een ander woord of onderwerp. <a class="meer" href="#raadswerk/${tabNaam}">Wis zoekterm en onderwerp</a></p>`);
+    return html + (huidig ? "</ul>" : "");
   };
+  const leeg = `<p class="leeg" style="padding-top:18px">Niets gevonden. Probeer een ander woord of onderwerp. <a class="meer" href="#raadswerk/${tabNaam}">Wis zoekterm en onderwerp</a></p>`;
   const toonLijst = () => {
     const q = $("#binnen").value.trim().toLowerCase();
-    const alles = q ? basis.filter(i => (i.titel + " " + i.samenvatting + " " + (i.indiener || "")).toLowerCase().includes(q)) : basis;
-    meerLaden({ doel: "#lijst", teller: "#teller", knop: "#meer" }, alles, perMaand, 25);
+    const past = i => opOnderwerp(i) && (!q || (i.titel + " " + (i.samenvatting || "") + " " + (i.indiener || "")).toLowerCase().includes(q));
+    return meerLadenStroom({ doel: "#lijst", teller: "#teller", knop: "#meer" }, st, past, perMaand, 25, !!(q || onderwerp), leeg);
   };
   let wacht; $("#binnen").addEventListener("input", () => {
     clearTimeout(wacht);
@@ -703,10 +762,8 @@ pagina.fractie = async ([wie]) => {
     const f = fractie.find(x => slug(x.naam) === wie);
     if (!f) return paginaKop("Niet gevonden", "");
     document.title = f.naam + " | Hart voor Den Haag (proef)";
-    const idx = await laad("zoekindex");
-    const voornaam = f.naam.split(" ")[0], achternaam = f.naam.split(" ").slice(-1)[0];
-    const zelf = slug(f.naam);
-    const werk = idx.filter(i => (i.i && slug(i.i).includes(zelf)) || (!i.i && PLAT(i.t + " " + i.x).includes(PLAT(achternaam)) && PLAT(i.t + " " + i.x).includes(PLAT(voornaam)))).sort((a, b) => b.d.localeCompare(a.d)).slice(0, 10);
+    const a = await aanpassingen();
+    const werk = (f.werk || []).filter(i => !(a[i.id] && a[i.id].verborgen)).map(i => a[i.id] ? { ...i, t: a[i.id].titel || i.t, sd: a[i.id].stadsdelen || i.sd, st: a[i.id].status ?? i.st } : i);
     return paginaKop(esc(f.naam), esc(f.functie || "Raadslid") + (f.stadsdelen.length ? ` voor ${esc(f.stadsdelen.join(" en "))}` : ""), `<a href="#">Home</a> / <a href="#fractie">Onze mensen</a>`) + `
       <section class="wit"><div class="wrap formulier-raster links">
         <div class="gezichten" style="grid-template-columns:minmax(0,320px)">${portret(f, { link: false })}</div>
@@ -728,11 +785,9 @@ pagina.fractie = async ([wie]) => {
 };
 pagina.fractie.na = async ([wie]) => {
   if (wie) return;
-  const [fractie, idx] = await Promise.all([laad("fractie"), laad("zoekindex")]);
-  const jaar = new Date(Date.now() - 365 * 864e5).toISOString().slice(0, 10);
+  const fractie = await laad("fractie");
   const recent = f => {
-    const zelf = slug(f.naam), mijn = idx.filter(i => i.i && i.d >= jaar && slug(i.i).includes(zelf));
-    const n = s_ => mijn.filter(i => i.s === s_).length;
+    const n = s_ => (f.telling && f.telling[s_]) || 0;
     const delen = [[n("raadsvraag"), "keer vragen", "keer vragen"], [n("motie"), "motie", "moties"], [n("amendement"), "amendement", "amendementen"]].filter(d => d[0]).map(d => `${d[0]} ${d[0] === 1 ? d[1] : d[2]}`);
     return delen.length ? `Het afgelopen jaar: ${delen.join(", ")}` : "";
   };
@@ -1070,14 +1125,15 @@ pagina.zoeken = async ([term = ""]) => {
     const t = i.t.toLowerCase(), x = (i.x || "").toLowerCase() + " " + (i.sd || []).join(" ").toLowerCase();
     if (!woorden.every(w => t.includes(w) || x.includes(w))) return null;
     return { ...i, score: woorden.reduce((s, w) => s + (t.includes(w) ? 5 : 1), 0) };
-  }).filter(Boolean).sort((a, b) => b.score - a.score || b.d.localeCompare(a.d)).slice(0, 40) : [];
+  }).filter(Boolean).sort((a, b) => b.score - a.score || b.d.localeCompare(a.d)) : [];
+  const totaalTreffers = treffers.length; treffers.splice(60);
   // markeren op platte tekst, daarna pas escapen
   const licht = s => {
     const re = new RegExp("(" + woorden.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|") + ")", "gi");
     return woorden.length ? String(s).split(re).map((deel, i) => i % 2 ? `<mark>${esc(deel)}</mark>` : esc(deel)).join("") : esc(s);
   };
   const knipsel = x => { const l = (x || "").toLowerCase(); const p = Math.max(0, l.indexOf(woorden[0] || "") - 60); const k = x.slice(p, p + 220); return (p ? "…" : "") + k.slice(0, k.lastIndexOf(" ") > 150 ? k.lastIndexOf(" ") : k.length) + "…"; };
-  return paginaKop("Zoeken", term ? `${treffers.length >= 40 ? "Meer dan 40" : treffers.length} resultaten voor "${esc(term)}"` : "Zoek in nieuws, successen, raadswerk en petities.") + `
+  return paginaKop("Zoeken", term ? `${fmt.format(totaalTreffers)} ${totaalTreffers === 1 ? "resultaat" : "resultaten"} voor "${esc(term)}"${totaalTreffers > 60 ? ", de 60 beste staan hieronder" : ""}` : "Zoek in al het nieuws, de successen, het raadswerk en de petities sinds 2012.") + `
     <section class="wit"><div class="wrap">
       <form id="zoek2" role="search" style="display:flex;gap:10px;max-width:720px;margin-bottom:28px"><label class="verborgen" for="zoek2-veld">Zoekterm</label><input type="search" id="zoek2-veld" value="${esc(term)}" placeholder="Bijvoorbeeld Moerwijk, parkeren of Kwartellaan"><button class="knop groen klein" type="submit">Zoeken</button></form>
       ${term && !treffers.length ? `<p class="leeg">Niets gevonden. Probeer een ander woord, of zoek op een straat of wijk.</p>` : ""}

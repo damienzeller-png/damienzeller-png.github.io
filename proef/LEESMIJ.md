@@ -22,13 +22,18 @@ Er zijn drie delen. Geen framework, geen bouwstap, geen database-server.
    - `beheer.html`, `beheer.js`: de beheeromgeving.
    - `beeld/`: logo's en vaste foto's. `data/`: de inhoud als JSON.
    - Kleuren, letters en maten staan als variabelen bovenaan `app.css` (`:root`). De huisstijl volgt hartvoordenhaag.nl: Raleway, het groen en geel van het logo.
-2. **De inhoud van hartvoordenhaag.nl** komt elke ochtend binnen.
-   - `tools/importeer.py` haalt via de openbare WordPress-API nieuws, successen, moties, amendementen, schriftelijke vragen, spreekteksten, petities, de fractie en het bestuur op. Het schrijft `data/*.json` (de nieuwste 200 per soort).
-   - Dat gebeurt door de workflow `.github/workflows/proef-inhoud.yml`, elke dag om 4:37 UTC. Handmatig starten kan via het tabblad Actions op GitHub.
-   - `data/agenda.json`, `kaart.json`, `wethouders.json` en `bewijs.json` worden niet geïmporteerd. Die past u met de hand aan (of de agenda via de beheeromgeving).
+2. **Het hele archief van hartvoordenhaag.nl** staat in `data/`, sinds 2012: ruim 7.800 stukken.
+   - `tools/importeer.py` haalt via de openbare WordPress-API nieuws, successen, moties, amendementen, schriftelijke vragen, spreekteksten, petities, de fractie en het bestuur op.
+   - Elk stuk heeft een eigen bestand `data/stuk/<id>.json` met de volledige tekst. De site laadt dat pas als iemand het stuk opent.
+   - Per soort is er een lichte lijst zonder tekst: `data/<soort>.json` met het recente werk (ruim een jaar, minstens 100 stukken) en `data/lijst/<soort>-<jaar>.json` per jaar. Lijsten op de site laden ouder werk jaar voor jaar bij, met de knop Meer laden.
+   - `data/zoekindex.json` (titel en begin van de tekst van alles) is voor de zoekpagina en de beheeromgeving. `data/archief.json` telt per soort en per jaar, en onthoudt wanneer de import liep.
+   - `data/archief/paginas.json` en `kandidaten.json` bewaren de pagina's en kandidaten van de oude site voor de verhuizing. De proef toont ze niet.
+   - Bij een dertigtal oude stukken gaf WordPress als datum 1 januari 1970. De import haalt de datum dan uit de titel of de tekst; lukt dat niet, dan schat hij hem (veld `datum_geschat`) en toont de site "datum onbekend".
+   - De workflow `.github/workflows/proef-inhoud.yml` draait elke dag om 4:37 UTC en haalt alleen op wat nieuw of gewijzigd is (minder dan een minuut). Op zondag haalt hij alles opnieuw op (ongeveer tien minuten), zodat ook verwijderde stukken verdwijnen. Handmatig kan via het tabblad Actions, met het vinkje "Alles opnieuw ophalen".
+   - `data/agenda.json`, `kaart.json`, `wethouders.json` worden niet geïmporteerd. Die past u met de hand aan (of de agenda via de beheeromgeving).
 3. **De achterkant** is een Cloudflare Worker met de naam `hvdh-proef`, op https://hvdh-proef.damienzeller.workers.dev, met opslag in Cloudflare KV (`hvdh-proef-inhoud`). Hij bewaart wat in de beheeromgeving gebeurt en ontvangt de formulieren.
 
-**Hoe de site alles samenvoegt.** `app.js` laadt een JSON-bestand uit `data/` en legt daar de aanpassingen uit de beheeromgeving overheen (functies `laad`, `aanpassingen` en `pasAan`). Eigen berichten komen er via `eigen()` bij. De import overschrijft aanpassingen dus nooit: die liggen apart bij de achterkant, per bericht-id (`n114543` is nieuwsbericht 114543 op hartvoordenhaag.nl).
+**Hoe de site alles samenvoegt.** `app.js` laadt een JSON-bestand uit `data/` en legt daar de aanpassingen uit de beheeromgeving overheen (functies `laad`, `stuk`, `aanpassingen` en `pasAan`). Lijsten met ouder werk lopen via `stroom()` en `meerLadenStroom()`. Eigen berichten komen er via `eigen()` bij. De import overschrijft aanpassingen dus nooit: die liggen apart bij de achterkant, per bericht-id (`n114543` is nieuwsbericht 114543 op hartvoordenhaag.nl).
 
 ### Adressen van de achterkant
 
