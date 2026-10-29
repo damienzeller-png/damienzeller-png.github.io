@@ -51,28 +51,77 @@ const isTouch = matchMedia("(hover: none)").matches;
 
 // ---------- gegevens ----------
 const cache = {};
+// Aanpassingen uit de beheeromgeving op overgenomen berichten: andere titel, stadsdeel, tekst, foto, of verborgen.
+// De dagelijkse import van hartvoordenhaag.nl overschrijft ze niet, want ze liggen apart bij de achterkant.
+const MET_AANPASSING = new Set(["nieuws", "successen", "moties", "amendementen", "raadsvragen", "spreekteksten", "petities", "agenda", "zoekindex"]);
+let aanpBelofte = null;
+function aanpassingen() {
+  if (!aanpBelofte) {
+    const ctrl = new AbortController();
+    setTimeout(() => ctrl.abort(), 3500);
+    aanpBelofte = fetch(API + "/aanpassingen", { signal: ctrl.signal }).then(r => r.ok ? r.json() : {}).then(d => d.aanpassingen || {}).catch(() => ({}));
+  }
+  return aanpBelofte;
+}
+function pasAan(naam, lijst, a) {
+  if (!Array.isArray(lijst) || !a || !Object.keys(a).length) return lijst;
+  const uit = [];
+  for (const x of lijst) {
+    const p = a[x.id];
+    if (!p) { uit.push(x); continue; }
+    if (p.verborgen) continue;
+    const y = { ...x };
+    if (naam === "zoekindex") {
+      if (p.titel != null) y.t = p.titel;
+      if (p.samenvatting != null) y.x = p.samenvatting;
+      if (p.stadsdelen) y.sd = p.stadsdelen;
+      if (p.onderwerpen) y.o = p.onderwerpen;
+      if (p.datum) y.d = p.datum;
+      if (p.indiener != null) y.i = p.indiener;
+      if (p.status != null) y.st = p.status;
+    } else {
+      if (p.titel != null && p.titel !== x.titel) y.titelOrigineel = x.titel;
+      for (const k of ["titel", "samenvatting", "html", "onderwerpen", "datum", "indiener", "status", "tijd", "plek"]) if (p[k] != null) y[k] = p[k];
+      if (p.stadsdelen) { if (naam === "agenda") y.stadsdeel = p.stadsdelen[0] || ""; else y.stadsdelen = p.stadsdelen; }
+      if (p.foto) y.beeld = `${API}/foto/${p.foto}`; else if (p.beeldWeg) y.beeld = "";
+      if (p.vast) y.vast = true;
+    }
+    uit.push(y);
+  }
+  return uit;
+}
 function laad(naam) {
-  if (!cache[naam]) cache[naam] = fetch(`data/${naam}.json?v=4`).then(r => r.ok ? r.json() : []).catch(() => []);
+  if (!cache[naam]) {
+    const bestand = fetch(`data/${naam}.json?v=4`).then(r => r.ok ? r.json() : []).catch(() => []);
+    cache[naam] = MET_AANPASSING.has(naam) ? Promise.all([bestand, aanpassingen()]).then(([d, a]) => pasAan(naam, d, a)) : bestand;
+  }
   return cache[naam];
 }
+const platAlinea = t => String(t || "").split(/\n{2,}/).filter(p => p.trim()).map(p => `<p>${esc(p).replace(/\n/g, "<br>")}</p>`).join("");
+const zonderTags = h => String(h || "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/\s+/g, " ").trim();
 let apiItems = null;
 function eigen() {
   if (!apiItems) {
     const ctrl = new AbortController();
     setTimeout(() => ctrl.abort(), 4000);
-    apiItems = fetch(API + "/inhoud", { signal: ctrl.signal }).then(r => r.json()).then(d => (d.items || []).map(i => ({
-      id: "w" + i.id, soort: i.soort, titel: i.titel, datum: i.datum, samenvatting: i.samenvatting || i.tekst.slice(0, 240),
-      html: i.tekst.split(/\n{2,}/).map(p => `<p>${esc(p).replace(/\n/g, "<br>")}</p>`).join(""),
-      beeld: i.foto ? `${API}/foto/${i.foto}` : "", stadsdelen: i.stadsdeel ? [i.stadsdeel] : [], link: i.link,
-      tijd: i.tijd, plek: i.plek, eigen: true, onderwerpen: [],
-    }))).catch(() => []);
+    apiItems = fetch(API + "/inhoud", { signal: ctrl.signal }).then(r => r.json()).then(d => (d.items || []).map(i => {
+      const html = i.html || platAlinea(i.tekst);
+      return {
+        id: "w" + i.id, soort: i.soort, titel: i.titel, datum: i.datum, samenvatting: i.samenvatting || zonderTags(html).slice(0, 240),
+        html, beeld: i.foto ? `${API}/foto/${i.foto}` : "", link: i.link,
+        stadsdelen: i.stadsdelen && i.stadsdelen.length ? i.stadsdelen : i.stadsdeel ? [i.stadsdeel] : [],
+        tijd: i.tijd, plek: i.plek, eigen: true, onderwerpen: i.onderwerpen || [], vast: !!i.vast,
+      };
+    })).catch(() => []);
   }
   return apiItems;
 }
+// berichten die de redactie bovenaan zette eerst, daarna op datum
+const opVolgorde = (a, b) => (b.vast ? 1 : 0) - (a.vast ? 1 : 0) || b.datum.localeCompare(a.datum);
 async function soort(s) {
   const bron = SOORT[s] && SOORT[s].bron;
-  const [vast, nieuw] = await Promise.all([bron ? laad(bron) : [], eigen()]);
-  return [...nieuw.filter(i => i.soort === s), ...vast].sort((a, b) => b.datum.localeCompare(a.datum));
+  const [overgenomen, nieuw] = await Promise.all([bron ? laad(bron) : [], eigen()]);
+  return [...nieuw.filter(i => i.soort === s), ...overgenomen].sort(opVolgorde);
 }
 async function agenda() {
   const [vast, nieuw] = await Promise.all([laad("agenda"), eigen()]);
@@ -319,7 +368,7 @@ function tellers() {
   }
   return tellerBelofte;
 }
-const handtekeningen = (p, tel) => (p.handtekeningen || 0) + (tel[p.titel] || 0);
+const handtekeningen = (p, tel) => (p.handtekeningen || 0) + (tel[p.titel] || 0) + (p.titelOrigineel ? tel[p.titelOrigineel] || 0 : 0);
 const doelVan = n => [250, 500, 1000, 2500, 5000, 10000, 25000, 50000].find(d => d > n) || Math.ceil((n + 1) / 50000) * 50000;
 function balk(n) {
   const doel = doelVan(n), pct = Math.max(2, Math.min(100, Math.round(n / doel * 100)));
@@ -523,7 +572,7 @@ async function detail(s, id, terugNaam, terugPad) {
     bijschrift({ ...i, handtekeningen: isPetitie ? 0 : i.handtekeningen }, { soort: !["nieuws", "succes", "petitie"].includes(s) }).replace("</p>", `<span>${lees} min lezen</span></p>`), i.stadsdelen && i.stadsdelen.length === 1 ? i.stadsdelen[0] : "") + `
   <section class="wit"><div class="wrap"><article class="artikel${isPetitie && open && i.beeld ? " petitie-open" : ""}">
     ${i.beeld ? `<span class="poster-lijst artikel-beeld"><img src="${esc(i.beeld)}" alt=""></span>` : ""}
-    ${isPetitie ? `<div class="teken-teller" id="teller-blok" data-n="${handtekeningen(i, tel)}">${balk(handtekeningen(i, tel))}<p class="leeg">Inclusief de handtekeningen op hartvoordenhaag.nl.</p></div>` : ""}
+    ${isPetitie ? `<div class="teken-teller" id="teller-blok" data-n="${handtekeningen(i, tel)}">${balk(handtekeningen(i, tel))}<p class="leeg">Inclusief de handtekeningen op hartvoordenhaag.nl.</p>${open ? `<button class="knop groen teken-snel" type="button" id="naar-teken">Teken deze petitie</button>` : ""}</div>` : ""}
     ${dictum}
     ${isPetitie && !open ? `<p class="melding" style="margin-top:22px">Deze petitie is gesloten. Bekijk <a href="#petities">de petities die nu lopen</a>.</p>` : ""}
     ${open ? `<form class="formulier" id="teken" style="margin-top:22px" novalidate><h2 style="font-size:2rem">Teken deze petitie</h2>
@@ -548,6 +597,11 @@ detail.na = () => {
     catch { d.textContent = "Kopieer de link uit de adresbalk"; }
   });
   const t = $("#teken");
+  const snel = $("#naar-teken");
+  if (snel && t) snel.addEventListener("click", () => {
+    t.scrollIntoView({ block: "start", behavior: stil() ? "auto" : "smooth" });
+    const eerste = t.querySelector("input:not([type=hidden])"); if (eerste) eerste.focus({ preventScroll: true });
+  });
   if (t) koppelFormulier(t, {
     soort: "petitie",
     eisen: () => ({ naam: verplicht("Vul uw naam in."), email: v => !v ? "Vul uw e-mailadres in." : EMAIL.test(v) ? "" : "Dit e-mailadres klopt niet.", akkoord: v => v ? "" : "Vink dit aan om te kunnen tekenen." }),
@@ -708,8 +762,10 @@ pagina.fractie.na = async ([wie]) => {
 pagina.wethouders = async () => {
   const w = await laad("wethouders");
   return paginaKop("Wethouders", "Vijf wethouders van Hart voor Den Haag zitten in het college van burgemeester en wethouders.") + `
-    <section class="wit"><div class="wrap">${w.map(x => `<article class="poster"><img src="${esc(x.beeld)}" alt="Poster van ${esc(x.naam)}" loading="lazy">
-      <div><h2>${esc(x.naam)}</h2><p class="inleiding">${esc(x.rol)}</p><ul>${x.portefeuilles.map(p => `<li>${esc(p)}</li>`).join("")}</ul></div></article>`).join("")}</div></section>`;
+    <section class="wit"><div class="wrap"><ul class="wethouders">${w.map(x => `<li class="wethouder">
+      <span class="weth-foto"><img src="${esc(x.beeld)}" alt="Portret van ${esc(x.naam)}" loading="lazy" decoding="async"></span>
+      <div><h2>${esc(x.naam)}</h2><p class="rol">${esc(x.rol.replace(/\.$/, ""))}</p>
+      <ul class="pf-lijst">${x.portefeuilles.map(p => `<li>${esc(p)}</li>`).join("")}</ul></div></li>`).join("")}</ul></div></section>`;
 };
 
 pagina.bestuur = async () => {

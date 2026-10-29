@@ -798,3 +798,24 @@ li:hover .lees-meer,.lead:hover .lees-meer{text-decoration:underline}
 .pagina-kop.met-plek h1{padding-right:0}
 .pagina-kop.met-plek .kop-lijnen{right:max(0px,calc((100vw - 1240px)/2));top:-8%;height:116%}
 @media (max-width:640px){.pagina-kop.met-plek .kop-lijnen{right:-28%;opacity:.28}}
+
+/* ---------- ronde 10 ---------- */
+/* wethouders als losse foto: het gezicht uit de campagneposter, de tekst ernaast */
+.wethouders{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,440px),1fr));gap:34px 48px}
+.wethouder{display:grid;grid-template-columns:150px minmax(0,1fr);gap:22px;align-items:start;padding-top:18px;border-top:1px solid var(--lijn)}
+.weth-foto{position:relative;display:block;aspect-ratio:1;overflow:hidden;border-radius:50%;background:var(--munt)}
+.weth-foto img{position:absolute;max-width:none;width:182%;height:auto;left:-73%;top:-58%}
+.wethouder h2{font-size:clamp(1.45rem,2.4vw,1.75rem);line-height:1.1;margin:2px 0 6px}
+.wethouder .rol{color:var(--zacht);margin:0 0 8px;line-height:1.4}
+.wethouder .bijschrift{margin:0 0 6px}
+.pf-lijst{margin:6px 0 0;padding-left:1.1em;line-height:1.5}
+@media (max-width:420px){.wethouder{grid-template-columns:96px minmax(0,1fr);gap:14px}}
+/* petitie op de telefoon: teller, meteen de knop en het formulier, daarna pas de foto */
+.teken-snel{display:none;margin-top:12px}
+@media (max-width:1000px){
+  .artikel.petitie-open{display:flex;flex-direction:column}
+  .artikel.petitie-open>.teken-teller{order:-3}
+  .artikel.petitie-open>#teken{order:-2;margin-top:18px!important;margin-bottom:26px}
+  .artikel.petitie-open>.artikel-beeld{order:-1}
+  .teken-snel{display:inline-flex;justify-self:start}
+}

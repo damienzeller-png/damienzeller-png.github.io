@@ -6,34 +6,79 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Redactie | Hart voor Den Haag (proef)</title>
 <meta name="theme-color" content="#137345">
+<meta name="color-scheme" content="light only">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700;800;900&display=swap">
-<link rel="stylesheet" href="app.css?v=12">
+<link rel="stylesheet" href="app.css?v=13">
 <style>
-.beheer{padding-block:40px 80px}
-.beheer-kop{font-size:clamp(2.4rem,6vw,3.6rem);font-weight:900;font-stretch:64%;line-height:.95}
+/* Beheeromgeving. De huisstijl komt uit app.css; hier alleen wat de redactie extra nodig heeft. */
+.beheer{padding-block:32px 80px}
+.beheer-kop{font-size:clamp(2.2rem,5.5vw,3.4rem);font-weight:900;line-height:.98;margin:4px 0 10px}
+.beheer-kop:focus{outline:none}
+.beheer .inleiding{max-width:46em;color:var(--zacht)}
 .inlog{max-width:480px;margin:0 auto}
 .inlog .formulier+.formulier{margin-top:22px}
-.tabbalk{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:24px}
-.tabbalk .wie{margin-left:auto;color:var(--zacht);font-size:.92rem;display:flex;gap:10px;align-items:center}
-.rij{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:16px;align-items:center;padding:14px 0;border-bottom:1.5px solid var(--lijn)}
-.rij img,.rij .geen{width:72px;height:54px;border-radius:10px;object-fit:cover;background:var(--munt);display:grid;place-items:center;font-size:.75rem;color:var(--zacht)}
-.rij h3{font-size:1.2rem}
-.rij .acties{display:flex;gap:8px}
+.nood{margin-top:22px}.nood summary{cursor:pointer;color:var(--zacht);min-height:44px;display:flex;align-items:center}
+.nood .formulier{margin-top:8px}
+.tabbalk{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:22px;padding-bottom:16px;border-bottom:1px solid var(--lijn)}
+.tabbalk .wie{margin-left:auto;color:var(--zacht);font-size:.92rem;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.kop-rij{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:18px}
+.kop-rij .knoppen{display:flex;flex-wrap:wrap;gap:10px}
+.knoppen{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.link-knop{background:none;border:0;padding:0;font:inherit;color:var(--link);text-decoration:underline;cursor:pointer;min-height:44px}
+.sub{font-size:1.6rem;margin:34px 0 10px}
+.zacht{color:var(--zacht)}
+.melding.waarschuwing{background:#FFF4CC;margin:16px 0;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+/* overzicht */
+.tegels{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:12px;margin-top:22px}
+.tegel{display:grid;gap:4px;text-align:left;padding:18px;border-radius:18px;border:1.5px solid var(--lijn);background:var(--vlak);color:var(--ink);font:inherit;cursor:pointer;align-content:start;min-height:120px}
+.tegel:hover{border-color:var(--veld);background:var(--munt)}
+.tegel b{font:900 2.2rem/1 var(--kop);color:var(--link)}
+.tegel span{font-weight:800;font-size:1.08rem}
+.tegel small{color:var(--zacht)}
+.logboek{list-style:none;margin:0;padding:0}
+.logboek li{display:grid;grid-template-columns:150px minmax(0,1fr);gap:12px;padding:10px 0;border-bottom:1px solid var(--lijn);font-size:.95rem}
+.logboek time{color:var(--zacht);font-variant-numeric:tabular-nums}
+@media (max-width:640px){.logboek li{grid-template-columns:1fr;gap:2px}}
+/* berichtenlijst */
+.filterbalk{display:grid;grid-template-columns:minmax(0,2fr) repeat(3,minmax(0,1fr));gap:12px;margin:6px 0 12px}
+@media (max-width:860px){.filterbalk{grid-template-columns:1fr 1fr}.filterbalk .veld:first-child{grid-column:1/-1}}
+.b-lijst{list-style:none;margin:0;padding:0}
+.rij{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;padding:14px 0;border-bottom:1.5px solid var(--lijn)}
+.rij h3{font-size:1.15rem;line-height:1.25;margin-bottom:4px}
+.rij .acties{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:flex-end}
+.b-rij .bijschrift{font-size:.88rem}
 .concept h3{color:var(--zacht)}.concept{border-left:3px dashed var(--veldrand);padding-left:12px}
-.kop-rij{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:24px}
-.foto-voorbeeld{max-width:260px;border-radius:14px;display:block}
+.concept-label{color:#8A5A00!important}
+.foto-voorbeeld{max-width:280px;border-radius:12px;display:block;margin-bottom:8px}
+.verborgen-input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
 .postvak .rij{grid-template-columns:minmax(0,1fr) auto}
-.postvak dl{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:8px 0 0;font-size:.92rem}
-.postvak dt{color:var(--zacht)}.postvak dd{margin:0;overflow-wrap:anywhere}
-@media (max-width:640px){.rij{grid-template-columns:56px minmax(0,1fr)}.rij .acties{grid-column:1/-1}.rij img,.rij .geen{width:56px;height:44px}}
+.postvak dl,.rollen{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:8px 0 0;font-size:.94rem}
+.postvak dt,.rollen dt{color:var(--zacht);font-weight:700}.postvak dd,.rollen dd{margin:0;overflow-wrap:anywhere}
+.rollen{max-width:46em;margin-top:14px}
+@media (max-width:640px){.rij{grid-template-columns:minmax(0,1fr)}.rij .acties{justify-content:flex-start}}
+/* bewerken */
+.label{font-weight:700}
+.vinkjes{display:flex;flex-wrap:wrap;gap:8px}
+.vink-klein{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:6px 14px;border:1.5px solid var(--veldrand);border-radius:999px;cursor:pointer;font-weight:600}
+.vink-klein input{width:18px;height:18px;margin:0;accent-color:var(--veld)}
+.vink-klein:has(input:checked){background:var(--munt);border-color:var(--veld)}
+.vink-klein:has(input:focus-visible){outline:3px solid var(--zon);outline-offset:2px}
+.re{border:1.5px solid var(--veldrand);border-radius:14px;background:var(--bg);overflow:hidden}
+.re-balk{display:flex;flex-wrap:wrap;gap:6px;padding:8px;border-bottom:1px solid var(--lijn);background:var(--band);position:sticky;top:0;z-index:2}
+.re-balk .knopje{min-height:38px;padding:6px 12px;font-size:.88rem;background:var(--bg)}
+.re-tekst{min-height:280px;max-height:70vh;overflow:auto;padding:16px 18px;outline:none;max-width:none}
+.re-tekst:focus{box-shadow:inset 0 0 0 3px var(--zon)}
+.re-tekst img{max-width:100%;height:auto;border-radius:8px}
+.hulp{max-width:46em}.hulp h2{font-size:1.5rem;margin-top:26px}
+@media (max-width:640px){.tabbalk{gap:6px}.tabbalk .knopje{min-height:40px;padding:6px 12px;font-size:.9rem}.tabbalk .wie{margin-left:0;width:100%;justify-content:space-between}.datumregel p{font-size:.85rem}}
 </style>
 </head>
 <body>
-<header class="balk"><div class="wrap"><a class="merk" href="./" aria-label="Naar de proefsite"><img class="logo-licht" src="beeld/logo.svg" alt="Hart voor Den Haag" width="155" height="36"><img class="logo-donker" src="beeld/logo-wit.svg" alt="Hart voor Den Haag" width="155" height="36"></a><a class="knop lijn klein" href="./">Naar de site</a></div></header>
-<div class="datumregel"><div class="wrap"><p><b>Redactie</b> · Beheeromgeving van de proefsite. Wat u publiceert, staat direct op de site.</p></div></div>
+<header class="balk"><div class="wrap"><a class="merk" href="./" aria-label="Naar de proefsite"><img class="logo-licht" src="beeld/logo.svg" alt="Hart voor Den Haag" width="155" height="36"><img class="logo-donker" src="beeld/logo-wit.svg" alt="Hart voor Den Haag" width="155" height="36"></a><a class="knop lijn klein" href="./" target="_blank" rel="noopener">Naar de site</a></div></header>
+<div class="datumregel"><div class="wrap"><p><b>Redactie</b> · Beheeromgeving van de proefsite. Wat u publiceert, staat binnen een minuut op de site.</p></div></div>
 <main class="beheer"><div class="wrap" id="app"></div></main>
-<script src="beheer.js?v=4"></script>
+<script src="beheer.js?v=5"></script>
 </body>
 </html>
