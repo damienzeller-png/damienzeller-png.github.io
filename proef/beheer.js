@@ -47,9 +47,9 @@ function inloggen(boodschap) {
   $("#f-ww").addEventListener("submit", async e => {
     e.preventDefault();
     const k = e.target.querySelector("button[type=submit]"); k.disabled = true; k.textContent = "Bezig…";
-    setTimeout(() => { k.disabled = false; k.textContent = "Inloggen"; }, 2500);
     try { const d = await vraag("/login", { method: "POST", body: { naam: $("#naam").value, wachtwoord: $("#ww").value } }); bewaar(d); start(); }
     catch (err) { melding($("#m-ww"), err.message, true); }
+    finally { k.disabled = false; k.textContent = "Inloggen"; }
   });
   $("#stuur").addEventListener("click", async () => {
     try { await vraag("/login/code", { method: "POST" }); $("#code-veld").hidden = false; $("#code-knop").hidden = false; $("#code").focus(); melding($("#m-code"), "De code staat in Telegram. Hij is tien minuten geldig."); }
@@ -96,7 +96,7 @@ async function berichten() {
     <button class="knop geel" type="button" id="nieuw">Nieuw bericht</button></div>
     ${items.length ? items.map(i => `<div class="rij${i.gepubliceerd ? "" : " concept"}">${i.foto ? `<img src="${API}/foto/${i.foto}" alt="">` : `<span class="geen">geen foto</span>`}
       <div><h3>${esc(i.titel)}</h3>
-      <p class="bijschrift">${i.stadsdeel ? `<span class="plek">${esc(i.stadsdeel)}</span>` : ""}<span>${esc(SOORTEN[i.soort] || i.soort)}</span>${i.gepubliceerd ? "" : '<span class="status">Concept</span>'}<time>${esc(i.datum)}</time><span>door ${esc(i.door)}</span></p></div>
+      <p class="bijschrift">${i.stadsdeel ? `<span class="plek">${esc(i.stadsdeel)}</span>` : ""}<span>${esc(SOORTEN[i.soort] || i.soort)}</span>${i.gepubliceerd ? "" : '<span class="status">Concept</span>'}<time datetime="${esc(i.datum)}">${esc(new Date(i.datum + "T12:00").toLocaleDateString("nl-NL", { day: "numeric", month: "long", year: "numeric" }))}</time><span>door ${esc(i.door)}</span></p></div>
       <div class="acties"><button class="knop lijn klein" type="button" data-bewerk="${i.id}">Bewerken</button><button class="knop lijn klein" type="button" data-weg="${i.id}">Verwijderen</button></div></div>`).join("") : `<p class="leeg">Nog niets geplaatst. Begin met een nieuw bericht.</p>`}`);
   koppelKader();
   $("#nieuw").addEventListener("click", () => editor({}));
