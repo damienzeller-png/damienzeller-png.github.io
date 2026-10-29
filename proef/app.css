@@ -819,3 +819,8 @@ li:hover .lees-meer,.lead:hover .lees-meer{text-decoration:underline}
   .artikel.petitie-open>.artikel-beeld{order:-1}
   .teken-snel{display:inline-flex;justify-self:start}
 }
+/* tikdoelen van minstens 44 px, zonder dat het beeld verandert */
+.zweef .sluit{position:relative}
+.zweef .sluit::after{content:"";position:absolute;inset:-5px;border-radius:50%}
+@media (max-width:760px){.dr-rechts a.wa{min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center}}
+.bewijs .laatste a{display:inline-block;padding-block:12px;margin-block:-12px}
