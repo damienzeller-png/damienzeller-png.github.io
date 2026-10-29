@@ -188,7 +188,7 @@ async function postvak() {
   const veld = (k, v) => k === "email" ? `<a href="mailto:${esc(v)}">${esc(v)}</a>` : k === "telefoon" ? `<a href="tel:${esc(v.replace(/[^\d+]/g, ""))}">${esc(v)}</a>` : esc(v);
   app.innerHTML = kader(`${H1("Postvak")}
     <p class="inleiding">Berichten via de formulieren op de site. Afgehandelde berichten gaan naar het archief en zijn terug te zetten.</p>
-    ${ongedaan && ongedaan.tot > Date.now() ? `<p class="melding" role="status" style="margin-top:14px">Bericht van ${esc(ongedaan.naam)} staat in het archief. <button class="knop lijn klein" type="button" id="ongedaan">Ongedaan maken</button></p>` : ""}
+    ${ongedaan && ongedaan.tot > Date.now() ? `<p class="melding toast" role="status">Bericht van ${esc(ongedaan.naam)} staat in het archief. <button class="knop lijn klein" type="button" id="ongedaan">Ongedaan maken</button></p>` : ""}
     <div class="filters" style="margin-top:18px">
       <button class="knopje" type="button" data-filter="" aria-pressed="${!filter}">Alles open (${open.length})</button>
       ${soorten.map(k => `<button class="knopje" type="button" data-filter="${k}" aria-pressed="${filter === k}">${FORM_NAAM[k]} (${tel(k)})</button>`).join("")}
@@ -207,14 +207,14 @@ async function postvak() {
       ongedaan = k.dataset.status === "afgehandeld" ? { id: k.dataset.id, naam: (b && (b.naam || b.email)) || "onbekend", tot: Date.now() + 10000 } : null;
       if (ongedaan) setTimeout(() => { const m = $("#ongedaan"); if (m && ongedaan && ongedaan.tot <= Date.now()) { m.closest(".melding").remove(); ongedaan = null; } }, 10100);
       await herlaad();
-      const og2 = $("#ongedaan"); if (og2) og2.focus();
+      const og2 = $("#ongedaan"); if (og2) og2.focus({ preventScroll: true });
     }
     catch (err) { k.disabled = false; k.textContent = "Lukte niet, probeer opnieuw"; }
   }));
   const og = $("#ongedaan");
   if (og) og.addEventListener("click", async () => {
     og.disabled = true;
-    try { await vraag(`/inbox/${ongedaan.id}/status`, { method: "POST", body: { status: "nieuw" } }); ongedaan = null; await herlaad(); }
+    try { const id = ongedaan.id; await vraag(`/inbox/${id}/status`, { method: "POST", body: { status: "nieuw" } }); ongedaan = null; await herlaad(); const terug = $(`[data-status="afgehandeld"][data-id="${id}"]`); if (terug) terug.focus({ preventScroll: true }); }
     catch (err) { og.disabled = false; og.textContent = "Lukte niet, probeer opnieuw"; }
   });
   $$("[data-weg]").forEach(k => k.addEventListener("click", async () => {

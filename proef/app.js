@@ -274,7 +274,7 @@ pagina.home = async () => {
   </div></section>
 
   <section class="donker" aria-labelledby="h-succes"><div class="wrap">
-    <div class="succes-kop"><span class="groot-getal" data-tel="${ditJaar}" data-van="${Math.max(0, ditJaar - 1)}">${ditJaar}</span><div><h2 id="h-succes">successen in ${new Date().getFullYear()}</h2><p>Van een besluit van de raad tot een opgeknapte speeltuin: dit leverde ombudspolitiek dit jaar op.</p></div></div>
+    <div class="succes-kop"><span class="groot-getal" data-tel="${ditJaar}" data-van="${Math.max(0, ditJaar - 1)}" aria-label="${ditJaar} successen"><span class="getal">${Math.max(0, ditJaar - 1)}</span></span><div><h2 id="h-succes">successen in ${new Date().getFullYear()}</h2><p>Van een besluit van de raad tot een opgeknapte speeltuin: dit leverde ombudspolitiek dit jaar op.</p></div></div>
     <ul class="drie">${succes.slice(0, 3).map(x => `<li>${x.beeld ? `<span class="poster-lijst"><img src="${esc(x.beeld)}" alt="" loading="lazy" decoding="async"></span>` : ""}<h3><a href="${href(x)}">${esc(x.titel)}</a></h3>${bijschrift(x)}</li>`).join("")}</ul>
     <p style="margin-top:22px"><a class="meer" href="#successen">Alle successen ${PIJL}</a></p>
   </div></section>
@@ -282,6 +282,13 @@ pagina.home = async () => {
   <section aria-labelledby="h-beloofd"><div class="wrap">
     <div class="sectie-kop"><h2 id="h-beloofd">Beloofd en gedaan</h2><a class="meer" href="#standpunten">Alle standpunten ${PIJL}</a><p class="inleiding">Wat in ons programma staat, en wat we er het afgelopen jaar in de raad voor deden.</p></div>
     ${bewijsLijst(bewijs, PUNTEN.slice(0, 4))}
+  </div></section>
+
+  <section class="band podcast" aria-labelledby="h-podcast"><div class="wrap podcast-blok">
+    <a class="podcast-hoes" href="https://open.spotify.com/show/0GI8mwNvxU1g3YUPhiJCeV" target="_blank" rel="noopener"><img src="beeld/den-haag-inside.webp" alt="Hoes van de podcast Den Haag Inside" width="640" height="640" loading="lazy" decoding="async"></a>
+    <div><p class="bovenregel">Podcast</p><h2 id="h-podcast">Den Haag Inside</h2>
+      <p class="inleiding">Elke twee weken gaat Richard de Mos achter de schermen van Den Haag, met openhartige gesprekken en scherpe vragen aan bekende Hagenaars, raadsleden en politici.</p>
+      <p class="knoppen"><a class="knop groen" href="https://open.spotify.com/show/0GI8mwNvxU1g3YUPhiJCeV" target="_blank" rel="noopener">Luister op Spotify</a><a class="knop lijn" href="https://www.youtube.com/@hartvoordenhaag" target="_blank" rel="noopener">Kijk op YouTube</a></p></div>
   </div></section>
   ${lidRegel()}`;
 };
@@ -646,7 +653,7 @@ pagina.fractie = async ([wie]) => {
     const voornaam = f.naam.split(" ")[0], achternaam = f.naam.split(" ").slice(-1)[0];
     const zelf = slug(f.naam);
     const werk = idx.filter(i => (i.i && slug(i.i).includes(zelf)) || (!i.i && PLAT(i.t + " " + i.x).includes(PLAT(achternaam)) && PLAT(i.t + " " + i.x).includes(PLAT(voornaam)))).sort((a, b) => b.d.localeCompare(a.d)).slice(0, 10);
-    return paginaKop(esc(f.naam), esc(f.functie || "Raadslid") + (f.stadsdelen.length ? ` voor ${esc(f.stadsdelen.join(" en "))}` : ""), `<a href="#">Home</a> / <a href="#fractie">Fractie</a>`) + `
+    return paginaKop(esc(f.naam), esc(f.functie || "Raadslid") + (f.stadsdelen.length ? ` voor ${esc(f.stadsdelen.join(" en "))}` : ""), `<a href="#">Home</a> / <a href="#fractie">Onze mensen</a>`) + `
       <section class="wit"><div class="wrap formulier-raster links">
         <div class="gezichten" style="grid-template-columns:minmax(0,320px)">${portret(f, { link: false })}</div>
         <div>
@@ -681,11 +688,11 @@ pagina.fractie.na = async ([wie]) => {
   const groepen = [...STADSDELEN.map(sd => [sd, fractie.filter(f => f.stadsdelen.includes(sd))]), ["Hele stad", fractie.filter(f => !f.stadsdelen.length)]];
   const filter = () => {
     const q = $("#wie").value.trim().toLowerCase(), sdKeuze = $("#wie-sd").value;
-    const past = f => !q || (f.portefeuilles.join(" ") + " " + f.naam).toLowerCase().includes(q);
+    const past = f => (!q || (f.portefeuilles.join(" ") + " " + f.naam).toLowerCase().includes(q)) && (!sdKeuze || (sdKeuze === "Hele stad" ? !f.stadsdelen.length : f.stadsdelen.includes(sdKeuze)));
     if (q) {
       const treffers = fractie.filter(past);
-      $("#groepen").innerHTML = treffers.length ? `<ul class="leden">${treffers.map(rij).join("")}</ul>` : `<p class="leeg">Niemand gevonden. Probeer een ander woord.</p>`;
-      $("#teller").textContent = `${treffers.length} van ${fractie.length} raadsleden`;
+      $("#groepen").innerHTML = treffers.length ? `<ul class="leden">${treffers.map(rij).join("")}</ul>` : `<p class="leeg">Niemand gevonden${sdKeuze ? ` in ${esc(sdKeuze)}` : ""}. Probeer een ander woord${sdKeuze ? " of kies alle stadsdelen" : ""}.</p>`;
+      $("#teller").textContent = `${treffers.length} ${treffers.length === 1 ? "raadslid" : "raadsleden"}${sdKeuze ? ` in ${sdKeuze}` : ""}`;
       return;
     }
     $("#teller").textContent = "";
@@ -1042,7 +1049,7 @@ pagina.toegankelijkheid = async () => paginaKop("Toegankelijkheid", "Deze site m
   </div></div></section>`;
 
 // ---------- router ----------
-const TITELS = { nieuws: "Nieuws", successen: "Successen", raadswerk: "Raadswerk", petities: "Petities", standpunten: "Standpunten", fractie: "Fractie", wethouders: "Wethouders", bestuur: "Bestuur", agenda: "Agenda", vacatures: "Vacatures", "doe-mee": "Doe mee", contact: "Contact", lid: "Word lid", doneren: "Doneren", zoeken: "Zoeken", bedankt: "Dank u wel", stadsdelen: "Uw stadsdeel", privacy: "Privacy", toegankelijkheid: "Toegankelijkheid" };
+const TITELS = { nieuws: "Nieuws", successen: "Successen", raadswerk: "Raadswerk", petities: "Petities", standpunten: "Standpunten", fractie: "Onze mensen", wethouders: "Wethouders", bestuur: "Bestuur", agenda: "Agenda", vacatures: "Vacatures", "doe-mee": "Doe mee", contact: "Contact", lid: "Word lid", doneren: "Doneren", zoeken: "Zoeken", bedankt: "Dank u wel", stadsdelen: "Uw stadsdeel", privacy: "Privacy", toegankelijkheid: "Toegankelijkheid" };
 let vorige = location.hash, viaLink = false;
 function gaNaar(h) { viaLink = true; location.hash = h; }
 document.addEventListener("click", e => {
@@ -1063,7 +1070,7 @@ async function route() {
     document.title = (TITELS[naam] ? TITELS[naam] + " | " : "") + "Hart voor Den Haag (proef)";
     app.innerHTML = await pagina[naam](delen);
     if (pagina[naam].na) await pagina[naam].na(delen);
-    telOp();
+    telOp(); const zw = $("#zweef"); if (zw && zw.volg) zw.volg();
   } catch (e) {
     console.error(e);
     app.innerHTML = paginaKop("Er ging iets mis", "Laad de pagina opnieuw. Lukt het niet? Bel " + TEL + ".");
@@ -1140,21 +1147,44 @@ addEventListener("keydown", e => {
 // cijfers tellen op zodra ze in beeld komen (niet bij "minder beweging")
 const stil = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 function telOp() {
-  if (stil() || !("IntersectionObserver" in window)) return;
+  const plat = $$("[data-tel]"), zet = (el, n) => { (el.querySelector(".getal") || el).textContent = fmt.format(n); };
+  if (stil() || !("IntersectionObserver" in window)) { plat.forEach(el => zet(el, Number(el.dataset.tel))); return; }
   const io = new IntersectionObserver(es => es.forEach(e => {
     if (!e.isIntersecting) return; io.unobserve(e.target);
-    const el = e.target, doel = Number(el.dataset.tel), van = el.dataset.van != null ? Number(el.dataset.van) : 0, duur = el.dataset.van != null ? 900 : 1100, t0 = performance.now();
-    const stap = t => { const p = Math.min(1, (t - t0) / duur); el.textContent = fmt.format(Math.round(van + (doel - van) * (1 - Math.pow(1 - p, 3)))); if (p < 1) requestAnimationFrame(stap); };
-    el.textContent = fmt.format(van); requestAnimationFrame(stap);
+    const el = e.target, doel = Number(el.dataset.tel);
+    if (el.dataset.van != null) {
+      // van 7 naar 8: het oude getal staat er even, dan tikt het succes erbij
+      zet(el, Number(el.dataset.van));
+      setTimeout(() => {
+        zet(el, doel); el.classList.remove("tik"); void el.offsetWidth; el.classList.add("tik");
+        const plus = document.createElement("span"); plus.className = "plus-een"; plus.setAttribute("aria-hidden", "true"); plus.textContent = "+" + (doel - Number(el.dataset.van));
+        el.append(plus); setTimeout(() => plus.remove(), 1800);
+      }, 700);
+      return;
+    }
+    const t0 = performance.now(), duur = 1600;
+    const stap = t => { const p = Math.min(1, (t - t0) / duur); zet(el, Math.round(doel * (1 - Math.pow(1 - p, 3)))); if (p < 1) requestAnimationFrame(stap); };
+    zet(el, 0); requestAnimationFrame(stap);
   }), { threshold: .6 });
-  $$("[data-tel]").forEach(el => io.observe(el));
+  plat.forEach(el => io.observe(el));
 }
 // Word lid in de kop springt even, kort na het laden en daarna eens per halve minuut
 (() => { const k = $(".balk-lid"); if (!k) return; const spring = () => { if (stil() || document.hidden) return; k.classList.remove("spring"); void k.offsetWidth; k.classList.add("spring"); };
   setTimeout(spring, 2500); setInterval(spring, 30000); k.addEventListener("animationend", () => k.classList.remove("spring")); })();
-// zwevende knop "Doe mee en volg ons" (dicht te klikken, onthoudt dat voor deze sessie)
-(() => { const z = $("#zweef"); if (!z) return; if (opslag.sLees("zweef-dicht")) z.querySelector(".ballon").hidden = z.querySelector(".sluit").hidden = true;
-  z.querySelector(".sluit").addEventListener("click", () => { z.querySelector(".ballon").hidden = z.querySelector(".sluit").hidden = true; opslag.sZet("zweef-dicht", "1"); }); })();
+// zwevende knop "Doe mee en volg ons", zoals op de huidige site: komt na een tel in beeld,
+// gaat even opzij als de voet of de filmknop eronder ligt, en het tekstballonnetje is weg te klikken
+(() => { const z = $("#zweef"); if (!z) return; const rij = z.querySelector(".ballon-rij");
+  if (opslag.sLees("zweef-dicht")) rij.hidden = true;
+  z.querySelector(".sluit").addEventListener("click", () => { rij.hidden = true; opslag.sZet("zweef-dicht", "1"); z.querySelector(".rond").focus(); });
+  // opzij als de knop over de filmknop of de voet zou vallen
+  const raakt = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+  let wacht = false;
+  const kijk = () => { wacht = false; const r = z.getBoundingClientRect(); z.classList.toggle("opzij", $$(".voet, #speel").some(el => raakt(r, el.getBoundingClientRect()))); };
+  z.volg = () => { if (!wacht) { wacht = true; requestAnimationFrame(kijk); } };
+  addEventListener("scroll", z.volg, { passive: true }); addEventListener("resize", z.volg); z.volg();
+  setTimeout(() => { z.classList.remove("weg"); if (!stil() && !rij.hidden) { rij.classList.add("hop"); rij.addEventListener("animationend", () => rij.classList.remove("hop"), { once: true }); } }, 1200);
+  setTimeout(() => setInterval(() => { if (stil() || document.hidden || rij.hidden) return; rij.classList.remove("hop"); void rij.offsetWidth; rij.classList.add("hop"); }, 30000), 15000);
+})();
 // datumregel: de datum van vandaag, zoals bovenaan een krant
 (() => { const d = new Date(), t = $("#vandaag"); if (t) { t.dateTime = d.toISOString().slice(0, 10); t.textContent = `${DAG[d.getDay()][0].toUpperCase() + DAG[d.getDay()].slice(1)} ${d.getDate()} ${MAAND[d.getMonth()]} ${d.getFullYear()}`; } })();
 // vertalen: de pagina opent via Google Vertalen in de gekozen taal (alleen als de bezoeker erop klikt)
