@@ -2,17 +2,17 @@
    Van "De Stadsplattegrond" komen de kaart met gezichten en het silhouet van het stadsdeel bij elk bericht.
    Niet saai: drie kleurmomenten (de film met het gele hart, de stadsdeelband in munt, de successen in woudgroen) en een donkere voet. */
 :root{
-  --hart:#1E945A; --veld:#137345; --woud:#0B3B25; --nacht:#072A1A; --zon:#FFD237; --zon-licht:#FFE27A;
-  --bg:#FFFFFF; --vlak:#FFFFFF; --band:#EEF5EF; --munt:#E3F1E7; --ink:#10251A; --zacht:#4A5F52; --lijn:#D9DFDA; --regel:#10251A; --veldrand:#768F80;
+  --hart:#18925A; --veld:#168351; --woud:#0B3B25; --nacht:#072A1A; --zon:#FFD439; --zon-licht:#FFE27A;
+  --bg:#FFFFFF; --vlak:#FFFFFF; --band:#F6F1E9; --munt:#E3F1E7; --ink:#10251A; --zacht:#4A5F52; --lijn:#D9DFDA; --regel:#10251A; --veldrand:#768F80;
   --link:#137345; --op-donker:#D3E8DA; --kaart-vlak:#FFFFFF; --kaart-rand:#1E945A; --kaart-hover:#D3EBDC; --fout:#B42318; --goed:#137345;
-  --kop:"Archivo","Arial Narrow",system-ui,sans-serif;
-  --tekst:"Lexend",system-ui,sans-serif;
+  --kop:"Raleway",system-ui,sans-serif;
+  --tekst:"Raleway",system-ui,sans-serif;
   --schaduw:0 24px 50px -32px rgba(11,59,37,.45);
   --onderbalk:0px;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root{
-  --bg:#0E1612;--vlak:#141F19;--band:#122019;--munt:#17281F;--ink:#ECF1ED;--zacht:#A8B7AD;--lijn:#2A3830;--regel:#ECF1ED;--veldrand:#6B8A79;
+  --bg:#0E1612;--vlak:#141F19;--band:#1A1813;--munt:#17281F;--ink:#ECF1ED;--zacht:#A8B7AD;--lijn:#2A3830;--regel:#ECF1ED;--veldrand:#6B8A79;
   --link:#7BD3A2;--hart:#4CC283;--fout:#FF8A80;--goed:#7BD3A2;--kaart-vlak:#141F19;--kaart-rand:#4CC283;--kaart-hover:#1F3A2B;
   --schaduw:0 24px 50px -30px rgba(0,0,0,.85);color-scheme:dark}}
 
@@ -656,3 +656,98 @@ section{padding-block:34px 64px}
 .artikel.petitie-open>#teken{grid-column:2;grid-row:2;margin-top:16px!important}
 .artikel.petitie-open>.volledig,.artikel.petitie-open>.artikel-tekst,.artikel.petitie-open>.na-artikel{max-width:46em}
 @media (max-width:1000px){.artikel.petitie-open{display:block;max-width:46em}.artikel.petitie-open>.artikel-beeld{margin-bottom:22px}}
+
+/* ---------- ronde 7: huisstijl van de partij (feedback fractie) ----------
+   Raleway zoals op hartvoordenhaag.nl, het groen en geel van het logo, beige vlakken, posterlijsten om foto's */
+body{font-weight:500;font-variant-numeric:lining-nums}
+h1,h2,h3,h4{font-family:var(--kop);font-weight:800;letter-spacing:-.01em}
+.held h1{font-size:clamp(2.8rem,6.2vw,5.2rem);font-weight:900;line-height:.95}
+.held-rol{font-size:clamp(1.05rem,1.5vw,1.2rem);font-weight:800}
+.pagina-kop h1{font-size:clamp(2.2rem,5vw,3.8rem);font-weight:900;line-height:1}
+.sectie-kop h2{font-size:clamp(1.6rem,3vw,2.3rem);font-weight:900}
+.lead h3{font-size:clamp(1.45rem,2.4vw,2rem);font-weight:800;line-height:1.12}
+.kolom-lijst h3,.stukken h3{font-size:1.12rem;line-height:1.25}
+.raad-lijst h4{font:800 1rem/1.25 var(--kop)}
+.drie h3{font-size:1.15rem;line-height:1.2}
+.bewijs h3{font-size:1.3rem}
+.bewijs .telling b{font:900 1.4rem/1 var(--kop)}
+.ag h3{font-size:1.05rem;line-height:1.25}
+.agenda-lijst h3{font-size:1.15rem;line-height:1.25}
+.ag-dd b{font:900 1.7rem/.95 var(--kop)}.ag-dd span{font:800 .85rem/1 var(--kop)}
+.agenda-lijst .dd b{font:900 2rem/.9 var(--kop)}
+.groot-getal{font:900 clamp(3.4rem,8vw,5.6rem)/.85 var(--kop)}
+.paneel h3{font-size:clamp(1.6rem,2.8vw,2.2rem);line-height:1}
+.dictum h2,.groep-kop{font-size:clamp(1.4rem,2.6vw,1.9rem)}
+.groep-kop .sil{width:24px;height:24px}
+.teken-teller .voortgang p b{font:900 1.6rem/1 var(--kop)}
+.uitleg li::before{font:900 1.6rem/1 var(--kop)}
+.lid-rij h3{font-size:1.12rem}
+.log-item h3{font-size:clamp(1.12rem,1.8vw,1.32rem);line-height:1.2}
+.log-item.eerste h3{font-size:clamp(1.5rem,2.6vw,2rem);line-height:1.1}
+.poster h2{font-size:clamp(1.6rem,3vw,2.2rem)}
+.stap legend{font:800 1.2rem/1.2 var(--kop)}
+.kolomkop,.maand-kop,.tussenkop{font:800 1rem/1.2 var(--kop)}
+.volledig{font-size:1.3rem}
+.lade-paneel a.hoofd{font:800 1.35rem/1.1 var(--kop)}
+.sd-naam{font:700 1rem/1.2 var(--kop)}
+.kaart .lbl{font:800 19px/1 var(--kop)}
+.menu a,.menu button{font-weight:700}
+/* kleine teksten groter en rustiger */
+.bijschrift{font-size:.97rem}
+.bijschrift .plek{font:700 .97rem/1.2 var(--kop)}
+.ag p,.agenda-lijst p,.raad-lijst .bijschrift,.m-item .bijschrift{font-size:.97rem}
+.datumregel{font-size:.92rem}
+.mensen span,.berichten small,.wijken,.paneel .feit{font-size:.95rem}
+.inleiding{font-size:1.08rem}
+/* successen in het groen van de partij in plaats van donker */
+.donker{background:var(--veld)}
+.donker .bijschrift,.donker .bijschrift .plek,.donker .inleiding,.donker .leeg,.succes-kop p{color:#fff}
+.donker .sil{fill:var(--zon)}
+.drie li+li{border-left-color:rgba(255,255,255,.35)}
+/* beige vlakken, zoals bij "Onze standpunten" op de huidige site */
+.band{background:var(--band)}
+.band .paneel{background:transparent}
+/* posterlijst om foto's: groen links en onder, geel boven en rechts */
+.poster-lijst{padding:10px;background:linear-gradient(225deg,var(--zon) 50%,var(--hart) 50%);border-radius:2px;display:block}
+.poster-lijst>img{display:block;width:100%;border-radius:0!important;margin:0!important}
+.drie .poster-lijst{padding:7px}
+/* voet: licht, met het logo in kleur */
+.voet{background:var(--band);color:var(--ink);border-top:6px solid var(--hart)}
+.voet-boven,.vertaal,.voet-onder{border-color:var(--lijn)}
+.voet-boven .zin,.nieuwsbrief label,.voet-kolommen b,.voet-kolommen a,.vertaal p,.vertaal a,.voet-onder a,.nb-wa{color:var(--ink)}
+.voet-kolommen span,.voet-onder span{color:var(--zacht)}
+.nb-rij input{background:var(--vlak);border-color:var(--veldrand);color:var(--ink)}
+.nb-rij input::placeholder{color:var(--zacht)}
+.nieuwsbrief .melding{background:var(--vlak);color:var(--ink)}
+.voet .fout-tekst{color:var(--fout)}
+.voet-kolommen a:hover{text-decoration-color:var(--hart)}
+.sociaal{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.sociaal a{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:6px 14px 6px 8px;border-radius:999px;background:var(--vlak);border:1px solid var(--lijn);color:var(--ink);text-decoration:none;font-weight:700}
+.sociaal a:hover{border-color:var(--hart)}
+.sociaal svg{width:22px;height:22px;fill:currentColor;color:var(--veld)}
+/* lees meer */
+.lees-meer{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--link);margin-top:2px}
+li:hover .lees-meer,.lead:hover .lees-meer{text-decoration:underline}
+/* zwevende knop: doe mee en volg ons */
+.zweef{position:fixed;z-index:1000;left:max(18px,env(safe-area-inset-left,0px));bottom:calc(18px + var(--onderbalk));display:flex;align-items:center;gap:10px}
+.zweef a.rond{width:56px;height:56px;border-radius:50%;background:#25D366;display:grid;place-items:center;box-shadow:0 6px 16px rgba(0,0,0,.18);transition:transform .2s ease}
+.zweef a.rond:hover{transform:scale(1.07)}
+.zweef a.rond svg{width:30px;height:30px;fill:#fff}
+.zweef .ballon{background:var(--vlak);color:var(--ink);border:1px solid var(--lijn);padding:8px 14px;border-radius:999px;font-weight:700;font-size:.92rem;box-shadow:0 4px 12px rgba(0,0,0,.1);text-decoration:none;white-space:nowrap;min-height:44px;display:inline-flex;align-items:center}
+.zweef .sluit{width:32px;height:32px;border-radius:50%;border:1px solid var(--lijn);background:var(--vlak);color:var(--ink);cursor:pointer;font:700 1rem/1 var(--tekst)}
+@keyframes hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}60%{transform:translateY(0)}75%{transform:translateY(-2px)}}
+@media (prefers-reduced-motion:no-preference){
+  .zweef .ballon{animation:hop 2.4s ease-in-out infinite}
+  .balk-lid.spring{animation:hop 1s ease-in-out 2}
+}
+@media (max-width:640px){.zweef .ballon{display:none}.zweef .sluit{display:none}.zweef a.rond{width:50px;height:50px}}
+
+.poster-lijst.artikel-beeld{aspect-ratio:auto;margin-bottom:28px;padding:10px;background:linear-gradient(225deg,var(--zon) 50%,var(--hart) 50%)}
+.poster-lijst.artikel-beeld img{aspect-ratio:16/9;object-fit:cover}
+.lead .poster-lijst img{aspect-ratio:16/8;object-fit:cover}
+.doe-mee-regel{font-size:.97rem}.doe-mee-regel a{color:var(--link);font-weight:700}
+.kop-lijnen{opacity:.2}
+@media (min-width:900px){.kop-lijnen{right:-14%}}
+.log-item .lees-meer{margin-top:4px}
+
+.uitslag,.deel-na{scroll-margin-bottom:calc(var(--onderbalk) + 90px)}

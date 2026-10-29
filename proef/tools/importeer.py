@@ -326,9 +326,15 @@ def lijst(pad, aantal):
     return uit[:aantal]
 
 
+SPELLING = {"Karadogan": "Karadoğan"}  # namen zoals de raadsleden ze zelf schrijven
+
+
 def schrijf(naam, data):
+    tekst_ = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
+    for fout, goed in SPELLING.items():
+        tekst_ = tekst_.replace(fout, goed)
     with open(os.path.join(UIT, naam), "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
+        f.write(tekst_)
     print(f"{naam}: {len(data) if isinstance(data, list) else 'ok'}")
 
 

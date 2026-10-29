@@ -176,6 +176,7 @@ function verklein(bestand, max, kwaliteit) {
   });
 }
 
+const herlaad = async () => { const y = scrollY; await start(); scrollTo(0, y); };
 let ongedaan = null; // {id, naam, tot}: na "Afgehandeld" kan het nog even terug
 async function postvak() {
   const { berichten } = await vraag("/inbox");
@@ -204,15 +205,16 @@ async function postvak() {
       await vraag(`/inbox/${k.dataset.id}/status`, { method: "POST", body: { status: k.dataset.status } });
       const b = berichten.find(x => x.id === k.dataset.id);
       ongedaan = k.dataset.status === "afgehandeld" ? { id: k.dataset.id, naam: (b && (b.naam || b.email)) || "onbekend", tot: Date.now() + 10000 } : null;
-      if (ongedaan) setTimeout(() => { if (ongedaan && ongedaan.tot <= Date.now() && $("#ongedaan")) start(); }, 10100);
-      start();
+      if (ongedaan) setTimeout(() => { const m = $("#ongedaan"); if (m && ongedaan && ongedaan.tot <= Date.now()) { m.closest(".melding").remove(); ongedaan = null; } }, 10100);
+      await herlaad();
+      const og2 = $("#ongedaan"); if (og2) og2.focus();
     }
     catch (err) { k.disabled = false; k.textContent = "Lukte niet, probeer opnieuw"; }
   }));
   const og = $("#ongedaan");
   if (og) og.addEventListener("click", async () => {
     og.disabled = true;
-    try { await vraag(`/inbox/${ongedaan.id}/status`, { method: "POST", body: { status: "nieuw" } }); ongedaan = null; start(); }
+    try { await vraag(`/inbox/${ongedaan.id}/status`, { method: "POST", body: { status: "nieuw" } }); ongedaan = null; await herlaad(); }
     catch (err) { og.disabled = false; og.textContent = "Lukte niet, probeer opnieuw"; }
   });
   $$("[data-weg]").forEach(k => k.addEventListener("click", async () => {
