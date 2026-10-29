@@ -624,7 +624,8 @@ def main():
         bio = re.sub(r"(?s)^\s*<p>\s*Stadsdeel:[^<]*</p>", "", bio).strip()
         fractie.append({"naam": naam, "positie": int((re.match(r"\d+", tekst(x["title"]["rendered"])) or [0])[0]),
                         "stadsdelen": [STADSDEEL[s] for s in x.get("stadsdeel", []) if s in STADSDEEL],
-                        "beeld": echt_beeld(beeld(x)) or kandidaat_foto(naam), "link": x["link"], "bio": bio,
+                        # raadsleden: de foto van hartvoordenhaag.nl, ook als die met AI is bewerkt (uitzondering, besluit Damiën 29 okt)
+                        "beeld": beeld(x) or kandidaat_foto(naam), "link": x["link"], "bio": bio,
                         "functie": veld("Functie"), "commissie": veld("Commissie"),
                         "portefeuilles": [p.strip(" .") for p in re.split(r",\s*(?![^()]*\))", veld("Portefeuilles")) if p.strip(" .")]})
     fractie.sort(key=lambda f: f["positie"])
