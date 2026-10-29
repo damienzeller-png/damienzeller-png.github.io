@@ -155,6 +155,25 @@ GERESERVEERD = {"nieuws", "successen", "raadswerk", "petities", "stadsdelen", "f
                 "sitemap.xml", "404.html", "app.js", "app.css", "kader.js", "beheer.js"}
 
 
+def kandidaat_foto(naam):
+    """Echte portretfoto van de kandidatenpagina, voor een raadslid van wie op hartvoordenhaag.nl alleen een AI-bewerkte foto staat."""
+    try:
+        for x in haal(f"kandidaat?search={urllib.parse.quote(naam)}&_embed=wp:featuredmedia"):
+            if plat(re.sub(r"^\d+\.\s*", "", tekst(x["title"]["rendered"]))) != plat(naam):
+                continue
+            m = _media(x)
+            if not m:
+                continue
+            maten = (m.get("media_details", {}) or {}).get("sizes", {}) or {}
+            for k in ("large", "medium_large", "1536x1536"):
+                if k in maten and maten[k].get("source_url"):
+                    return echt_beeld(maten[k]["source_url"])
+            return echt_beeld(beeld(x))
+    except Exception as fout:
+        print("  kandidaatfoto niet gevonden voor", naam, fout)
+    return ""
+
+
 def echt_beeld(url):
     # AI-bewerkte portretten slaan we over: op de site alleen echte foto's
     return "" if "Use-AI-Image" in (url or "") else url
@@ -605,7 +624,7 @@ def main():
         bio = re.sub(r"(?s)^\s*<p>\s*Stadsdeel:[^<]*</p>", "", bio).strip()
         fractie.append({"naam": naam, "positie": int((re.match(r"\d+", tekst(x["title"]["rendered"])) or [0])[0]),
                         "stadsdelen": [STADSDEEL[s] for s in x.get("stadsdeel", []) if s in STADSDEEL],
-                        "beeld": echt_beeld(beeld(x)), "link": x["link"], "bio": bio,
+                        "beeld": echt_beeld(beeld(x)) or kandidaat_foto(naam), "link": x["link"], "bio": bio,
                         "functie": veld("Functie"), "commissie": veld("Commissie"),
                         "portefeuilles": [p.strip(" .") for p in re.split(r",\s*(?![^()]*\))", veld("Portefeuilles")) if p.strip(" .")]})
     fractie.sort(key=lambda f: f["positie"])
