@@ -824,3 +824,37 @@ li:hover .lees-meer,.lead:hover .lees-meer{text-decoration:underline}
 .zweef .sluit::after{content:"";position:absolute;inset:-5px;border-radius:50%}
 @media (max-width:760px){.dr-rechts a.wa{min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center}}
 .bewijs .laatste a{display:inline-block;padding-block:12px;margin-block:-12px}
+
+/* ---------- voet: minder links in beeld ----------
+   Op de telefoon klappen Raadswerk, Partij en Meedoen in; sociale media als ronde pictogrammen; talen in één keuzelijst */
+.voet-contact{display:flex;flex-direction:column}
+.voet-groep>summary{list-style:none;color:var(--ink);font:800 1.08rem/1.2 var(--kop);font-stretch:86%;margin-bottom:6px}
+.voet-groep>summary::-webkit-details-marker{display:none}
+.voet-groep>div{display:flex;flex-direction:column}
+.voet-groep a{color:var(--ink);text-decoration:none;min-height:42px;display:inline-flex;align-items:center}
+.voet-groep a:hover{text-decoration:underline;text-decoration-color:var(--hart)}
+@media (min-width:761px){.voet-groep>summary{pointer-events:none}}
+@media (min-width:761px) and (max-width:860px){.voet-kolommen{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.voet-rij{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px 28px;margin-top:22px;padding-top:18px;border-top:1px solid var(--lijn)}
+.voet-rij .sociaal{margin-top:0;gap:6px}
+.sociaal a{width:44px;height:44px;padding:0;justify-content:center;gap:0}
+.vertaal{margin-top:0;padding-top:0;border-top:0;gap:10px;flex-wrap:nowrap}
+.vertaal label{font-weight:700;color:var(--ink);white-space:nowrap}
+.vertaal select{min-height:44px;padding:6px 36px 6px 12px;border-radius:999px;border:1px solid var(--lijn);background:var(--vlak);color:var(--ink);font:600 .95rem var(--tekst);width:auto}
+@media (max-width:760px){
+  .voet{padding-block:32px 24px}
+  .voet-kolommen{grid-template-columns:1fr;gap:0}
+  .voet-contact{padding-bottom:14px}
+  .voet-groep{border-top:1px solid var(--lijn)}
+  .voet-groep:last-child{border-bottom:1px solid var(--lijn)}
+  .voet-groep>summary{min-height:52px;display:flex;align-items:center;justify-content:space-between;margin:0;cursor:pointer}
+  .voet-groep>summary::after{content:"";width:10px;height:10px;border-right:2.5px solid currentColor;border-bottom:2.5px solid currentColor;transform:rotate(45deg) translateY(-3px);transition:transform .2s ease}
+  .voet-groep[open]>summary::after{transform:rotate(-135deg) translate(-2px,-1px)}
+  .voet-groep>div{padding-bottom:10px}
+  .voet-rij{border-top:0;margin-top:16px;padding-top:0}
+  .voet-rij .sociaal{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:4px;width:100%}
+  .voet-rij .sociaal a{width:auto}
+  .vertaal{width:100%;justify-content:space-between}
+  .voet-onder{font-size:.85rem}
+}
+@media (prefers-reduced-motion:reduce){.voet-groep>summary::after{transition:none}}

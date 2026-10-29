@@ -1304,7 +1304,19 @@ function telOp() {
 (() => { const d = new Date(), t = $("#vandaag"); if (t) { t.dateTime = d.toISOString().slice(0, 10); t.textContent = `${DAG[d.getDay()][0].toUpperCase() + DAG[d.getDay()].slice(1)} ${d.getDate()} ${MAAND[d.getMonth()]} ${d.getFullYear()}`; } })();
 // vertalen: de pagina opent via Google Vertalen in de gekozen taal (alleen als de bezoeker erop klikt)
 function zetVertaallinks() {
-  $$("#vertaal a[data-taal]").forEach(a => { const t = a.dataset.taal; a.href = `https://damienzeller-nl.translate.goog/proef/?_x_tr_sl=nl&_x_tr_tl=${t}&_x_tr_hl=${t}${location.hash}`; a.target = "_blank"; a.rel = "noopener"; });
+  const k = $("#taal");
+  if (k && !k.dataset.klaar) {
+    k.dataset.klaar = "1";
+    k.addEventListener("change", () => {
+      const t = k.value; if (!t) return;
+      open(`https://damienzeller-nl.translate.goog/proef/?_x_tr_sl=nl&_x_tr_tl=${t}&_x_tr_hl=${t}${location.hash}`, "_blank", "noopener");
+      k.value = "";
+    });
+  }
+  // voet: op de telefoon de linkgroepen dicht, op een groter scherm altijd open
+  const smal = matchMedia("(max-width: 760px)");
+  const zet = () => $$(".voet-groep").forEach(d => { d.open = !smal.matches; });
+  if (!document.body.dataset.voet) { document.body.dataset.voet = "1"; zet(); smal.addEventListener("change", zet); }
 }
 zetVertaallinks(); addEventListener("hashchange", zetVertaallinks);
 // strook: eerstvolgende afspraak
