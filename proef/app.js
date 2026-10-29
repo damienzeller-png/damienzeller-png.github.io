@@ -94,7 +94,7 @@ const silhouet = n => KAART && KAART.sd[n] && KAART.sd[n].bb ? `<svg class="sil"
 const lidVan = naam => FRACTIE.find(f => slug(f.naam) === slug(naam));
 const escRe = t => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 function wieVan(i) {
-  if (i.indiener) return i.indiener.split(" en ").map(lidVan).filter(Boolean);
+  if (i.indiener) return i.indiener.split(" en ").map(n => lidVan(n) || { naam: n.trim(), beeld: "" }).filter(f => f.naam);
   if (i.soort !== "nieuws" && i.soort !== "succes") return [];
   const t = i.titel + " " + (i.samenvatting || "").slice(0, 160);
   return FRACTIE.filter(f => {
@@ -268,7 +268,7 @@ pagina.home = async () => {
   </div></section>
 
   <section class="band" aria-labelledby="h-stadsdeel"><div class="wrap">
-    <div class="sectie-kop"><h2 id="h-stadsdeel">Uw stadsdeel, uw raadsleden</h2><p class="inleiding">Vul uw postcode in of ${isTouch ? "tik" : "klik"} op de kaart. U ziet wie er bij u spreekuur houdt en wat er bij u in de buurt speelt.</p></div>
+    <div class="sectie-kop"><h2 id="h-stadsdeel">Uw stadsdeel, uw raadsleden</h2><p class="inleiding">Vul uw postcode in of kies uw stadsdeel. U ziet wie er bij u spreekuur houdt en wat er bij u in de buurt speelt.</p></div>
     ${kaartBlok(kaart)}
   </div></section>
 
@@ -391,10 +391,11 @@ async function activeerKaart(kaart, start) {
     namen.forEach(m => { const aan = m === n; vlak[m].setAttribute("aria-pressed", aan); lbl[m].classList.toggle("aan", aan); });
     STADSDELEN.forEach(m => knop[m].setAttribute("aria-pressed", m === n));
     if (!n) {
-      paneel.innerHTML = `<div class="kies-hint"><h3>Kies uw stadsdeel</h3><p>Den Haag heeft acht stadsdelen, elk met eigen raadsleden en een eigen wethouder. ${isTouch ? "Tik" : "Klik"} op de kaart of op een naam.</p></div>`;
+      paneel.innerHTML = `<div class="kies-hint"><h3>Kies uw stadsdeel</h3><p>Den Haag heeft acht stadsdelen, elk met eigen raadsleden en een eigen wethouder. Vul uw postcode in of kies een stadsdeel.</p></div>`;
+      paneel.classList.add("leeg-paneel");
       return;
     }
-    opslag.zet("stadsdeel", n);
+    opslag.zet("stadsdeel", n); paneel.classList.remove("leeg-paneel");
     const s = kaart.sd[n];
     const mensen = fractie.filter(f => f.stadsdelen.includes(n));
     const weth = wethouders.find(w => w.stadsdeel === n);
@@ -432,7 +433,7 @@ async function activeerKaart(kaart, start) {
   if (pcForm) pcForm.addEventListener("submit", async e => {
     e.preventDefault();
     const veld = $("#pc"), uit = $("#pc-uitslag"), pc = veld.value.replace(/\s+/g, "").toUpperCase();
-    if (!/^\d{4}[A-Z]{2}$/.test(pc)) { zetFout(veld, "Vul een postcode in zoals 2491 AA."); veld.focus(); return; }
+    if (!/^\d{4}[A-Z]{2}$/.test(pc)) { uit.textContent = ""; zetFout(veld, "Vul een postcode in zoals 2491 AA."); veld.focus(); return; }
     zetFout(veld, ""); uit.textContent = "Even zoeken…";
     try {
       const r = await fetch(`https://api.pdok.nl/bzk/locatieserver/search/v3_1/free?q=postcode:${pc}&fq=type:adres&fl=wijknaam,gemeentenaam&rows=1`);
@@ -444,7 +445,7 @@ async function activeerKaart(kaart, start) {
       if (!sd) { uit.textContent = `${wijk || "Deze wijk"} konden we niet aan een stadsdeel koppelen. Kies hieronder.`; return; }
       uit.textContent = `${pc.slice(0, 4)} ${pc.slice(4)} ligt in ${wijk}, stadsdeel ${sd}.`;
       kies(sd, true);
-    } catch { uit.textContent = "Zoeken lukte nu niet. Kies uw stadsdeel op de kaart of hieronder."; }
+    } catch { uit.textContent = "Zoeken lukte nu niet. Kies uw stadsdeel hieronder."; }
   });
   kies(start && kaart.sd[start] ? start : "", false);
 }
@@ -506,12 +507,12 @@ async function detail(s, id, terugNaam, terugPad) {
     return `<div class="dictum"><h2>${s === "amendement" ? "Wat we willen veranderen" : "Wat we het college vragen"}</h2>
       <p class="dictum-kop">${esc(i.dictum.kop)}:</p>
       ${delen.length > 1 ? `<ol>${delen.map(d => `<li>${esc(d)}</li>`).join("")}</ol>` : `<p>${esc(i.dictum.tekst)}</p>`}
-      <div class="dictum-voet">${wie.length ? `<span class="m-wie${wie.length > 1 ? " twee" : ""}" aria-hidden="true">${gezichtjes(wie)}</span>` : ""}<p>${i.indiener ? `Ingediend door ${wie.length ? wie.map(f => `<a href="#fractie/${slug(f.naam)}">${esc(f.naam)}</a>`).join(" en ") : esc(i.indiener)}` : "Ingediend door Hart voor Den Haag"}, raad van ${datum(i.datum)}.${i.status ? ` <b>${esc(i.status)}.</b>` : ""}</p></div></div>`;
+      <div class="dictum-voet">${wie.length ? `<span class="m-wie${wie.length > 1 ? " twee" : ""}" aria-hidden="true">${gezichtjes(wie)}</span>` : ""}<p>${i.indiener ? `Ingediend door ${wie.length ? wie.map(f => lidVan(f.naam) ? `<a href="#fractie/${slug(f.naam)}">${esc(f.naam)}</a>` : esc(f.naam)).join(" en ") : esc(i.indiener)}` : "Ingediend door Hart voor Den Haag"}, raad van ${datum(i.datum)}.${i.status ? ` <b>${esc(i.status)}.</b>` : ""}</p></div></div>`;
   })() : "";
   const lees = leestijd(i.html);
   return paginaKop(esc(i.titel), "", `<a href="#">Home</a> / <a href="#${terugPad}">${esc(terugNaam)}</a>`,
-    bijschrift({ ...i }, { soort: !["nieuws", "succes", "petitie"].includes(s) }).replace("</p>", `<span>${lees} min lezen</span></p>`), i.stadsdelen && i.stadsdelen.length === 1 ? i.stadsdelen[0] : "") + `
-  <section class="wit"><div class="wrap"><article class="artikel">
+    bijschrift({ ...i, handtekeningen: isPetitie ? 0 : i.handtekeningen }, { soort: !["nieuws", "succes", "petitie"].includes(s) }).replace("</p>", `<span>${lees} min lezen</span></p>`), i.stadsdelen && i.stadsdelen.length === 1 ? i.stadsdelen[0] : "") + `
+  <section class="wit"><div class="wrap"><article class="artikel${isPetitie && open && i.beeld ? " petitie-open" : ""}">
     ${i.beeld ? `<img class="artikel-beeld" src="${esc(i.beeld)}" alt="">` : ""}
     ${isPetitie ? `<div class="teken-teller" id="teller-blok" data-n="${handtekeningen(i, tel)}">${balk(handtekeningen(i, tel))}<p class="leeg">Inclusief de handtekeningen op hartvoordenhaag.nl.</p></div>` : ""}
     ${dictum}
@@ -543,6 +544,7 @@ detail.na = () => {
     eisen: () => ({ naam: verplicht("Vul uw naam in."), email: v => !v ? "Vul uw e-mailadres in." : EMAIL.test(v) ? "" : "Dit e-mailadres klopt niet.", akkoord: v => v ? "" : "Vink dit aan om te kunnen tekenen." }),
     bedankt: () => "Dank u wel! Uw handtekening is binnen. Helpt u mee? Hoe meer mensen tekenen, hoe sterker we in de raad staan.",
     na: (d, uit) => {
+      $$(".velden, .vink, button[type=submit], h2", $("#teken")).forEach(x => x.hidden = true);
       const tb = $("#teller-blok"); if (tb) { const n = Number(tb.dataset.n) + 1; tb.dataset.n = n; tb.firstElementChild.outerHTML = balk(n); }
       const tekst = `Ik heb de petitie "${d.petitie}" getekend. Teken jij ook? ${location.href}`;
       uit.insertAdjacentHTML("afterend", `<div class="deel-na"><a class="knop groen" href="https://wa.me/?text=${encodeURIComponent(tekst)}" target="_blank" rel="noopener">Deel via WhatsApp</a><button class="knop lijn" type="button" id="kopieer">Kopieer de link</button></div>`);
@@ -593,7 +595,7 @@ pagina.raadswerk.na = async ([tab = "moties", ...rest]) => {
       if (m !== huidig) { if (huidig) html += "</ul>"; html += `<h2 class="maand-kop">${m[0].toUpperCase() + m.slice(1)}</h2><ul class="stukken">`; huidig = m; }
       html += stukItem(i);
     }
-    return html + (huidig ? "</ul>" : `<p class="leeg" style="padding-top:18px">Niets gevonden. Probeer een ander woord of onderwerp.</p>`);
+    return html + (huidig ? "</ul>" : `<p class="leeg" style="padding-top:18px">Niets gevonden. Probeer een ander woord of onderwerp. <a class="meer" href="#raadswerk/${tabNaam}">Wis zoekterm en onderwerp</a></p>`);
   };
   const toonLijst = () => {
     const q = $("#binnen").value.trim().toLowerCase();
@@ -1061,12 +1063,14 @@ async function route() {
   laad("kaart").then(k => $$(".kop-lijnen").forEach(svg => { svg.setAttribute("viewBox", `0 0 ${k.w} ${k.h}`); svg.innerHTML = Object.values(k.sd).map(x => `<path d="${x.d}"/>`).join(""); }));
   const sectie = naam;
   $$(".menu a[data-sectie], .onderbalk [data-sectie]").forEach(a => a.dataset.sectie.split(" ").includes(sectie) ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
+  const meld = $(".onderbalk a.meld"); if (meld) location.hash.startsWith("#contact/melding") ? meld.setAttribute("aria-current", "page") : meld.removeAttribute("aria-current");
+  const contact = $(".onderbalk [data-sectie='contact']:not(.meld)"); if (contact && location.hash.startsWith("#contact/melding")) contact.removeAttribute("aria-current");
   $$(".menu button[data-sectie]").forEach(b => b.classList.toggle("actief", b.dataset.sectie.split(" ").includes(sectie)));
   // lade en uitklapmenu's: de langste link die bij het huidige adres past, is de huidige pagina
   const h = (location.hash || "#").replace(/^#raadswerk\/(vraag|amendement|spreektekst|motie)(?=\/)/, (m, t) => "#raadswerk/" + ({ vraag: "vragen", amendement: "amendementen", spreektekst: "spreekteksten", motie: "moties" })[t]).replace(/^#raadswerk\/moties(?=\/|$)/, "#raadswerk");
-  const passend = $$("#lade .lade-links a[href^='#'], .uitklap-paneel a[href^='#']").filter(a => { const r = a.getAttribute("href"); return h === r || h.startsWith(r + "/"); });
+  const passend = $$("#lade .lade-links a[href^='#'], #lade a.hoofd[href^='#'], .uitklap-paneel a[href^='#']").filter(a => { const r = a.getAttribute("href"); return h === r || h.startsWith(r + "/"); });
   const langst = Math.max(0, ...passend.map(a => a.getAttribute("href").length));
-  $$("#lade .lade-links a, .uitklap-paneel a").forEach(a => passend.includes(a) && a.getAttribute("href").length === langst ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
+  $$("#lade .lade-links a, #lade a.hoofd, .uitklap-paneel a").forEach(a => passend.includes(a) && a.getAttribute("href").length === langst ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
   const terug = !viaLink && opslag.sLees("scroll:" + location.hash);
   if (terug) window.scrollTo({ top: Number(terug), behavior: "instant" });
   else {

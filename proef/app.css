@@ -334,7 +334,7 @@ section{padding-block:80px}
 .artikel-tekst a{color:var(--link);font-weight:600}
 .artikel-tekst blockquote{margin:1.2em 0;padding:4px 0 4px 20px;border-left:4px solid var(--zon);font-size:1.15rem}
 .artikel-tekst ul,.artikel-tekst ol{padding-left:1.3em}
-.artikel-beeld{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:22px;margin-bottom:28px;display:block;background:var(--munt)}
+.artikel-beeld{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:4px;margin-bottom:28px;display:block;background:var(--munt)}
 .na-artikel{margin-top:44px;padding-top:26px;border-top:1.5px solid var(--lijn);display:grid;gap:28px}
 .deelrij{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 /* dictum: wat we het college vragen */
@@ -645,3 +645,14 @@ section{padding-block:34px 64px}
 .stukken li.met-wie>div{display:grid;gap:6px;min-width:0}
 /* op de telefoon: eerst de stadsdeelrijen, de kaart als lijnen weg */
 @media (max-width:640px){.stad-raster .kaart{display:none}.sd-rijen{margin-top:0}}
+
+/* ronde 6 */
+@media (max-width:640px){.leeg-paneel{display:none!important}.kop-lijnen{opacity:.12;right:-70%}}
+.kop-sil{fill:var(--hart);opacity:.22}
+.artikel.petitie-open{max-width:1120px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:0 40px;align-items:start}
+.artikel.petitie-open>*{grid-column:1/-1}
+.artikel.petitie-open>.artikel-beeld{grid-column:1;grid-row:1 / span 2;margin-bottom:0}
+.artikel.petitie-open>.teken-teller{grid-column:2;grid-row:1}
+.artikel.petitie-open>#teken{grid-column:2;grid-row:2;margin-top:16px!important}
+.artikel.petitie-open>.volledig,.artikel.petitie-open>.artikel-tekst,.artikel.petitie-open>.na-artikel{max-width:46em}
+@media (max-width:1000px){.artikel.petitie-open{display:block;max-width:46em}.artikel.petitie-open>.artikel-beeld{margin-bottom:22px}}

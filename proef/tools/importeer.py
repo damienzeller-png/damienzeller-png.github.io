@@ -345,6 +345,7 @@ def main():
     fractie = []
     for x in lijst("fractielid", 30):
         naam = re.sub(r"^\d+\.\s*", "", tekst(x["title"]["rendered"]))
+        naam = {"Mert Karadogan": "Mert Karadoğan"}.get(naam, naam)  # spelling zoals hij zelf schrijft
         inhoud = schoon_html(x["content"]["rendered"])
         veld = lambda k: tekst((re.search(r"<strong>\s*" + k + r"\s*:?\s*</strong>\s*:?(.*?)</li>", inhoud, re.S) or [None, ""])[1]).strip(" :")
         bio = re.sub(r"(?s)<ul[^>]*>\s*<li>\s*<strong>\s*Functie.*?</ul>", "", inhoud)

@@ -176,6 +176,7 @@ function verklein(bestand, max, kwaliteit) {
   });
 }
 
+let ongedaan = null; // {id, naam, tot}: na "Afgehandeld" kan het nog even terug
 async function postvak() {
   const { berichten } = await vraag("/inbox");
   const toonArchief = filter === "archief";
@@ -186,6 +187,7 @@ async function postvak() {
   const veld = (k, v) => k === "email" ? `<a href="mailto:${esc(v)}">${esc(v)}</a>` : k === "telefoon" ? `<a href="tel:${esc(v.replace(/[^\d+]/g, ""))}">${esc(v)}</a>` : esc(v);
   app.innerHTML = kader(`${H1("Postvak")}
     <p class="inleiding">Berichten via de formulieren op de site. Afgehandelde berichten gaan naar het archief en zijn terug te zetten.</p>
+    ${ongedaan && ongedaan.tot > Date.now() ? `<p class="melding" role="status" style="margin-top:14px">Bericht van ${esc(ongedaan.naam)} staat in het archief. <button class="knop lijn klein" type="button" id="ongedaan">Ongedaan maken</button></p>` : ""}
     <div class="filters" style="margin-top:18px">
       <button class="knopje" type="button" data-filter="" aria-pressed="${!filter}">Alles open (${open.length})</button>
       ${soorten.map(k => `<button class="knopje" type="button" data-filter="${k}" aria-pressed="${filter === k}">${FORM_NAAM[k]} (${tel(k)})</button>`).join("")}
@@ -198,9 +200,21 @@ async function postvak() {
   $$("[data-filter]").forEach(k => k.addEventListener("click", () => { filter = k.dataset.filter; start(); }));
   $$("[data-status]").forEach(k => k.addEventListener("click", async () => {
     k.disabled = true;
-    try { await vraag(`/inbox/${k.dataset.id}/status`, { method: "POST", body: { status: k.dataset.status } }); start(); }
+    try {
+      await vraag(`/inbox/${k.dataset.id}/status`, { method: "POST", body: { status: k.dataset.status } });
+      const b = berichten.find(x => x.id === k.dataset.id);
+      ongedaan = k.dataset.status === "afgehandeld" ? { id: k.dataset.id, naam: (b && (b.naam || b.email)) || "onbekend", tot: Date.now() + 10000 } : null;
+      if (ongedaan) setTimeout(() => { if (ongedaan && ongedaan.tot <= Date.now() && $("#ongedaan")) start(); }, 10100);
+      start();
+    }
     catch (err) { k.disabled = false; k.textContent = "Lukte niet, probeer opnieuw"; }
   }));
+  const og = $("#ongedaan");
+  if (og) og.addEventListener("click", async () => {
+    og.disabled = true;
+    try { await vraag(`/inbox/${ongedaan.id}/status`, { method: "POST", body: { status: "nieuw" } }); ongedaan = null; start(); }
+    catch (err) { og.disabled = false; og.textContent = "Lukte niet, probeer opnieuw"; }
+  });
   $$("[data-weg]").forEach(k => k.addEventListener("click", async () => {
     if (k.dataset.zeker !== "1") { k.dataset.zeker = "1"; k.textContent = "Echt verwijderen? Dit kan niet terug."; return; }
     try { await vraag("/inbox/" + k.dataset.weg, { method: "DELETE" }); start(); }
