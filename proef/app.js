@@ -87,7 +87,7 @@ function zetSprite(k) {
   if (document.getElementById("sd-sprite")) return;
   const d = document.createElement("div");
   d.id = "sd-sprite"; d.setAttribute("aria-hidden", "true");
-  d.innerHTML = `<svg width="0" height="0" style="position:absolute"><defs>${Object.entries(k.sd).map(([n, v]) => `<path id="sd-${slug(n)}" d="${v.d}"/>`).join("")}</defs></svg>`;
+  d.innerHTML = `<svg width="0" height="0" style="position:absolute"><defs>${Object.entries(k.sd).map(([n, v]) => `<path id="sd-${slug(n)}" d="${v.d}"/>`).join("")}<path id="sd-stad" d="${Object.values(k.sd).map(v => v.d).join(" ")}"/></defs></svg>`;
   document.body.prepend(d);
 }
 const silhouet = n => KAART && KAART.sd[n] && KAART.sd[n].bb ? `<svg class="sil" viewBox="${KAART.sd[n].bb.join(" ")}" aria-hidden="true"><use href="#sd-${slug(n)}"/></svg>` : "";
@@ -127,7 +127,8 @@ const stukItem = (i, opties = {}) => `<li><h3><a href="${href(i)}">${esc(i.titel
 function agendaItem(a) {
   const x = dt(a.datum);
   return `<li><div class="dd" aria-hidden="true"><b>${x.d}</b><span>${MND[x.m]}</span></div>
-    <div><h3>${esc(a.titel)}</h3><p>${DAG[x.wd]} ${x.d} ${MAAND[x.m]}${a.tijd ? ", " + esc(a.tijd) + " uur" : ""} · ${esc(a.plek || "")}${a.stadsdeel ? " · " + esc(a.stadsdeel) : ""}</p>${a.samenvatting ? `<p>${esc(a.samenvatting)}</p>` : ""}</div></li>`;
+    <div><h3>${esc(a.titel)}</h3><p>${DAG[x.wd]} ${x.d} ${MAAND[x.m]}${a.tijd ? ", " + esc(a.tijd) + " uur" : ""} · ${esc(a.plek || "")}${a.stadsdeel ? " · " + esc(a.stadsdeel) : ""}</p>${a.samenvatting ? `<p>${esc(a.samenvatting)}</p>` : ""}
+    <a class="aanmeld" href="#agenda/aanmelden/${encodeURIComponent(a.id)}">Aanmelden<span class="verborgen"> voor ${esc(a.titel)}</span></a></div></li>`;
 }
 function portret(f, opties = {}) {
   const naam = esc(f.naam);
@@ -162,7 +163,7 @@ function controleer(form, eisen) {
     zetFout(veld, fout || "");
     if (fout && !eerste) eerste = veld;
   }
-  if (eerste) eerste.focus();
+  if (eerste) (eerste.type === "hidden" ? eerste.closest("fieldset")?.querySelector("input:not([type=hidden])") || eerste : eerste).focus();
   return !eerste;
 }
 const verplicht = tekst => v => v ? "" : tekst;
@@ -185,6 +186,7 @@ function koppelFormulier(form, opties) {
       return;
     }
     data.soort = typeof opties.soort === "function" ? opties.soort(data) : opties.soort;
+    if (opties.voor) Object.assign(data, opties.voor(data));
     knop.disabled = true; const label = knop.textContent; knop.textContent = "Bezig met versturen…";
     try {
       const r = await fetch(API + "/formulier", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
@@ -192,6 +194,7 @@ function koppelFormulier(form, opties) {
       if (!d.ok) { const fout = new Error(""); fout.nl = d.fout && !/token|fetch|json|error/i.test(d.fout) ? d.fout : ""; throw fout; }
       form.reset(); form.dispatchEvent(new Event("change")); form.dispatchEvent(new Event("input"));
       toon(uit, opties.bedankt(data));
+      if (opties.na) opties.na(data, uit);
     } catch (err) {
       toon(uit, (err.nl ? err.nl + " " : "Versturen lukte niet. ") + `Probeer het zo nog eens, of bel ${TEL}.`, true);
     }
@@ -207,63 +210,72 @@ function toon(el, tekst, isFout) {
 const pagina = {};
 
 pagina.home = async () => {
-  const [kaart, nieuws, succes, vragen, moties, amend, ag, petities, bewijs] = await Promise.all([laad("kaart"), soort("nieuws"), soort("succes"), soort("raadsvraag"), soort("motie"), soort("amendement"), agenda(), soort("petitie"), laad("bewijs")]);
-  const eerst = ag[0], x = eerst ? dt(eerst.datum) : null;
+  const [kaart, nieuws, succes, vragen, moties, amend, ag, petities, bewijs, tel] = await Promise.all([laad("kaart"), soort("nieuws"), soort("succes"), soort("raadsvraag"), soort("motie"), soort("amendement"), agenda(), soort("petitie"), laad("bewijs"), tellers()]);
   const ditJaar = succes.filter(s => s.datum.startsWith(String(new Date().getFullYear()))).length;
   const open = petities.filter(isOpen);
+  const opDatum = (a, b) => b.datum.localeCompare(a.datum);
+  const grens = new Date(Date.now() - 42 * 864e5).toISOString().slice(0, 10);
+  let raad = [...vragen, ...moties, ...amend].sort(opDatum);
+  raad = (raad.filter(i => i.datum >= grens).length >= 4 ? raad.filter(i => i.datum >= grens) : raad).slice(0, 6);
+  const lead = nieuws.find(n => n.beeld) || nieuws[0];
+  const rest = nieuws.filter(n => n !== lead).slice(0, 4);
   return `
-  <section class="held" aria-labelledby="titel">
-    <svg class="held-lijnen" viewBox="0 0 ${kaart.w} ${kaart.h}" aria-hidden="true">${Object.values(kaart.sd).map(s => `<path d="${s.d}"/>`).join("")}</svg>
-    <div class="wrap">
+  <section class="held" aria-labelledby="titel"><div class="wrap">
+    <div class="held-kop">
+      <h1 id="titel" tabindex="-1">Hart voor <span>Den Haag</span></h1>
       <div>
-        <h1 id="titel" tabindex="-1">Hart voor <span>Den Haag</span></h1>
         <p class="held-rol">De grootste lokale partij van Den Haag</p>
         <p class="intro">Met ombudspolitiek zijn we zichtbaar in de wijken, dicht bij de Hagenaar, Hagenees, Scheveninger en Loosduiner. Zestien raadsleden zetten zich elke dag in voor een veilige, schone en leefbare stad.</p>
-        <div class="knoppen"><a class="knop geel" href="#lid">Word lid vanaf € 12,50 per jaar</a><a class="knop rand" href="#contact/melding">Meld een probleem</a></div>
+        <div class="knoppen"><a class="knop geel" href="#lid">Word lid vanaf € 12,50 per jaar</a><a class="knop lijn" href="#contact/melding">Meld een probleem</a></div>
       </div>
-      <figure class="held-beeld">
-        <svg class="hart" viewBox="0 0 100 92" aria-hidden="true"><path d="M50 90C22 68 2 50 2 27 2 12 13 2 27 2c10 0 18 6 23 14C55 8 63 2 73 2c14 0 25 10 25 25 0 23-20 41-48 63z"/></svg>
-        <video id="held-video" muted loop playsinline preload="metadata" poster="beeld/groep.jpg" aria-label="Campagnefilm van Hart voor Den Haag, zonder geluid"><source src="${VIDEO}" type="video/mp4"></video>
-        <button class="speel" type="button" id="speel"><svg viewBox="0 0 16 16" aria-hidden="true"></svg><span>Pauzeer film</span></button>
-      </figure>
     </div>
-  </section>
-  ${eerst ? `<div class="wrap kaartje-plek"><div class="kaartje">
-    <div class="datum" aria-hidden="true"><span class="dag">${x.d}</span><span class="maand">${MAAND[x.m]}</span><span class="wd">${DAG[x.wd]}${eerst.tijd ? ", " + esc(eerst.tijd) : ""}</span></div>
-    <div class="kaartje-tekst"><h2>${esc(eerst.titel)}</h2><p><b>${DAG[x.wd]} ${x.d} ${MAAND[x.m]}, ${esc(eerst.plek)}${eerst.stadsdeel ? ", " + esc(eerst.stadsdeel) : ""}.</b> ${esc(eerst.samenvatting || "")}</p></div>
-    <a class="knop groen" href="#agenda">Hele agenda</a></div></div>` : ""}
+    <figure class="held-beeld">
+      ${HART.replace('class="sil"', 'class="hart"')}
+      <div class="film"><video id="held-video" muted loop playsinline preload="metadata" poster="beeld/groep.jpg" aria-label="Campagnefilm van Hart voor Den Haag, zonder geluid"><source src="${VIDEO}" type="video/mp4"></video>
+      <button class="speel" type="button" id="speel"><svg viewBox="0 0 16 16" aria-hidden="true"></svg><span>Pauzeer film</span></button></div>
+      <figcaption><span>De fractie van Hart voor Den Haag. De film speelt zonder geluid.</span><a href="#fractie">Wie is uw raadslid?</a></figcaption>
+    </figure>
+  </div></section>
 
-  <section class="wit">
-    <div class="wrap">
-      <h2 class="log-titel">De afgelopen weken in de raad en de stad</h2>
-      ${maandLog(nieuws, [...vragen, ...moties, ...amend])}
-      ${open.length ? `<div class="teken-regel"><p><b>Teken mee</b></p><ul>${open.slice(0, 2).map(p => `<li><a href="${href(p)}">${esc(p.titel.replace(/^petitie:\s*/i, "").replace(/^./, c => c.toUpperCase()))}</a>${p.handtekeningen ? ` <span>${fmt.format(p.handtekeningen)} handtekeningen</span>` : ""}</li>`).join("")}</ul></div>` : ""}
-      <p class="log-voet">Ouder werk staat bij <a href="#nieuws">Nieuws</a> en <a href="#raadswerk/vragen">Raadswerk</a>.</p>
-    </div>
-  </section>
+  ${ag.length ? `<section class="binnenkort" aria-labelledby="h-binnenkort"><div class="wrap">
+    <div class="sectie-kop"><h2 id="h-binnenkort">Binnenkort</h2><a class="meer" href="#agenda">Hele agenda ${PIJL}</a></div>
+    <div class="ag-rij">${ag.slice(0, 3).map((a, k) => agKolom(a, k === 0)).join("")}</div>
+  </div></section>` : ""}
 
-  <section>
-    <div class="wrap">
-      <div class="kop"><h2>Uw stadsdeel, uw raadsleden</h2><p class="inleiding">${isTouch ? "Tik" : "Klik"} op uw stadsdeel. U ziet wie er bij u spreekuur houdt en wat er bij u in de buurt speelt.</p></div>
-      ${kaartBlok(kaart)}
+  <section aria-labelledby="h-weken"><div class="wrap">
+    <div class="sectie-kop"><h2 id="h-weken">De afgelopen weken</h2><a class="meer" href="#nieuws">Al het nieuws ${PIJL}</a></div>
+    <div class="krant">
+      <div>
+        ${lead ? `<article class="lead">${lead.beeld ? `<img class="lead-beeld" src="${esc(lead.beeld)}" alt="" decoding="async">` : ""}
+          <h3><a href="${href(lead)}">${esc(lead.titel)}</a></h3>${bijschrift(lead)}${lead.samenvatting ? `<p class="sam">${esc(lead.samenvatting)}</p>` : ""}</article>` : ""}
+        <ul class="kolom-lijst">${rest.map(n => `<li><div><h3><a href="${href(n)}">${esc(n.titel)}</a></h3>${bijschrift(n)}</div>${n.beeld ? `<img class="k-beeld" src="${esc(n.beeld)}" alt="" loading="lazy" decoding="async">` : "<span></span>"}</li>`).join("")}</ul>
+      </div>
+      <aside class="krant-zij" aria-labelledby="h-raad">
+        <h3 class="kolomkop" id="h-raad">Uit de raad</h3>
+        <ul class="raad-lijst">${raad.map(i => { const w = wieVan(i); const plek = i.stadsdelen && i.stadsdelen[0];
+          return `<li><span class="r-wie${w.length > 1 ? " twee" : ""}" aria-hidden="true">${w.length ? gezichtjes(w) : `<span class="r-plek">${plek ? silhouet(plek) : STAD}</span>`}</span>
+          <div><h4><a href="${href(i)}">${esc(i.titel)}</a></h4>${bijschrift(i, { soort: true, ris: false })}</div></li>`; }).join("")}</ul>
+        <p><a class="meer" href="#raadswerk/vragen">Al het raadswerk ${PIJL}</a></p>
+        ${open.length ? `<div class="teken"><h3 class="kolomkop">Teken mee</h3>${open.slice(0, 2).map(p => `<div class="teken-item"><a href="${href(p)}">${esc(p.titel.replace(/^petitie:\s*/i, "").replace(/^./, c => c.toUpperCase()))}</a>${balk(handtekeningen(p, tel))}</div>`).join("")}</div>` : ""}
+      </aside>
     </div>
-  </section>
+  </div></section>
 
-  <section class="donker">
-    <div class="wrap">
-      <div class="succes-kop"><span class="groot-getal">${ditJaar}</span><div><h2>successen in ${new Date().getFullYear()}</h2><p>Van een besluit van de raad tot een opgeknapte speeltuin: dit leverde ombudspolitiek dit jaar op.</p></div></div>
-      <ol class="log">${succes.slice(0, 5).map((s, i) => logItem(s, i === 0)).join("")}</ol>
-      <p style="margin-top:18px"><a class="meer" href="#successen">Alle successen ${PIJL}</a></p>
-    </div>
-  </section>
+  <section class="band" aria-labelledby="h-stadsdeel"><div class="wrap">
+    <div class="sectie-kop"><h2 id="h-stadsdeel">Uw stadsdeel, uw raadsleden</h2><p class="inleiding">Vul uw postcode in of ${isTouch ? "tik" : "klik"} op de kaart. U ziet wie er bij u spreekuur houdt en wat er bij u in de buurt speelt.</p></div>
+    ${kaartBlok(kaart)}
+  </div></section>
 
-  <section>
-    <div class="wrap">
-      <div class="kop"><h2>Beloofd en gedaan</h2><p class="inleiding">Wat in ons programma staat, en wat we er het afgelopen jaar in de raad voor deden.</p></div>
-      ${bewijsLijst(bewijs, PUNTEN.slice(0, 4))}
-      <p style="margin-top:18px"><a class="meer" href="#standpunten">Alle standpunten ${PIJL}</a></p>
-    </div>
-  </section>
+  <section class="donker" aria-labelledby="h-succes"><div class="wrap">
+    <div class="succes-kop"><span class="groot-getal">${ditJaar}</span><div><h2 id="h-succes">successen in ${new Date().getFullYear()}</h2><p>Van een besluit van de raad tot een opgeknapte speeltuin: dit leverde ombudspolitiek dit jaar op.</p></div></div>
+    <ul class="drie">${succes.slice(0, 3).map(x => `<li>${x.beeld ? `<img src="${esc(x.beeld)}" alt="" loading="lazy" decoding="async">` : ""}<h3><a href="${href(x)}">${esc(x.titel)}</a></h3>${bijschrift(x)}</li>`).join("")}</ul>
+    <p style="margin-top:22px"><a class="meer" href="#successen">Alle successen ${PIJL}</a></p>
+  </div></section>
+
+  <section aria-labelledby="h-beloofd"><div class="wrap">
+    <div class="sectie-kop"><h2 id="h-beloofd">Beloofd en gedaan</h2><a class="meer" href="#standpunten">Alle standpunten ${PIJL}</a><p class="inleiding">Wat in ons programma staat, en wat we er het afgelopen jaar in de raad voor deden.</p></div>
+    ${bewijsLijst(bewijs, PUNTEN.slice(0, 4))}
+  </div></section>
   ${lidRegel()}`;
 };
 pagina.home.na = async () => {
@@ -276,27 +288,33 @@ pagina.home.na = async () => {
   activeerKaart(await laad("kaart"), opslag.lees("stadsdeel"));
 };
 
-// Eén doorlopend logboek: nieuws en raadswerk door elkaar, met wie het deed en waar.
-function maandLog(nieuws, raad) {
-  const grens = new Date(Date.now() - 42 * 864e5).toISOString().slice(0, 10);
-  const opDatum = (a, b) => b.datum.localeCompare(a.datum);
-  let nw = nieuws.filter(i => i.datum >= grens), rw = raad.filter(i => i.datum >= grens).sort(opDatum);
-  if (nw.length + rw.length < 6) { nw = nieuws.slice(0, 5); rw = raad.sort(opDatum).slice(0, 5); }
-  const rij = [...nw.slice(0, 6), ...rw.slice(0, 7)].sort(opDatum).slice(0, 12);
-  let html = "", maand = "";
-  for (const i of rij) {
-    const x = dt(i.datum), m = MAAND[x.m] + (x.y !== new Date().getFullYear() ? " " + x.y : "");
-    if (m !== maand) { if (maand) html += "</ol>"; html += `<h3 class="maand-kop">${m[0].toUpperCase() + m.slice(1)}</h3><ol class="mlog">`; maand = m; }
-    const wie = wieVan(i);
-    const plek = i.stadsdelen && i.stadsdelen[0];
-    html += `<li class="m-item${i.beeld ? "" : " zonder-beeld"}">
-      <div class="m-wie${wie.length > 1 ? " twee" : ""}">${wie.length ? gezichtjes(wie) : `<span class="m-plek">${plek ? silhouet(plek) : HART}</span>`}</div>
-      <div class="m-tekst"><h4><a href="${href(i)}">${esc(i.titel)}</a></h4>${bijschrift(i, { soort: true, ris: false })}</div>
-      ${i.beeld ? `<img class="m-beeld" src="${esc(i.beeld)}" alt="" loading="lazy" decoding="async">` : ""}</li>`;
+// een afspraak als krantenkolom, met aanmelden
+function agKolom(a, eerst) {
+  const x = dt(a.datum);
+  return `<article class="ag${eerst ? " eerst" : ""}"><div class="ag-dd" aria-hidden="true"><b>${x.d}</b><span>${MND[x.m]}</span></div>
+    <div><h3>${esc(a.titel)}</h3><p>${DAG[x.wd]} ${x.d} ${MAAND[x.m]}${a.tijd ? ", " + esc(a.tijd) + " uur" : ""} · ${esc(a.plek || "")}${a.stadsdeel ? " · " + esc(a.stadsdeel) : ""}</p>
+    <a class="aanmeld" href="#agenda/aanmelden/${encodeURIComponent(a.id)}">Aanmelden<span class="verborgen"> voor ${esc(a.titel)}</span></a></div></article>`;
+}
+
+// petities: handtekeningen van hartvoordenhaag.nl plus die via deze site, met een doel
+let tellerBelofte = null;
+function tellers() {
+  if (!tellerBelofte) {
+    const ctrl = new AbortController(); setTimeout(() => ctrl.abort(), 4000);
+    tellerBelofte = fetch(API + "/tellers", { signal: ctrl.signal }).then(r => r.json()).then(d => d.petities || {}).catch(() => ({}));
   }
-  return html + (maand ? "</ol>" : "");
+  return tellerBelofte;
+}
+const handtekeningen = (p, tel) => (p.handtekeningen || 0) + (tel[p.titel] || 0);
+const doelVan = n => [250, 500, 1000, 2500, 5000, 10000, 25000, 50000].find(d => d > n) || Math.ceil((n + 1) / 50000) * 50000;
+function balk(n) {
+  const doel = doelVan(n), pct = Math.max(2, Math.min(100, Math.round(n / doel * 100)));
+  return `<div class="voortgang"><div class="voortgang-balk" role="progressbar" aria-valuemin="0" aria-valuemax="${doel}" aria-valuenow="${n}" aria-label="Handtekeningen"><span style="width:${pct}%"></span></div>
+    <p><b>${fmt.format(n)}</b> handtekeningen · doel ${fmt.format(doel)}</p></div>`;
 }
 const HART = '<svg class="sil" viewBox="0 0 100 92" aria-hidden="true"><path d="M50 90C22 68 2 50 2 27 2 12 13 2 27 2c10 0 18 6 23 14C55 8 63 2 73 2c14 0 25 10 25 25 0 23-20 41-48 63z"/></svg>';
+// omtrek van de hele stad, voor stukken die over heel Den Haag gaan
+const STAD = '<svg class="sil" viewBox="0 0 1000 801" aria-hidden="true"><use href="#sd-stad"/></svg>';
 
 // Standpunten met bewijs: wat we het afgelopen jaar in de raad deden op dat onderwerp.
 function bewijsLijst(bewijs, punten, metProgramma = false) {
@@ -311,23 +329,27 @@ function bewijsLijst(bewijs, punten, metProgramma = false) {
   return `<div class="bewijs">${punten.map(([kop, tekst]) => {
     const b = bewijs && bewijs[kop];
     let rechts;
-    if (kop === "Samenwerking voor de stad") rechts = `<p class="telling"><b>5</b> wethouders van Hart voor Den Haag in het college</p><p class="bijschrift"><a href="#wethouders">Wie het zijn en waar ze over gaan</a></p>`;
+    if (kop === "Samenwerking voor de stad") rechts = `<p class="telling"><b>5</b> wethouders van Hart voor Den Haag in het college</p><p class="laatste"><a href="#wethouders">Wie het zijn en waar ze over gaan</a></p>`;
     else if (b) rechts = `<p class="telling">${telling(b)}</p>
-      ${b.succes ? `<p class="bijschrift"><span>Laatste succes: <a href="#successen/${esc(b.succes.id)}">${esc(b.succes.t)}</a></span><time datetime="${esc(b.succes.d)}">${datum(b.succes.d)}</time></p>` : ""}
-      ${b.onderwerp ? `<p class="bijschrift"><a href="#raadswerk/vragen/onderwerp/${encodeURIComponent(b.onderwerp)}">Bekijk het raadswerk over ${esc(b.onderwerp.toLowerCase())}</a></p>` : ""}`;
+      ${b.succes ? `<p class="laatste">Laatste succes: <a href="#successen/${esc(b.succes.id)}">${esc(b.succes.t)}</a> <time datetime="${esc(b.succes.d)}">(${datum(b.succes.d)})</time></p>` : ""}
+      ${b.onderwerp ? `<p class="laatste"><a href="#raadswerk/vragen/onderwerp/${encodeURIComponent(b.onderwerp)}">Bekijk het raadswerk over ${esc(b.onderwerp.toLowerCase())}</a></p>` : ""}`;
     else rechts = `<p class="telling">${esc(tekst)}</p>`;
     return `<article><h3>${esc(kop)}</h3><div>${rechts}${metProgramma ? `<details class="hoe klein"><summary>Wat er in het programma staat</summary><p>${esc(tekst)}</p></details>` : ""}</div></article>`;
   }).join("")}</div>`;
 }
-const lidRegel = () => `<section class="lid-regel-sectie"><div class="wrap lid-regel">
+const WA_KANAAL = "https://whatsapp.com/channel/0029VaD3yaZGE56qCyallu3r";
+const lidRegel = () => `<section class="lid-regel-sectie"><div class="wrap"><div class="lid-regel">
   <p><b>Eens?</b> Word lid vanaf € 12,50 per jaar en praat mee over de koers, het bestuur en de kandidaten.</p>
   <a class="knop geel" href="#lid">Word lid</a>
-  <p class="anders">Of <a href="#doneren">doneer</a>, of <a href="#doe-mee">help mee in uw stadsdeel</a>.</p>
-</div></section>`;
+  <p class="anders">Of <a href="#doneren">doneer</a>, <a href="#doe-mee">help mee in uw stadsdeel</a> of volg ons <a href="${WA_KANAAL}" target="_blank" rel="noopener">WhatsApp-kanaal</a>.</p>
+</div></div></section>`;
 
 // stadsdelenkaart
 function kaartBlok(kaart) {
-  return `<div class="stad-raster"><div><svg class="kaart" id="kaart" viewBox="0 0 ${kaart.w} ${kaart.h}" aria-hidden="true"></svg>
+  return `<form class="postcode" id="postcode" novalidate role="search"><div class="veld"><label for="pc">Uw postcode</label>
+      <div class="pc-rij"><input type="text" id="pc" name="pc" inputmode="text" autocomplete="postal-code" placeholder="Bijvoorbeeld 2491 AA" maxlength="7"><button class="knop groen klein" type="submit">Zoek mijn raadsleden</button></div></div>
+      <p class="pc-uitslag" id="pc-uitslag" aria-live="polite"></p></form>
+    <div class="stad-raster"><div><svg class="kaart" id="kaart" viewBox="0 0 ${kaart.w} ${kaart.h}" aria-hidden="true"></svg>
     <div class="sd-rijen" id="kaart-knoppen" role="group" aria-label="Kies een stadsdeel"></div></div><div class="paneel" id="paneel" aria-live="polite" tabindex="-1"></div></div>`;
 }
 async function activeerKaart(kaart, start) {
@@ -385,10 +407,43 @@ async function activeerKaart(kaart, start) {
       <div class="knoppen"><a class="knop groen" href="#contact/melding/${encodeURIComponent(n)}">Meld een probleem in ${esc(n)}</a><a class="knop lijn" href="#nieuws/stadsdeel/${encodeURIComponent(n)}">Nieuws uit ${esc(n)}</a></div>`;
     if (doorGebruiker && paneel.getBoundingClientRect().top > innerHeight * .6) paneel.scrollIntoView({ block: "start" });
   }
+  // gezichten op de kaart, bij het label van elk stadsdeel (alleen breed; smal staan ze in de rijen)
+  if (innerWidth > 900) namen.forEach((n, k) => {
+    const s = kaart.sd[n], mensen = fractie.filter(f => f.stadsdelen.includes(n) && f.beeld).slice(0, 3);
+    const r = 19, start = s.x - (mensen.length - 1) * r * 0.8;
+    mensen.forEach((f, i) => {
+      const cx = start + i * r * 1.6, cy = s.y + (n === "Leidschenveen-Ypenburg" ? 52 : 34);
+      const clip = document.createElementNS(NS, "clipPath"); clip.id = `gz-${k}-${i}`;
+      const c = document.createElementNS(NS, "circle"); c.setAttribute("cx", cx); c.setAttribute("cy", cy); c.setAttribute("r", r); clip.appendChild(c); svg.appendChild(clip);
+      const rand = document.createElementNS(NS, "circle"); rand.setAttribute("cx", cx); rand.setAttribute("cy", cy); rand.setAttribute("r", r + 2.5); rand.setAttribute("class", "gz-rand"); svg.appendChild(rand);
+      const im = document.createElementNS(NS, "image"); im.setAttribute("href", f.beeld); im.setAttribute("x", cx - r); im.setAttribute("y", cy - r * 1.15);
+      im.setAttribute("width", r * 2); im.setAttribute("height", r * 2.6); im.setAttribute("preserveAspectRatio", "xMidYMin slice"); im.setAttribute("clip-path", `url(#gz-${k}-${i})`);
+      im.setAttribute("class", "gz"); svg.appendChild(im);
+    });
+  });
+  // postcode: via de openbare adresdienst van PDOK naar de wijk, en van de wijk naar het stadsdeel
+  const pcForm = $("#postcode");
+  if (pcForm) pcForm.addEventListener("submit", async e => {
+    e.preventDefault();
+    const veld = $("#pc"), uit = $("#pc-uitslag"), pc = veld.value.replace(/\s+/g, "").toUpperCase();
+    if (!/^\d{4}[A-Z]{2}$/.test(pc)) { zetFout(veld, "Vul een postcode in zoals 2491 AA."); veld.focus(); return; }
+    zetFout(veld, ""); uit.textContent = "Even zoeken…";
+    try {
+      const r = await fetch(`https://api.pdok.nl/bzk/locatieserver/search/v3_1/free?q=postcode:${pc}&fq=type:adres&fl=wijknaam,gemeentenaam&rows=1`);
+      const doc = (await r.json()).response.docs[0];
+      if (!doc) { uit.textContent = "Deze postcode kennen we niet. Kies uw stadsdeel hieronder."; return; }
+      if (!/gravenhage/i.test(doc.gemeentenaam || "")) { uit.textContent = `Deze postcode ligt in ${doc.gemeentenaam}, niet in Den Haag.`; return; }
+      const wijk = String(doc.wijknaam || "").replace(/^Wijk \d+\s*/, "");
+      const sd = namen.find(n => (kaart.sd[n].wijken || []).includes(wijk));
+      if (!sd) { uit.textContent = `${wijk || "Deze wijk"} konden we niet aan een stadsdeel koppelen. Kies hieronder.`; return; }
+      uit.textContent = `${pc.slice(0, 4)} ${pc.slice(4)} ligt in ${wijk}, stadsdeel ${sd}.`;
+      kies(sd, true);
+    } catch { uit.textContent = "Zoeken lukte nu niet. Kies uw stadsdeel op de kaart of hieronder."; }
+  });
   kies(start && kaart.sd[start] ? start : "", false);
 }
 
-pagina.stadsdelen = async () => paginaKop("Uw stadsdeel", "Acht stadsdelen, elk met eigen raadsleden. Kies uw stadsdeel op de kaart of met de knoppen.") +
+pagina.stadsdelen = async () => paginaKop("Uw stadsdeel", "Acht stadsdelen, elk met eigen raadsleden. Vul uw postcode in of kies uw stadsdeel op de kaart.") +
   `<section><div class="wrap">${kaartBlok(await laad("kaart"))}</div></section>`;
 pagina.stadsdelen.na = async ([naam]) => activeerKaart(await laad("kaart"), naam ? decodeURIComponent(naam) : opslag.lees("stadsdeel"));
 
@@ -431,7 +486,7 @@ pagina.nieuws = lijstPagina("nieuws", "Nieuws", "Wat Hart voor Den Haag doet in 
 pagina.successen = lijstPagina("succes", "Successen", "Wat ombudspolitiek opleverde: besluiten, oplossingen en opgeknapte plekken.", "successen");
 
 async function detail(s, id, terugNaam, terugPad) {
-  const alles = await soort(s);
+  const [alles, tel] = await Promise.all([soort(s), s === "petitie" ? tellers() : {}]);
   const i = alles.find(x => String(x.id) === id);
   if (!i) return paginaKop("Niet gevonden", "Dit stuk bestaat niet (meer).") + `<section><div class="wrap"><a class="knop groen" href="#${terugPad}">Terug naar ${esc(terugNaam.toLowerCase())}</a></div></section>`;
   document.title = i.titel + " | Hart voor Den Haag (proef)";
@@ -452,7 +507,7 @@ async function detail(s, id, terugNaam, terugPad) {
     bijschrift({ ...i }, { soort: !["nieuws", "succes", "petitie"].includes(s) }).replace("</p>", `<span>${lees} min lezen</span></p>`)) + `
   <section class="wit"><div class="wrap"><article class="artikel">
     ${i.beeld ? `<img class="artikel-beeld" src="${esc(i.beeld)}" alt="">` : ""}
-    ${isPetitie ? `<div class="teken-teller">${i.handtekeningen ? `<b>${fmt.format(i.handtekeningen)}</b><span>handtekeningen op hartvoordenhaag.nl</span>` : ""}</div>` : ""}
+    ${isPetitie ? `<div class="teken-teller">${balk(handtekeningen(i, tel))}<p class="leeg">Inclusief de handtekeningen op hartvoordenhaag.nl.</p></div>` : ""}
     ${dictum}
     ${dictum ? `<h2 class="volledig">Volledige tekst</h2>` : ""}
     <div class="artikel-tekst" style="margin-top:18px">${i.html || `<p>${esc(i.samenvatting)}</p>`}</div>
@@ -480,7 +535,12 @@ detail.na = () => {
   if (t) koppelFormulier(t, {
     soort: "petitie",
     eisen: () => ({ naam: verplicht("Vul uw naam in."), email: v => !v ? "Vul uw e-mailadres in." : EMAIL.test(v) ? "" : "Dit e-mailadres klopt niet.", akkoord: v => v ? "" : "Vink dit aan om te kunnen tekenen." }),
-    bedankt: () => "Dank u wel! Uw handtekening is binnen.",
+    bedankt: () => "Dank u wel! Uw handtekening is binnen. Helpt u mee? Hoe meer mensen tekenen, hoe sterker we in de raad staan.",
+    na: (d, uit) => {
+      const tekst = `Ik heb de petitie "${d.petitie}" getekend. Teken jij ook? ${location.href}`;
+      uit.insertAdjacentHTML("afterend", `<div class="deel-na"><a class="knop groen" href="https://wa.me/?text=${encodeURIComponent(tekst)}" target="_blank" rel="noopener">Deel via WhatsApp</a><button class="knop lijn" type="button" id="kopieer">Kopieer de link</button></div>`);
+      $("#kopieer").addEventListener("click", async e => { try { await navigator.clipboard.writeText(location.href); e.target.textContent = "Link gekopieerd"; } catch { e.target.textContent = "Kopieer de link uit de adresbalk"; } });
+    },
   });
 };
 
@@ -543,11 +603,11 @@ pagina.raadswerk.na = async ([tab = "moties", ...rest]) => {
 
 pagina.petities = async ([id]) => {
   if (id) return detail("petitie", decodeURIComponent(id), "Petities", "petities");
-  const alles = await soort("petitie");
+  const [alles, tel] = await Promise.all([soort("petitie"), tellers()]);
   const open = alles.filter(isOpen), dicht = alles.filter(p => !isOpen(p));
   return paginaKop("Petities", "Hagenaars die samen iets willen veranderen. Teken mee, dan nemen wij het mee naar de raad.") +
     `<section class="wit"><div class="wrap">
-      ${open.length ? `<h2 class="maand-kop">Loopt nu</h2><ul class="stukken">${open.map(p => stukItem(p, { open: true })).join("")}</ul>` : `<p class="leeg">Er loopt nu geen petitie.</p>`}
+      ${open.length ? `<h2 class="maand-kop">Loopt nu</h2><ul class="stukken">${open.map(p => `<li><h3><a href="${href(p)}">${esc(p.titel)}</a></h3>${bijschrift(p, { open: true })}${balk(handtekeningen(p, tel))}</li>`).join("")}</ul>` : `<p class="leeg">Er loopt nu geen petitie.</p>`}
       ${dicht.length ? `<h2 class="maand-kop">Eerder</h2><ul class="stukken">${dicht.map(p => stukItem({ ...p, samenvatting: "" }, { open: true })).join("")}</ul>` : ""}
     </div></section>`;
 };
@@ -638,12 +698,67 @@ pagina.bestuur = async () => {
       <ul class="documenten">${b.stukken.map(s => `<li><a href="${esc(s.link)}" target="_blank" rel="noopener"><span>${esc(s.titel)}</span>${UIT}</a></li>`).join("")}</ul></div></section>`;
 };
 
-pagina.agenda = async () => {
+pagina.agenda = async ([stap, id]) => {
   const ag = await agenda();
-  return paginaKop("Agenda", "Spreekuren, wijkschouwen en bijeenkomsten. Loop gerust binnen.") + `
-    <section class="wit"><div class="wrap">${ag.length ? `<ol class="agenda-lijst">${ag.map(agendaItem).join("")}</ol>` : `<p class="leeg">Er staat nu niets op de agenda.</p>`}
-    <p class="melding" style="margin-top:28px">Staat er niets bij u in de buurt? <a href="#contact/spreekuur">Vraag een spreekuur aan in uw stadsdeel</a>.</p></div></section>`;
+  if (stap === "aanmelden") {
+    const a = ag.find(x => String(x.id) === decodeURIComponent(id || ""));
+    if (!a) return paginaKop("Aanmelden", "Deze afspraak staat niet (meer) op de agenda.") + `<section><div class="wrap"><a class="knop groen" href="#agenda">Naar de agenda</a></div></section>`;
+    const x = dt(a.datum);
+    return paginaKop("Aanmelden", esc(a.titel), `<a href="#">Home</a> / <a href="#agenda">Agenda</a>`) + `
+    <section><div class="wrap formulier-raster">
+      <form class="formulier" id="form" novalidate>
+        <input type="hidden" name="activiteit" value="${esc(a.titel)}"><input type="hidden" name="datum" value="${esc(a.datum)}">
+        <div class="velden">
+          <div class="veld"><label for="a-naam">Naam</label><input type="text" id="a-naam" name="naam" autocomplete="name"></div>
+          <div class="veld"><label for="a-email">E-mailadres</label><input type="email" id="a-email" name="email" autocomplete="email"></div>
+          <div class="veld"><label for="a-tel">Telefoonnummer <small>(niet verplicht)</small></label><input type="tel" id="a-tel" name="telefoon" autocomplete="tel"></div>
+          <div class="veld"><label for="a-aantal">Met hoeveel personen?</label><select id="a-aantal" name="aantal">${[1, 2, 3, 4, 5, 6].map(n => `<option>${n}</option>`).join("")}</select></div>
+          <div class="veld breed"><label for="a-ber">Vraag of onderwerp dat u wilt bespreken <small>(niet verplicht)</small></label><textarea id="a-ber" name="bericht" maxlength="1500"></textarea></div></div>
+        ${akkoordVeld()}<button class="knop groen" type="submit">Meld mij aan</button><p class="uitslag" hidden></p></form>
+      <div><h2>${DAG[x.wd][0].toUpperCase() + DAG[x.wd].slice(1)} ${x.d} ${MAAND[x.m]}</h2>
+        <ul class="voordelen"><li>${a.tijd ? esc(a.tijd) + " uur" : "Tijd volgt"}</li><li>${esc(a.plek || "")}${a.stadsdeel ? ", " + esc(a.stadsdeel) : ""}</li>${a.samenvatting ? `<li>${esc(a.samenvatting)}</li>` : ""}</ul>
+        <p class="melding" style="margin-top:22px">Aanmelden helpt ons met koffie en stoelen. Zonder aanmelden bent u ook welkom.</p>
+        <p style="margin-top:14px"><button class="knop lijn klein" type="button" id="ics">Zet in mijn agenda</button></p></div>
+    </div></section>`;
+  }
+  const sd = stap === "stadsdeel" ? decodeURIComponent(id || "") : "";
+  const lijst = ag.filter(a => !sd || a.stadsdeel === sd);
+  return paginaKop("Agenda", "Spreekuren, wijkschouwen en bijeenkomsten. Loop gerust binnen, of meld u aan.") + `
+    <section><div class="wrap">
+      <div class="filterrij"><div class="veld"><label for="ag-sd">Stadsdeel</label><select id="ag-sd"><option value="">Alle stadsdelen</option>${STADSDELEN.map(x => `<option${x === sd ? " selected" : ""}>${x}</option>`).join("")}</select></div>
+        <p class="teller">${lijst.length} ${lijst.length === 1 ? "afspraak" : "afspraken"}</p></div>
+      ${lijst.length ? `<ol class="agenda-lijst">${lijst.map(agendaItem).join("")}</ol>` : `<p class="leeg">Er staat nu niets op de agenda${sd ? " in " + esc(sd) : ""}.</p>`}
+      <p class="melding" style="margin-top:28px">Staat er niets bij u in de buurt? <a href="#contact/spreekuur">Vraag een spreekuur aan in uw stadsdeel</a>.</p></div></section>`;
 };
+pagina.agenda.na = async ([stap, id]) => {
+  const ag = await agenda();
+  if (stap !== "aanmelden") {
+    $("#ag-sd").addEventListener("change", e => gaNaar("agenda" + (e.target.value ? "/stadsdeel/" + encodeURIComponent(e.target.value) : "")));
+    return;
+  }
+  const a = ag.find(x => String(x.id) === decodeURIComponent(id || ""));
+  if (!a) return;
+  $("#ics").addEventListener("click", () => icsDownload(a));
+  koppelFormulier($("#form"), {
+    soort: "aanmelding",
+    eisen: () => ({ naam: verplicht("Vul uw naam in."), email: v => !v ? "Vul uw e-mailadres in, dan sturen we een bevestiging." : EMAIL.test(v) ? "" : "Dit e-mailadres klopt niet.", akkoord: v => v ? "" : "Vink dit aan, zodat we u kunnen laten weten als er iets verandert." }),
+    bedankt: () => `U bent aangemeld voor ${a.titel}. Tot ${DAG[dt(a.datum).wd]}!`,
+    na: (d, uit) => { uit.insertAdjacentHTML("afterend", `<div class="deel-na"><button class="knop groen" type="button" id="ics2">Zet in mijn agenda</button></div>`); $("#ics2").addEventListener("click", () => icsDownload(a)); },
+  });
+};
+// agendabestand (.ics) voor de eigen agenda
+function icsDownload(a) {
+  const d = a.datum.replace(/-/g, ""), t = (a.tijd || "").replace(/[.:]/, "");
+  const eind = t ? String(Math.min(2359, Number(t) + 100)).padStart(4, "0") : "";
+  const regels = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Hart voor Den Haag//Agenda//NL", "BEGIN:VEVENT",
+    `UID:${a.id}-${d}@hartvoordenhaag.nl`, `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, "").slice(0, 15)}Z`,
+    t ? `DTSTART:${d}T${t}00` : `DTSTART;VALUE=DATE:${d}`, t ? `DTEND:${d}T${eind}00` : "",
+    `SUMMARY:${(a.titel || "").replace(/[,;]/g, "\\$&")}`, `LOCATION:${[a.plek, a.stadsdeel, "Den Haag"].filter(Boolean).join(" ").replace(/[,;]/g, "\\$&")}`,
+    "END:VEVENT", "END:VCALENDAR"].filter(Boolean);
+  const url = URL.createObjectURL(new Blob([regels.join("\r\n")], { type: "text/calendar" }));
+  const l = document.createElement("a"); l.href = url; l.download = slug(a.titel).slice(0, 40) + ".ics"; document.body.appendChild(l); l.click(); l.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+}
 
 pagina.vacatures = async ([id]) => {
   if (id) return detail("vacature", decodeURIComponent(id), "Vacatures", "vacatures");
@@ -653,12 +768,18 @@ pagina.vacatures = async ([id]) => {
 };
 pagina.vacatures.na = ([id]) => id && detail.na();
 
-pagina["doe-mee"] = async () => paginaKop("Doe mee", "Den Haag wordt beter als u meedoet. Word wijkvertegenwoordiger of vrijwilliger in uw eigen stadsdeel.") + `
+const TAKEN = ["Folders bezorgen in mijn buurt", "Aanbellen en gesprekken voeren", "Bellen met leden en kiezers", "Online delen en reageren", "Een raamposter ophangen", "Een tuinbord plaatsen", "Helpen bij bijeenkomsten en spreekuren", "Meldingen uit mijn buurt doorgeven"];
+pagina["doe-mee"] = async () => paginaKop("Doe mee", "Den Haag wordt beter als u meedoet. Kies wat bij u past: een uur per maand helpt al.") + `
   <section><div class="wrap formulier-raster">
     <form class="formulier" id="form" novalidate>
-      <fieldset><legend>Ik wil helpen als</legend><div class="keuzes">
-        <div class="keuze"><input type="radio" name="rol" id="r1" value="Wijkvertegenwoordiger" checked><label for="r1"><b>Wijkvertegenwoordiger</b><span>Ogen en oren in uw buurt</span></label></div>
-        <div class="keuze"><input type="radio" name="rol" id="r2" value="Vrijwilliger"><label for="r2"><b>Vrijwilliger</b><span>Flyeren, acties, campagne</span></label></div></div></fieldset>
+      <fieldset><legend>Wat wilt u doen? <small>(kies er een of meer)</small></legend><div class="taken" id="taken">
+        ${TAKEN.map((t, i) => `<label class="taak"><input type="checkbox" class="taak-vink" value="${esc(t)}" id="t${i}"><span>${esc(t)}</span></label>`).join("")}</div>
+        <input type="hidden" name="takenlijst" id="takenlijst"></fieldset>
+      <fieldset><legend>Hoeveel tijd heeft u?</legend><div class="keuzes kort">
+        <div class="keuze"><input type="radio" name="beschikbaar" id="tijd1" value="Af en toe" checked><label for="tijd1"><b>Af en toe</b></label></div>
+        <div class="keuze"><input type="radio" name="beschikbaar" id="tijd2" value="Een paar uur per maand"><label for="tijd2"><b>Een paar uur per maand</b></label></div>
+        <div class="keuze"><input type="radio" name="beschikbaar" id="tijd3" value="Elke week"><label for="tijd3"><b>Elke week</b></label></div>
+        <div class="keuze"><input type="radio" name="beschikbaar" id="tijd4" value="Alleen in campagnetijd"><label for="tijd4"><b>Alleen in campagnetijd</b></label></div></div></fieldset>
       <div class="velden">
         <div class="veld"><label for="f-naam">Naam</label><input type="text" id="f-naam" name="naam" autocomplete="name"></div>
         <div class="veld"><label for="f-tel">Telefoonnummer</label><input type="tel" id="f-tel" name="telefoon" autocomplete="tel"></div>
@@ -667,16 +788,22 @@ pagina["doe-mee"] = async () => paginaKop("Doe mee", "Den Haag wordt beter als u
         <div class="veld breed"><label for="f-ber">Iets wat we moeten weten? <small>(niet verplicht)</small></label><textarea id="f-ber" name="bericht" maxlength="1500"></textarea></div></div>
       ${akkoordVeld()}<button class="knop groen" type="submit">Ik doe mee</button><p class="uitslag" hidden></p></form>
     <div><h2>Zo werkt het</h2><ol class="uitleg" style="grid-template-columns:1fr;margin-top:22px">
-      <li><b>Meld u aan</b><span>Vul het formulier in. Dat duurt een minuut.</span></li>
+      <li><b>Meld u aan</b><span>Vink aan wat u wilt doen. Dat duurt een minuut.</span></li>
       <li><b>Kennismaken</b><span>Iemand uit uw stadsdeel belt of mailt u voor een eerste gesprek.</span></li>
       <li><b>Aan de slag</b><span>U helpt in uw eigen buurt, op momenten die u uitkomen.</span></li></ol>
-      <p class="melding" style="margin-top:8px">Liever eerst bellen? <a href="${TEL_LINK}">${TEL}</a>. Wilt u een poster voor uw raam? Zet het in uw bericht.</p></div>
+      <p class="melding" style="margin-top:8px">Liever eerst bellen? <a href="${TEL_LINK}">${TEL}</a>. Of volg ons <a href="${WA_KANAAL}" target="_blank" rel="noopener">WhatsApp-kanaal</a> voor acties bij u in de buurt.</p></div>
   </div></section>`;
-pagina["doe-mee"].na = () => koppelFormulier($("#form"), {
-  soort: "doemee",
-  eisen: () => ({ naam: verplicht("Vul uw naam in."), email: mailOfTel, stadsdeel: verplicht("Kies uw stadsdeel, dan zoeken we iemand bij u in de buurt."), akkoord: v => v ? "" : "Vink dit aan, zodat we contact mogen opnemen." }),
-  bedankt: d => `Dank u wel! Iemand uit ${d.stadsdeel || "uw stadsdeel"} neemt binnenkort contact met u op.`,
-});
+pagina["doe-mee"].na = () => {
+  const f = $("#form");
+  const zetTaken = () => { $("#takenlijst").value = $$(".taak-vink:checked", f).map(x => x.value).join(", "); if ($("#takenlijst").value) zetFout($("#takenlijst"), ""); };
+  f.addEventListener("change", zetTaken); f.addEventListener("submit", zetTaken, true);
+  koppelFormulier(f, {
+    soort: "doemee",
+    eisen: () => ({ takenlijst: v => v ? "" : "Kies minstens één ding dat u wilt doen.", naam: verplicht("Vul uw naam in."), email: mailOfTel, stadsdeel: verplicht("Kies uw stadsdeel, dan zoeken we iemand bij u in de buurt."), akkoord: v => v ? "" : "Vink dit aan, zodat we contact mogen opnemen." }),
+    voor: () => ({ rol: "Vrijwilliger" }),
+    bedankt: d => `Dank u wel! Iemand uit ${d.stadsdeel || "uw stadsdeel"} neemt binnenkort contact met u op.`,
+  });
+};
 
 pagina.contact = async ([onderwerp, sd]) => {
   const keuzes = [["melding", "Iets in mijn buurt"], ["contact", "Een vraag aan de fractie"], ["spreekuur", "Spreekuur aanvragen"], ["lidmaatschap", "Lidmaatschap"], ["pers", "Pers en media"], ["anders", "Iets anders"]];
@@ -722,38 +849,65 @@ pagina.contact.na = () => {
   });
 };
 
+// lid worden in drie stappen; betalen loopt straks via Mollie (eerste keer iDEAL, daarna incasso)
+const euro = n => Number(n) % 1 ? Number(n).toFixed(2).replace(".", ",") : String(n);
+const LID = { silver: ["Silvermember", 12.5], gold: ["Goldmember", 25], ouder: ["Ouderenlid, vanaf 65", 6.7], jong: ["Jongeren voor Den Haag", 12.5] };
 pagina.lid = async () => paginaKop("Word lid", "Met meer leden zijn we sterker. Als lid praat u mee en kiest u mee over bestuur en kandidaat-raadsleden.") + `
   <section><div class="wrap formulier-raster">
-    <form class="formulier" id="form" novalidate>
-      <fieldset><legend>Kies uw lidmaatschap</legend><div class="keuzes">
-        <div class="keuze"><input type="radio" name="soort" id="s1" value="silver" checked><label for="s1"><b>Silvermember</b><span>€ 12,50 per jaar</span></label></div>
-        <div class="keuze"><input type="radio" name="soort" id="s2" value="gold"><label for="s2"><b>Goldmember</b><span>€ 25 per jaar</span></label></div>
-        <div class="keuze"><input type="radio" name="soort" id="s3" value="ouder"><label for="s3"><b>Ouderenlid, vanaf 65</b><span>€ 6,70 het eerste jaar, daarna € 12,50</span></label></div>
-        <div class="keuze"><input type="radio" name="soort" id="s4" value="jong"><label for="s4"><b>Jongeren voor Den Haag</b><span>€ 12,50 of € 25 per jaar</span></label></div></div></fieldset>
-      <fieldset><legend>Hoe wilt u betalen?</legend><div class="keuzes">
-        <div class="keuze"><input type="radio" name="betaal" id="b1" value="incasso" checked><label for="b1"><b>Automatische incasso</b><span>Eerste keer met iDEAL, daarna vanzelf</span></label></div>
-        <div class="keuze"><input type="radio" name="betaal" id="b2" value="ideal"><label for="b2"><b>Elk jaar zelf</b><span>U krijgt een betaalverzoek</span></label></div></div></fieldset>
-      <div class="velden">
-        <div class="veld"><label for="l-naam">Naam</label><input type="text" id="l-naam" name="naam" autocomplete="name"></div>
-        <div class="veld"><label for="l-email">E-mailadres</label><input type="email" id="l-email" name="email" autocomplete="email"></div>
-        <div class="veld"><label for="l-pc">Postcode</label><input type="text" id="l-pc" name="postcode" autocomplete="postal-code"></div>
-        <div class="veld"><label for="l-nr">Huisnummer</label><input type="text" id="l-nr" name="huisnummer"></div></div>
-      <button class="knop groen" type="submit">Verder naar betalen</button><p class="uitslag" hidden></p></form>
+    <form class="formulier stappen" id="form" novalidate>
+      <ol class="stappenbalk" aria-label="Voortgang"><li aria-current="step">Keuze</li><li>Gegevens</li><li>Betalen</li></ol>
+      <fieldset class="stap" data-stap="1"><legend>Kies uw lidmaatschap</legend><div class="keuzes">
+        ${Object.entries(LID).map(([k, v], i) => `<div class="keuze"><input type="radio" name="soort" id="s${i}" value="${k}"${i === 0 ? " checked" : ""}><label for="s${i}"><b>${v[0]}</b><span>${k === "ouder" ? "€ 6,70 het eerste jaar, daarna € 12,50" : k === "jong" ? "€ 12,50 of € 25 per jaar" : "€ " + euro(v[1]) + " per jaar"}</span></label></div>`).join("")}</div>
+        <button class="knop groen" type="button" data-naar="2">Volgende: uw gegevens</button></fieldset>
+      <fieldset class="stap" data-stap="2" hidden><legend>Uw gegevens</legend>
+        <div class="velden">
+          <div class="veld"><label for="l-naam">Naam</label><input type="text" id="l-naam" name="naam" autocomplete="name"></div>
+          <div class="veld"><label for="l-email">E-mailadres</label><input type="email" id="l-email" name="email" autocomplete="email"></div>
+          <div class="veld"><label for="l-pc">Postcode</label><input type="text" id="l-pc" name="postcode" autocomplete="postal-code"></div>
+          <div class="veld"><label for="l-nr">Huisnummer</label><input type="text" id="l-nr" name="huisnummer"></div>
+          <div class="veld"><label for="l-sd">Stadsdeel</label><select id="l-sd" name="stadsdeel">${stadsdeelOpties()}</select><small id="l-sd-hint"></small></div>
+          <div class="veld"><label for="l-tel">Telefoonnummer <small>(niet verplicht)</small></label><input type="tel" id="l-tel" name="telefoon" autocomplete="tel"></div></div>
+        <fieldset><legend>Wilt u ook actief worden?</legend><div class="keuzes kort">
+          <div class="keuze"><input type="radio" name="actief" id="ac1" value="ja" checked><label for="ac1"><b>Ja, graag</b></label></div>
+          <div class="keuze"><input type="radio" name="actief" id="ac2" value="later"><label for="ac2"><b>Misschien later</b></label></div>
+          <div class="keuze"><input type="radio" name="actief" id="ac3" value="nee"><label for="ac3"><b>Nee, alleen lid</b></label></div></div></fieldset>
+        <div class="velden">
+          <div class="veld"><label for="l-door">Wie bracht u aan? <small>(niet verplicht)</small></label><input type="text" id="l-door" name="aangebracht"></div>
+          <div class="veld"><label for="l-waarom">Waarom wordt u lid? <small>(niet verplicht)</small></label><input type="text" id="l-waarom" name="waarom" maxlength="200"></div></div>
+        <div class="knoppen"><button class="knop lijn" type="button" data-naar="1">Terug</button><button class="knop groen" type="button" data-naar="3">Volgende: betalen</button></div></fieldset>
+      <fieldset class="stap" data-stap="3" hidden><legend>Hoe wilt u betalen?</legend><div class="keuzes">
+        <div class="keuze"><input type="radio" name="betaal" id="b1" value="incasso" checked><label for="b1"><b>Automatisch elk jaar</b><span>Eerste keer met iDEAL, daarna incasso</span></label></div>
+        <div class="keuze"><input type="radio" name="betaal" id="b2" value="ideal"><label for="b2"><b>Elk jaar zelf</b><span>U krijgt een betaalverzoek</span></label></div></div>
+        <p class="overzicht" id="overzicht"></p>
+        <div class="knoppen"><button class="knop lijn" type="button" data-naar="2">Terug</button><button class="knop geel" type="submit" id="lid-knop">Betaal met iDEAL</button></div>
+        <p class="uitslag" hidden></p></fieldset>
+    </form>
     <div><h2>Wat u krijgt</h2><ul class="voordelen">
       <li>Een stem op de Algemene Ledenvergadering.</li>
       <li>Mee beslissen over het bestuur en de kandidaat-raadsleden.</li>
       <li>Een uitnodiging voor al onze (leden)evenementen.</li>
       <li>Het speldje met de groen-gele hartjes, als welkomstcadeau.</li></ul>
-      <p class="leeg" style="margin-top:20px">Bij opzeggen krijgt u geen geld terug; u blijft lid tot het einde van de betaalde periode. Vragen over uw lidmaatschap? <a href="#contact/lidmaatschap">Stel ze hier</a>.</p></div>
+      <p class="leeg" style="margin-top:20px">Uw aanmelding gaat rechtstreeks naar de ledenadministratie; de website bewaart geen ledengegevens. Bij opzeggen krijgt u geen geld terug; u blijft lid tot het einde van de betaalde periode. Vragen? <a href="#contact/lidmaatschap">Stel ze hier</a>.</p></div>
   </div></section>`;
 pagina.lid.na = () => {
   const f = $("#form");
+  const naar = n => {
+    $$(".stap", f).forEach(x => x.hidden = x.dataset.stap !== String(n));
+    $$(".stappenbalk li", f).forEach((li, i) => i + 1 === n ? li.setAttribute("aria-current", "step") : li.removeAttribute("aria-current"));
+    $$(".stappenbalk li", f).forEach((li, i) => li.classList.toggle("klaar", i + 1 < n));
+    const leg = $(`.stap[data-stap="${n}"] legend`, f); if (leg) { leg.tabIndex = -1; leg.focus(); }
+    if (n === 3) { const [naam, bedrag] = LID[f.soort.value]; $("#overzicht").innerHTML = `<b>${naam}</b>, € ${euro(bedrag)} ${f.betaal.value === "incasso" ? "per jaar, automatisch" : "dit jaar"}.`; $("#lid-knop").textContent = `Betaal € ${euro(bedrag)} met iDEAL`; }
+  };
   f.addEventListener("input", e => { if (e.target.getAttribute("aria-invalid")) zetFout(e.target, ""); });
-  f.addEventListener("submit", e => {
-    e.preventDefault();
-    if (!controleer(f, { naam: verplicht("Vul uw naam in."), email: v => EMAIL.test(v) ? "" : "Vul een geldig e-mailadres in.", postcode: v => /^\d{4}\s?[a-z]{2}$/i.test(v) ? "" : "Vul uw postcode in, bijvoorbeeld 2511 BT.", huisnummer: verplicht("Vul uw huisnummer in.") })) return;
-    toon($(".uitslag", f), "Dit is een proef: er is niets verstuurd of betaald. Straks gaat u hier naar iDEAL en komt uw aanmelding direct in de ledenadministratie.");
+  f.addEventListener("change", () => { if (!$(".stap[data-stap='3']", f).hidden) naar(3); });
+  const eisen2 = { naam: verplicht("Vul uw naam in."), email: v => EMAIL.test(v) ? "" : "Vul een geldig e-mailadres in.", postcode: v => /^\d{4}\s?[a-z]{2}$/i.test(v) ? "" : "Vul uw postcode in, bijvoorbeeld 2511 BT.", huisnummer: verplicht("Vul uw huisnummer in.") };
+  $$("[data-naar]", f).forEach(b => b.addEventListener("click", () => { const n = Number(b.dataset.naar); if (n === 3 && !controleer(f, eisen2)) return; naar(n); }));
+  // postcode vult het stadsdeel vanzelf in
+  $("#l-pc").addEventListener("change", async e => {
+    const pc = e.target.value.replace(/\s+/g, "").toUpperCase(); if (!/^\d{4}[A-Z]{2}$/.test(pc)) return;
+    const sd = await stadsdeelVanPostcode(pc); if (sd && !$("#l-sd").value) { $("#l-sd").value = sd; $("#l-sd-hint").textContent = "Ingevuld op basis van uw postcode."; }
   });
+  f.addEventListener("submit", e => { e.preventDefault(); betaal(f, "lid", { lid: f.soort.value, betaal: f.betaal.value }); });
 };
 
 pagina.doneren = async () => paginaKop("Doneren", "Geen lid, wel steunen? Elke bijdrage gaat naar acties in de wijk, het ombudsteam en campagnemateriaal.") + `
@@ -770,12 +924,13 @@ pagina.doneren = async () => paginaKop("Doneren", "Geen lid, wel steunen? Elke b
         <div class="veld"><label for="d-naam">Naam</label><input type="text" id="d-naam" name="naam" autocomplete="name"></div>
         <div class="veld"><label for="d-plaats">Woonplaats</label><input type="text" id="d-plaats" name="plaats" autocomplete="address-level2"></div>
         <div class="veld breed"><label for="d-email">E-mailadres</label><input type="email" id="d-email" name="email" autocomplete="email"></div></div>
-      <button class="knop groen" type="submit" id="doneer-knop">Doneer € 25 met iDEAL</button><p class="uitslag" hidden></p></form>
+      <button class="knop geel" type="submit" id="doneer-knop">Doneer € 25 met iDEAL</button><p class="uitslag" hidden></p></form>
     <div><h2>Waar uw geld heen gaat</h2><ul class="voordelen">
       <li>Schouwen, bewonersavonden en spreekuren in alle acht stadsdelen.</li>
       <li>Het ombudsteam, zodat meldingen van bewoners snel worden opgepakt.</li>
       <li>Posters, flyers en filmpjes voor de campagne.</li></ul>
-      <p class="melding" style="margin-top:22px">Giften aan politieke partijen vallen onder regels voor openheid. Daarom vragen we altijd uw naam en woonplaats. Anonieme giften nemen we niet aan.</p></div>
+      <p class="melding" style="margin-top:22px">Maandelijks geven gaat zo: de eerste keer betaalt u met iDEAL, daarna schrijven we het bedrag elke maand af. Stoppen kan altijd met één mail.</p>
+      <p class="leeg" style="margin-top:14px">Giften aan politieke partijen vallen onder regels voor openheid. Daarom vragen we altijd uw naam en woonplaats. Anonieme giften nemen we niet aan.</p></div>
   </div></section>`;
 pagina.doneren.na = () => {
   const f = $("#form");
@@ -789,9 +944,36 @@ pagina.doneren.na = () => {
   f.addEventListener("submit", e => {
     e.preventDefault();
     if (!controleer(f, { eigen: v => f.bedrag.value === "eigen" && !(Number(v) >= 1) ? "Vul een bedrag in van minstens € 1." : "", naam: verplicht("Vul uw naam in. Anonieme giften nemen we niet aan."), plaats: verplicht("Vul uw woonplaats in."), email: v => EMAIL.test(v) ? "" : "Vul een geldig e-mailadres in." })) return;
-    toon($(".uitslag", f), "Dit is een proef: er is niets betaald. Straks opent hier iDEAL via Mollie.");
+    betaal(f, "doneren", { bedrag: bedrag(), maandelijks: f.vaak.value === "maandelijks" });
   });
 };
+
+// Betalen via de achterkant. Staat de Mollie-sleutel er nog niet, dan zegt de achterkant "demo" en tonen we dat eerlijk.
+async function betaal(f, soortBetaling, extra) {
+  const uit = $(".uitslag", f), knop = $("button[type=submit]", f), label = knop.textContent;
+  const data = Object.fromEntries(new FormData(f).entries());
+  knop.disabled = true; knop.textContent = "Even geduld…";
+  try {
+    const r = await fetch(API + "/betaling", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ soort: soortBetaling, naam: data.naam, email: data.email, plaats: data.plaats || "", ...extra }) });
+    const d = await r.json().catch(() => ({}));
+    if (d.ok && d.checkout) { location.href = d.checkout; return; }
+    if (d.ok && d.demo) toon(uit, "Dit is een proef: er is niets betaald. Zodra de partij Mollie heeft gekoppeld, gaat u hier naar iDEAL.");
+    else toon(uit, (d.fout || "Betalen lukte nu niet.") + ` Probeer het zo nog eens, of bel ${TEL}.`, true);
+  } catch { toon(uit, `Betalen lukte nu niet. Probeer het zo nog eens, of bel ${TEL}.`, true); }
+  knop.disabled = false; knop.textContent = label;
+}
+
+// postcode naar stadsdeel (PDOK locatieserver, openbaar)
+async function stadsdeelVanPostcode(pc) {
+  try {
+    const r = await fetch(`https://api.pdok.nl/bzk/locatieserver/search/v3_1/free?q=postcode:${pc}&fq=type:adres&fl=wijknaam,gemeentenaam&rows=1`);
+    const doc = (await r.json()).response.docs[0];
+    if (!doc || !/gravenhage/i.test(doc.gemeentenaam || "")) return "";
+    const wijk = String(doc.wijknaam || "").replace(/^Wijk \d+\s*/, "");
+    const k = await laad("kaart");
+    return Object.keys(k.sd).find(n => (k.sd[n].wijken || []).includes(wijk)) || "";
+  } catch { return ""; }
+}
 
 pagina.zoeken = async ([term = ""]) => {
   term = decodeURIComponent(term);
@@ -818,6 +1000,9 @@ pagina.zoeken = async ([term = ""]) => {
 };
 pagina.zoeken.na = () => $("#zoek2").addEventListener("submit", e => { e.preventDefault(); const t = $("#zoek2-veld").value.trim(); if (t) gaNaar("zoeken/" + encodeURIComponent(t)); });
 
+pagina.bedankt = async ([soortBetaling]) => paginaKop("Dank u wel!", soortBetaling === "lid" ? "Welkom bij Hart voor Den Haag. U krijgt een bevestiging per mail zodra de betaling rond is." : "Uw steun komt goed terecht. U krijgt een bevestiging per mail zodra de betaling rond is.") + `
+  <section><div class="wrap"><p class="melding">Ging er iets mis bij het betalen? Dan is er niets afgeschreven. Probeer het opnieuw of bel <a href="${TEL_LINK}">${TEL}</a>.</p>
+  <div class="knoppen" style="margin-top:22px"><a class="knop groen" href="#">Naar de voorpagina</a><a class="knop lijn" href="${WA_KANAAL}" target="_blank" rel="noopener">Volg ons WhatsApp-kanaal</a></div></div></section>`;
 pagina.privacy = async () => paginaKop("Privacy", "Hoe we met uw gegevens omgaan op deze proefsite.") + `
   <section class="wit"><div class="wrap artikel"><div class="artikel-tekst">
     <p>Deze site plaatst geen volg- of advertentiecookies en houdt geen bezoekersstatistieken bij. Uw keuze voor een stadsdeel onthoudt uw eigen browser, zodat de kaart de volgende keer meteen uw buurt laat zien.</p>
@@ -834,7 +1019,7 @@ pagina.toegankelijkheid = async () => paginaKop("Toegankelijkheid", "Deze site m
   </div></div></section>`;
 
 // ---------- router ----------
-const TITELS = { nieuws: "Nieuws", successen: "Successen", raadswerk: "Raadswerk", petities: "Petities", standpunten: "Standpunten", fractie: "Fractie", wethouders: "Wethouders", bestuur: "Bestuur", agenda: "Agenda", vacatures: "Vacatures", "doe-mee": "Doe mee", contact: "Contact", lid: "Word lid", doneren: "Doneren", zoeken: "Zoeken", stadsdelen: "Uw stadsdeel", privacy: "Privacy", toegankelijkheid: "Toegankelijkheid" };
+const TITELS = { nieuws: "Nieuws", successen: "Successen", raadswerk: "Raadswerk", petities: "Petities", standpunten: "Standpunten", fractie: "Fractie", wethouders: "Wethouders", bestuur: "Bestuur", agenda: "Agenda", vacatures: "Vacatures", "doe-mee": "Doe mee", contact: "Contact", lid: "Word lid", doneren: "Doneren", zoeken: "Zoeken", bedankt: "Dank u wel", stadsdelen: "Uw stadsdeel", privacy: "Privacy", toegankelijkheid: "Toegankelijkheid" };
 let vorige = location.hash, viaLink = false;
 function gaNaar(h) { viaLink = true; location.hash = h; }
 document.addEventListener("click", e => {
@@ -926,6 +1111,13 @@ addEventListener("keydown", e => {
   if (!$("#zoekbalk").hidden) { $("#zoekbalk").hidden = true; $("#zoek-knop").setAttribute("aria-expanded", "false"); $("#zoek-knop").focus(); }
 });
 
+// datumregel: de datum van vandaag, zoals bovenaan een krant
+(() => { const d = new Date(), t = $("#vandaag"); if (t) { t.dateTime = d.toISOString().slice(0, 10); t.textContent = `${DAG[d.getDay()][0].toUpperCase() + DAG[d.getDay()].slice(1)} ${d.getDate()} ${MAAND[d.getMonth()]} ${d.getFullYear()}`; } })();
+// vertalen: de pagina opent via Google Vertalen in de gekozen taal (alleen als de bezoeker erop klikt)
+function zetVertaallinks() {
+  $$("#vertaal a[data-taal]").forEach(a => { const t = a.dataset.taal; a.href = `https://damienzeller-nl.translate.goog/proef/?_x_tr_sl=nl&_x_tr_tl=${t}&_x_tr_hl=${t}${location.hash}`; a.target = "_blank"; a.rel = "noopener"; });
+}
+zetVertaallinks(); addEventListener("hashchange", zetVertaallinks);
 // strook: eerstvolgende afspraak
 agenda().then(ag => { if (ag[0]) { const x = dt(ag[0].datum); $("#strook-spreekuur").textContent = `Agenda: ${x.d} ${MND[x.m]}, ${ag[0].plek.split(",")[0]}`; } });
 

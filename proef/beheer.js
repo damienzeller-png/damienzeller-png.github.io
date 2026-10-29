@@ -3,8 +3,8 @@
 const API = "https://hvdh-proef.damienzeller.workers.dev";
 const STADSDELEN = ["Centrum", "Escamp", "Haagse Hout", "Laak", "Leidschenveen-Ypenburg", "Loosduinen", "Scheveningen", "Segbroek"];
 const SOORTEN = { nieuws: "Nieuwsbericht", agenda: "Agenda-afspraak", succes: "Succes", petitie: "Petitie", vacature: "Vacature" };
-const FORM_NAAM = { melding: "Meldingen", contact: "Contact", doemee: "Doe mee", petitie: "Handtekeningen", nieuwsbrief: "Nieuwsbrief" };
-const VELD_NAAM = { email: "E-mail", telefoon: "Telefoon", stadsdeel: "Stadsdeel", rol: "Wil helpen als", plek: "Waar", onderwerp: "Onderwerp", petitie: "Petitie", bericht: "Bericht" };
+const FORM_NAAM = { melding: "Meldingen", contact: "Contact", doemee: "Doe mee", aanmelding: "Aanmeldingen", petitie: "Handtekeningen", nieuwsbrief: "Nieuwsbrief" };
+const VELD_NAAM = { email: "E-mail", telefoon: "Telefoon", stadsdeel: "Stadsdeel", rol: "Wil helpen als", takenlijst: "Wil doen", beschikbaar: "Tijd", activiteit: "Aangemeld voor", datum: "Datum", aantal: "Aantal personen", plek: "Waar", onderwerp: "Onderwerp", petitie: "Petitie", bericht: "Bericht" };
 const H1 = t => `<h1 class="beheer-kop">${t}</h1>`;
 let gewijzigd = false;
 addEventListener("beforeunload", e => { if (gewijzigd) { e.preventDefault(); e.returnValue = ""; } });

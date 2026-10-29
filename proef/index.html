@@ -6,26 +6,20 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Hart voor Den Haag (proef)</title>
 <meta name="description" content="Proefontwerp voor de nieuwe website van Hart voor Den Haag.">
-<meta name="theme-color" content="#137345">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0E1612" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="https://www.hartvoordenhaag.nl/wp-content/uploads/2026/01/cropped-favicon-192x192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..100,600..900&family=Lexend:wght@400;600;700&display=swap">
-<link rel="stylesheet" href="app.css?v=5">
+<link rel="stylesheet" href="app.css?v=6">
 </head>
 <body>
 <a class="naar-inhoud" href="#inhoud">Naar de inhoud</a>
 
-<div class="strook">
-  <div class="wrap">
-    <p class="proef-noot"><b>Proefontwerp.</b> Inhoud van hartvoordenhaag.nl. Betalen werkt nog niet.</p>
-    <p class="strook-rechts"><a href="#agenda" id="strook-spreekuur">Agenda</a><a href="tel:+31623462139">06 234 621 39</a><a href="https://webshop.hartvoordenhaag.nl/" target="_blank" rel="noopener">Webshop</a></p>
-  </div>
-</div>
-
 <header class="balk">
   <div class="wrap">
-    <a class="merk" href="#" aria-label="Hart voor Den Haag, naar de voorpagina"><img src="beeld/logo-wit.svg" alt="Hart voor Den Haag" width="146" height="34"></a>
+    <a class="merk" href="#" aria-label="Hart voor Den Haag, naar de voorpagina"><img class="logo-licht" src="beeld/logo.svg" alt="Hart voor Den Haag" width="155" height="36"><img class="logo-donker" src="beeld/logo-wit.svg" alt="Hart voor Den Haag" width="155" height="36"></a>
     <nav class="menu" aria-label="Hoofdmenu">
       <ul>
         <li><a href="#nieuws" data-sectie="nieuws">Nieuws</a></li>
@@ -61,7 +55,7 @@
     </nav>
     <div class="balk-rechts">
       <button class="ikoon-knop" type="button" id="zoek-knop" aria-label="Zoeken" aria-expanded="false" aria-controls="zoekbalk"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg></button>
-      <a class="knop rand klein balk-lid" href="#lid">Word lid</a>
+      <a class="knop lijn klein balk-lid" href="#lid">Word lid</a>
     </div>
   </div>
   <div class="zoekbalk" id="zoekbalk" hidden>
@@ -74,11 +68,15 @@
     </div>
   </div>
 </header>
+<div class="datumregel"><div class="wrap">
+  <p><b>Proefontwerp</b> · <time id="vandaag"></time></p>
+  <p class="dr-rechts"><a href="#agenda" id="strook-spreekuur">Agenda</a><a href="tel:+31623462139">06 234 621 39</a><a href="https://webshop.hartvoordenhaag.nl/" target="_blank" rel="noopener">Webshop</a><a class="wa" href="https://whatsapp.com/channel/0029VaD3yaZGE56qCyallu3r" target="_blank" rel="noopener" aria-label="WhatsApp-kanaal van Hart voor Den Haag"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.8-1.2s.2-1.1.2-1.2-.2-.2-.4-.3z"/></svg><span class="wa-tekst">WhatsApp-kanaal</span></a></p>
+</div></div>
 
 <div class="lade" id="lade" hidden>
   <nav class="lade-paneel" aria-label="Menu" role="dialog" aria-modal="true">
-    <div class="lade-kop"><img src="beeld/logo-wit.svg" alt="" height="30"><button class="ikoon-knop" type="button" id="lade-dicht" aria-label="Menu sluiten"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
-    <a class="hoofd" href="#nieuws">Nieuws</a><a class="hoofd" href="#stadsdelen">Uw stadsdeel</a><a class="hoofd" href="#agenda">Agenda</a><a class="hoofd" href="#contact/melding">Meld een probleem</a><a class="hoofd" href="#contact">Contact</a>
+    <div class="lade-kop"><img class="logo-licht" src="beeld/logo.svg" alt="" height="30"><img class="logo-donker" src="beeld/logo-wit.svg" alt="" height="30"><button class="ikoon-knop" type="button" id="lade-dicht" aria-label="Menu sluiten"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <a class="hoofd" href="#nieuws">Nieuws</a><a class="hoofd" href="#stadsdelen">Uw stadsdeel</a><a class="hoofd" href="#agenda">Agenda</a><a class="hoofd" href="#contact/melding">Meld een probleem</a><a class="hoofd" href="#contact">Contact</a><a class="hoofd" href="https://whatsapp.com/channel/0029VaD3yaZGE56qCyallu3r" target="_blank" rel="noopener">WhatsApp-kanaal</a>
     <p class="lade-groep">Raadswerk</p>
     <div class="lade-links"><a href="#raadswerk">Moties</a><a href="#raadswerk/amendementen">Amendementen</a><a href="#raadswerk/vragen">Schriftelijke vragen</a><a href="#raadswerk/spreekteksten">Spreekteksten</a><a href="#successen">Successen</a><a href="#petities">Petities</a></div>
     <p class="lade-groep">Wie we zijn</p>
@@ -94,25 +92,22 @@
 <footer class="voet">
   <div class="wrap">
     <div class="voet-boven">
-      <img src="beeld/logo-wit.svg" alt="Hart voor Den Haag" width="172" height="40">
+      <div><img src="beeld/logo-wit.svg" alt="Hart voor Den Haag" width="172" height="40"><p class="zin">De grootste lokale partij van Den Haag. Zichtbaar in de wijken, dicht bij de Hagenaar.</p></div>
       <form class="nieuwsbrief" id="nieuwsbrief" novalidate>
         <label for="nb-email">Nieuwsbrief: elke maand wat we deden</label>
         <div class="nb-rij"><input type="email" id="nb-email" name="email" autocomplete="email" placeholder="uw@email.nl"><button class="knop geel klein" type="submit">Aanmelden</button></div>
         <p class="uitslag" hidden></p>
+        <a class="nb-wa" href="https://whatsapp.com/channel/0029VaD3yaZGE56qCyallu3r" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.8-1.2s.2-1.1.2-1.2-.2-.2-.4-.3z"/></svg>Of volg ons WhatsApp-kanaal</a>
       </form>
     </div>
     <div class="voet-kolommen">
       <div><b>Hart voor Den Haag</b><span>Spui 70, 2511 BT Den Haag</span><a href="tel:+31623462139">06 234 621 39</a><a href="mailto:hartvoordenhaag@denhaag.nl">hartvoordenhaag@denhaag.nl</a>
-        <div class="socials">
-          <a class="soc" href="https://www.facebook.com/HartvoorDenHaag" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3c-2.8 0-4 1.7-4 4.3V10H7v4h3v8h4v-8h3l1-4h-4V8.6c0-.4.3-.6.6-.6z"/></svg></a>
-          <a class="soc" href="https://www.instagram.com/hartvoordenhaag/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7.3A4.7 4.7 0 1 0 12 16.7 4.7 4.7 0 0 0 12 7.3zm0 7.7a3 3 0 1 1 0-6 3 3 0 0 1 0 6zM17 5.8a1.1 1.1 0 1 0 0 2.2 1.1 1.1 0 0 0 0-2.2zM21 7c-.1-1.5-.4-2.8-1.5-3.9S17 1.6 15.5 1.6C14 1.5 10 1.5 8.5 1.6 7 1.7 5.7 2 4.6 3.1S3.1 5.6 3 7.1C3 8.6 3 15.4 3 17c.1 1.5.4 2.8 1.5 3.9S7 22.4 8.5 22.4c1.5.1 5.5.1 7 0 1.5-.1 2.8-.4 3.9-1.5S20.9 18.5 21 17c.1-1.5.1-8.5 0-10z"/></svg></a>
-          <a class="soc" href="https://x.com/Hartv00rDenHaag" target="_blank" rel="noopener" aria-label="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.8 3h3.1l-6.8 7.8L22 21h-6.2l-4.9-6.4L5.3 21H2.2l7.3-8.3L2 3h6.4l4.4 5.8zm-1.1 16.2h1.7L7.4 4.7H5.6z"/></svg></a>
-          <a class="soc" href="https://www.linkedin.com/company/hartvoordenhaag/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM3 9h4v12H3zm7 0h3.8v1.7h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5.6c0-1.3 0-3-1.9-3s-2.2 1.5-2.2 2.9V21h-4z"/></svg></a>
-        </div></div>
+        <a href="https://www.facebook.com/HartvoorDenHaag" target="_blank" rel="noopener">Facebook</a><a href="https://www.instagram.com/hartvoordenhaag/" target="_blank" rel="noopener">Instagram</a><a href="https://x.com/Hartv00rDenHaag" target="_blank" rel="noopener">X</a><a href="https://www.linkedin.com/company/hartvoordenhaag/" target="_blank" rel="noopener">LinkedIn</a></div>
       <div><b>Raadswerk</b><a href="#raadswerk">Moties</a><a href="#raadswerk/amendementen">Amendementen</a><a href="#raadswerk/vragen">Schriftelijke vragen</a><a href="#raadswerk/spreekteksten">Spreekteksten</a><a href="#successen">Successen</a><a href="#petities">Petities</a><a href="#agenda">Agenda</a></div>
       <div><b>Partij</b><a href="#standpunten">Standpunten</a><a href="https://www.hartvoordenhaag.nl/wp-content/uploads/2026/01/EnNuAanDeSlag_Hart_voor_Den_Haag_V1.pdf" target="_blank" rel="noopener">Verkiezingsprogramma</a><a href="#fractie">Fractie</a><a href="#wethouders">Wethouders</a><a href="#bestuur">Bestuur</a></div>
       <div><b>Meedoen</b><a href="#lid">Word lid</a><a href="#doneren">Doneren</a><a href="#doe-mee">Vrijwilliger worden</a><a href="#vacatures">Vacatures</a><a href="https://webshop.hartvoordenhaag.nl/" target="_blank" rel="noopener">Webshop</a></div>
     </div>
+    <div class="vertaal" id="vertaal"><p>Lees deze site in</p><a href="#" data-taal="en" lang="en">English</a><a href="#" data-taal="tr" lang="tr">Türkçe</a><a href="#" data-taal="ar" lang="ar" dir="rtl">العربية</a><a href="#" data-taal="pl" lang="pl">Polski</a><a href="#" data-taal="bg" lang="bg">Български</a><a href="#" data-taal="es" lang="es">Español</a><a href="#" data-taal="uk" lang="uk">Українська</a></div>
     <p class="voet-onder"><a href="#privacy">Privacy</a><a href="#toegankelijkheid">Toegankelijkheid</a><a href="beheer.html">Inloggen redactie</a><span>Proefontwerp, niet de officiële site</span></p>
   </div>
 </footer>
@@ -123,6 +118,6 @@
   <a class="meld" href="#contact/melding" data-sectie="contact"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/></svg>Meld een probleem</a>
   <button type="button" id="menu-knop" aria-expanded="false" aria-controls="lade"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Menu</button>
 </nav>
-<script src="app.js?v=5"></script>
+<script src="app.js?v=6"></script>
 </body>
 </html>
