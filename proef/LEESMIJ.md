@@ -18,9 +18,13 @@ De **eigenaar** logt in met een code die via Telegram komt. Alle anderen loggen 
 Er zijn drie delen. Geen framework, geen bouwstap, geen database-server.
 
 1. **De voorkant** staat in deze map (`proef/`) en wordt gehost door GitHub Pages.
-   - `index.html`, `app.js`, `app.css`: de site. Eén pagina met routes achter het hekje (`#nieuws`, `#raadswerk/vragen`, `#petities/p114304`).
+   - Elke pagina heeft een gewoon adres: `/proef/nieuws/`, `/proef/raadswerk/vragen/?onderwerp=Veiligheid`, `/proef/fractie/damien-zeller/`. Een stuk van hartvoordenhaag.nl staat op **hetzelfde adres als op de oude site** (`/proef/motie/<naam>/`, `/proef/<naam-van-het-bericht>/`), zodat oude links blijven werken en Google de stukken vindt. Wat de redactie hier zelf plaatst, staat op `/proef/s/w<nummer>/`.
+   - `kader.js`: kop, menu en voet, één keer voor alle pagina's. Hierin staat ook `HVDH.BASE` (nu `/proef/`).
+   - `app.js`, `app.css`: de site zelf. `app.js` leest het adres en bouwt de pagina; links binnen de site wisselen alleen de inhoud (geen nieuwe pagina laden).
    - `beheer.html`, `beheer.js`: de beheeromgeving.
-   - `beeld/`: logo's en vaste foto's. `data/`: de inhoud als JSON.
+   - `beeld/`: logo's en vaste foto's. `lettertype/`: Raleway, op de site zelf (geen verzoek naar Google). `data/`: de inhoud als JSON.
+   - **Gemaakte pagina's** (niet met de hand aanpassen): de duizenden mappen met een `index.html` in `proef/` maakt `tools/bouw.py`. Elke pagina heeft al de titel, de omschrijving en de foto voor zoekmachines en voor het voorbeeld als iemand de link deelt, plus de tekst van het stuk. De lijst staat in `tools/gegenereerd.txt`; pagina's van stukken die verdwijnen, ruimt het script zelf op. Het maakt ook `sitemap.xml`, `feed.xml` (RSS) en `404.html` in de hoofdmap van de repository.
+   - Oude adressen die op de nieuwe site anders heten (`fractieleden/…`, `kandidaat/…`, `stadsdeel/…`, `expats/`, `ik-word-lid/`) sturen door.
    - Kleuren, letters en maten staan als variabelen bovenaan `app.css` (`:root`). De huisstijl volgt hartvoordenhaag.nl: Raleway, het groen en geel van het logo.
 2. **Het hele archief van hartvoordenhaag.nl** staat in `data/`, sinds 2012: ruim 7.800 stukken.
    - `tools/importeer.py` haalt via de openbare WordPress-API nieuws, successen, moties, amendementen, schriftelijke vragen, spreekteksten, petities, de fractie en het bestuur op.
@@ -29,9 +33,11 @@ Er zijn drie delen. Geen framework, geen bouwstap, geen database-server.
    - `data/zoekindex.json` (titel en begin van de tekst van alles) is voor de zoekpagina en de beheeromgeving. `data/archief.json` telt per soort en per jaar, en onthoudt wanneer de import liep.
    - `data/archief/paginas.json` en `kandidaten.json` bewaren de pagina's en kandidaten van de oude site voor de verhuizing. De proef toont ze niet.
    - Bij een dertigtal oude stukken gaf WordPress als datum 1 januari 1970. De import haalt de datum dan uit de titel of de tekst; lukt dat niet, dan schat hij hem (veld `datum_geschat`) en toont de site "datum onbekend".
-   - De workflow `.github/workflows/proef-inhoud.yml` draait elke dag om 4:37 UTC en haalt alleen op wat nieuw of gewijzigd is (minder dan een minuut). Op zondag haalt hij alles opnieuw op (ongeveer tien minuten), zodat ook verwijderde stukken verdwijnen. Handmatig kan via het tabblad Actions, met het vinkje "Alles opnieuw ophalen".
+   - De workflow `.github/workflows/proef-inhoud.yml` draait elke dag om 4:37 UTC, haalt alleen op wat nieuw of gewijzigd is (minder dan een minuut) en draait daarna `tools/bouw.py`. Op zondag haalt hij alles opnieuw op (ongeveer tien minuten), zodat ook verwijderde stukken verdwijnen. Handmatig kan via het tabblad Actions, met het vinkje "Alles opnieuw ophalen".
    - `data/agenda.json`, `kaart.json`, `wethouders.json` worden niet geïmporteerd. Die past u met de hand aan (of de agenda via de beheeromgeving).
 3. **De achterkant** is een Cloudflare Worker met de naam `hvdh-proef`, op https://hvdh-proef.damienzeller.workers.dev, met opslag in Cloudflare KV (`hvdh-proef-inhoud`). Hij bewaart wat in de beheeromgeving gebeurt en ontvangt de formulieren.
+
+**Bezoekers tellen.** De site plaatst geen cookies. Bij elke pagina stuurt `app.js` het adres naar de achterkant (`POST /bezoek`), die per dag per pagina een getal ophoogt, zonder IP-adres. In de beheeromgeving staat het onder Bezoek.
 
 **Hoe de site alles samenvoegt.** `app.js` laadt een JSON-bestand uit `data/` en legt daar de aanpassingen uit de beheeromgeving overheen (functies `laad`, `stuk`, `aanpassingen` en `pasAan`). Lijsten met ouder werk lopen via `stroom()` en `meerLadenStroom()`. Eigen berichten komen er via `eigen()` bij. De import overschrijft aanpassingen dus nooit: die liggen apart bij de achterkant, per bericht-id (`n114543` is nieuwsbericht 114543 op hartvoordenhaag.nl).
 
@@ -62,15 +68,16 @@ Opslag in KV, per sleutel: `items`, `aanpassingen`, `inbox`, `tellers`, `gebruik
 ```
 git clone https://github.com/damienzeller-png/damienzeller-png.github.io
 cd damienzeller-png.github.io
+python3 proef/tools/bouw.py        # pagina's maken (na een wijziging in data of in bouw.py)
 python3 -m http.server 8000
 ```
 
-Open daarna http://localhost:8000/proef/ en http://localhost:8000/proef/beheer.html. De achterkant staat gewoon online en accepteert verzoeken van `localhost`, dus formulieren en inloggen werken ook lokaal. Let op: wat u lokaal opslaat, staat echt op de site.
+Open daarna http://localhost:8000/proef/ en http://localhost:8000/proef/beheer.html. Let op: de eenvoudige server van Python stuurt een onbekend adres (zoals `/proef/s/w12/`) niet door naar `404.html`, GitHub Pages wel. Test zulke adressen online of met een server die dat nabootst. De achterkant staat gewoon online en accepteert verzoeken van `localhost`, dus formulieren en inloggen werken ook lokaal. Let op: wat u lokaal opslaat, staat echt op de site.
 
 ## Een wijziging publiceren
 
 1. Pas de bestanden aan (in een editor, of direct op github.com met het potloodje).
-2. Heeft u `app.js`, `app.css` of `beheer.js` veranderd? Verhoog dan het nummer achter `?v=` in `index.html` en `beheer.html`, anders zien bezoekers nog de oude versie.
+2. De pagina's laden `app.js`, `app.css` en `kader.js` zonder versienummer. GitHub Pages laat browsers ze tien minuten bewaren; daarna halen ze de nieuwe versie. Alleen in `beheer.html` staat nog een `?v=`: verhoog dat nummer als u `beheer.js` of `app.css` verandert.
 3. Commit naar de tak `main`. GitHub Pages zet het binnen een paar minuten online.
 
 Botst een push met de importrobot, doe dan eerst `git pull --rebase`.
@@ -110,6 +117,14 @@ Elke keer dat de noodsleutel wordt gebruikt, komt er een bericht naar de eigenaa
 | Adres | damienzeller.nl/proef | het eigen domein hartvoordenhaag.nl |
 
 Tot dat geregeld is: maak regelmatig een reservekopie (tab Hulp) en bewaar die bij het bestuur. Het postvak bevat persoonsgegevens, dus niet in een openbare map of in deze repository.
+
+## Overstappen naar hartvoordenhaag.nl
+
+1. In `kader.js`: `HVDH.BASE = "/"`. In `tools/bouw.py`: `BASE = "/"`, `SITE = "https://www.hartvoordenhaag.nl"`, `PROEF = False` (dan verdwijnt ook `noindex`).
+2. De site en de map `data` naar de hoofdmap van de nieuwe hosting, `python3 tools/bouw.py` draaien. Oude adressen van stukken werken dan vanzelf, want de pagina's staan op dezelfde plek.
+3. In de Worker (`SITE`, terugkeeradres van Mollie) het nieuwe domein zetten, en het domein toevoegen aan de toegestane herkomst (CORS).
+4. In Google Search Console de nieuwe `sitemap.xml` opgeven.
+5. Foto's en pdf's van wp-content eerst overzetten (stap 3), anders verdwijnen ze als WordPress uitgaat.
 
 ## Afspraken
 

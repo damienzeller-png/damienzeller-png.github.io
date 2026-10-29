@@ -14,6 +14,7 @@ import sys
 import unicodedata
 import urllib.error
 import urllib.request
+import urllib.parse
 import time
 import bisect
 
@@ -102,16 +103,56 @@ def schoon_html(s):
     return s.strip()
 
 
-def beeld(x):
+def _media(x):
     try:
         m = x["_embedded"]["wp:featuredmedia"][0]
-        maten = m.get("media_details", {}).get("sizes", {})
-        for k in ("medium_large", "large", "full"):
-            if k in maten:
-                return maten[k]["source_url"]
-        return m.get("source_url", "")
     except (KeyError, IndexError, TypeError):
+        return None
+    return m if isinstance(m, dict) and m.get("source_url") else None
+
+
+def beeld(x):
+    """De foto bij een stuk: het origineel, behalve als dat erg groot is; dan de grootste kleinere versie van WordPress."""
+    m = _media(x)
+    if not m:
         return ""
+    det = m.get("media_details", {}) or {}
+    maten = det.get("sizes", {}) or {}
+    if (det.get("width") or 0) > 1400:
+        kandidaten = [v for k, v in maten.items() if k not in ("thumbnail", "logo", "medium") and 500 <= (v.get("width") or 0) <= 1400]
+        if kandidaten:
+            return max(kandidaten, key=lambda v: v["width"])["source_url"]
+    return m["source_url"]
+
+
+def beeld_klein(x):
+    """Een kleinere versie voor lijsten (ongeveer 600 pixels breed), zodat een telefoon geen originelen hoeft te laden."""
+    m = _media(x)
+    if not m:
+        return ""
+    maten = (m.get("media_details", {}) or {}).get("sizes", {}) or {}
+    for k in ("wide", "rectangle", "full-wide", "medium_large"):
+        if k in maten and maten[k].get("source_url"):
+            return maten[k]["source_url"]
+    kandidaten = [v for k, v in maten.items() if k not in ("thumbnail", "logo") and 300 <= (v.get("width") or 0) <= 900]
+    return max(kandidaten, key=lambda v: v["width"])["source_url"] if kandidaten else ""
+
+
+def pad_van(link):
+    """Het adres van het stuk op hartvoordenhaag.nl zonder domein, bijvoorbeeld "motie/naam-van-de-motie/".
+    De nieuwe site maakt op precies dat adres een pagina, zodat oude links blijven werken."""
+    p = urllib.parse.urlparse(link or "").path.strip("/")
+    # botst het adres met een pagina of map van de nieuwe site, dan krijgt het stuk een eigen adres (s/<id>/)
+    if not p or p.split("/")[0].lower() in GERESERVEERD or not re.fullmatch(r"[A-Za-z0-9._~%/-]+", p):
+        return ""
+    return p + "/"
+
+
+# eerste deel van een adres dat de nieuwe site zelf gebruikt
+GERESERVEERD = {"nieuws", "successen", "raadswerk", "petities", "stadsdelen", "fractie", "wethouders", "bestuur", "agenda", "doe-mee",
+                "contact", "lid", "doneren", "vacatures", "standpunten", "privacy", "toegankelijkheid", "zoeken", "bedankt", "pers",
+                "english", "onderwerpen", "s", "data", "beeld", "lettertype", "tools", "index.html", "beheer.html", "feed.xml",
+                "sitemap.xml", "404.html", "app.js", "app.css", "kader.js", "beheer.js"}
 
 
 def echt_beeld(url):
@@ -204,7 +245,7 @@ def onderwerpen(tekst_):
     return [n for k, n in scores[:2] if k >= 2]
 
 
-MAAND = r"(?:" + "|".join(MAANDEN) + r")"
+MAAND = r"(?:" + "|".join(MAANDEN) + r"|mai|okt|sept)"
 DATUM = r"\d{1,2}\s+" + MAAND + r"(?:\s+\d{4})?"
 
 
@@ -212,8 +253,24 @@ def schone_titel(t, soort):
     """Haalt "Raad 26 februari motie:", "19 april 2018 Raad Amendement" en "Spreektekst <naam>" van de titel af.
     Geeft (titel, naam): de naam van de spreker gaat naar indiener, de datum staat er apart bij."""
     naam = ""
-    t2 = re.sub(r"(?i)^(raadsvergadering\s+|raad\s+)?" + DATUM + r"\s*:?\s*(raad\s+)?(motie|amendement|schriftelijke vragen|raadsvragen)\s*:?\s*", "", t)
-    t2 = re.sub(r"(?i)^(motie|amendement)\s*:\s*", "", t2)
+    t2 = t
+    soort_woord = r"(aanvullende\s+|nadere\s+)?(schriftelijke\s+)?(vervolg)?(vragen|raadsvragen|motie|amendement)"
+    for _ in range(4):
+        voor = t2
+        t2 = re.sub(r"(?i)^(raadsvergadering|raad)(?!\s+van\b)\s*:?\s*", "", t2)
+        t2 = re.sub(r"(?i)^(motie|amendement)\s+(?=\d)", "", t2)
+        m = re.match(r"(?i)^(" + DATUM + r"|\d{1,2}-\d{1,2}-\d{4})\s*:?\s*", t2)
+        if m:
+            t2 = t2[m.end():]
+            t2 = re.sub(r"(?i)^(raad\s+)?" + soort_woord + r"\b\s*:?\s*(inzake\s+)?", "", t2)
+            t2 = re.sub(r"(?i)^schriftelijke\s+(inzake\s+)?", "", t2)
+        t2 = re.sub(r"(?i)^" + soort_woord + r"\s*(?=" + DATUM + r")", "", t2)
+        t2 = re.sub(r"(?i)^(raad\s+)?" + soort_woord + r"\s*:\s*", "", t2)
+        if t2 == voor:
+            break
+    if soort == "motie":
+        t2 = re.sub(r"^Motie\s+(?!van\b|over\b|om\b|voor\b)(?=[A-Z])", "", t2)
+    t2 = t2.rstrip(" .") if len(t2) > 3 else t2
     if soort == "spreektekst" and re.search(r"(?i)spreekt?tekst|inbreng", t2):
         for vol in sorted(BEKENDE_NAMEN + ["De Mos"], key=len, reverse=True):
             m = re.search(r"(?i)(partijleider\s+)?\b" + re.escape(vol) + r"\b", t2)
@@ -291,12 +348,15 @@ def item(x, soort, met_html=True):
     geplaatst = x["date"][:10]
     d = {"id": f"{PREFIX[soort]}{x['id']}", "soort": soort, "slug": x["slug"], "titel": titel,
          "datum": vergaderdatum(t, geplaatst) if raad else geplaatst,
-         "samenvatting": afkappen(samen), "beeld": echt_beeld(beeld(x)), "link": x["link"],
+         "samenvatting": afkappen(samen), "beeld": echt_beeld(beeld(x)), "link": x["link"], "p": pad_van(x["link"]),
          "stadsdelen": [STADSDEEL[s] for s in x.get("stadsdeel", []) if s in STADSDEEL]}
     if not d["stadsdelen"]:
         # alleen raden als er een plek in de titel staat: een stadsbrede begroting hoort niet onder één stadsdeel
         d["stadsdelen"] = plekken(titel)
         d["geraden"] = bool(d["stadsdelen"])
+    klein = echt_beeld(beeld_klein(x))
+    if klein and d["beeld"] and klein != d["beeld"]:
+        d["beeld_klein"] = klein
     ris = re.findall(r"RIS\s?(\d{6})", platte)
     if ris:
         d["ris"] = "RIS" + ris[0]
@@ -436,9 +496,10 @@ def licht(d):
     return {k: v for k, v in d.items() if k not in NIET_IN_LIJST}
 
 
-def fractiewerk(fractie, index):
+def fractiewerk(fractie, index, paden=None):
     """Per raadslid de tien nieuwste stukken en het aantal vragen, moties en amendementen van het afgelopen jaar."""
     jaar = (datetime.date.today() - datetime.timedelta(days=365)).isoformat()
+    paden = paden or {}
     for f in fractie:
         zelf, delen = plat(f["naam"]), plat(f["naam"]).split()
         voornaam, achternaam = delen[0], delen[-1]
@@ -448,7 +509,7 @@ def fractiewerk(fractie, index):
             t = plat(i["t"] + " " + i["x"])
             return achternaam in t and voornaam in t
         mijn = sorted((i for i in index if van(i)), key=lambda i: i["d"], reverse=True)
-        f["werk"] = [{k: i[k] for k in ("id", "s", "t", "d", "sd", "st") if k in i} for i in mijn[:10]]
+        f["werk"] = [{**{k: i[k] for k in ("id", "s", "t", "d", "sd", "st") if k in i}, **({"p": paden[i["id"]]} if paden.get(i["id"]) else {})} for i in mijn[:10]]
         recent = [i for i in mijn if i.get("i") and i["d"] >= jaar]
         f["telling"] = {s_: sum(1 for i in recent if i["s"] == s_) for s_ in ("raadsvraag", "motie", "amendement")}
 
@@ -529,7 +590,8 @@ def main():
         for i in per_soort[soort]:
             index.append({"id": i["id"], "s": i["soort"], "t": i["titel"], "d": i["datum"],
                           "x": tekst(i.get("html", ""))[:200], "sd": i["stadsdelen"], "o": i.get("onderwerpen", []),
-                          **({"i": i["indiener"]} if i.get("indiener") else {}), **({"st": i["status"]} if i.get("status") else {})})
+                          **({"i": i["indiener"]} if i.get("indiener") else {}), **({"st": i["status"]} if i.get("status") else {}),
+                          **({"g": 1} if i.get("geraden") else {})})
     index.sort(key=lambda i: i["d"], reverse=True)
     schrijf("zoekindex.json", index)
 
@@ -547,7 +609,8 @@ def main():
                         "functie": veld("Functie"), "commissie": veld("Commissie"),
                         "portefeuilles": [p.strip(" .") for p in re.split(r",\s*(?![^()]*\))", veld("Portefeuilles")) if p.strip(" .")]})
     fractie.sort(key=lambda f: f["positie"])
-    fractiewerk(fractie, index)
+    paden = {i["id"]: i.get("p", "") for lijst_ in per_soort.values() for i in lijst_}
+    fractiewerk(fractie, index, paden)
     schrijf("fractie.json", fractie)
     schrijf("bestuur.json", bestuur())
     if alles:
@@ -560,9 +623,9 @@ def main():
         tel = lambda s_: sum(1 for i in stukken_ if i["s"] == s_)
         succes = next((i for i in sorted(stukken_, key=lambda i: i["d"], reverse=True) if i["s"] == "succes" and i["o"] and i["o"][0] in onderw), None)
         bewijs[punt] = {"onderwerp": onderw[0], "vragen": tel("raadsvraag"), "moties": tel("motie"), "amendementen": tel("amendement"),
-                        "succes": {"id": succes["id"], "t": succes["t"], "d": succes["d"]} if succes else None}
+                        "succes": {"id": succes["id"], "t": succes["t"], "d": succes["d"], "p": paden.get(succes["id"], "")} if succes else None}
     succ = sorted((i for i in index if i["s"] == "succes" and i["d"] >= SINDS), key=lambda i: i["d"], reverse=True)
-    bewijs["Echte ombudspolitiek"] = {"successen": len(succ), "succes": {"id": succ[0]["id"], "t": succ[0]["t"], "d": succ[0]["d"]} if succ else None}
+    bewijs["Echte ombudspolitiek"] = {"successen": len(succ), "succes": {"id": succ[0]["id"], "t": succ[0]["t"], "d": succ[0]["d"], "p": paden.get(succ[0]["id"], "")} if succ else None}
     bewijs["sinds"] = SINDS
     schrijf("bewijs.json", bewijs)
 

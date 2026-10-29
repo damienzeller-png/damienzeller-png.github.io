@@ -1,6 +1,6 @@
 name: Proefsite partij bijwerken
 # Haalt het hele archief van hartvoordenhaag.nl op (nieuws, successen, moties, amendementen, raadsvragen, spreekteksten,
-# petities, fractie en bestuur) en zet het in proef/data. Elke ochtend alleen wat nieuw of gewijzigd is; op zondag alles,
+# petities, fractie en bestuur) en zet het in proef/data. Daarna maakt bouw.py van elk stuk een pagina op het oude adres. Elke ochtend alleen wat nieuw of gewijzigd is; op zondag alles,
 # zodat ook verwijderde stukken verdwijnen. Wat redacteuren in de beheeromgeving plaatsen, staat apart in de Worker.
 on:
   schedule:
@@ -30,11 +30,13 @@ jobs:
           else
             python proef/tools/importeer.py
           fi
+      - name: Pagina's maken
+        run: python proef/tools/bouw.py
       - name: Opslaan
         run: |
           git config user.name "data-robot"
           git config user.email "actions@users.noreply.github.com"
-          git add -A proef/data
+          git add -A proef 404.html
           git diff --cached --quiet && exit 0
           git commit -qm "Proefsite: inhoud bijgewerkt $(date +%F)"
           for i in 1 2 3 4 5; do git pull --rebase -q && git push -q && exit 0; git rebase --abort 2>/dev/null; sleep $((RANDOM % 10 + 3)); done
