@@ -321,9 +321,11 @@ const TABS = () => [["overzicht", "Overzicht"], ["berichten", "Berichten"], ["po
 addEventListener("hashchange", () => { const t = location.hash.slice(1); if (t && t !== tab && sessie) { if (gewijzigd && !confirm("Uw wijzigingen zijn nog niet opgeslagen. Toch weggaan?")) { history.replaceState(null, "", "#" + tab); return; } gaNaar(t, { adres: false }); } });
 function kader(inhoud) {
   return `<nav class="tabbalk" aria-label="Onderdelen">${TABS().map(([k, n]) => `<button class="knopje" type="button" data-tab="${k}" aria-pressed="${tab === k}">${n}</button>`).join("")}
-    <span class="wie">Ingelogd als <b>${esc(sessie.naam)}</b> (${esc((ROL_NAAM[sessie.rol] || sessie.rol).toLowerCase())})<button class="knop lijn klein" type="button" id="uit">Uitloggen</button></span></nav>${inhoud}`;
+    <span class="wie">Ingelogd als <b>${esc(sessie.naam)}</b> (${esc((ROL_NAAM[sessie.rol] || sessie.rol).toLowerCase())})<button class="knop lijn klein" type="button" id="uit">Uitloggen</button></span></nav>
+    ${sessie.waarschuwing2fa && tab !== "account" ? `<p class="melding waarschuwing" role="status"><b>Zet tweestapsverificatie aan.</b> Als beheerder kunt u bij persoonsgegevens. <button class="knop lijn klein" type="button" data-naar-tab="account">Nu aanzetten</button></p>` : ""}${inhoud}`;
 }
 function koppelKader() {
+  $$("[data-naar-tab]").forEach(b => b.addEventListener("click", () => gaNaar(b.dataset.naarTab)));
   $$("[data-tab]").forEach(b => b.addEventListener("click", () => {
     if (gewijzigd && !zeker(b, "Wijzigingen weggooien?")) return;
     gaNaar(b.dataset.tab);
@@ -351,14 +353,13 @@ async function overzicht() {
   const [{ berichten: post }, { logboek }, mensenLijst, telling] = await Promise.all([
     vraag("/inbox?status=nieuw&n=200"), vraag("/logboek").catch(() => ({ logboek: [] })),
     magBeheren() ? vraag("/gebruikers").then(d => d.gebruikers).catch(() => null) : Promise.resolve(null), vraag("/inbox/telling").catch(() => null)]);
-  const t = telling && telling.telling;
+  const t = telling && (telling.soorten || telling.telling);
   const open = post.filter(b => (b.status || "nieuw") !== "afgehandeld");
   const tel = k => t && t[k] ? t[k].nieuw || 0 : open.filter(b => b.soort === k).length;
   const openTotaal = t ? Object.values(t).reduce((s2, x) => s2 + (x.nieuw || 0), 0) : open.length;
   const beheerders = mensenLijst ? mensenLijst.filter(g => g.rol === "beheerder").length : null;
   app.innerHTML = kader(`${H1("Overzicht")}
     <p class="inleiding">Hier ziet u wat er binnenkwam en wat er laatst veranderde. Alles wat u op de site wilt aanpassen, staat onder Berichten.</p>
-    ${sessie.waarschuwing2fa ? `<div class="melding waarschuwing" role="status"><b>Zet tweestapsverificatie aan.</b> Als beheerder kunt u bij persoonsgegevens; een code uit een app op uw telefoon maakt inloggen veel veiliger. <button class="knop lijn klein" type="button" data-naar="account">Nu aanzetten</button></div>` : ""}
     ${beheerders === 0 ? `<div class="melding waarschuwing" role="status"><b>Er is nog geen tweede beheerder.</b> Valt de eigenaar weg, dan kan niemand anders mensen toegang geven of een reservekopie maken. <button class="knop lijn klein" type="button" data-naar="mensen">Voeg een beheerder toe</button></div>` : ""}
     <div class="tegels">
       <button class="tegel" type="button" data-naar="postvak"><b>${openTotaal}</b><span>open in het postvak</span><small>${tel("melding")} meldingen · ${tel("contact")} vragen · ${tel("aanmelding")} aanmeldingen</small></button>
@@ -695,7 +696,7 @@ async function downloadLijst(query, naam) {
 async function postvak() {
   const [d, telling] = await Promise.all([vraag("/inbox?" + postQuery({ n: 100 })), vraag("/inbox/telling").catch(() => null)]);
   const post = [...d.berichten, ...postExtra];
-  const open = telling && telling.telling ? telling.telling : null;
+  const open = telling && (telling.soorten || telling.telling) ? (telling.soorten || telling.telling) : null;
   const aantal = k => open && open[k] ? (open[k].nieuw || 0) : "";
   const veld = (k, v) => k === "email" ? `<a href="mailto:${esc(v)}">${esc(v)}</a>` : k === "telefoon" ? `<a href="tel:${esc(String(v).replace(/[^\d+]/g, ""))}">${esc(v)}</a>` : esc(v);
   // voor petities en aanmeldingen: kiezen welke, zodat de lijst te downloaden is voor de overhandiging of de organisator
@@ -768,10 +769,12 @@ async function postvak() {
 // ---------- bezoek: tellen zonder cookies ----------
 async function bezoek() {
   const d = await vraag("/statistiek?dagen=30");
-  const dagen = d.dagen || d.perDag || [];
+  const dagen = Array.isArray(d.perDag) ? d.perDag : [];
   const max = Math.max(1, ...dagen.map(x => x.n || x.bezoeken || 0));
   const top = d.paden || d.top || [];
-  const form = d.inzendingen || d.formulieren || [];
+  const perSoort = {};
+  for (const x of dagen) for (const [k, n] of Object.entries(x.inzendingen || {})) perSoort[k] = (perSoort[k] || 0) + n;
+  const form = Object.entries(perSoort).map(([soort, n]) => ({ soort, n })).sort((a, b) => b.n - a.n);
   const totaal = dagen.reduce((s, x) => s + (x.n || x.bezoeken || 0), 0);
   app.innerHTML = kader(`${H1("Bezoek")}
     <p class="inleiding">Hoe vaak pagina's de afgelopen dertig dagen zijn bekeken. We tellen zonder cookies en zonder IP-adressen: alleen een getal per pagina per dag. Daardoor zien we geen unieke bezoekers, wel wat er gelezen wordt en of formulieren werken.</p>
@@ -779,9 +782,9 @@ async function bezoek() {
     <h2 class="sub">Per dag</h2>
     ${dagen.length ? `<ul class="balken">${dagen.map(x => { const n = x.n || x.bezoeken || 0; return `<li><span>${esc(datumNL(x.dag || x.datum))}</span><span class="b" style="width:${Math.round(n / max * 100)}%"></span><span class="n">${n.toLocaleString("nl-NL")}</span></li>`; }).join("")}</ul>` : `<p class="leeg">Nog geen bezoek geteld.</p>`}
     <h2 class="sub">Meest bekeken</h2>
-    ${top.length ? `<ul class="balken top-paden">${top.map(x => `<li><span><a href=".${esc(x.pad)}" target="_blank" rel="noopener">${esc(x.pad)}</a></span><span class="n">${(x.n || 0).toLocaleString("nl-NL")}</span></li>`).join("")}</ul>` : `<p class="leeg">Nog niets.</p>`}
-    <h2 class="sub">Ingevulde formulieren</h2>
-    ${form.length ? `<ul class="balken top-paden">${form.map(x => `<li><span>${esc(FORM_NAAM[x.soort] || x.soort)}${x.dag ? " · " + esc(datumNL(x.dag)) : ""}</span><span class="n">${(x.n || 0).toLocaleString("nl-NL")}</span></li>`).join("")}</ul>` : `<p class="leeg">Nog niets.</p>`}`);
+    ${top.length ? `<ul class="balken top-paden">${top.map(x => `<li><span><a href=".${esc(x.pad)}" target="_blank" rel="noopener">${esc(x.pad)}</a></span><span class="n">${(x.n || x.bezoeken || 0).toLocaleString("nl-NL")}</span></li>`).join("")}</ul>` : `<p class="leeg">Nog niets.</p>`}
+    <h2 class="sub">Ingevulde formulieren, laatste ${dagen.length} dagen</h2>
+    ${form.length ? `<ul class="balken top-paden">${form.map(x => `<li><span>${esc(FORM_NAAM[x.soort] || x.soort)}</span><span class="n">${(x.n || 0).toLocaleString("nl-NL")}</span></li>`).join("")}</ul>` : `<p class="leeg">Nog niets.</p>`}`);
   koppelKader();
 }
 
