@@ -11,10 +11,11 @@
   --onderbalk:0px;
   color-scheme:light;
 }
-@media (prefers-color-scheme:dark){:root{
+/* donker alleen op verzoek (data-theme="dark"), niet meer automatisch: besluit Damiën 29 okt */
+:root[data-theme="dark"]{
   --bg:#0E1612;--vlak:#141F19;--band:#1A1813;--munt:#17281F;--ink:#ECF1ED;--zacht:#A8B7AD;--lijn:#2A3830;--regel:#ECF1ED;--veldrand:#6B8A79;
   --link:#7BD3A2;--hart:#4CC283;--fout:#FF8A80;--goed:#7BD3A2;--kaart-vlak:#141F19;--kaart-rand:#4CC283;--kaart-hover:#1F3A2B;
-  --schaduw:0 24px 50px -30px rgba(0,0,0,.85);color-scheme:dark}}
+  --schaduw:0 24px 50px -30px rgba(0,0,0,.85);color-scheme:dark}
 
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;scroll-padding-top:96px}
@@ -62,7 +63,7 @@ section{padding-block:80px}
 .merk{display:flex;align-items:center;text-decoration:none;flex:none;min-height:44px}
 .merk img{height:36px;width:auto;display:block}
 .logo-donker{display:none!important}
-@media (prefers-color-scheme:dark){.logo-licht{display:none!important}.logo-donker{display:block!important}}
+:root[data-theme="dark"] .logo-licht{display:none!important}:root[data-theme="dark"] .logo-donker{display:block!important}
 .menu ul{display:flex;gap:2px;align-items:center;list-style:none;margin:0;padding:0}
 .menu li{position:relative}
 .menu a,.menu button{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font:600 1rem/1 var(--tekst);color:var(--ink);padding:12px 12px;white-space:nowrap;background:none;border:0;cursor:pointer;min-height:44px}
