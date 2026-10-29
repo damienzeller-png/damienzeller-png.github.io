@@ -315,7 +315,7 @@ section{padding-block:80px}
 /* paginakop: wit met een dikke regel, de stadsdeellijnen zacht op de achtergrond */
 .pagina-kop{position:relative;overflow:hidden;isolation:isolate;background:var(--bg);color:var(--ink);padding-block:30px 6px}
 .pagina-kop .wrap{position:relative;z-index:1}
-.kop-lijnen{position:absolute;z-index:0;right:-4%;top:-40%;height:190%;width:auto;fill:none;stroke:var(--hart);stroke-width:1.4;stroke-linejoin:round;opacity:.16;pointer-events:none}
+.kop-lijnen{position:absolute;z-index:0;right:-4%;top:-40%;height:190%;width:auto;fill:none;stroke:var(--hart);stroke-width:1.6;stroke-linejoin:round;opacity:.32;pointer-events:none}
 @media (max-width:700px){.kop-lijnen{right:-50%}}
 .pagina-kop h1{font-size:clamp(2.8rem,7vw,5.2rem);font-weight:900;font-stretch:62%;line-height:.9;padding-bottom:14px;border-bottom:3px solid var(--regel)}
 .pagina-kop p{margin-top:14px;max-width:42em;font-size:1.06rem;color:var(--zacht)}
@@ -630,3 +630,18 @@ section{padding-block:34px 64px}
 
 .bewijs .laatste{margin-top:6px;font-size:.92rem;color:var(--zacht)}
 .bewijs .laatste a{color:var(--link);font-weight:600}
+
+/* ronde 5b: geen zwevende kaarten in een krant van regels */
+.formulier{box-shadow:none;border-radius:4px;border:1px solid var(--lijn);border-top:3px solid var(--regel)}
+.paneel{box-shadow:none;border-radius:0;background:transparent;padding:14px 0 0;border-top:3px solid var(--regel)}
+.dictum{border-radius:4px;border-top:3px solid var(--regel)}
+.band .paneel{background:transparent}
+/* groot silhouet van het stadsdeel in de kop */
+.kop-sil{position:absolute;z-index:0;right:max(24px,calc((100vw - 1180px)/2 + 24px));top:22px;width:clamp(90px,14vw,170px);height:clamp(90px,14vw,170px);fill:var(--munt);opacity:.95;pointer-events:none}
+.pagina-kop.met-plek h1{padding-right:clamp(0px,12vw,150px)}
+@media (max-width:640px){.kop-sil{width:72px;height:72px;top:14px}}
+/* raadswerklijsten met de gezichten van de indieners */
+.stukken li.met-wie{grid-template-columns:42px minmax(0,1fr);gap:4px 14px;align-items:start}
+.stukken li.met-wie>div{display:grid;gap:6px;min-width:0}
+/* op de telefoon: eerst de stadsdeelrijen, de kaart als lijnen weg */
+@media (max-width:640px){.stad-raster .kaart{display:none}.sd-rijen{margin-top:0}}

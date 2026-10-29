@@ -123,7 +123,13 @@ function logItem(i, eerste, opties = {}) {
     <div class="log-tekst"><h3><a href="${href(i)}">${esc(i.titel)}</a></h3>${bijschrift(i, opties)}${i.samenvatting ? `<p class="sam">${esc(i.samenvatting)}</p>` : ""}</div>
     ${i.beeld ? `<img class="log-beeld" src="${esc(i.beeld)}" alt="" loading="${eerste ? "eager" : "lazy"}" decoding="async">` : ""}</li>`;
 }
-const stukItem = (i, opties = {}) => `<li><h3><a href="${href(i)}">${esc(i.titel)}</a></h3>${bijschrift(i, opties)}${i.samenvatting ? `<p class="sam">${esc(i.samenvatting)}</p>` : ""}</li>`;
+function stukItem(i, opties = {}) {
+  const raad = ["motie", "amendement", "raadsvraag", "spreektekst"].includes(i.soort);
+  const tekst = `<h3><a href="${href(i)}">${esc(i.titel)}</a></h3>${bijschrift(i, opties)}${i.samenvatting ? `<p class="sam">${esc(i.samenvatting)}</p>` : ""}`;
+  if (!raad || opties.kaal) return `<li>${tekst}</li>`;
+  const w = wieVan(i), plek = i.stadsdelen && i.stadsdelen[0];
+  return `<li class="met-wie"><span class="r-wie${w.length > 1 ? " twee" : ""}" aria-hidden="true">${w.length ? gezichtjes(w) : `<span class="r-plek">${plek ? silhouet(plek) : STAD}</span>`}</span><div>${tekst}</div></li>`;
+}
 function agendaItem(a) {
   const x = dt(a.datum);
   return `<li><div class="dd" aria-hidden="true"><b>${x.d}</b><span>${MND[x.m]}</span></div>
@@ -137,7 +143,7 @@ function portret(f, opties = {}) {
   return `<figure>${f.beeld ? `<img src="${esc(f.beeld)}" alt="Portret van ${naam}" loading="lazy" decoding="async">` : `<div class="leeg-foto" aria-hidden="true">${initialen(f.naam)}</div>`}
     <figcaption>${opties.link === false ? `<b>${naam}</b>` : `<a href="#fractie/${slug(f.naam)}"><b>${naam}</b></a>`}${onder ? `<span>${onder}</span>` : ""}${pf}</figcaption></figure>`;
 }
-const paginaKop = (titel, tekst, kruimel = "", extra = "") => `<div class="pagina-kop"><svg class="kop-lijnen" aria-hidden="true"></svg><div class="wrap">${kruimel ? `<p class="kruimel">${kruimel}</p>` : ""}<h1 tabindex="-1">${titel}</h1>${tekst ? `<p>${tekst}</p>` : ""}${extra}</div></div>`;
+const paginaKop = (titel, tekst, kruimel = "", extra = "", plek = "") => `<div class="pagina-kop${plek ? " met-plek" : ""}"><svg class="kop-lijnen" aria-hidden="true"></svg>${plek ? silhouet(plek).replace('class="sil"', 'class="kop-sil"') : ""}<div class="wrap">${kruimel ? `<p class="kruimel">${kruimel}</p>` : ""}<h1 tabindex="-1">${titel}</h1>${tekst ? `<p>${tekst}</p>` : ""}${extra}</div></div>`;
 const stadsdeelOpties = (gekozen = "") => `<option value="">Kies uw stadsdeel</option>` + STADSDELEN.map(s => `<option${s === gekozen ? " selected" : ""}>${s}</option>`).join("");
 const leestijd = h => Math.max(1, Math.round((h || "").replace(/<[^>]+>/g, " ").split(/\s+/).filter(Boolean).length / 200));
 
@@ -504,20 +510,20 @@ async function detail(s, id, terugNaam, terugPad) {
   })() : "";
   const lees = leestijd(i.html);
   return paginaKop(esc(i.titel), "", `<a href="#">Home</a> / <a href="#${terugPad}">${esc(terugNaam)}</a>`,
-    bijschrift({ ...i }, { soort: !["nieuws", "succes", "petitie"].includes(s) }).replace("</p>", `<span>${lees} min lezen</span></p>`)) + `
+    bijschrift({ ...i }, { soort: !["nieuws", "succes", "petitie"].includes(s) }).replace("</p>", `<span>${lees} min lezen</span></p>`), i.stadsdelen && i.stadsdelen.length === 1 ? i.stadsdelen[0] : "") + `
   <section class="wit"><div class="wrap"><article class="artikel">
     ${i.beeld ? `<img class="artikel-beeld" src="${esc(i.beeld)}" alt="">` : ""}
-    ${isPetitie ? `<div class="teken-teller">${balk(handtekeningen(i, tel))}<p class="leeg">Inclusief de handtekeningen op hartvoordenhaag.nl.</p></div>` : ""}
+    ${isPetitie ? `<div class="teken-teller" id="teller-blok" data-n="${handtekeningen(i, tel)}">${balk(handtekeningen(i, tel))}<p class="leeg">Inclusief de handtekeningen op hartvoordenhaag.nl.</p></div>` : ""}
     ${dictum}
-    ${dictum ? `<h2 class="volledig">Volledige tekst</h2>` : ""}
-    <div class="artikel-tekst" style="margin-top:18px">${i.html || `<p>${esc(i.samenvatting)}</p>`}</div>
-    ${isPetitie && !open ? `<p class="melding" style="margin-top:32px">Deze petitie is gesloten. Bekijk <a href="#petities">de petities die nu lopen</a>.</p>` : ""}
-    ${open ? `<form class="formulier" id="teken" style="margin-top:36px" novalidate><h2 style="font-size:2rem">Teken deze petitie</h2>
+    ${isPetitie && !open ? `<p class="melding" style="margin-top:22px">Deze petitie is gesloten. Bekijk <a href="#petities">de petities die nu lopen</a>.</p>` : ""}
+    ${open ? `<form class="formulier" id="teken" style="margin-top:22px" novalidate><h2 style="font-size:2rem">Teken deze petitie</h2>
       <input type="hidden" name="petitie" value="${esc(i.titel)}">
       <div class="velden"><div class="veld"><label for="p-naam">Naam</label><input type="text" id="p-naam" name="naam" autocomplete="name"></div>
       <div class="veld"><label for="p-email">E-mailadres</label><input type="email" id="p-email" name="email" autocomplete="email"></div>
       <div class="veld breed"><label for="p-sd">Stadsdeel <small>(niet verplicht)</small></label><select id="p-sd" name="stadsdeel">${stadsdeelOpties(i.stadsdelen[0])}</select></div></div>
       ${akkoordVeld()}<button class="knop groen" type="submit">Teken de petitie</button><p class="uitslag" hidden></p></form>` : ""}
+    ${dictum || open ? `<h2 class="volledig">${open ? "Waarom deze petitie" : "Volledige tekst"}</h2>` : ""}
+    <div class="artikel-tekst" style="margin-top:18px">${i.html || `<p>${esc(i.samenvatting)}</p>`}</div>
     <div class="na-artikel">
       <div class="deelrij"><button class="knop lijn klein" type="button" id="deel">Deel dit stuk</button>${i.link ? `<a class="meer" href="${esc(i.link)}" target="_blank" rel="noopener">Op hartvoordenhaag.nl ${UIT}</a>` : ""}</div>
       ${meer.length ? `<div><h2 style="font-size:1.8rem">Meer uit ${esc(i.stadsdelen.join(" en "))}</h2><ul class="stukken" style="margin-top:10px">${meer.map(x => stukItem({ ...x, samenvatting: "" }, { ris: false })).join("")}</ul></div>` : ""}
@@ -537,6 +543,7 @@ detail.na = () => {
     eisen: () => ({ naam: verplicht("Vul uw naam in."), email: v => !v ? "Vul uw e-mailadres in." : EMAIL.test(v) ? "" : "Dit e-mailadres klopt niet.", akkoord: v => v ? "" : "Vink dit aan om te kunnen tekenen." }),
     bedankt: () => "Dank u wel! Uw handtekening is binnen. Helpt u mee? Hoe meer mensen tekenen, hoe sterker we in de raad staan.",
     na: (d, uit) => {
+      const tb = $("#teller-blok"); if (tb) { const n = Number(tb.dataset.n) + 1; tb.dataset.n = n; tb.firstElementChild.outerHTML = balk(n); }
       const tekst = `Ik heb de petitie "${d.petitie}" getekend. Teken jij ook? ${location.href}`;
       uit.insertAdjacentHTML("afterend", `<div class="deel-na"><a class="knop groen" href="https://wa.me/?text=${encodeURIComponent(tekst)}" target="_blank" rel="noopener">Deel via WhatsApp</a><button class="knop lijn" type="button" id="kopieer">Kopieer de link</button></div>`);
       $("#kopieer").addEventListener("click", async e => { try { await navigator.clipboard.writeText(location.href); e.target.textContent = "Link gekopieerd"; } catch { e.target.textContent = "Kopieer de link uit de adresbalk"; } });
@@ -907,7 +914,14 @@ pagina.lid.na = () => {
     const pc = e.target.value.replace(/\s+/g, "").toUpperCase(); if (!/^\d{4}[A-Z]{2}$/.test(pc)) return;
     const sd = await stadsdeelVanPostcode(pc); if (sd && !$("#l-sd").value) { $("#l-sd").value = sd; $("#l-sd-hint").textContent = "Ingevuld op basis van uw postcode."; }
   });
-  f.addEventListener("submit", e => { e.preventDefault(); betaal(f, "lid", { lid: f.soort.value, betaal: f.betaal.value }); });
+  f.addEventListener("submit", e => {
+    e.preventDefault();
+    const stap = Number($(".stap:not([hidden])", f).dataset.stap);
+    if (stap === 1) return naar(2);
+    if (stap === 2) { if (controleer(f, eisen2)) naar(3); return; }
+    if (!controleer(f, eisen2)) return naar(2);
+    betaal(f, "lid", { lid: f.soort.value, betaal: f.betaal.value });
+  });
 };
 
 pagina.doneren = async () => paginaKop("Doneren", "Geen lid, wel steunen? Elke bijdrage gaat naar acties in de wijk, het ombudsteam en campagnemateriaal.") + `
@@ -1049,7 +1063,7 @@ async function route() {
   $$(".menu a[data-sectie], .onderbalk [data-sectie]").forEach(a => a.dataset.sectie.split(" ").includes(sectie) ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
   $$(".menu button[data-sectie]").forEach(b => b.classList.toggle("actief", b.dataset.sectie.split(" ").includes(sectie)));
   // lade en uitklapmenu's: de langste link die bij het huidige adres past, is de huidige pagina
-  const h = location.hash || "#";
+  const h = (location.hash || "#").replace(/^#raadswerk\/(vraag|amendement|spreektekst|motie)(?=\/)/, (m, t) => "#raadswerk/" + ({ vraag: "vragen", amendement: "amendementen", spreektekst: "spreekteksten", motie: "moties" })[t]).replace(/^#raadswerk\/moties(?=\/|$)/, "#raadswerk");
   const passend = $$("#lade .lade-links a[href^='#'], .uitklap-paneel a[href^='#']").filter(a => { const r = a.getAttribute("href"); return h === r || h.startsWith(r + "/"); });
   const langst = Math.max(0, ...passend.map(a => a.getAttribute("href").length));
   $$("#lade .lade-links a, .uitklap-paneel a").forEach(a => passend.includes(a) && a.getAttribute("href").length === langst ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
