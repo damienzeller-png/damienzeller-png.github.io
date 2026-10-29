@@ -458,7 +458,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--veld);bo
 .m-item:hover h4 a{text-decoration:underline;text-decoration-color:var(--hart);text-decoration-thickness:2px}
 .m-beeld{width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:12px;background:var(--munt);display:block}
 .m-wie{position:relative;width:52px;height:52px;display:block}
-.m-wie img,.m-wie .leeg-foto{width:48px;height:48px;border-radius:50%;object-fit:cover;object-position:50% 20%;border:2px solid var(--vlak);background:var(--munt);display:grid;place-items:center;font-size:.85rem}
+.m-wie img,.m-wie .leeg-foto{max-width:none;width:48px;height:48px;border-radius:50%;object-fit:cover;object-position:50% 20%;border:2px solid var(--vlak);background:var(--munt);display:grid;place-items:center;font-size:.85rem}
 .m-wie.twee img,.m-wie.twee .leeg-foto{width:38px;height:38px;position:absolute}
 .m-wie.twee>:first-child{left:0;top:0}.m-wie.twee>:nth-child(2){right:0;bottom:0}
 .m-plek{width:48px;height:48px;border-radius:50%;background:var(--munt);display:grid;place-items:center}
@@ -480,16 +480,21 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--veld);bo
 .log-voet{margin-top:18px;color:var(--zacht)}
 .log-voet a{color:var(--link);font-weight:700;display:inline-flex;min-height:44px;align-items:center}
 
-/* kaart: per stadsdeel de gezichten */
-.sd-rijen{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 22px;margin-top:18px;border-top:1.5px solid var(--lijn)}
-.sd-rij{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px 10px;min-height:58px;padding:8px 8px;border:0;border-bottom:1.5px solid var(--lijn);background:none;color:var(--ink);text-align:left;cursor:pointer;border-radius:0}
-.sd-rij:hover .sd-naam{text-decoration:underline;text-decoration-color:var(--hart)}
-.sd-rij[aria-pressed="true"]{background:var(--munt);box-shadow:inset 4px 0 0 var(--veld)}
-.sd-naam{display:inline-flex;align-items:center;gap:8px;font:800 1.12rem/1.1 var(--kop);font-stretch:82%}
-.sd-gezichten{display:inline-flex;padding-left:10px}
-.sd-gezichten img,.sd-gezichten .leeg-foto{width:34px;height:34px;border-radius:50%;object-fit:cover;object-position:50% 20%;margin-left:-10px;border:2px solid var(--bg);background:var(--munt);font-size:.72rem}
-.sd-rij[aria-pressed="true"] .sd-gezichten img,.sd-rij[aria-pressed="true"] .sd-gezichten .leeg-foto{border-color:var(--munt)}
-@media (max-width:640px){.sd-rijen{gap:0 12px}.sd-rij{padding:8px 4px}.sd-naam{font-size:1rem}.sd-gezichten img,.sd-gezichten .leeg-foto{width:30px;height:30px}}
+/* kaart: per stadsdeel de gezichten. Vaste kolommen: silhouet, naam, gezichten rechts; niets loopt door elkaar */
+.sd-rijen{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px;margin-top:22px;border-top:1.5px solid var(--lijn)}
+.sd-rij{display:grid;grid-template-columns:18px minmax(0,1fr) auto;align-items:center;gap:12px;min-height:60px;padding:8px 10px 8px 8px;border:0;border-bottom:1.5px solid var(--lijn);background:none;color:var(--ink);text-align:left;cursor:pointer;border-radius:0}
+.sd-naam{font:800 1.08rem/1.1 var(--kop);font-stretch:82%;min-width:0}
+.sd-rij>.sil{width:18px;height:18px;justify-self:center}
+.sd-rij:hover{background:color-mix(in srgb,var(--munt) 55%,transparent)}
+.sd-rij[aria-pressed="true"]{background:var(--munt);box-shadow:inset 3px 0 0 var(--veld)}
+.sd-gezichten{display:flex;align-items:center;justify-content:flex-end;padding-left:8px;min-width:0}
+.sd-gezichten>*{flex:none;width:34px;height:34px;max-width:none;border-radius:50%;margin-left:-8px;border:2px solid var(--bg);background:var(--munt)}
+.sd-gezichten img{object-fit:cover;object-position:50% 18%}
+.sd-gezichten .leeg-foto{display:grid;place-items:center;font-size:.7rem;border-width:2px}
+.sd-gezichten .meer-mensen{display:grid;place-items:center;font:700 .74rem/1 var(--tekst);color:var(--link)}
+.sd-rij[aria-pressed="true"] .sd-gezichten>*{border-color:var(--munt)}
+@media (max-width:640px){.sd-rijen{grid-template-columns:1fr}.sd-rij{min-height:56px}}
+@media (min-width:901px) and (max-width:1100px){.sd-rijen{grid-template-columns:1fr}}
 
 /* beloofd en gedaan */
 .bewijs{display:grid;border-top:1.5px solid var(--lijn)}

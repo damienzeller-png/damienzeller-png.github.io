@@ -353,7 +353,7 @@ async function activeerKaart(kaart, start) {
   STADSDELEN.forEach(n => {
     const b = document.createElement("button"); b.type = "button"; b.className = "sd-rij"; b.setAttribute("aria-pressed", "false");
     const mensen = FRACTIE.filter(f => f.stadsdelen.includes(n));
-    b.innerHTML = `<span class="sd-naam">${silhouet(n)}${esc(n)}</span><span class="sd-gezichten" aria-hidden="true">${gezichtjes(mensen, 5)}</span>`;
+    b.innerHTML = `${silhouet(n)}<span class="sd-naam">${esc(n)}</span><span class="sd-gezichten" aria-hidden="true">${gezichtjes(mensen, 3)}${mensen.length > 3 ? `<span class="meer-mensen">+${mensen.length - 3}</span>` : ""}</span>`;
     b.setAttribute("aria-label", `${n}${mensen.length ? ", raadsleden " + mensen.map(f => f.naam).join(", ") : ""}`);
     b.addEventListener("click", () => kies(n, true)); knoppen.appendChild(b); knop[n] = b;
   });
