@@ -163,9 +163,11 @@ section{padding-block:80px}
 @media (max-width:860px){.ag-rij{grid-template-columns:1fr}.ag{padding-right:0}.ag+.ag{border-left:0;padding-left:0;border-top:1px solid var(--lijn);padding-top:14px;margin-top:14px}}
 
 /* bijschrift: soort, plek, datum */
-/* elk deel begint met een puntje; de linkerrand knipt het puntje weg dat een nieuwe regel zou beginnen */
+/* elk deel begint met een puntje; de linkerrand knipt het puntje weg dat een nieuwe regel zou beginnen.
+   Het puntje staat in de opvulling van het deel, zodat een naam die doorloopt naar een tweede regel niet wordt afgeknipt. */
 .bijschrift{display:flex;flex-wrap:wrap;align-items:center;gap:2px 0;font-size:.92rem;color:var(--zacht);margin-left:-20px;clip-path:inset(-4px -4px -4px 20px)}
-.bijschrift>*::before{content:"·";display:inline-block;width:20px;text-align:center;color:var(--zacht);font-weight:400}
+.bijschrift>*{position:relative;padding-left:20px}
+.bijschrift>*::before{content:"·";position:absolute;left:0;top:0;width:20px;text-align:center;color:var(--zacht);font-weight:400}
 .bijschrift time{font-variant-numeric:tabular-nums}
 .bijschrift .plek{font:800 .98rem/1.1 var(--kop);font-stretch:84%;color:var(--ink);display:inline-flex;align-items:center;gap:6px}
 .sil{width:16px;height:16px;fill:var(--hart);flex:none;display:inline-block}
@@ -946,3 +948,19 @@ input[type=file]{min-height:44px;font:inherit}
 .skelet-rij span{display:block;height:16px;border-radius:8px;background:linear-gradient(90deg,var(--band),var(--munt),var(--band));background-size:200% 100%;animation:skelet 1.4s ease infinite}
 .skelet-rij span:first-child{height:24px;width:75%}.skelet-rij span:last-child{width:50%}
 @media (prefers-reduced-motion:reduce){.skelet-rij span{animation:none}}
+
+/* ronde 11: fotoveld met eigen knop, zodat het nooit breder wordt dan het scherm */
+.verborgen-input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.foto-kies{display:block;position:relative;max-width:100%}
+.foto-kies:focus-within label{outline:3px solid var(--zon);outline-offset:3px}
+input[type=file]{max-width:100%}
+/* ronde 11: WhatsApp-knop op de telefoon rechts boven de onderbalk, kleiner, en ruimte onderaan zodat hij de laatste regels niet bedekt */
+@media (max-width:760px){
+  .zweef{left:auto;right:max(14px,env(safe-area-inset-right,0px));bottom:calc(12px + var(--onderbalk));align-items:flex-end}
+  .zweef a.rond{width:48px;height:48px}
+  .zweef a.rond svg{width:26px;height:26px}
+  main{padding-bottom:64px}
+  html{scroll-padding-bottom:calc(var(--onderbalk) + 72px)}
+}
+/* ronde 11: podcast op de telefoon compacter: hoes klein naast de kop */
+@media (max-width:640px){.podcast-blok{grid-template-columns:96px minmax(0,1fr);gap:14px 16px;align-items:start}.podcast-hoes{max-width:96px}.podcast .knoppen{grid-column:1/-1}}

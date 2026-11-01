@@ -21,8 +21,10 @@ import os
 import re
 import sys
 import unicodedata
+import urllib.request
 
 BASE = "/proef/"
+API = "https://hvdh-proef.damienzeller.workers.dev"  # de Worker met wat de redactie zelf plaatst
 SITE = "https://damienzeller.nl"
 PROEF = True
 NAAM = "Hart voor Den Haag"
@@ -41,6 +43,7 @@ SOORT = {
     "motie": ("Motie", "raadswerk/", "Moties"), "amendement": ("Amendement", "raadswerk/amendementen/", "Amendementen"),
     "raadsvraag": ("Schriftelijke vragen", "raadswerk/vragen/", "Schriftelijke vragen"),
     "spreektekst": ("Spreektekst", "raadswerk/spreekteksten/", "Spreekteksten"), "petitie": ("Petitie", "petities/", "Petities"),
+    "vacature": ("Vacature", "vacatures/", "Vacatures"),
 }
 MAAND = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"]
 
@@ -195,6 +198,28 @@ def doorsturen(naar, titel="Deze pagina is verhuisd"):
             f'<p>Deze pagina staat nu op <a href="{e(doel)}">{e(SITE + doel)}</a>.</p>\n</body>\n</html>\n')
 
 
+def eigen_berichten():
+    """Wat de redactie in de beheeromgeving plaatste (nieuws, succes, petitie, vacature). Geeft None als de Worker
+    niet antwoordt; dan blijven de eerder gemaakte pagina's staan."""
+    try:
+        with urllib.request.urlopen(urllib.request.Request(API + "/inhoud", headers={"User-Agent": "hvdh-bouw"}), timeout=20) as r:
+            items = json.load(r).get("items") or []
+    except Exception as fout:
+        print(f"Eigen berichten niet opgehaald ({fout}); bestaande pagina's blijven staan")
+        return None
+    uit = []
+    for i in items:
+        if not i.get("id") or not i.get("titel") or i.get("soort") not in SOORT:
+            continue
+        tekst = i.get("html") or "".join(f"<p>{e(p)}</p>" for p in re.split(r"\n{2,}", i.get("tekst") or "") if p.strip())
+        kaal = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", tekst)).strip()
+        sd = i.get("stadsdelen") or ([i["stadsdeel"]] if i.get("stadsdeel") else [])
+        uit.append({"id": "w" + str(i["id"]), "soort": i["soort"], "titel": i["titel"], "datum": (i.get("datum") or datetime.date.today().isoformat())[:10],
+                    "samenvatting": i.get("samenvatting") or kaal[:240], "html": tekst, "stadsdelen": sd,
+                    "beeld": f"{API}/foto/{i['foto']}" if i.get("foto") else "", "p": f"s/w{i['id']}/"})
+    return uit
+
+
 def main():
     index = lees("zoekindex.json", [])
     levend = {i["id"] for i in index}
@@ -250,6 +275,16 @@ def main():
         if d.get("indiener"):
             ld["author"] = [{"@type": "Person", "name": n.strip()} for n in d["indiener"].split(" en ")]
         nieuw += schrijf(d["p"] + "index.html", pagina(d["p"], titel, kort(d.get("samenvatting")), stuk_html(d), d.get("beeld_klein") or d.get("beeld", ""), d["id"], ld, "article"), gemaakt)
+
+    # pagina's voor eigen berichten (s/w<nummer>/), zodat delen in WhatsApp en op Facebook titel, tekst en foto toont
+    eigen = eigen_berichten()
+    if eigen is None and os.path.exists(LIJST):
+        with open(LIJST, encoding="utf-8") as f:
+            gemaakt.update(r.strip() for r in f if r.startswith("s/w"))
+    for d in eigen or []:
+        ld = {"@context": "https://schema.org", "@type": "NewsArticle", "headline": kort(d["titel"], 110), "datePublished": d["datum"],
+              "inLanguage": "nl", "mainEntityOfPage": SITE + BASE + d["p"], "publisher": {"@type": "Organization", "name": NAAM}}
+        nieuw += schrijf(d["p"] + "index.html", pagina(d["p"], d["titel"], kort(d["samenvatting"]), stuk_html(d), d["beeld"], d["id"], ld, "article"), gemaakt)
 
     # opruimen: pagina's die dit script eerder maakte maar die er niet meer horen
     weg = 0
