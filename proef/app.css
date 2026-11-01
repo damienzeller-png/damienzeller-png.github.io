@@ -964,3 +964,45 @@ input[type=file]{max-width:100%}
 }
 /* ronde 11: podcast op de telefoon compacter: hoes klein naast de kop */
 @media (max-width:640px){.podcast-blok{grid-template-columns:96px minmax(0,1fr);gap:14px 16px;align-items:start}.podcast-hoes{max-width:96px}.podcast .knoppen{grid-column:1/-1}}
+
+/* ronde 12: verbinding, één filterpatroon, zoeken, controle-overzicht, meldingstatus */
+.net-fout{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 18px;margin:18px 0}
+.net-fout p{margin:0;max-width:44em}
+.filter-uitklap{margin-bottom:6px}
+.filter-uitklap>summary{display:none}
+@media (max-width:760px){
+  .filter-uitklap{border:1.5px solid var(--lijn);border-radius:12px;padding:0 14px;margin-bottom:14px}
+  .filter-uitklap>summary{display:flex;align-items:center;gap:10px;min-height:48px;cursor:pointer;font-weight:700;list-style:none}
+  .filter-uitklap>summary::-webkit-details-marker{display:none}
+  .filter-uitklap>summary::after{content:"";margin-left:auto;width:8px;height:8px;border-right:2.5px solid currentColor;border-bottom:2.5px solid currentColor;transform:translateY(-3px) rotate(45deg)}
+  .filter-uitklap[open]>summary::after{transform:translateY(2px) rotate(-135deg)}
+  .filter-uitklap>summary small{font-weight:600;color:var(--zacht)}
+  .filter-uitklap .filterrij{padding-bottom:14px;margin-bottom:0}
+}
+.wis-filters{margin:0 0 12px}
+.lijst-voet{display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px}
+.lijst-voet .meer-laden{margin-top:26px}
+.naar-boven{margin-top:26px;min-height:44px;display:inline-flex;align-items:center}
+.direct{margin:6px 0 26px}
+.direct-lijst{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+.direct-lijst a{display:grid;grid-template-columns:48px 1fr;gap:12px;align-items:center;min-height:64px;padding:8px 12px;border:1.5px solid var(--lijn);border-radius:12px;text-decoration:none;color:var(--ink);background:var(--vlak)}
+.direct-lijst a:hover{border-color:var(--veld)}
+.direct-lijst img,.direct-lijst .leeg-foto{width:48px;height:48px;border-radius:50%;object-fit:cover;object-position:50% 20%;background:var(--munt);display:grid;place-items:center;font-weight:700}
+.direct-icoon{display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:var(--munt)}
+.direct-icoon .sil{width:30px;height:30px;fill:var(--veld)}
+.direct-lijst b{display:block;line-height:1.2}
+.direct-lijst small{display:block;color:var(--zacht);font-size:.86rem;margin-top:2px}
+.controle{margin:0 0 14px;display:grid;gap:0}
+.controle div{display:grid;grid-template-columns:9.5rem 1fr;gap:4px 14px;padding:8px 0;border-bottom:1px solid var(--lijn)}
+.controle dt{color:var(--zacht);font-size:.94rem}
+.controle dd{margin:0;overflow-wrap:anywhere}
+@media (max-width:480px){.controle div{grid-template-columns:1fr}}
+.knop-tekst{background:none;border:0;padding:0 0 0 8px;min-height:32px;color:var(--link);font:700 .94rem var(--tekst);text-decoration:underline;cursor:pointer}
+.grens-uitleg{margin:12px 0 0;font-size:.92rem;color:var(--zacht);max-width:38em}
+.uitslag.stand{margin-top:18px}
+.uitslag.stand p+p{margin-top:8px}
+.stand-kop .status{display:inline-block;font-weight:800;color:var(--ink)}
+.stand-kop .status.klaar{color:var(--goed)}
+.log.vooraf .log-item{grid-template-columns:minmax(0,1fr)}
+.filter-uitklap .filterrij .veld{flex:1 1 220px;max-width:340px}
+@media (max-width:700px){.filter-uitklap .filterrij .veld{max-width:none}}

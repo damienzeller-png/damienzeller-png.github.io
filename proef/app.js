@@ -106,9 +106,20 @@ function pasAan(naam, lijst, a) {
   }
   return uit;
 }
+// Lukt laden niet (geen verbinding of een storing), dan onthouden we dat: de pagina zegt dan "Geen verbinding" met een
+// knop Opnieuw, in plaats van een lege lijst die lijkt te zeggen dat er niets is.
+const mislukt = new Set();
+const ophalen = (naam, url, leeg) => fetch(url).then(r => r.ok ? r.json() : r.status >= 500 ? Promise.reject(new Error(String(r.status))) : leeg)
+  .catch(() => { mislukt.add(naam); return leeg; });
+function opnieuwProberen() {
+  for (const n of mislukt) delete cache[n];
+  mislukt.clear(); KAART = null;
+  route();
+}
+const foutBalk = () => `<div class="wrap"><div class="melding fout net-fout" role="alert"><p><b>Geen verbinding.</b> Een deel van deze pagina kon niet laden. Controleer uw internet en probeer het opnieuw.</p><button class="knop lijn klein" type="button" data-opnieuw>Opnieuw proberen</button></div></div>`;
 function laad(naam) {
   if (!cache[naam]) {
-    const bestand = fetch(U(`data/${naam}.json`)).then(r => r.ok ? r.json() : []).catch(() => []);
+    const bestand = ophalen(naam, U(`data/${naam}.json`), naam === "kaart" || naam === "archief" || naam === "bewijs" || naam === "bestuur" ? null : []);
     cache[naam] = MET_AANPASSING.has(naam) || naam.startsWith("lijst/") ? Promise.all([bestand, aanpassingen()]).then(([d, a]) => pasAan(naam, d, a)) : bestand;
   }
   return cache[naam];
@@ -116,7 +127,7 @@ function laad(naam) {
 // één stuk met de volledige tekst (data/stuk/<id>.json), pas geladen als iemand het opent
 function stuk(id) {
   const k = "stuk/" + id;
-  if (!cache[k]) cache[k] = Promise.all([fetch(U(`data/stuk/${encodeURIComponent(id)}.json`)).then(r => r.ok ? r.json() : null).catch(() => null), aanpassingen()])
+  if (!cache[k]) cache[k] = Promise.all([ophalen(k, U(`data/stuk/${encodeURIComponent(id)}.json`), null), aanpassingen()])
     .then(([d, a]) => d ? (pasAan("stuk", [d], a)[0] || null) : null);
   return cache[k];
 }
@@ -615,9 +626,48 @@ pagina.stadsdelen = async ([naam]) => {
 pagina.stadsdelen.na = async ([naam]) => activeerKaart(await laad("kaart"), sdVanSlug(naam) || opslag.lees("stadsdeel"));
 pagina.stadsdelen.titel = ([naam]) => sdVanSlug(naam) ? `Hart voor Den Haag in ${sdVanSlug(naam)}` : "Uw stadsdeel";
 
+// Eén filterpatroon voor alle lijsten: stadsdeel, onderwerp en zoeken, met het echte aantal erbij.
+// De aantallen komen uit data/tellingen.json (per soort, stadsdeel en onderwerp, gemaakt door bouw.py);
+// alleen bij een zoekwoord tellen we in de zoekindex: die laden we dan pas.
+const leesFilter = q => ({ stadsdeel: STADSDELEN.includes(q.get("stadsdeel")) ? q.get("stadsdeel") : "", onderwerp: ONDERWERPEN.includes(q.get("onderwerp")) ? q.get("onderwerp") : "", zoek: (q.get("zoek") || "").trim() });
+function filterHref(pad, f) { const p = new URLSearchParams(); for (const k of ["stadsdeel", "onderwerp", "zoek"]) if (f[k]) p.set(k, f[k]); const s = p.toString(); return U(pad + (s ? "?" + s : "")); }
+const aantalActief = f => [f.stadsdeel, f.onderwerp, f.zoek].filter(Boolean).length;
+function filterBalk(pad, f, tel = null, s = "") {
+  const n = aantalActief(f);
+  const aantal = (sd, o) => { if (!tel || !tel[s]) return ""; const x = tel[s][`${sd}|${o}`] || 0; return ` (${fmt.format(x)})`; };
+  return `<details class="filter-uitklap" id="filter-uitklap"${n || !smal() ? " open" : ""}><summary>Filters${n ? ` <small>${n} actief</small>` : ""}</summary>
+    <div class="filterrij">
+      <div class="veld"><label for="f-sd">Stadsdeel</label><select id="f-sd"><option value="">Hele stad${aantal("", f.onderwerp)}</option>${STADSDELEN.map(x => `<option value="${x}"${x === f.stadsdeel ? " selected" : ""}>${x}${aantal(x, f.onderwerp)}</option>`).join("")}</select></div>
+      <div class="veld"><label for="f-o">Onderwerp</label><select id="f-o"><option value="">Alle onderwerpen${aantal(f.stadsdeel, "")}</option>${ONDERWERPEN.map(x => `<option value="${x}"${x === f.onderwerp ? " selected" : ""}>${x}${aantal(f.stadsdeel, x)}</option>`).join("")}</select></div>
+      <div class="veld"><label for="f-zoek">Zoek in deze lijst</label><input type="search" id="f-zoek" value="${esc(f.zoek)}" placeholder="Bijvoorbeeld parkeren of Moerwijk"></div>
+      ${n ? `<p class="wis-filters"><a class="meer" href="${U(pad)}">Wis filters</a></p>` : ""}
+    </div></details>
+    <p class="teller" id="teller" aria-live="polite"></p>`;
+}
+function koppelFilter(pad, f, herteken) {
+  const uk = $("#filter-uitklap"); if (uk && !smal()) uk.open = true;
+  const naar = extra => gaNaar(filterHref(pad, { ...f, zoek: $("#f-zoek").value.trim(), ...extra }), null, { houd: extra.stadsdeel != null ? "f-sd" : "f-o" });
+  $("#f-sd").addEventListener("change", e => naar({ stadsdeel: e.target.value }));
+  $("#f-o").addEventListener("change", e => naar({ onderwerp: e.target.value }));
+  let wacht;
+  $("#f-zoek").addEventListener("input", () => {
+    clearTimeout(wacht);
+    wacht = setTimeout(() => { f.zoek = $("#f-zoek").value.trim(); history.replaceState(history.state, "", filterHref(pad, f)); herteken(); }, 250);
+  });
+}
+const pastFilter = f => { const z = PLAT(f.zoek.toLowerCase()); return i => (!f.stadsdeel || (i.stadsdelen || []).includes(f.stadsdeel)) && (!f.onderwerp || (i.onderwerpen || []).includes(f.onderwerp)) && (!z || PLAT((i.titel + " " + (i.samenvatting || "") + " " + (i.indiener || "")).toLowerCase()).includes(z)); };
+const pastIndex = f => { const z = PLAT(f.zoek.toLowerCase()); return i => (!f.stadsdeel || (i.sd || []).includes(f.stadsdeel)) && (!f.onderwerp || (i.o || []).includes(f.onderwerp)) && (!z || PLAT((i.t + " " + (i.x || "") + " " + (i.i || "")).toLowerCase()).includes(z)); };
+// het echte aantal in het hele archief voor dit filter (null als we het niet weten)
+async function echtTotaal(s, f) {
+  const nieuw = (await eigen()).filter(i => i.soort === s && pastFilter(f)(i)).length;
+  if (!f.zoek) { const t = await laad("tellingen"); return t && t[s] ? (t[s][`${f.stadsdeel}|${f.onderwerp}`] || 0) + nieuw : null; }
+  const idx = await laad("zoekindex"); if (!idx.length) return null;
+  return idx.filter(i => i.s === s && pastIndex(f)(i)).length + nieuw;
+}
+
 // lijsten uit het hele archief: "Meer laden" haalt zo nodig een ouder jaar op; bij Terug blijft het aantal staan
 const lijstSleutel = () => "n:" + location.pathname + location.search;
-async function meerLadenStroom(lijst, st, past, maak, stap, filterActief, leeg) {
+async function meerLadenStroom(lijst, st, past, maak, stap, filterActief, leeg, totaal = null) {
   const sleutel = lijstSleutel();
   let n = Math.max(stap, Number(opslag.sLees(sleutel)) || stap);
   const knop = $(lijst.knop), teller = $(lijst.teller);
@@ -631,11 +681,18 @@ async function meerLadenStroom(lijst, st, past, maak, stap, filterActief, leeg) 
     }
     const doel = $(lijst.doel); if (!doel || doel.dataset.beurt !== beurt) return;
     if (knop) { knop.disabled = false; knop.textContent = "Meer laden"; }
-    if (!zicht.length && st.klaar) { doel.innerHTML = leeg; if (teller) teller.textContent = ""; if (knop) knop.hidden = true; return; }
+    const boven = $("#naar-boven");
+    if (!zicht.length && st.klaar) {
+      doel.innerHTML = mislukt.size ? `${/^(OL|UL)$/.test(doel.tagName) ? "<li class=\"leeg\">" : "<p class=\"leeg\">"}Deze lijst kon niet laden. <button class="knop lijn klein" type="button" data-opnieuw>Opnieuw proberen</button>${/^(OL|UL)$/.test(doel.tagName) ? "</li>" : "</p>"}` : leeg;
+      if (teller) teller.textContent = mislukt.size ? "" : "Niets gevonden"; if (knop) knop.hidden = true; if (boven) boven.hidden = true; return;
+    }
     doel.innerHTML = maak(zicht.slice(0, n));
     const getoond = Math.min(n, zicht.length);
-    if (teller) teller.textContent = st.klaar ? `${fmt.format(getoond)} van ${fmt.format(zicht.length)}` : filterActief ? `${fmt.format(getoond)} getoond, met Meer laden zoekt u verder terug` : `${fmt.format(getoond)} van ${fmt.format(st.totaal)}`;
+    const tot = st.klaar ? zicht.length : totaal ? await totaal() : null;
+    if (doel.dataset.beurt !== beurt) return;
+    if (teller) teller.textContent = tot != null ? `${fmt.format(getoond)} van ${fmt.format(Math.max(tot, getoond))}` : filterActief ? `${fmt.format(getoond)} getoond, met Meer laden zoekt u verder terug` : `${fmt.format(getoond)} van ${fmt.format(st.totaal)}`;
     if (knop) knop.hidden = st.klaar && n >= zicht.length;
+    if (boven) boven.hidden = getoond <= stap;
   };
   await teken();
   if (knop) knop.onclick = async () => { n += stap; opslag.sZet(sleutel, n); await teken(); };
@@ -644,22 +701,25 @@ async function meerLadenStroom(lijst, st, past, maak, stap, filterActief, leeg) 
 const bijgewerkt = st => st.opgehaald ? `Overgenomen van hartvoordenhaag.nl, bijgewerkt op ${datumVol(st.opgehaald)}.` : "";
 
 // nieuws en successen
+const lijstVoet = (meerId = "meer") => `<div class="lijst-voet"><button class="knop lijn meer-laden" type="button" id="${meerId}" hidden>Meer laden</button><a class="meer naar-boven" id="naar-boven" href="#inhoud" hidden>Naar boven</a></div>`;
 function lijstPagina(s, titel, tekst, pad) {
   const f = async (args, q) => {
-    const sd = q.get("stadsdeel") || "";
-    const knoppen = ["", ...STADSDELEN].map(x => `<a class="knopje" href="${U(pad + (x ? "?stadsdeel=" + encodeURIComponent(x) : ""))}"${x === sd ? ' aria-current="page"' : ""}>${x || "Hele stad"}</a>`).join("");
+    const fl = leesFilter(q);
     return paginaKop(titel, tekst) + `<section class="${s === "succes" ? "" : "wit"}"><div class="wrap">
-      <nav class="filters" aria-label="Kies een stadsdeel">${knoppen}</nav>
-      <p class="teller" id="teller" aria-live="polite"></p><h2 class="verborgen">Berichten</h2><ol class="log" id="lijst">${"<li class=\"skelet-rij\" aria-hidden=\"true\"><span></span><span></span><span></span></li>".repeat(5)}</ol>
-      <button class="knop lijn meer-laden" type="button" id="meer" hidden>Meer laden</button>
+      ${filterBalk(pad, fl, await laad("tellingen"), s)}
+      <h2 class="verborgen">Berichten</h2><ol class="log" id="lijst">${"<li class=\"skelet-rij\" aria-hidden=\"true\"><span></span><span></span><span></span></li>".repeat(5)}</ol>
+      ${lijstVoet()}
       <p class="leeg" id="bron" style="margin-top:22px"></p></div></section>`;
   };
   f.na = async (args, q) => {
-    const sd = q.get("stadsdeel") || "";
+    const fl = leesFilter(q);
     const st = await stroom(s).start();
     $("#bron").textContent = `Alles sinds ${s === "succes" ? "2014" : "2013"} staat hier; met Meer laden gaat u verder terug. ${bijgewerkt(st)}`;
-    await meerLadenStroom({ doel: "#lijst", teller: "#teller", knop: "#meer" }, st, i => !sd || i.stadsdelen.includes(sd),
-      rij => rij.map((n, i) => logItem(n, i === 0 && !sd)).join(""), 20, !!sd, `<li class="leeg">Nog geen berichten uit ${esc(sd)}.</li>`);
+    const leeg = () => `<li class="leeg">Niets gevonden${fl.stadsdeel ? ` in ${esc(fl.stadsdeel)}` : ""}. Probeer een ander filter of <a href="${U("zoeken/?q=" + encodeURIComponent(fl.zoek))}">zoek op de hele site</a>.</li>`;
+    const teken = () => meerLadenStroom({ doel: "#lijst", teller: "#teller", knop: "#meer" }, st, pastFilter(fl),
+      rij => rij.map((n, i) => logItem(n, i === 0 && !aantalActief(fl))).join(""), 20, !!aantalActief(fl), leeg(), () => echtTotaal(s, fl));
+    koppelFilter(pad, fl, teken);
+    await teken();
   };
   return f;
 }
@@ -745,33 +805,27 @@ const TABS = {
   vragen: { s: "raadsvraag", pad: "raadswerk/vragen/", titel: "Schriftelijke vragen", vraag: "Wat zijn schriftelijke vragen?", uitleg: `<p>Met schriftelijke vragen zetten we een probleem uit de wijk op de agenda. Het college moet binnen een paar weken antwoorden.</p>` },
   spreekteksten: { s: "spreektekst", pad: "raadswerk/spreekteksten/", titel: "Spreekteksten", vraag: "Wat is een spreektekst?", uitleg: `<p>Wat onze raadsleden zeggen in de raad en in commissies, zoals bij de begroting.</p>` },
 };
-const rwHref = (tab, o, q) => { const p = new URLSearchParams(); if (o) p.set("onderwerp", o); if (q) p.set("zoek", q); const s = p.toString(); return U(TABS[tab].pad + (s ? "?" + s : "")); };
+const rwHref = (tab, o, q) => filterHref(TABS[tab].pad, { onderwerp: o, zoek: q });
 pagina.raadswerk = async ([tab = "moties"], q) => {
   const tabNaam = TABS[tab] ? tab : "moties", t = TABS[tabNaam];
-  const onderwerp = q.get("onderwerp") || "", zoek = q.get("zoek") || "";
-  const knoppen = ["", ...ONDERWERPEN].map(o => `<a class="knopje" href="${rwHref(tabNaam, o, zoek)}"${o === onderwerp ? ' aria-current="page"' : ""}>${o || "Alle onderwerpen"}</a>`).join("");
+  const fl = leesFilter(q);
   return paginaKop(t.titel, "Wat Hart voor Den Haag in de gemeenteraad doet: moties, amendementen, vragen aan het college en wat we zeggen in de raad.") + `
     <section class="wit"><div class="wrap">
-      <nav class="tabs" aria-label="Soort stuk">${Object.entries(TABS).map(([k, v]) => `<a href="${U(v.pad)}"${k === tabNaam ? ' aria-current="page"' : ""}>${v.titel}</a>`).join("")}</nav>
+      <nav class="tabs" aria-label="Soort stuk">${Object.entries(TABS).map(([k, v]) => `<a href="${filterHref(v.pad, fl)}"${k === tabNaam ? ' aria-current="page"' : ""}>${v.titel}</a>`).join("")}</nav>
       <details class="hoe"><summary>${t.vraag}</summary>${t.uitleg}</details>
-      <nav class="filters breed-alleen" aria-label="Onderwerp">${knoppen}</nav>
-      <div class="filterrij">
-        <div class="veld smal-alleen"><label for="rw-onderwerp">Onderwerp</label><select id="rw-onderwerp"><option value="">Alle onderwerpen</option>${ONDERWERPEN.map(o => `<option${o === onderwerp ? " selected" : ""}>${o}</option>`).join("")}</select></div>
-        <div class="veld"><label for="binnen">Zoek in deze lijst</label><input type="search" id="binnen" value="${esc(zoek)}" placeholder="Bijvoorbeeld parkeren of Moerwijk"></div>
-        <p class="teller" id="teller" aria-live="polite"></p></div>
+      ${filterBalk(t.pad, fl, await laad("tellingen"), t.s)}
       <div id="lijst"><ul class="skelet" aria-hidden="true">${"<li><span></span><span></span><span></span></li>".repeat(6)}</ul></div>
-      <button class="knop lijn meer-laden" type="button" id="meer" hidden>Meer laden</button>
+      ${lijstVoet()}
       <p class="leeg" id="bron" style="margin-top:22px"></p>
     </div></section>`;
 };
 pagina.raadswerk.titel = ([tab]) => TABS[tab] ? TABS[tab].titel : "Raadswerk";
 pagina.raadswerk.na = async ([tab = "moties"], q) => {
   const tabNaam = TABS[tab] ? tab : "moties", t = TABS[tabNaam];
-  const onderwerp = q.get("onderwerp") || "";
+  const fl = leesFilter(q);
   const st = await stroom(t.s).start();
   const nieuwste = st.items.find(i => !i.eigen) || st.items[0];
   $("#bron").textContent = `Alles wat de fractie sinds 2012 op hartvoordenhaag.nl plaatste${nieuwste ? `; het nieuwste stuk in deze lijst is van ${datumVol(nieuwste.datum)}` : ""}. ${bijgewerkt(st)} Onderwerpen zijn automatisch toegekend op basis van de tekst.`;
-  const opOnderwerp = i => !onderwerp || (i.onderwerpen || []).includes(onderwerp);
   const perMaand = rij => {
     let html = "", huidig = "";
     for (const i of rij) {
@@ -781,18 +835,10 @@ pagina.raadswerk.na = async ([tab = "moties"], q) => {
     }
     return html + (huidig ? "</ul>" : "");
   };
-  const leeg = `<p class="leeg" style="padding-top:18px">Niets gevonden. Probeer een ander woord of onderwerp, of <a href="${U("zoeken/?q=" + encodeURIComponent(($("#binnen") || {}).value || ""))}">zoek op de hele site</a>. <a class="meer" href="${U(t.pad)}">Wis zoekterm en onderwerp</a></p>`;
-  const toonLijst = () => {
-    const zoek = PLAT($("#binnen").value.trim().toLowerCase());
-    const past = i => opOnderwerp(i) && (!zoek || PLAT((i.titel + " " + (i.samenvatting || "") + " " + (i.indiener || "")).toLowerCase()).includes(zoek));
-    return meerLadenStroom({ doel: "#lijst", teller: "#teller", knop: "#meer" }, st, past, perMaand, 25, !!(zoek || onderwerp), leeg);
-  };
-  let wacht; $("#binnen").addEventListener("input", () => {
-    clearTimeout(wacht);
-    wacht = setTimeout(() => { history.replaceState(history.state, "", rwHref(tabNaam, onderwerp, $("#binnen").value.trim())); toonLijst(); }, 250);
-  });
-  $("#rw-onderwerp").addEventListener("change", e => gaNaar(rwHref(tabNaam, e.target.value, $("#binnen").value.trim())));
-  toonLijst();
+  const leeg = () => `<p class="leeg" style="padding-top:18px">Niets gevonden. Probeer een ander woord, stadsdeel of onderwerp, of <a href="${U("zoeken/?q=" + encodeURIComponent(fl.zoek))}">zoek op de hele site</a>. <a class="meer" href="${U(t.pad)}">Wis filters</a></p>`;
+  const teken = () => meerLadenStroom({ doel: "#lijst", teller: "#teller", knop: "#meer" }, st, pastFilter(fl), perMaand, 25, !!aantalActief(fl), leeg(), () => echtTotaal(t.s, fl));
+  koppelFilter(t.pad, fl, teken);
+  await teken();
 };
 
 pagina.petities = async () => {
@@ -1067,6 +1113,7 @@ pagina.contact = async ([sub], q) => {
       <li><h3><a href="${TEL_LINK}">${TEL}</a></h3><p class="sam">Voor een snelle vraag</p></li>
       <li><h3><a href="mailto:${MAIL}">${MAIL}</a></h3><p class="sam">Wij lezen elk bericht</p></li>
       <li><h3>Spui 70, Den Haag</h3><p class="sam">Fractiekamer in het stadhuis</p></li></ul>
+      <p style="margin-top:18px"><a class="meer" href="${U("melding-status/")}">Hoe staat mijn melding ervoor? ${PIJL}</a></p>
       ${melding ? "" : `<p class="melding" style="margin-top:22px"><b>Gevaarlijke situatie?</b> Bel 112. Een melding voor de gemeente zelf kan via 14 070 of denhaag.nl.</p>`}
       ${gekozen === "pers" ? `<p class="melding" style="margin-top:22px">Journalist? Op de <a href="${U("pers/")}">perspagina</a> staan persberichten, logo's en foto's.</p>` : ""}</div>
   </div></section>`;
@@ -1136,14 +1183,58 @@ pagina.contact.na = () => {
     }),
     voor: d => d.onderwerp === "melding" ? { foto: foto || undefined, lat: d.lat || undefined, lon: d.lon || undefined } : { lat: undefined, lon: undefined },
     bedankt: (d, a) => d.onderwerp === "melding" ? `Dank u wel! Uw melding over ${d.stadsdeel} is binnen.${a.kenmerk ? ` Uw kenmerk is ${a.kenmerk}; noem het als u ons belt of mailt.` : ""} Het ombudsteam kijkt ernaar en laat van zich horen.` : `Dank u wel! Uw bericht is binnen.${a.kenmerk ? ` Uw kenmerk is ${a.kenmerk}.` : ""} We reageren zo snel mogelijk.`,
-    na: () => { foto = ""; $("#foto-voorbeeld").innerHTML = ""; $("#plek-uitslag").textContent = ""; },
+    na: (d, uit, a) => {
+      foto = ""; $("#foto-voorbeeld").innerHTML = ""; $("#plek-uitslag").textContent = "";
+      if (a && a.kenmerk) uit.insertAdjacentHTML("beforeend", ` <a href="${U("melding-status/?kenmerk=" + encodeURIComponent(a.kenmerk))}">Bekijk later hoe het ervoor staat</a>.`);
+    },
+  });
+};
+
+// hoe staat mijn melding ervoor: kenmerk plus het e-mailadres of de laatste vier cijfers van het telefoonnummer
+pagina["melding-status"] = async (args, q) => paginaKop("Hoe staat mijn melding ervoor?", "Vul het kenmerk in uit de bevestiging die u kreeg, bijvoorbeeld M-26-0012.") + `
+  <section><div class="wrap formulier-raster">
+    <form class="formulier" id="form" novalidate>
+      <div class="velden">
+        <div class="veld"><label for="s-kenmerk">Kenmerk</label><input type="text" id="s-kenmerk" name="kenmerk" autocomplete="off" autocapitalize="characters" placeholder="M-26-0012" value="${esc((q.get("kenmerk") || "").slice(0, 12))}"></div>
+        <div class="veld"><label for="s-contact">Uw e-mailadres <small>of de laatste vier cijfers van uw telefoonnummer</small></label><input type="text" id="s-contact" name="contact" autocomplete="email" inputmode="email"></div></div>
+      <button class="knop groen" type="submit">Bekijk de stand</button><div class="uitslag" id="s-uitslag" hidden></div></form>
+    <div><h2>Wat de stand betekent</h2><ul class="voordelen">
+      <li><b>Ontvangen:</b> het ombudsteam heeft uw melding en kijkt ernaar. Willen we meer weten, dan nemen we contact op.</li>
+      <li><b>Afgehandeld:</b> we hebben gedaan wat we konden. U hoort van ons wat eruit kwam.</li></ul>
+      <p class="melding" style="margin-top:22px">Geen kenmerk meer? Bel <a href="${TEL_LINK}">${TEL}</a> of <a href="${U("contact/")}">stuur een bericht</a>. Een nieuwe melding doet u <a href="${U("contact/melding/")}">hier</a>.</p></div>
+  </div></section>`;
+pagina["melding-status"].titel = () => "Hoe staat mijn melding ervoor?";
+pagina["melding-status"].na = () => {
+  const f = $("#form"), uit = $("#s-uitslag");
+  f.addEventListener("input", e => { if (e.target.getAttribute("aria-invalid")) zetFout(e.target, ""); });
+  f.addEventListener("submit", async e => {
+    e.preventDefault();
+    if (!controleer(f, {
+      kenmerk: v => /^[mc]-?\d{2}-?\d{4}$/i.test(v.replace(/\s+/g, "")) ? "" : "Een kenmerk ziet eruit als M-26-0012.",
+      contact: v => EMAIL.test(v) || /^\d{4}$/.test(v.replace(/\s+/g, "")) ? "" : "Vul uw e-mailadres in, of alleen de laatste vier cijfers van uw telefoonnummer.",
+    })) return;
+    const k = f.kenmerk.value.replace(/\s+/g, "").toUpperCase().replace(/^([MC])-?(\d{2})-?(\d{4})$/, "$1-$2-$3");
+    const knop = $("button[type=submit]", f); knop.disabled = true;
+    try {
+      const r = await fetch(API + "/melding-status", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kenmerk: k, contact: f.contact.value.trim() }) });
+      const d = await r.json().catch(() => ({}));
+      if (!d.ok) { toon(uit, d.fout || `Dat lukte nu niet. Probeer het zo nog eens, of bel ${TEL}.`, true); knop.disabled = false; return; }
+      const wat = d.soort === "contact" ? "Uw bericht" : "Uw melding";
+      const dag = iso => { const x = new Date(iso); return isNaN(x) ? "" : `${x.getDate()} ${MAAND[x.getMonth()]} ${x.getFullYear()}`; };
+      uit.hidden = false; uit.className = "uitslag melding stand"; uit.setAttribute("role", "status");
+      uit.innerHTML = `<p class="stand-kop"><span class="status${d.status === "afgehandeld" ? " klaar" : ""}">${d.status === "afgehandeld" ? "Afgehandeld" : "Ontvangen, het ombudsteam kijkt ernaar"}</span></p>
+        <p>${wat} ${esc(d.kenmerk)}${d.stadsdeel ? ` over ${esc(d.stadsdeel)}` : ""} kwam binnen op ${dag(d.ontvangen)}.${d.status === "afgehandeld" && d.bijgewerkt ? ` Afgehandeld op ${dag(d.bijgewerkt)}.` : ""}</p>
+        ${d.status === "afgehandeld" ? `<p>Niet tevreden over hoe het afliep? <a href="${U("contact/?onderwerp=melding")}">Laat het ons weten</a>.</p>` : `<p>Duurt het lang of is er iets veranderd? Bel <a href="${TEL_LINK}">${TEL}</a> en noem uw kenmerk.</p>`}`;
+      uit.tabIndex = -1; uit.focus();
+    } catch { toon(uit, `Geen verbinding. Controleer uw internet en probeer het opnieuw, of bel ${TEL}.`, true); }
+    knop.disabled = false;
   });
 };
 
 // lid worden in drie stappen; elke stap is een eigen adres (?stap=2), zodat Terug in de browser werkt
 const LID = {
-  silver: { naam: "Silvermember", bedrag: 12.5, uitleg: "€ 12,50 per jaar. Het gewone lidmaatschap, met het speldje als welkomstcadeau." },
-  gold: { naam: "Goldmember", bedrag: 25, uitleg: "€ 25 per jaar. Dezelfde rechten als Silver: u steunt de partij met een hogere bijdrage." },
+  silver: { naam: "Lid", bedrag: 12.5, uitleg: "€ 12,50 per jaar. Het gewone lidmaatschap, met het speldje als welkomstcadeau. Heette eerder Silvermember." },
+  gold: { naam: "Steunend lid", bedrag: 25, uitleg: "€ 25 per jaar. Dezelfde rechten als een gewoon lid: u steunt de partij met een hogere bijdrage. Heette eerder Goldmember." },
   ouder: { naam: "Ouderenlid, vanaf 65 jaar", bedrag: 6.7, vervolg: 12.5, uitleg: "€ 6,70 het eerste jaar, daarna € 12,50 per jaar." },
   jong: { naam: "Jongeren voor Den Haag", bedrag: 12.5, uitleg: "Lid van de jongerenbeweging. U kiest zelf: € 12,50 of € 25 per jaar." },
 };
@@ -1201,25 +1292,39 @@ pagina.lid.na = (args, q) => {
     if (n === 3) {
       const l = lidBedrag(f), auto = f.betaal.value === "incasso";
       const vervolg = l.vervolg ? `daarna € ${euro(l.vervolg)} per jaar` : `daarna elk jaar € ${euro(l.bedrag)}`;
-      $("#overzicht").innerHTML = `<p><b>${esc(l.naam)}</b></p><p>Nu: € ${euro(l.bedrag)} met iDEAL.</p><p>${auto ? `Daarna schrijven we automatisch af: ${vervolg.replace(/^daarna /, "")}.` : `Volgend jaar krijgt u een betaalverzoek van € ${euro(l.vervolg || l.bedrag)}.`}</p>`;
+      const w = naam => esc((f.elements[naam]?.value || "").trim());
+      const actief = { ja: "Ja, graag", later: "Misschien later", nee: "Nee, alleen lid" }[f.actief.value] || "";
+      // alles wat u invulde nog één keer op een rij, met een knop om het te wijzigen, voordat u naar iDEAL gaat
+      $("#overzicht").innerHTML = `<h3 class="tussenkop">Klopt alles?</h3><dl class="controle">
+        <div><dt>Lidmaatschap</dt><dd>${esc(l.naam)}, € ${euro(l.bedrag)} per jaar <button class="knop-tekst" type="button" data-naar="1">Wijzig</button></dd></div>
+        <div><dt>Naam</dt><dd>${w("naam")}</dd></div><div><dt>E-mailadres</dt><dd>${w("email")}</dd></div>
+        <div><dt>Adres</dt><dd>${w("postcode").toUpperCase().replace(/^(\d{4})\s*([A-Z]{2})$/, "$1 $2")} ${w("huisnummer")}${w("stadsdeel") ? `, ${w("stadsdeel")}` : ""}</dd></div>
+        ${w("telefoon") ? `<div><dt>Telefoon</dt><dd>${w("telefoon")}</dd></div>` : ""}<div><dt>Actief worden</dt><dd>${actief} <button class="knop-tekst" type="button" data-naar="2">Wijzig gegevens</button></dd></div></dl>
+        <p><b>Nu: € ${euro(l.bedrag)} met iDEAL.</b> ${auto ? `Daarna schrijven we automatisch af: ${vervolg.replace(/^daarna /, "")}.` : `Volgend jaar krijgt u een betaalverzoek van € ${euro(l.vervolg || l.bedrag)}.`}</p>`;
+      $$("#overzicht [data-naar]").forEach(b => b.addEventListener("click", () => f.naarStap(Number(b.dataset.naar))));
       $("#lid-knop").textContent = `Betaal € ${euro(l.bedrag)} met iDEAL`;
     }
   };
   const zetKeuze = () => { $("#jong-veld").hidden = f.soort.value !== "jong"; $("#ouder-veld").hidden = f.soort.value !== "ouder"; };
-  const eisen1 = { vijfenzestig: v => f.soort.value === "ouder" && !v ? "Het ouderenlidmaatschap is voor wie 65 jaar of ouder is. Vink dit aan, of kies Silver of Gold." : "" };
+  const eisen1 = { vijfenzestig: v => f.soort.value === "ouder" && !v ? "Het ouderenlidmaatschap is voor wie 65 jaar of ouder is. Vink dit aan, of kies Lid of Steunend lid." : "" };
   const eisen2 = { naam: verplicht("Vul uw naam in."), email: v => EMAIL.test(v) ? "" : "Vul een geldig e-mailadres in.", postcode: v => /^\d{4}\s?[a-z]{2}$/i.test(v) ? "" : "Vul uw postcode in, bijvoorbeeld 2511 BT.", huisnummer: verplicht("Vul uw huisnummer in.") };
   const naar = (n, push = true) => {
-    if (n >= 2 && !controleer(f, eisen1)) n = 1;
-    else if (n === 3 && !controleer(f, eisen2)) n = 2;
+    let fout = false;
+    if (n >= 2 && !controleer(f, eisen1)) { n = 1; fout = true; }
+    else if (n === 3 && !controleer(f, eisen2)) { n = 2; fout = true; }
     toonStap(n);
     const url = U("lid/" + (n > 1 ? "?stap=" + n : ""));
     if (push && location.pathname + location.search !== url) history.pushState({ lidStap: n }, "", url);
-    const leg = $(`.stap[data-stap="${n}"] legend`, f); if (leg) { leg.tabIndex = -1; leg.focus(); }
+    // bij een fout naar het eerste foute veld van die stap, anders naar de kop van de stap
+    const stapEl = $(`.stap[data-stap="${n}"]`, f), eersteFout = fout && stapEl && $("[aria-invalid='true']", stapEl);
+    if (eersteFout) eersteFout.focus();
+    else { const leg = stapEl && $("legend", stapEl); if (leg) { leg.tabIndex = -1; leg.focus(); } }
   };
+  f.naarStap = n => naar(n);
   f.lidNaar = n => toonStap(n);
   f.addEventListener("input", e => { if (e.target.getAttribute("aria-invalid")) zetFout(e.target, ""); });
   f.addEventListener("change", () => { zetKeuze(); if (!$(".stap[data-stap='3']", f).hidden) toonStap(3); });
-  $$("[data-naar]", f).forEach(b => b.addEventListener("click", () => naar(Number(b.dataset.naar))));
+  $$(".stap > .knoppen [data-naar], .stap > [data-naar]", f).forEach(b => b.addEventListener("click", () => naar(Number(b.dataset.naar))));
   // postcode vult het stadsdeel vanzelf in
   $("#l-pc").addEventListener("change", async e => {
     const pc = e.target.value.replace(/\s+/g, "").toUpperCase(); if (!/^\d{4}[A-Z]{2}$/.test(pc)) return;
@@ -1250,7 +1355,8 @@ pagina.doneren = async () => paginaKop("Doneren", "Geen lid, wel steunen? Elke b
       <fieldset><legend>Bedrag</legend><div class="keuzes drie">
         ${[10, 25, 50, 100, 250].map((b, i) => `<div class="keuze"><input type="radio" name="bedrag" id="d${i}" value="${b}"${b === 25 ? " checked" : ""}><label for="d${i}"><b>€ ${b}</b></label></div>`).join("")}
         <div class="keuze"><input type="radio" name="bedrag" id="d9" value="eigen"><label for="d9"><b>Ander bedrag</b></label></div></div>
-        <div class="veld" id="eigen-veld" hidden><label for="d-eigen">Uw bedrag in euro <small>(bijvoorbeeld 12,50)</small></label><div class="bedrag-rij"><span aria-hidden="true">€</span><input type="text" id="d-eigen" name="eigen" inputmode="decimal" autocomplete="off" maxlength="9"></div><small id="d-lees" aria-live="polite"></small></div></fieldset>
+        <div class="veld" id="eigen-veld" hidden><label for="d-eigen">Uw bedrag in euro <small>(bijvoorbeeld 12,50)</small></label><div class="bedrag-rij"><span aria-hidden="true">€</span><input type="text" id="d-eigen" name="eigen" inputmode="decimal" autocomplete="off" maxlength="9"></div><small id="d-lees" aria-live="polite"></small></div>
+        <p class="grens-uitleg" id="d-grens">U geeft tussen € 1 en € 1.000. Geeft u meer dan € 250 in één keer, of meer dan € 50 per maand, dan vragen we u het bedrag nog even te bevestigen. Naam en woonplaats zijn verplicht: anonieme giften nemen we niet aan.</p></fieldset>
       <div class="velden">
         <div class="veld"><label for="d-naam">Naam</label><input type="text" id="d-naam" name="naam" autocomplete="name"></div>
         <div class="veld"><label for="d-plaats">Woonplaats</label><input type="text" id="d-plaats" name="plaats" autocomplete="address-level2"></div>
@@ -1271,7 +1377,7 @@ pagina.doneren.na = () => {
     $("#eigen-veld").hidden = f.bedrag.value !== "eigen";
     const b = bedrag(), maand = f.vaak.value === "maandelijks";
     const geldig = b >= 1 && b <= 1000;
-    $("#d-lees").textContent = f.bedrag.value === "eigen" && $("#d-eigen").value ? (isNaN(b) ? "Typ alleen een bedrag, bijvoorbeeld 12,50." : `U geeft € ${euro(b)}${maand ? " per maand" : ""}.`) : "";
+    $("#d-lees").textContent = f.bedrag.value === "eigen" && $("#d-eigen").value ? (isNaN(b) ? "Typ alleen een bedrag, bijvoorbeeld 12,50." : b < 1 ? "Het kleinste bedrag is € 1." : b > 1000 ? "Meer dan € 1.000 kan niet via de site. Neem eerst contact op met de penningmeester (zie rechts)." : `U geeft € ${euro(b)}${maand ? " per maand" : ""}.`) : "";
     $("#doneer-knop").textContent = geldig ? `Doneer € ${euro(b)}${maand ? " per maand" : ""} met iDEAL` : "Kies een bedrag";
     const groot = geldig && (maand ? b > 50 : b > 250);
     $("#groot-veld").hidden = !groot;
@@ -1321,6 +1427,29 @@ async function stadsdeelVanPostcode(pc) {
 
 // zoeken: in alles sinds 2012, met filters op soort, sorteren, en een suggestie bij een tikfout
 const ZOEK_SOORTEN = [["", "Alles"], ["nieuws", "Nieuws"], ["succes", "Successen"], ["motie", "Moties"], ["raadsvraag", "Vragen"], ["amendement", "Amendementen"], ["spreektekst", "Spreekteksten"], ["petitie", "Petities"]];
+// vaste pagina's die de zoekfunctie als eerste toont: titel, adres en woorden waarop ze gevonden worden
+const VASTE_PAGINAS = [
+  ["Word lid", "lid/", "lid leden lidmaatschap aanmelden contributie silver gold jongeren ouderen"], ["Doneren", "doneren/", "doneren donatie gift geld steunen schenken"],
+  ["Meld een probleem", "contact/melding/", "melding melden probleem klacht overlast kapot stoep afval ombudsteam"], ["Hoe staat mijn melding ervoor?", "melding-status/", "kenmerk status melding stand opvolging"],
+  ["Contact", "contact/", "contact bellen mailen telefoon adres stadhuis fractiekamer"], ["Agenda en spreekuren", "agenda/", "agenda spreekuur spreekuren bijeenkomst wijkschouw"],
+  ["Petities", "petities/", "petitie petities tekenen handtekening"], ["Standpunten", "standpunten/", "standpunt standpunten programma verkiezingsprogramma beloofd"],
+  ["Onze mensen", "fractie/", "fractie raadsleden raadslid mensen wie"], ["Wethouders", "wethouders/", "wethouder wethouders college"],
+  ["Bestuur", "bestuur/", "bestuur jaarverslag jaarcijfers statuten reglement vereniging"], ["Vacatures", "vacatures/", "vacature vacatures werken baan stage"],
+  ["Doe mee", "doe-mee/", "vrijwilliger vrijwilligers meedoen helpen folderen flyeren poster"], ["Pers", "pers/", "pers journalist media logo persbericht"],
+  ["Dossiers", "onderwerpen/", "dossier dossiers onderwerpen thema"], ["Uw stadsdeel", "stadsdelen/", "stadsdeel stadsdelen postcode wijk buurt"],
+  ["Privacy", "privacy/", "privacy gegevens cookies avg"], ["Toegankelijkheid", "toegankelijkheid/", "toegankelijkheid schermlezer"], ["In English", "english/", "english engels expat"],
+];
+function directTreffers(woorden) {
+  if (!woorden.length) return [];
+  const past = tekst => { const t = PLAT(tekst.toLowerCase()).split(/[^a-z0-9-]+/); return woorden.every(w => t.some(x => x.startsWith(w) || (w.length > 4 && x.includes(w)))); };
+  const uit = [];
+  for (const f of FRACTIE) if (past(f.naam + " " + (f.portefeuilles || []).join(" "))) uit.push({ soort: "mens", f, titel: f.naam, pad: "fractie/" + slug(f.naam) + "/", onder: past(f.naam) ? (f.functie || "Raadslid") : "Gaat over " + f.portefeuilles.filter(p => past(p)).slice(0, 2).join(", ") });
+  for (const sd of STADSDELEN) if (past(sd)) uit.push({ soort: "plek", titel: `Hart voor Den Haag in ${sd}`, pad: `stadsdelen/${slug(sd)}/`, onder: "Raadsleden, spreekuren en wat we doen", sd });
+  PUNTEN.forEach(([kop, tekst]) => { if (past(kop) || past(tekst)) uit.push({ soort: "standpunt", titel: kop, pad: "standpunten/", onder: "Standpunt" }); });
+  for (const o of ONDERWERPEN) if (past(o)) uit.push({ soort: "dossier", titel: `Dossier ${o.toLowerCase()}`, pad: `onderwerpen/${slug(o)}/`, onder: "Alles over dit onderwerp" });
+  for (const [t, pad, trefwoorden] of VASTE_PAGINAS) if (past(t + " " + trefwoorden)) uit.push({ soort: "pagina", titel: t, pad, onder: "Pagina" });
+  return uit.slice(0, 6);
+}
 const afstand = (a, b) => { if (Math.abs(a.length - b.length) > 2) return 9; const r = Array.from({ length: b.length + 1 }, (_, i) => i); for (let i = 1; i <= a.length; i++) { let vorige = r[0]; r[0] = i; for (let j = 1; j <= b.length; j++) { const t = r[j]; r[j] = Math.min(r[j] + 1, r[j - 1] + 1, vorige + (a[i - 1] === b[j - 1] ? 0 : 1)); vorige = t; } } return r[b.length]; };
 pagina.zoeken = async (args, q) => {
   const term = (q.get("q") || "").trim(), welk = q.get("soort") || "", sorteer = q.get("sorteer") || "";
@@ -1352,13 +1481,17 @@ pagina.zoeken = async (args, q) => {
   const knipsel = x => { const l = PLAT((x || "").toLowerCase()); const p = Math.max(0, l.indexOf(woorden[0] || "") - 60); const k = x.slice(p, p + 220); return (p ? "…" : "") + k.slice(0, k.lastIndexOf(" ") > 150 ? k.lastIndexOf(" ") : k.length) + "…"; };
   const href = (extra) => { const p = new URLSearchParams({ q: term, ...(welk ? { soort: welk } : {}), ...(sorteer ? { sorteer } : {}), ...extra }); for (const [k, v] of [...p]) if (!v) p.delete(k); return U("zoeken/?" + p); };
   const totaal = Object.values(perSoort).reduce((a, b) => a + b, 0);
+  const direct = welk ? [] : directTreffers(woorden);
+  const directHtml = direct.length ? `<div class="direct"><h2 class="tussenkop">Direct naar</h2><ul class="direct-lijst">${direct.map(d => `<li><a href="${U(d.pad)}">${d.f ? (d.f.beeld ? `<img src="${esc(d.f.beeld)}" alt="" loading="lazy">` : `<span class="leeg-foto" aria-hidden="true">${initialen(d.f.naam)}</span>`) : d.sd ? `<span class="direct-icoon">${silhouet(d.sd)}</span>` : `<span class="direct-icoon">${HART}</span>`}<span><b>${esc(d.titel)}</b><small>${esc(d.onder)}</small></span></a></li>`).join("")}</ul></div>` : "";
   pagina.zoeken.lijst = treffers.map(i => `<li><h3><a href="${U(i.p || "s/" + encodeURIComponent(i.id) + "/")}" data-stuk="${esc(i.id)}">${licht(i.t)}</a></h3><p class="bijschrift">${i.sd && i.sd.length ? `<span class="plek">${esc(i.sd.join(" en "))}</span>` : ""}<span>${esc(SOORT[i.s].naam)}</span>${i.st ? `<span class="status">${esc(i.st)}</span>` : ""}<time datetime="${esc(i.d)}">${datum(i.d)}</time></p><p class="sam">${licht(knipsel(i.x || ""))}</p></li>`);
-  return paginaKop("Zoeken", term ? `${fmt.format(totaal)} ${totaal === 1 ? "resultaat" : "resultaten"} voor "${esc(term)}"` : "Zoek in al het nieuws, de successen, het raadswerk en de petities sinds 2012.") + `
+  return paginaKop("Zoeken", term ? (!totaal && direct.length ? `${direct.length === 1 ? "Eén pagina" : direct.length + " pagina's"} gevonden voor "${esc(term)}"` : `${fmt.format(totaal)} ${totaal === 1 ? "resultaat" : "resultaten"} voor "${esc(term)}"`) : "Zoek in al het nieuws, de successen, het raadswerk en de petities sinds 2012.") + `
     <section class="wit"><div class="wrap">
       <form id="zoek2" role="search" class="zoek2" action="${U("zoeken/")}"><label class="verborgen" for="zoek2-veld">Zoekterm</label><input type="search" id="zoek2-veld" name="q" value="${esc(term)}" placeholder="Bijvoorbeeld Moerwijk, parkeren of Kwartellaan"><button class="knop groen klein" type="submit">Zoeken</button></form>
       ${term ? `<nav class="filters" aria-label="Soort">${ZOEK_SOORTEN.filter(([s]) => !s || perSoort[s]).map(([s, n]) => `<a class="knopje" href="${href({ soort: s })}"${s === welk ? ' aria-current="page"' : ""}>${n}${s ? ` <small>${fmt.format(perSoort[s])}</small>` : ""}</a>`).join("")}</nav>
       <p class="sorteer">Sorteer op: ${sorteer === "datum" ? `<a href="${href({ sorteer: "" })}">beste treffer</a> · <b>nieuwste eerst</b>` : `<b>beste treffer</b> · <a href="${href({ sorteer: "datum" })}">nieuwste eerst</a>`}</p>` : ""}
-      ${term && !treffers.length ? `<p class="leeg">Niets gevonden${welk ? " in deze soort" : ""}.${suggestie ? ` Bedoelde u <a href="${U("zoeken/?q=" + encodeURIComponent(suggestie))}"><b>${esc(suggestie)}</b></a>?` : " Probeer een ander woord, of zoek op een straat of wijk."}</p>` : ""}
+      ${directHtml}
+      ${term && !treffers.length && direct.length ? `<p class="leeg">In het nieuws en raadswerk vonden we niets met "${esc(term)}".</p>` : ""}
+      ${term && !treffers.length && !direct.length ? `<p class="leeg">Niets gevonden${welk ? " in deze soort" : ""}.${suggestie ? ` Bedoelde u <a href="${U("zoeken/?q=" + encodeURIComponent(suggestie))}"><b>${esc(suggestie)}</b></a>?` : " Probeer een ander woord, of zoek op een straat of wijk."}</p>` : ""}
       <h2 class="verborgen">Resultaten</h2><ul class="stukken zoek-treffer" id="zoek-lijst"></ul>
       <button class="knop lijn meer-laden" type="button" id="zoek-meer" hidden>Meer resultaten</button>
       <p class="teller" id="zoek-teller" aria-live="polite"></p>
@@ -1459,7 +1592,7 @@ pagina.nietgevonden.titel = () => "Niet gevonden";
 // ---------- adressen en router ----------
 // Elke pagina heeft een gewoon adres onder BASE. Filters staan in de zoekregel (?stadsdeel=Laak), zodat elk adres
 // een bestaande pagina is. Een stuk staat op hetzelfde adres als op hartvoordenhaag.nl (motie/<naam>/) of op s/<id>/.
-const TITELS = { nieuws: "Nieuws", successen: "Successen", petities: "Petities", standpunten: "Standpunten", wethouders: "Wethouders", bestuur: "Bestuur", vacatures: "Vacatures", "doe-mee": "Doe mee", lid: "Word lid", doneren: "Doneren", privacy: "Privacy", toegankelijkheid: "Toegankelijkheid", pers: "Pers" };
+const TITELS = { "melding-status": "Hoe staat mijn melding ervoor?", nieuws: "Nieuws", successen: "Successen", petities: "Petities", standpunten: "Standpunten", wethouders: "Wethouders", bestuur: "Bestuur", vacatures: "Vacatures", "doe-mee": "Doe mee", lid: "Word lid", doneren: "Doneren", privacy: "Privacy", toegankelijkheid: "Toegankelijkheid", pers: "Pers" };
 const SECTIE_VAN_SOORT = { nieuws: "nieuws", succes: "successen", motie: "raadswerk", amendement: "raadswerk", raadsvraag: "raadswerk", spreektekst: "raadswerk", petitie: "petities", vacature: "vacatures", agenda: "agenda" };
 // adressen uit de tijd van het hekje (#nieuws/n114543) en oude losse routes werken nog
 function oudAdres(h) {
@@ -1489,16 +1622,19 @@ function routeNu() {
   p = p.replace(/(^|\/)index\.html$/, "").replace(/^\/+|\/+$/g, "");
   return { delen: p ? p.split("/") : [], q: new URLSearchParams(location.search) };
 }
-let viaLink = false, routeNr = 0, eersteKeer = true;
+let viaLink = false, routeNr = 0, eersteKeer = true, houdVast = null;
 history.scrollRestoration = "manual";
-function gaNaar(url, stukId = null) {
+// opties.houd: na het wisselen van een filter blijft de pagina op dezelfde hoogte en de focus op dat veld
+function gaNaar(url, stukId = null, opties = {}) {
   const u = new URL(url, location.href);
   history.replaceState({ ...(history.state || {}), scroll: scrollY }, "");
   history.pushState({ stuk: stukId }, "", u.pathname + u.search + u.hash);
+  houdVast = opties.houd ? { id: opties.houd, scroll: scrollY } : null;
   viaLink = true; route();
 }
 // gewone links binnen de site: geen nieuwe pagina laden, alleen de inhoud wisselen
 document.addEventListener("click", e => {
+  if (e.target.closest && e.target.closest("[data-opnieuw]")) { opnieuwProberen(); return; }
   if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
   const a = e.target.closest("a[href]"); if (!a) return;
   const ruw = a.getAttribute("href");
@@ -1540,7 +1676,7 @@ async function route() {
   const titel = p ? (p.titel ? p.titel(args, q) : TITELS[naam] || ({ raadswerk: "Raadswerk", stadsdelen: "Uw stadsdeel", fractie: "Onze mensen", agenda: "Agenda en spreekuren", contact: "Contact", zoeken: "Zoeken", onderwerpen: "Dossiers" })[naam] || "") : "";
   app.setAttribute("aria-busy", "true"); document.documentElement.classList.add("laadt");
   // duurt het langer dan een tel, dan meteen de kop van de nieuwe pagina met een laadregel
-  const wacht = voorgebouwd || eersteKeer ? null : setTimeout(() => { if (nr === routeNr) { app.innerHTML = paginaKop(esc(titel || "Even laden"), "") + skelet(); window.scrollTo({ top: 0, behavior: "instant" }); } }, 150);
+  const wacht = voorgebouwd || eersteKeer || houdVast ? null : setTimeout(() => { if (nr === routeNr) { app.innerHTML = paginaKop(esc(titel || "Even laden"), "") + skelet(); window.scrollTo({ top: 0, behavior: "instant" }); } }, 150);
   let html = null, sectie = naam, wat = stukId ? "stuk" : p ? "pagina" : "niet", menuPad = location.pathname;
   try {
     await basis();
@@ -1552,17 +1688,21 @@ async function route() {
         const doel = U(stukPad(i)); if (location.pathname !== doel && !voorgebouwd) history.replaceState({ ...(history.state || {}), stuk: stukId }, "", doel + location.hash);
       }
     } else if (p) html = await p(args, q);
-    if (html == null) { html = await pagina.nietgevonden(); wat = "niet"; sectie = ""; document.title = "Niet gevonden | Hart voor Den Haag (proef)"; }
+    if (html == null && mislukt.size) { html = paginaKop(esc(titel || "Even geen verbinding"), "") + foutBalk(); wat = "fout"; }
+    else if (html == null) { html = await pagina.nietgevonden(); wat = "niet"; sectie = ""; document.title = "Niet gevonden | Hart voor Den Haag (proef)"; }
     else if (wat === "pagina" && titel) document.title = titel + " | Hart voor Den Haag (proef)";
     else if (wat === "pagina" && naam === "home") document.title = "Hart voor Den Haag (proef)";
     if (nr !== routeNr) return;
     clearTimeout(wacht);
     app.innerHTML = html; delete app.dataset.stuk;
     if (wat === "stuk") await detail.na(); else if (wat === "pagina" && p.na) await p.na(args, q); else if (wat === "niet") pagina.nietgevonden.na();
+    // laadde een deel niet, dan bovenaan een melding met Opnieuw (de lijsten zelf zeggen het ook)
+    if (mislukt.size && wat !== "fout" && !$(".net-fout", app)) { const kop = $(".pagina-kop, .held", app); if (kop) kop.insertAdjacentHTML("afterend", foutBalk()); else app.insertAdjacentHTML("afterbegin", foutBalk()); }
   } catch (e) {
     console.error(e);
     clearTimeout(wacht);
-    if (nr === routeNr) app.innerHTML = paginaKop("Er ging iets mis", "Laad de pagina opnieuw. Lukt het niet? Bel " + TEL + ".");
+    if (nr === routeNr) app.innerHTML = mislukt.size || !navigator.onLine ? paginaKop("Even geen verbinding", "") + foutBalk()
+      : paginaKop("Er ging iets mis", "Probeer het opnieuw. Lukt het niet? Bel " + TEL + ".") + `<div class="wrap"><button class="knop groen" type="button" data-opnieuw>Opnieuw proberen</button></div>`;
   }
   if (nr !== routeNr) return;
   app.removeAttribute("aria-busy"); document.documentElement.classList.remove("laadt");
@@ -1571,13 +1711,14 @@ async function route() {
   markeerMenu(sectie, naam === "contact" && args[0] === "melding", menuPad);
   telBezoek(location.pathname.slice(BASE.length - 1));
   const terug = !viaLink && history.state && history.state.scroll;
-  if (terug) window.scrollTo({ top: Number(terug), behavior: "instant" });
+  if (houdVast && document.getElementById(houdVast.id)) { window.scrollTo({ top: houdVast.scroll, behavior: "instant" }); document.getElementById(houdVast.id).focus({ preventScroll: true }); }
+  else if (terug) window.scrollTo({ top: Number(terug), behavior: "instant" });
   else if (location.hash.length > 1 && document.getElementById(location.hash.slice(1))) document.getElementById(location.hash.slice(1)).scrollIntoView();
   else if (!eersteKeer) {
     window.scrollTo({ top: 0, behavior: "instant" });
     if (viaLink) { const h = $("#app h1"); if (h) h.focus({ preventScroll: true }); }
   }
-  viaLink = false; eersteKeer = false;
+  viaLink = false; eersteKeer = false; houdVast = null;
 }
 function tekenKopLijnen() {
   laad("kaart").then(k => $$(".kop-lijnen").forEach(svg => { const plek = svg.dataset.plek, bb = plek && k.sd[plek] && k.sd[plek].bb;

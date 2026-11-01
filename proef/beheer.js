@@ -266,6 +266,9 @@ const vinkjes = (naam, opties, gekozen) => `<div class="vinkjes">${opties.map((o
 const gevinkt = (form, naam) => $$(`input[name="${naam}"]:checked`, form).map(i => i.value);
 
 // ---------- inloggen ----------
+// Inloggen met een Telegram-code (eigenaar) en de noodsleutel staan niet op het gewone inlogscherm: alleen via
+// beheer.html?toegang=1. Zo zien redacteuren en buitenstaanders ze niet.
+const ANDERE_TOEGANG = /[?&]toegang=/.test(location.search);
 function inloggen(boodschap) {
   app.innerHTML = `<div class="inlog">
     ${H1("Inloggen redactie")}
@@ -277,14 +280,14 @@ function inloggen(boodschap) {
       <label class="vink"><input type="checkbox" id="blijf"><span>Ingelogd blijven op deze computer (niet op een gedeelde computer)</span></label>
       <button class="knop groen" type="submit">Inloggen</button><p id="m-ww" hidden></p>
       <p class="leeg" style="font-size:.92rem">Wachtwoord kwijt? Een beheerder kan u een nieuw wachtwoord geven.</p></form>
-    <details class="nood"><summary>Andere manieren van inloggen</summary>
+    ${ANDERE_TOEGANG ? `<details class="nood" open><summary>Andere manieren van inloggen</summary>
       <form class="formulier" id="f-code" novalidate><h2 style="font-size:1.4rem">Eigenaar: code via Telegram</h2>
         <button class="knop lijn" type="button" id="stuur">Stuur mij een code</button>
         <div class="veld" id="code-veld" hidden><label for="code">Code uit Telegram</label><input type="text" id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>
         <button class="knop groen" type="submit" id="code-knop" hidden>Inloggen met code</button><p id="m-code" hidden></p></form>
       <form class="formulier" id="f-nood" novalidate><h2 style="font-size:1.4rem">Noodtoegang</h2><p class="leeg">Alleen als niemand meer kan inloggen. De noodsleutel ligt bij het bestuur. Na gebruik krijgt de eigenaar een bericht.</p>
         <div class="veld"><label for="sleutel">Noodsleutel</label><input type="password" id="sleutel" autocomplete="off"></div>
-        <button class="knop lijn" type="submit">Inloggen met de noodsleutel</button><p id="m-nood" hidden></p></form></details></div>`;
+        <button class="knop lijn" type="submit">Inloggen met de noodsleutel</button><p id="m-nood" hidden></p></form></details>` : ""}</div>`;
   let tussen = "";
   const blijf = () => $("#blijf").checked;
   $("#f-ww").addEventListener("submit", async e => {
@@ -297,6 +300,7 @@ function inloggen(boodschap) {
       bewaar(d, blijf()); start();
     } catch (err) { melding($("#m-ww"), err.message, true); klaar(); }
   });
+  if (!ANDERE_TOEGANG) return;
   $("#stuur").addEventListener("click", async e => {
     const klaar = bezig(e.target, "Bezig…");
     try { await vraag("/login/code", { method: "POST" }); $("#code-veld").hidden = false; $("#code-knop").hidden = false; $("#code").focus(); melding($("#m-code"), "De code staat in Telegram. Hij is tien minuten geldig."); }
@@ -666,6 +670,18 @@ function eigenEditor(i) {
     if (s === "petitie") Object.assign(b, leesPetitie());
     if (b.titel.trim().length < 4) { melding(m, "Geef het bericht een titel van minstens 4 tekens.", true); $("#titel").focus(); return; }
     if (b.link && !/^https:\/\//.test(b.link)) { melding(m, "Een link begint met https://.", true); $("#link").focus(); return; }
+    // voor publiceren: waarschuwen als iets ontbreekt wat bezoekers missen (één keer; nog een klik publiceert toch)
+    if (b.gepubliceerd && s !== "agenda") {
+      const mist = [];
+      if (!b.samenvatting.trim()) mist.push(["samenvatting", "een korte samenvatting (die staat in de overzichten en in het voorbeeld bij delen)"]);
+      if (b.foto && !b.alt) mist.push(["alt", "een beschrijving van de foto (voor mensen die hem niet kunnen zien)"]);
+      if (!b.stadsdelen.length) mist.push(["", "een stadsdeel (zonder vinkje staat het bericht bij heel Den Haag)"]);
+      if (mist.length && !zeker(knop, "Toch publiceren")) {
+        melding(m, `Nog niet gepubliceerd. Er ontbreekt ${mist.length > 1 ? mist.slice(0, -1).map(x => x[1]).join("; ") + " en " + mist[mist.length - 1][1] : mist[0][1]}. Vul het aan, of klik op Toch publiceren.`, true);
+        const eerste = mist.find(x => x[0]); if (eerste && $("#" + eerste[0])) $("#" + eerste[0]).focus();
+        return;
+      }
+    }
     // een afspraak in het verleden staat niet op de agenda: eerst vragen of dat de bedoeling is
     if (s === "agenda" && b.gepubliceerd && b.datum < vandaag() && !zeker(knop, "Datum ligt in het verleden. Toch opslaan?")) { melding(m, "Deze datum is al geweest. Een afspraak in het verleden verschijnt niet op de agenda. Klik nog een keer als u hem toch wilt opslaan.", true); return; }
     const extra = s === "agenda" && !i.id ? herhaalData() : [];

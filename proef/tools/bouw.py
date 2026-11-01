@@ -69,6 +69,7 @@ VAST = [
     ("vacatures/", "Vacatures", "Werken of vrijwilligen voor Hart voor Den Haag."),
     ("contact/", "Contact", "Bel, mail of stuur een bericht aan de fractie van Hart voor Den Haag."),
     ("contact/melding/", "Meld een probleem", "Iets mis in uw buurt? Meld het bij het ombudsteam van Hart voor Den Haag."),
+    ("melding-status/", "Hoe staat mijn melding ervoor?", "Bekijk met uw kenmerk hoe het staat met uw melding bij het ombudsteam van Hart voor Den Haag."),
     ("lid/", "Word lid", "Word lid van Hart voor Den Haag, vanaf € 12,50 per jaar."),
     ("doneren/", "Doneren", "Steun Hart voor Den Haag met een gift."),
     ("zoeken/", "Zoeken", "Zoek in al het nieuws en raadswerk van Hart voor Den Haag sinds 2012."),
@@ -176,6 +177,68 @@ def stuk_html(d):
             f'<section class="wit"><div class="wrap"><article class="artikel">{beeld}<div class="artikel-tekst" style="margin-top:18px">{tekst}</div></article></div></section>')
 
 
+# Lijsten en de voorpagina staan vooraf in de HTML (de eerste twintig stukken), zodat er meteen iets te lezen is,
+# ook zonder JavaScript of met een trage verbinding. app.js bouwt de pagina daarna opnieuw op, met filters en Meer laden.
+LIJSTEN = {"nieuws/": ("nieuws", "nieuws.json"), "successen/": ("succes", "successen.json"), "raadswerk/": ("motie", "moties.json"),
+           "raadswerk/amendementen/": ("amendement", "amendementen.json"), "raadswerk/vragen/": ("raadsvraag", "raadsvragen.json"),
+           "raadswerk/spreekteksten/": ("spreektekst", "spreekteksten.json")}
+
+
+def bijschrift_html(d, met_soort=False):
+    delen = []
+    if d.get("stadsdelen"):
+        delen.append(f'<span class="plek">{e(" en ".join(d["stadsdelen"]))}</span>')
+    if met_soort:
+        delen.append(f"<span>{e(SOORT[d['soort']][0])}</span>")
+    if d.get("indiener"):
+        delen.append(f"<span>{e(d['indiener'])}</span>")
+    if d.get("status"):
+        delen.append(f'<span class="status">{e(d["status"])}</span>')
+    delen.append(f'<time datetime="{e(d["datum"])}">{datum_nl(d["datum"])}</time>')
+    return f'<p class="bijschrift">{"".join(delen)}</p>'
+
+
+def vooraf_lijst(pad, titel, beschrijving, n=20):
+    soort, bestand = LIJSTEN[pad]
+    items = sorted(lees(bestand, []) or [], key=lambda d: d.get("datum", ""), reverse=True)[:n]
+    if not items:
+        return ""
+    rijen = "".join(f'<li class="log-item zonder-beeld"><div class="log-tekst"><h3><a href="{BASE}{e(d.get("p") or "s/" + d["id"] + "/")}">{e(d["titel"])}</a></h3>'
+                    f'{bijschrift_html(d)}{f"<p class=\"sam\">{e(kort(d.get('samenvatting'), 220))}</p>" if d.get("samenvatting") else ""}</div></li>' for d in items)
+    return (kop_html(e(titel), "", f"<p>{e(beschrijving)}</p>") +
+            f'<section class="wit"><div class="wrap"><h2 class="verborgen">Berichten</h2><ol class="log vooraf">{rijen}</ol>'
+            f'<p class="leeg" style="margin-top:22px">De twintig nieuwste stukken. Filteren en ouder werk: even geduld, de pagina laadt.</p></div></section>')
+
+
+def vooraf_voorpagina():
+    nieuws = sorted(lees("nieuws.json", []) or [], key=lambda d: d.get("datum", ""), reverse=True)[:6]
+    vandaag = datetime.date.today().isoformat()
+    agenda = sorted((a for a in (lees("agenda.json", []) or []) if a.get("datum", "") >= vandaag), key=lambda a: a.get("datum", "") + (a.get("tijd") or ""))[:3]
+    held = (f'<section class="held" aria-labelledby="titel"><div class="wrap"><div class="held-kop"><h1 id="titel" tabindex="-1">Hart voor <span>Den Haag</span></h1>'
+            '<div><p class="held-rol">De grootste lokale partij van Den Haag</p><p class="intro">Met ombudspolitiek zijn we zichtbaar in de wijken, dicht bij de Hagenaar, '
+            'Hagenees, Scheveninger en Loosduiner. Zestien raadsleden zetten zich elke dag in voor een veilige, schone en leefbare stad.</p>'
+            f'<div class="knoppen"><a class="knop geel" href="{BASE}lid/">Word lid vanaf € 12,50 per jaar</a><a class="knop lijn" href="{BASE}contact/melding/">Meld een probleem</a></div></div></div></div></section>')
+    ag = "".join(f'<li><h3>{e(a["titel"])}</h3><p class="bijschrift"><time datetime="{e(a["datum"])}">{datum_nl(a["datum"])}</time>'
+                 f'{f"<span>{e(a.get('tijd'))} uur</span>" if a.get("tijd") else ""}<span>{e(a.get("plek", ""))}</span></p></li>' for a in agenda)
+    rijen = "".join(f'<li class="log-item zonder-beeld"><div class="log-tekst"><h3><a href="{BASE}{e(d.get("p") or "s/" + d["id"] + "/")}">{e(d["titel"])}</a></h3>{bijschrift_html(d)}</div></li>' for d in nieuws)
+    return (held + (f'<section class="binnenkort"><div class="wrap"><h2>Binnenkort</h2><ul class="stukken">{ag}</ul></div></section>' if ag else "") +
+            f'<section><div class="wrap"><h2>De afgelopen weken</h2><ol class="log vooraf">{rijen}</ol></div></section>')
+
+
+def tellingen(index, aanpassingen=None):
+    """Aantallen per soort, stadsdeel en onderwerp voor de filters op de site (sleutel "stadsdeel|onderwerp", leeg = alles)."""
+    uit = {}
+    for i in index:
+        s = uit.setdefault(i["s"], {})
+        sds = [""] + list(i.get("sd") or [])
+        os_ = [""] + list(i.get("o") or [])
+        for sd in sds:
+            for o in os_:
+                k = f"{sd}|{o}"
+                s[k] = s.get(k, 0) + 1
+    return uit
+
+
 def schrijf(pad_rel, inhoud, gemaakt):
     """pad_rel is relatief aan proef/ (bijvoorbeeld 'motie/x/index.html'). Schrijft alleen als het anders is."""
     pad = os.path.join(MAP, pad_rel)
@@ -249,7 +312,9 @@ def main():
     film = (f'<link rel="preload" as="image" href="{BASE}beeld/groep-film-800.webp" media="(max-width: 760px)">\n'
             f'<link rel="preload" as="image" href="{BASE}beeld/groep-film.webp" media="(min-width: 761px)">')
     for pad, titel, beschrijving in VAST:
-        nieuw += schrijf(pad + "index.html", pagina(pad, titel, beschrijving, extra=film if pad == "" else ""), gemaakt)
+        inhoud = vooraf_voorpagina() if pad == "" else vooraf_lijst(pad, titel, beschrijving) if pad in LIJSTEN else ""
+        nieuw += schrijf(pad + "index.html", pagina(pad, titel, beschrijving, inhoud, extra=film if pad == "" else ""), gemaakt)
+    nieuw += schrijf("data/tellingen.json", json.dumps(tellingen(index), ensure_ascii=False, separators=(",", ":"), sort_keys=True), set())
     for sd in STADSDELEN:
         pad = f"stadsdelen/{slug(sd)}/"
         nieuw += schrijf(pad + "index.html", pagina(pad, f"Hart voor Den Haag in {sd}", f"Raadsleden, spreekuren en wat Hart voor Den Haag doet in {sd}."), gemaakt)

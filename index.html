@@ -86,6 +86,7 @@
       <a class="meer" href="nieuws.html">Alle nieuws</a>
     </div>
     <ol class="log" id="berichten"></ol>
+    <p class="vervolg">Speelt er iets bij u in de buurt? <a href="#melden">Meld het hier</a> of <a href="#spreekuur">kom naar het spreekuur</a>.</p>
   </div>
 </section>
 
@@ -197,6 +198,7 @@
         <ul class="x-lijst" id="x-lijst"></ul>
       </div>
     </div>
+    <p class="ook-op" id="ook-op" hidden></p>
   </div>
 </section>
 
@@ -415,7 +417,7 @@ function berichten() {
   const ol = document.getElementById("berichten"); ol.textContent = "";
   const spAan = !document.getElementById("held-sp").hidden;
   const lijst = data.berichten.filter(x => (x.eigen || (x.dossier && x.zeller !== false)) && !(spAan && /spreekuu?r/i.test(x.titel + " " + (x.tekst || ""))))
-    .sort(nieuwste).slice(0, 4);
+    .sort(nieuwste).slice(0, 3);
   if (!lijst.length) { ol.append(el("li", "leeg", "Binnenkort staan hier de nieuwste berichten.")); return; }
   lijst.forEach((x, i) => {
     const li = el("li", "log-item" + (i ? "" : " eerste")), tekst = el("div", "log-tekst");
@@ -509,7 +511,7 @@ function vragen(lijst) {
     const t = el(v.vraag_link ? "a" : "span", "vtitel", v.titel);
     if (v.vraag_link) { t.href = v.vraag_link; nieuwTab(t); }
     const regel = el("p", "vregel");
-    regel.append(document.createTextNode("Gesteld op " + datumNL(v.gesteld) + ". "));
+    if (v.gesteld) regel.append(document.createTextNode("Gesteld op " + datumNL(v.gesteld) + ". "));
     if (v.antwoord_link) {
       const a = nieuwTab(el("a", null, "Lees het antwoord")); a.href = v.antwoord_link;
       regel.append(document.createTextNode("Antwoord op " + datumNL(v.antwoord_datum) + ": ")); regel.append(a);
@@ -595,6 +597,13 @@ function basis(d) {
   if (d.intro) document.getElementById("intro").textContent = d.intro;
   if (d.mail) for (const id of ["mail-link", "pers-mail"]) { const m = document.getElementById(id); m.href = "mailto:" + d.mail; m.textContent = d.mail; }
   if (d.lid_worden) document.getElementById("lid").href = d.lid_worden;
+  // in "Volg Damiën" ook de kanalen zonder eigen blok (Instagram, Facebook, LinkedIn), zodra ze in links.json staan
+  const ook = document.getElementById("ook-op"), extra = ["instagram", "facebook", "linkedin"].filter(k => d.socials && d.socials[k]);
+  if (ook && extra.length) {
+    ook.textContent = "Ook op ";
+    extra.forEach((k, i) => { const a = el("a", null, NAMEN[k]); a.href = d.socials[k]; ook.append(nieuwTab(a)); if (i < extra.length - 1) ook.append(document.createTextNode(i === extra.length - 2 ? " en " : ", ")); });
+    ook.append(document.createTextNode(".")); ook.hidden = false;
+  }
   const box = document.getElementById("socials");
   for (const [k, u] of Object.entries(d.socials || {})) {
     if (!u) continue;

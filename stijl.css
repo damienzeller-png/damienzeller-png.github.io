@@ -487,3 +487,8 @@ footer a{color:#fff}
   .melden .meld-foto{order:3}
   .held-foto .hart{left:5%;top:5%;width:88%}
 }
+
+/* vervolgstap onder Actueel en de overige kanalen onder Volg */
+.vervolg{margin-top:18px;color:var(--zacht)}
+.vervolg a,.ook-op a{font-weight:700}
+.ook-op{margin-top:26px;color:var(--zacht)}
