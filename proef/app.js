@@ -919,6 +919,7 @@ pagina.fractie = async ([wie]) => {
         <div class="veld"><label for="wie-sd">Stadsdeel</label><select id="wie-sd"><option value="">Alle stadsdelen</option>${STADSDELEN.map(x => `<option>${x}</option>`).join("")}<option>Hele stad</option></select></div>
         <p class="teller" id="teller" aria-live="polite"></p></div>
       <div id="groepen"></div>
+      <p class="meer-rij">Ook in het college en de vereniging: <a href="${U("wethouders/")}">onze vijf wethouders</a> en <a href="${U("bestuur/")}">het bestuur</a>, met jaarverslagen.</p>
     </div></section>`;
 };
 pagina.fractie.titel = ([wie]) => wie ? "" : "Onze mensen";
@@ -1066,7 +1067,8 @@ pagina["doe-mee"] = async () => paginaKop("Doe mee en maak uw buurt beter", "Den
       <li><b>Meld u aan</b><span>Vink aan wat u wilt doen. Dat duurt een minuut.</span></li>
       <li><b>Kennismaken</b><span>Iemand uit uw stadsdeel belt of mailt u voor een eerste gesprek.</span></li>
       <li><b>Aan de slag</b><span>U helpt in uw eigen buurt, op momenten die u uitkomen.</span></li></ol>
-      <p class="melding" style="margin-top:8px">Liever eerst bellen? <a href="${TEL_LINK}">${TEL}</a>. Of volg ons <a href="${WA_KANAAL}" target="_blank" rel="noopener">WhatsApp-kanaal</a> voor acties bij u in de buurt.</p></div>
+      <p style="margin-top:8px"><a class="meer" href="${U("vacatures/")}">Liever een vaste rol of betaald werk? Bekijk de vacatures ${PIJL}</a></p>
+      <p class="melding" style="margin-top:14px">Liever eerst bellen? <a href="${TEL_LINK}">${TEL}</a>. Of volg ons <a href="${WA_KANAAL}" target="_blank" rel="noopener">WhatsApp-kanaal</a> voor acties bij u in de buurt.</p></div>
   </div></section>`;
 pagina["doe-mee"].na = () => {
   const f = $("#form");

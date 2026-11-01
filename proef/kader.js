@@ -99,15 +99,15 @@ HVDH.TURNSTILE = "";
     </div>
     <div class="voet-kolommen">
       <div class="voet-contact"><b>Hart voor Den Haag</b><span>Spui 70, 2511 BT Den Haag</span><a href="tel:+31623462139">Bel 06 234 621 39</a><a href="mailto:hartvoordenhaag@denhaag.nl">hartvoordenhaag@denhaag.nl</a></div>
-      ${groep("Raadswerk", a("raadswerk/", "Moties") + a("raadswerk/amendementen/", "Amendementen") + a("raadswerk/vragen/", "Schriftelijke vragen") + a("raadswerk/spreekteksten/", "Spreekteksten") + a("successen/", "Successen") + a("petities/", "Petities") + a("onderwerpen/", "Dossiers"))}
-      ${groep("Partij", a("standpunten/", "Standpunten") + `<a href="${PROGRAMMA}" target="_blank" rel="noopener">Verkiezingsprogramma (pdf)</a>` + a("fractie/", "Onze mensen") + a("wethouders/", "Wethouders") + a("bestuur/", "Bestuur") + a("pers/", "Pers") + a("english/", "In English", ' lang="en"'))}
-      ${groep("Meedoen", a("lid/", "Word lid") + a("doneren/", "Doneren") + a("doe-mee/", "Doe mee in uw buurt") + a("agenda/", "Agenda en spreekuren") + a("vacatures/", "Vacatures") + `<a href="${WEBSHOP}" target="_blank" rel="noopener">Webshop</a>`)}
+      ${groep("Wat we doen", a("raadswerk/", "Raadswerk") + a("successen/", "Successen") + a("petities/", "Petities") + a("onderwerpen/", "Dossiers"))}
+      ${groep("Wie we zijn", a("standpunten/", "Standpunten") + a("fractie/", "Onze mensen") + a("agenda/", "Agenda en spreekuren") + a("pers/", "Pers"))}
+      ${groep("Doe mee", a("lid/", "Word lid") + a("doneren/", "Doneren") + a("doe-mee/", "Doe mee in uw buurt") + `<a href="${WEBSHOP}" target="_blank" rel="noopener">Webshop</a>`)}
     </div>
     <div class="voet-rij">
       <div class="sociaal" role="group" aria-label="Volg Hart voor Den Haag">${SOCIAAL.map(([n, u, p]) => `<a href="${u}" target="_blank" rel="noopener" aria-label="${n}" title="${n}"><svg viewBox="0 0 24 24" aria-hidden="true">${p}</svg></a>`).join("")}</div>
       <div class="vertaal" id="vertaal"><label for="taal">Lees deze site in</label><select id="taal"><option value="">Nederlands</option>${TALEN.map(([c, n]) => `<option value="${c}" lang="${c}">${n}</option>`).join("")}</select></div>
     </div>
-    <p class="voet-onder">${a("privacy/", "Privacy")}${a("toegankelijkheid/", "Toegankelijkheid")}<a href="${B}feed.xml">Nieuws als RSS-feed</a><a href="${B}beheer.html">Inloggen redactie</a><span>Proefontwerp, niet de officiële site</span></p>
+    <p class="voet-onder">${a("privacy/", "Privacy")}${a("toegankelijkheid/", "Toegankelijkheid")}<a href="${B}beheer.html">Inloggen redactie</a><span>Proefontwerp, niet de officiële site</span></p>
   </div>
 </footer>
 <div class="zweef weg" id="zweef"><div class="ballon-rij" hidden><a class="ballon" href="${B}doe-mee/">Doe mee en volg ons!</a><button class="sluit" type="button" aria-label="Melding sluiten">×</button></div><a class="rond" href="${WA}" target="_blank" rel="noopener" aria-label="Volg ons WhatsApp-kanaal">${WA_SVG}</a></div>
