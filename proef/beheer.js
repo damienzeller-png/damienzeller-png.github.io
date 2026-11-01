@@ -279,7 +279,7 @@ function inloggen(boodschap) {
       <div class="veld" id="code2-veld" hidden><label for="code2">Code uit uw app <small>Zes cijfers uit uw authenticator-app</small></label><input type="text" id="code2" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>
       <label class="vink"><input type="checkbox" id="blijf"><span>Ingelogd blijven op deze computer (niet op een gedeelde computer)</span></label>
       <button class="knop groen" type="submit">Inloggen</button><p id="m-ww" hidden></p>
-      <p class="leeg" style="font-size:.92rem">Wachtwoord kwijt? Een beheerder kan u een nieuw wachtwoord geven.</p></form>
+      <p class="leeg" style="font-size:.92rem">Wachtwoord kwijt? Vraag een beheerder (bijvoorbeeld Damiën Zeller) om een nieuw wachtwoord.</p></form>
     ${ANDERE_TOEGANG ? `<details class="nood" open><summary>Andere manieren van inloggen</summary>
       <form class="formulier" id="f-code" novalidate><h2 style="font-size:1.4rem">Eigenaar: code via Telegram</h2>
         <button class="knop lijn" type="button" id="stuur">Stuur mij een code</button>
@@ -292,6 +292,9 @@ function inloggen(boodschap) {
   const blijf = () => $("#blijf").checked;
   $("#f-ww").addEventListener("submit", async e => {
     e.preventDefault();
+    // eerst zelf kijken of alles is ingevuld, dan pas naar de achterkant
+    const leeg = !tussen ? [["naam", "Vul uw inlognaam in."], ["ww", "Vul uw wachtwoord in."]].find(([id]) => !$("#" + id).value.trim()) : (!/^\d{6}$/.test($("#code2").value.trim()) ? ["code2", "Vul de zes cijfers uit uw app in."] : null);
+    if (leeg) { melding($("#m-ww"), leeg[1], true); $("#" + leeg[0]).focus(); return; }
     const klaar = bezig(e.target.querySelector("button[type=submit]"), "Bezig…");
     try {
       const d = tussen ? await vraag("/login/2fa", { method: "POST", body: { tussen, code: $("#code2").value.trim() } })

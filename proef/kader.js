@@ -105,12 +105,12 @@ HVDH.TURNSTILE = "";
     </div>
     <div class="voet-rij">
       <div class="sociaal" role="group" aria-label="Volg Hart voor Den Haag">${SOCIAAL.map(([n, u, p]) => `<a href="${u}" target="_blank" rel="noopener" aria-label="${n}" title="${n}"><svg viewBox="0 0 24 24" aria-hidden="true">${p}</svg></a>`).join("")}</div>
-      <div class="vertaal" id="vertaal"><label for="taal">Lees deze site in</label><select id="taal"><option value="">Nederlands</option>${TALEN.map(([c, n]) => `<option value="${c}" lang="${c}">${n}</option>`).join("")}</select></div>
+      <form class="vertaal" id="vertaal"><label for="taal">Lees deze site in</label><select id="taal"><option value="">Nederlands</option>${TALEN.map(([c, n]) => `<option value="${c}" lang="${c}">${n}</option>`).join("")}</select><button class="knop lijn klein" type="submit">Vertaal<span class="verborgen"> (opent Google Vertalen in een nieuw tabblad)</span></button></form>
     </div>
     <p class="voet-onder">${a("privacy/", "Privacy")}${a("toegankelijkheid/", "Toegankelijkheid")}<a href="${B}beheer.html">Inloggen redactie</a><span>Proefontwerp, niet de officiële site</span></p>
   </div>
 </footer>
-<div class="zweef weg" id="zweef"><div class="ballon-rij" hidden><a class="ballon" href="${B}doe-mee/">Doe mee en volg ons!</a><button class="sluit" type="button" aria-label="Melding sluiten">×</button></div><a class="rond" href="${WA}" target="_blank" rel="noopener" aria-label="Volg ons WhatsApp-kanaal">${WA_SVG}</a></div>
+<aside class="zweef weg" id="zweef" aria-label="WhatsApp-kanaal"><div class="ballon-rij" hidden><a class="ballon" href="${B}doe-mee/">Doe mee en volg ons!</a><button class="sluit" type="button" aria-label="Melding sluiten">×</button></div><a class="rond" href="${WA}" target="_blank" rel="noopener" aria-label="Volg ons WhatsApp-kanaal">${WA_SVG}</a></aside>
 <nav class="onderbalk" aria-label="Snel naar">
   <a href="${B}nieuws/" data-sectie="nieuws"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11l3 3v13H5z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>Nieuws</a>
   <a href="${B}stadsdelen/" data-sectie="stadsdelen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Uw stadsdeel</a>

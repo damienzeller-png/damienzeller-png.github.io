@@ -72,7 +72,7 @@ let aanpBelofte = null;
 function aanpassingen() {
   if (!aanpBelofte) {
     const ctrl = new AbortController();
-    setTimeout(() => ctrl.abort(), 3500);
+    setTimeout(() => ctrl.abort(), 2000);
     aanpBelofte = fetch(API + "/aanpassingen", { signal: ctrl.signal }).then(r => r.ok ? r.json() : {}).then(d => d.aanpassingen || {}).catch(() => ({}));
   }
   return aanpBelofte;
@@ -116,7 +116,7 @@ function opnieuwProberen() {
   mislukt.clear(); KAART = null;
   route();
 }
-const foutBalk = () => `<div class="wrap"><div class="melding fout net-fout" role="alert"><p><b>Geen verbinding.</b> Een deel van deze pagina kon niet laden. Controleer uw internet en probeer het opnieuw.</p><button class="knop lijn klein" type="button" data-opnieuw>Opnieuw proberen</button></div></div>`;
+const foutBalk = () => `<div class="wrap"><div class="melding fout net-fout" role="alert"><p>${navigator.onLine === false ? "<b>Geen verbinding.</b> Een deel van deze pagina kon niet laden. Controleer uw internet en probeer het opnieuw." : "<b>Niet alles kon laden.</b> Bij ons ging iets mis, niet bij u. Wat u ziet, kan onvolledig zijn. Probeer het zo opnieuw."}</p><button class="knop lijn klein" type="button" data-opnieuw>Opnieuw proberen</button></div></div>`;
 function laad(naam) {
   if (!cache[naam]) {
     const bestand = ophalen(naam, U(`data/${naam}.json`), naam === "kaart" || naam === "archief" || naam === "bewijs" || naam === "bestuur" ? null : []);
@@ -161,7 +161,7 @@ let apiItems = null;
 function eigen() {
   if (!apiItems) {
     const ctrl = new AbortController();
-    setTimeout(() => ctrl.abort(), 4000);
+    setTimeout(() => ctrl.abort(), 2000);
     apiItems = fetch(API + "/inhoud", { signal: ctrl.signal }).then(r => r.json()).then(d => (d.items || []).map(i => {
       const html = i.html || platAlinea(i.tekst);
       return {
@@ -635,7 +635,7 @@ const aantalActief = f => [f.stadsdeel, f.onderwerp, f.zoek].filter(Boolean).len
 function filterBalk(pad, f, tel = null, s = "") {
   const n = aantalActief(f);
   const aantal = (sd, o) => { if (!tel || !tel[s]) return ""; const x = tel[s][`${sd}|${o}`] || 0; return ` (${fmt.format(x)})`; };
-  return `<details class="filter-uitklap" id="filter-uitklap"${n || !smal() ? " open" : ""}><summary>Filters${n ? ` <small>${n} actief</small>` : ""}</summary>
+  return `<details class="filter-uitklap" id="filter-uitklap"${n || !smal() ? " open" : ""}><summary>Filters${n ? ` <small>${esc([f.stadsdeel, f.onderwerp, f.zoek && `"${f.zoek}"`].filter(Boolean).join(", "))}</small>` : ""}</summary>
     <div class="filterrij">
       <div class="veld"><label for="f-sd">Stadsdeel</label><select id="f-sd"><option value="">Hele stad${aantal("", f.onderwerp)}</option>${STADSDELEN.map(x => `<option value="${x}"${x === f.stadsdeel ? " selected" : ""}>${x}${aantal(x, f.onderwerp)}</option>`).join("")}</select></div>
       <div class="veld"><label for="f-o">Onderwerp</label><select id="f-o"><option value="">Alle onderwerpen${aantal(f.stadsdeel, "")}</option>${ONDERWERPEN.map(x => `<option value="${x}"${x === f.onderwerp ? " selected" : ""}>${x}${aantal(f.stadsdeel, x)}</option>`).join("")}</select></div>
@@ -700,6 +700,9 @@ async function meerLadenStroom(lijst, st, past, maak, stap, filterActief, leeg, 
 }
 const bijgewerkt = st => st.opgehaald ? `Overgenomen van hartvoordenhaag.nl, bijgewerkt op ${datumVol(st.opgehaald)}.` : "";
 
+// De eerste keer staat de lijst al in de HTML (bouw.py). Die laten we staan tot de volledige lijst klaar is,
+// in plaats van hem even te vervangen door een laadskelet.
+const voorafLijst = () => { const v = eersteKeer && !location.search && $("#app .log.vooraf"); return v ? v.innerHTML : ""; };
 // nieuws en successen
 const lijstVoet = (meerId = "meer") => `<div class="lijst-voet"><button class="knop lijn meer-laden" type="button" id="${meerId}" hidden>Meer laden</button><a class="meer naar-boven" id="naar-boven" href="#inhoud" hidden>Naar boven</a></div>`;
 function lijstPagina(s, titel, tekst, pad) {
@@ -707,7 +710,7 @@ function lijstPagina(s, titel, tekst, pad) {
     const fl = leesFilter(q);
     return paginaKop(titel, tekst) + `<section class="${s === "succes" ? "" : "wit"}"><div class="wrap">
       ${filterBalk(pad, fl, await laad("tellingen"), s)}
-      <h2 class="verborgen">Berichten</h2><ol class="log" id="lijst">${"<li class=\"skelet-rij\" aria-hidden=\"true\"><span></span><span></span><span></span></li>".repeat(5)}</ol>
+      <h2 class="verborgen">Berichten</h2><ol class="log" id="lijst">${voorafLijst() || "<li class=\"skelet-rij\" aria-hidden=\"true\"><span></span><span></span><span></span></li>".repeat(5)}</ol>
       ${lijstVoet()}
       <p class="leeg" id="bron" style="margin-top:22px"></p></div></section>`;
   };
@@ -744,7 +747,7 @@ async function detail(id) {
     return `<div class="dictum"><h2>${s === "amendement" ? "Wat we willen veranderen" : "Wat we het college vragen"}</h2>
       <p class="dictum-kop">${esc(i.dictum.kop)}:</p>
       ${delen.length > 1 ? `<ol>${delen.map(d => `<li>${esc(d)}</li>`).join("")}</ol>` : `<p>${esc(i.dictum.tekst)}</p>`}
-      <div class="dictum-voet">${wie.length ? `<span class="m-wie${wie.length > 1 ? " twee" : ""}" aria-hidden="true">${gezichtjes(wie)}</span>` : ""}<p>${i.indiener ? `Ingediend door ${wie.length ? wie.map(f => lidVan(f.naam) ? `<a href="${U("fractie/" + slug(f.naam) + "/")}">${esc(f.naam)}</a>` : esc(f.naam)).join(" en ") : esc(i.indiener)}` : "Ingediend door Hart voor Den Haag"}, raad van ${datumVol(i.datum)}.${i.status ? ` <b>Uitslag: ${esc(i.status.toLowerCase())}.</b>` : ""}</p></div></div>`;
+      <div class="dictum-voet">${wie.length ? `<span class="m-wie${wie.length > 1 ? " twee" : ""}" aria-hidden="true">${gezichtjes(wie)}</span>` : ""}<p>${i.indiener ? `Ingediend door ${wie.length ? wie.map(f => lidVan(f.naam) ? `<a href="${U("fractie/" + slug(f.naam) + "/")}">${esc(f.naam)}</a>` : esc(f.naam)).join(" en ") : esc(i.indiener)}` : "Ingediend door Hart voor Den Haag"}, raad van ${datumVol(i.datum)}. ${i.status ? `<b>Uitslag: ${esc(i.status.toLowerCase())}.</b>` : `<span class="geen-uitslag">De uitslag staat nog niet op deze site${i.ris ? `; zoek ${esc(i.ris)} op <a href="https://denhaag.raadsinformatie.nl/" target="_blank" rel="noopener">denhaag.raadsinformatie.nl</a>` : ""}.</span>`}</p></div></div>`;
   })() : "";
   const lees = leestijd(i.html);
   const titel = isPetitie ? kaleTitel(i) : i.titel;
@@ -752,7 +755,7 @@ async function detail(id) {
     bijschrift({ ...i, handtekeningen: isPetitie ? 0 : i.handtekeningen }, { soort: !["nieuws", "succes", "petitie"].includes(s) }).replace("</p>", `<span>${lees} min lezen</span></p>`), i.stadsdelen && i.stadsdelen.length === 1 ? i.stadsdelen[0] : "") + `
   <section class="wit"><div class="wrap"><article class="artikel${isPetitie && open && i.beeld ? " petitie-open" : ""}">
     ${i.beeld ? `<span class="poster-lijst artikel-beeld"><img src="${esc(i.beeld)}" alt="${esc(i.alt || "")}" decoding="async"></span>` : ""}
-    ${isPetitie ? `<div class="teken-teller" id="teller-blok" data-n="${n}">${balk(n, i)}${i.handtekeningen ? `<p class="leeg">Inclusief de handtekeningen op hartvoordenhaag.nl.</p>` : ""}${open ? `<button class="knop groen teken-snel" type="button" id="naar-teken">Teken deze petitie</button>` : ""}</div>` : ""}
+    ${isPetitie ? `<div class="teken-teller" id="teller-blok" data-n="${n}">${balk(n, i)}${i.handtekeningen ? `<p class="leeg">Inclusief de handtekeningen op hartvoordenhaag.nl.</p>` : ""}${open && (i.beeld || dictum) ? `<button class="knop groen teken-snel" type="button" id="naar-teken">Teken deze petitie</button>` : ""}</div>` : ""}
     ${dictum}
     ${isPetitie && !open ? `<div class="melding afloop" style="margin-top:22px"><p><b>Deze petitie is gesloten.</b>${i.afloop ? " " + esc(i.afloop) : ""}</p><p>Bekijk <a href="${U("petities/")}">de petities die nu lopen</a>.</p></div>` : ""}
     ${open ? `<form class="formulier" id="teken" style="margin-top:22px" novalidate><h2 style="font-size:2rem">Teken deze petitie</h2>
@@ -761,8 +764,8 @@ async function detail(id) {
       <div class="veld"><label for="p-email">E-mailadres</label><input type="email" id="p-email" name="email" autocomplete="email"></div>
       <div class="veld breed"><label for="p-sd">Stadsdeel <small>(niet verplicht)</small></label><select id="p-sd" name="stadsdeel">${stadsdeelOpties((i.stadsdelen || [])[0])}</select></div></div>
       ${akkoordVeld("petitie")}<button class="knop groen" type="submit">Teken de petitie</button><p class="uitslag" hidden></p></form>` : ""}
-    ${dictum || open ? `<h2 class="volledig">${open ? "Waarom deze petitie" : "Volledige tekst"}</h2>` : ""}
-    <div class="artikel-tekst" style="margin-top:18px">${i.html || `<p>${esc(i.samenvatting)}</p>`}</div>
+    ${(() => { const tekst = i.html || `<p>${esc(i.samenvatting)}</p>`, leegje = isPetitie && zonderTags(tekst).length < 80;
+      return leegje ? "" : `${dictum || open ? `<h2 class="volledig">${open ? "Waarom deze petitie" : "Volledige tekst"}</h2>` : ""}<div class="artikel-tekst" style="margin-top:18px">${tekst}</div>`; })()}
     <div class="na-artikel">
       <div class="deelrij"><button class="knop lijn klein" type="button" id="deel">Deel dit stuk</button><a class="knop lijn klein" href="https://wa.me/?text=${encodeURIComponent(titel + " " + location.origin + U(stukPad(i)))}" target="_blank" rel="noopener">Deel via WhatsApp</a>${i.link ? `<a class="meer" href="${esc(i.link)}" target="_blank" rel="noopener">Op hartvoordenhaag.nl ${UIT}</a>` : ""}</div>
       ${meer.length ? `<div><h2 style="font-size:1.8rem">Meer uit ${esc(i.stadsdelen.join(" en "))}</h2><ul class="stukken" style="margin-top:10px">${meer.map(x => stukItem({ ...x, samenvatting: "" }, { ris: false, soort: true })).join("")}</ul></div>` : ""}
@@ -814,7 +817,7 @@ pagina.raadswerk = async ([tab = "moties"], q) => {
       <nav class="tabs" aria-label="Soort stuk">${Object.entries(TABS).map(([k, v]) => `<a href="${filterHref(v.pad, fl)}"${k === tabNaam ? ' aria-current="page"' : ""}>${v.titel}</a>`).join("")}</nav>
       <details class="hoe"><summary>${t.vraag}</summary>${t.uitleg}</details>
       ${filterBalk(t.pad, fl, await laad("tellingen"), t.s)}
-      <div id="lijst"><ul class="skelet" aria-hidden="true">${"<li><span></span><span></span><span></span></li>".repeat(6)}</ul></div>
+      <div id="lijst">${voorafLijst() ? `<ol class="log vooraf">${voorafLijst()}</ol>` : `<ul class="skelet" aria-hidden="true">${"<li><span></span><span></span><span></span></li>".repeat(6)}</ul>`}</div>
       ${lijstVoet()}
       <p class="leeg" id="bron" style="margin-top:22px"></p>
     </div></section>`;
@@ -880,7 +883,7 @@ pagina.onderwerpen = async ([o]) => {
   const tabVoor = { motie: "moties", raadsvraag: "vragen", amendement: "amendementen" };
   return paginaKop(`Dossier ${esc(naam.toLowerCase())}`, punt ? esc(punt[1]) : "Wat we vinden, wat we in de raad deden en wie erover gaat.", kruimels(["onderwerpen/", "Dossiers"], ["", naam])) + `
     <section class="wit"><div class="wrap">
-      <p class="telling-dossier">Het afgelopen jaar: <b>${tel("succes")}</b> successen, <b>${tel("raadsvraag")}</b> keer schriftelijke vragen, <b>${tel("motie")}</b> moties en <b>${tel("amendement")}</b> amendementen.</p>
+      <p class="telling-dossier">Het afgelopen jaar: <b>${tel("succes")}</b> ${tel("succes") === 1 ? "succes" : "successen"}, <b>${tel("raadsvraag")}</b> keer schriftelijke vragen, <b>${tel("motie")}</b> ${tel("motie") === 1 ? "motie" : "moties"} en <b>${tel("amendement")}</b> ${tel("amendement") === 1 ? "amendement" : "amendementen"}.</p>
       ${wie.length ? `<div class="dossier-wie"><h2 class="maand-kop">Wie gaat erover</h2><ul class="mensen">${wie.map(f => `<li>${f.beeld ? `<img src="${esc(f.beeld)}" alt="" loading="lazy">` : `<span class="leeg-foto" aria-hidden="true">${initialen(f.naam)}</span>`}<div><a href="${U("fractie/" + slug(f.naam) + "/")}"><b>${esc(f.naam)}</b></a><span>${esc(f.portefeuilles.filter(p => DOSSIER_PF[naam].test(p)).join(", "))}</span></div></li>`).join("")}</ul></div>` : ""}
       <div class="dossier-raster">${rij("succes", "Successen")}${rij("nieuws", "Laatste nieuws")}${rij("motie", "Moties")}${rij("raadsvraag", "Schriftelijke vragen")}</div>
       <p class="knoppen" style="margin-top:24px">${Object.entries(tabVoor).map(([s, tab]) => `<a class="knop lijn klein" href="${rwHref(tab, naam, "")}">Alle ${TABS[tab].titel.toLowerCase()} over dit onderwerp</a>`).join("")}</p>
@@ -979,7 +982,8 @@ pagina.agenda = async ([stap], q) => {
   if (stap === "aanmelden") {
     const id = q.get("id") || "";
     const a = ag.find(x => String(x.id) === id);
-    if (!a) return paginaKop("Aanmelden", "Deze afspraak staat niet (meer) op de agenda.") + `<section><div class="wrap"><a class="knop groen" href="${U("agenda/")}">Naar de agenda</a></div></section>`;
+    if (!a) return paginaKop("Aanmelden", id ? "Deze afspraak staat niet (meer) op de agenda. Dit zijn de eerstvolgende:" : "Kies de afspraak waarvoor u zich wilt aanmelden.", kruimels(["agenda/", "Agenda"], ["", "Aanmelden"])) +
+      `<section><div class="wrap">${ag.length ? `<ol class="agenda-lijst">${ag.slice(0, 5).map(agendaItem).join("")}</ol>` : `<p class="leeg">Er staat nu niets op de agenda.</p>`}<p style="margin-top:22px"><a class="meer" href="${U("agenda/")}">Hele agenda ${PIJL}</a></p></div></section>`;
     const x = dt(a.datum);
     return paginaKop("Aanmelden", esc(a.titel), kruimels(["agenda/", "Agenda"], ["", "Aanmelden"])) + `
     <section><div class="wrap formulier-raster">
@@ -1091,14 +1095,16 @@ pagina.contact = async ([sub], q) => {
   const aan = q.get("aan") ? (await laad("fractie")).find(f => slug(f.naam) === q.get("aan")) : null;
   const sd = q.get("stadsdeel") || (melding ? opslag.lees("stadsdeel") || "" : "");
   const hulp = `<div class="keuzehulp" role="note"><p class="tussenkop">Waar kunt u het beste terecht?</p><ul>
-      <li><b>Spoed of gevaar?</b> Bel <a href="tel:112">112</a>.</li>
-      <li><b>Losse tegel, afval, kapotte lantaarnpaal?</b> Meld het bij de gemeente via <a href="tel:14070">14 070</a> of <a href="https://www.denhaag.nl/nl/melding-openbare-ruimte" target="_blank" rel="noopener">denhaag.nl</a>. Dan komt het direct bij de juiste dienst.</li>
+      <li><b>Spoed of gevaar?</b> Bel <a class="tel-knop" href="tel:112">112</a></li>
+      <li><b>Losse tegel, afval, kapotte lantaarnpaal?</b> Meld het bij de gemeente via <a class="tel-knop" href="tel:14070">14 070</a> of <a href="https://www.denhaag.nl/nl/melding-openbare-ruimte" target="_blank" rel="noopener">denhaag.nl</a>. Dan komt het direct bij de juiste dienst.</li>
       <li><b>Gebeurt er niets, of gaat het om iets groters?</b> Dan helpen wij. Vul het formulier in.</li></ul></div>`;
   return paginaKop(melding ? "Meld een probleem" : aan ? `Bericht aan ${esc(aan.naam)}` : "Contact", melding ? "Loszittende stoeptegels, overlast, een gevaarlijke oversteek: vertel het ons. Het ombudsteam pakt het op." : "Wij staan open voor uw ideeën en opmerkingen. Vertel ons uw verhaal, dan nemen we zo snel mogelijk contact op.") + `
   <section><div class="wrap formulier-raster">
     <div class="formulier-kolom">${melding ? hulp : ""}
     <form class="formulier" id="form" novalidate>
-      <fieldset><legend>Waar gaat uw bericht over?</legend><div class="keuzes">${CONTACT_KEUZES.map((k, i) => `<div class="keuze"><input type="radio" name="onderwerp" id="o${i}" value="${k[0]}"${k[0] === gekozen ? " checked" : ""}><label for="o${i}"><b>${k[1]}</b></label></div>`).join("")}</div></fieldset>
+      ${melding ? `<input type="hidden" name="onderwerp" value="melding"><p class="ander-onderwerp">Geen probleem in uw buurt, maar een vraag, spreekuur of iets anders? <a href="${U("contact/")}">Naar het contactformulier</a>.</p>`
+        : `<fieldset><legend>Waar gaat uw bericht over?</legend><div class="keuzes">${CONTACT_KEUZES.filter(k => k[0] !== "melding").map((k, i) => `<div class="keuze"><input type="radio" name="onderwerp" id="o${i}" value="${k[0]}"${k[0] === gekozen ? " checked" : ""}><label for="o${i}"><b>${k[1]}</b></label></div>`).join("")}</div>
+          <p class="ander-onderwerp">Iets kapot of onveilig in uw buurt? <a href="${U("contact/melding/")}">Meld een probleem</a>, dan kunt u ook een foto en de plek meesturen.</p></fieldset>`}
       ${aan ? `<input type="hidden" name="aan" value="${esc(aan.naam)}">` : ""}
       <div class="velden">
         <div class="veld"><label for="c-naam">Naam</label><input type="text" id="c-naam" name="naam" autocomplete="name"></div>
@@ -1226,7 +1232,7 @@ pagina["melding-status"].na = () => {
       uit.hidden = false; uit.className = "uitslag melding stand"; uit.setAttribute("role", "status");
       uit.innerHTML = `<p class="stand-kop"><span class="status${d.status === "afgehandeld" ? " klaar" : ""}">${d.status === "afgehandeld" ? "Afgehandeld" : "Ontvangen, het ombudsteam kijkt ernaar"}</span></p>
         <p>${wat} ${esc(d.kenmerk)}${d.stadsdeel ? ` over ${esc(d.stadsdeel)}` : ""} kwam binnen op ${dag(d.ontvangen)}.${d.status === "afgehandeld" && d.bijgewerkt ? ` Afgehandeld op ${dag(d.bijgewerkt)}.` : ""}</p>
-        ${d.status === "afgehandeld" ? `<p>Niet tevreden over hoe het afliep? <a href="${U("contact/?onderwerp=melding")}">Laat het ons weten</a>.</p>` : `<p>Duurt het lang of is er iets veranderd? Bel <a href="${TEL_LINK}">${TEL}</a> en noem uw kenmerk.</p>`}`;
+        ${d.status === "afgehandeld" ? `<p>Niet tevreden over hoe het afliep? <a href="${U("contact/")}">Laat het ons weten</a>.</p>` : `<p>Duurt het lang of is er iets veranderd? Bel <a href="${TEL_LINK}">${TEL}</a> en noem uw kenmerk.</p>`}`;
       uit.tabIndex = -1; uit.focus();
     } catch { toon(uit, `Geen verbinding. Controleer uw internet en probeer het opnieuw, of bel ${TEL}.`, true); }
     knop.disabled = false;
@@ -1454,6 +1460,10 @@ function directTreffers(woorden) {
 }
 const afstand = (a, b) => { if (Math.abs(a.length - b.length) > 2) return 9; const r = Array.from({ length: b.length + 1 }, (_, i) => i); for (let i = 1; i <= a.length; i++) { let vorige = r[0]; r[0] = i; for (let j = 1; j <= b.length; j++) { const t = r[j]; r[j] = Math.min(r[j] + 1, r[j - 1] + 1, vorige + (a[i - 1] === b[j - 1] ? 0 : 1)); vorige = t; } } return r[b.length]; };
 pagina.zoeken = async (args, q) => {
+  const html = await zoekPagina(args, q);
+  return html;
+};
+async function zoekPagina(args, q, gevraagd = "") {
   const term = (q.get("q") || "").trim(), welk = q.get("soort") || "", sorteer = q.get("sorteer") || "";
   const [idx, nieuw] = await Promise.all([laad("zoekindex"), eigen()]);
   const woorden = PLAT(term.toLowerCase()).split(/\s+/).filter(w => w.length > 1);
@@ -1472,6 +1482,8 @@ pagina.zoeken = async (args, q) => {
     const tel = {}; for (const i of idx) for (const w of PLAT(i.t.toLowerCase()).split(/[^a-z0-9-]+/)) if (w.length > 3) tel[w] = (tel[w] || 0) + 1;
     suggestie = woorden.map(w => { if (tel[w]) return w; let best = w, score = 3; for (const [k, n] of Object.entries(tel)) { const a = afstand(w, k); if (a < score || (a === score && n > (tel[best] || 0))) { best = k; score = a; } } return best; }).join(" ");
     if (suggestie === woorden.join(" ")) suggestie = "";
+    // tikfout: meteen de resultaten voor het bedoelde woord, met de mogelijkheid toch het getypte te zoeken
+    if (suggestie && !gevraagd && !q.get("exact")) { const q2 = new URLSearchParams(q); q2.set("q", suggestie); return zoekPagina(args, q2, term); }
   }
   const licht = s => {
     if (!woorden.length) return esc(s);
@@ -1491,6 +1503,7 @@ pagina.zoeken = async (args, q) => {
       <form id="zoek2" role="search" class="zoek2" action="${U("zoeken/")}"><label class="verborgen" for="zoek2-veld">Zoekterm</label><input type="search" id="zoek2-veld" name="q" value="${esc(term)}" placeholder="Bijvoorbeeld Moerwijk, parkeren of Kwartellaan"><button class="knop groen klein" type="submit">Zoeken</button></form>
       ${term ? `<nav class="filters" aria-label="Soort">${ZOEK_SOORTEN.filter(([s]) => !s || perSoort[s]).map(([s, n]) => `<a class="knopje" href="${href({ soort: s })}"${s === welk ? ' aria-current="page"' : ""}>${n}${s ? ` <small>${fmt.format(perSoort[s])}</small>` : ""}</a>`).join("")}</nav>
       <p class="sorteer">Sorteer op: ${sorteer === "datum" ? `<a href="${href({ sorteer: "" })}">beste treffer</a> · <b>nieuwste eerst</b>` : `<b>beste treffer</b> · <a href="${href({ sorteer: "datum" })}">nieuwste eerst</a>`}</p>` : ""}
+      ${gevraagd ? `<p class="melding">Niets gevonden voor "${esc(gevraagd)}". Hieronder de resultaten voor <b>${esc(term)}</b>. <a href="${U("zoeken/?q=" + encodeURIComponent(gevraagd))}&exact=1">Toch zoeken op "${esc(gevraagd)}"</a></p>` : ""}
       ${directHtml}
       ${term && !treffers.length && direct.length ? `<p class="leeg">In het nieuws en raadswerk vonden we niets met "${esc(term)}".</p>` : ""}
       ${term && !treffers.length && !direct.length ? `<p class="leeg">Niets gevonden${welk ? " in deze soort" : ""}.${suggestie ? ` Bedoelde u <a href="${U("zoeken/?q=" + encodeURIComponent(suggestie))}"><b>${esc(suggestie)}</b></a>?` : " Probeer een ander woord, of zoek op een straat of wijk."}</p>` : ""}
@@ -1690,7 +1703,7 @@ async function route() {
         const doel = U(stukPad(i)); if (location.pathname !== doel && !voorgebouwd) history.replaceState({ ...(history.state || {}), stuk: stukId }, "", doel + location.hash);
       }
     } else if (p) html = await p(args, q);
-    if (html == null && mislukt.size) { html = paginaKop(esc(titel || "Even geen verbinding"), "") + foutBalk(); wat = "fout"; }
+    if (html == null && mislukt.size) { html = paginaKop(esc(titel || (navigator.onLine === false ? "Even geen verbinding" : "Er ging iets mis")), "") + foutBalk(); wat = "fout"; }
     else if (html == null) { html = await pagina.nietgevonden(); wat = "niet"; sectie = ""; document.title = "Niet gevonden | Hart voor Den Haag (proef)"; }
     else if (wat === "pagina" && titel) document.title = titel + " | Hart voor Den Haag (proef)";
     else if (wat === "pagina" && naam === "home") document.title = "Hart voor Den Haag (proef)";
@@ -1703,7 +1716,7 @@ async function route() {
   } catch (e) {
     console.error(e);
     clearTimeout(wacht);
-    if (nr === routeNr) app.innerHTML = mislukt.size || !navigator.onLine ? paginaKop("Even geen verbinding", "") + foutBalk()
+    if (nr === routeNr) app.innerHTML = mislukt.size || !navigator.onLine ? paginaKop(navigator.onLine === false ? "Even geen verbinding" : "Er ging iets mis", "") + foutBalk()
       : paginaKop("Er ging iets mis", "Probeer het opnieuw. Lukt het niet? Bel " + TEL + ".") + `<div class="wrap"><button class="knop groen" type="button" data-opnieuw>Opnieuw proberen</button></div>`;
   }
   if (nr !== routeNr) return;
@@ -1757,6 +1770,9 @@ function koppelKop() {
     if (!e.relatedTarget || li.contains(e.relatedTarget)) return;
     const b = $("button", li); b.setAttribute("aria-expanded", "false"); $("#" + b.getAttribute("aria-controls")).hidden = true;
   }));
+  // de zoekindex is groot: we halen hem alvast op zodra iemand naar zoeken gaat, zodat de resultaten er sneller staan
+  const voorladen = () => laad("zoekindex");
+  ["pointerenter", "focus", "touchstart"].forEach(ev => $("#zoek-knop").addEventListener(ev, voorladen, { once: true, passive: true }));
   $("#zoek-knop").addEventListener("click", () => {
     const z = $("#zoekbalk"); z.hidden = !z.hidden; $("#zoek-knop").setAttribute("aria-expanded", String(!z.hidden));
     if (!z.hidden) $("#zoek-veld").focus();
@@ -1837,9 +1853,11 @@ function koppelZweef() {
 }
 // vertalen: de pagina opent via Google Vertalen in de gekozen taal (alleen als de bezoeker erop klikt)
 function koppelVoet() {
-  const k = $("#taal");
-  if (k) k.addEventListener("change", () => {
-    const t = k.value; if (!t) return;
+  // vertalen pas na een klik op Vertaal: met de pijltjes door de lijst lopen opent dus geen tabblad (WCAG 3.2.2)
+  const k = $("#taal"), vf = $("#vertaal");
+  if (k && vf) vf.addEventListener("submit", e => {
+    e.preventDefault();
+    const t = k.value; if (!t) { k.focus(); return; }
     const extra = location.search ? "&" + location.search.slice(1) : "";
     open(`https://damienzeller-nl.translate.goog${location.pathname}?_x_tr_sl=nl&_x_tr_tl=${t}&_x_tr_hl=${t}${extra}`, "_blank", "noopener");
     k.value = "";

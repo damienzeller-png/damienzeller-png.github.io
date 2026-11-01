@@ -1008,3 +1008,14 @@ input[type=file]{max-width:100%}
 @media (max-width:700px){.filter-uitklap .filterrij .veld{max-width:none}}
 .meer-rij{margin-top:28px;color:var(--zacht)}
 .meer-rij a{color:var(--link);font-weight:700}
+
+/* ronde 13 */
+.artikel-tekst{overflow-wrap:anywhere}
+.voet-groep a,.voet-kolommen a{min-height:44px}
+.tel-knop{display:inline-flex;align-items:center;justify-content:center;min-width:56px;min-height:44px;padding:0 12px;margin:2px 0;border-radius:999px;background:var(--vlak);border:1.5px solid var(--veldrand);font-weight:800;text-decoration:none}
+.ander-onderwerp{margin:0 0 18px;color:var(--zacht);font-size:.95rem}
+fieldset .ander-onderwerp{margin:12px 0 0}
+.ander-onderwerp a{color:var(--link);font-weight:700}
+.geen-uitslag{color:var(--zacht)}
+.vertaal .knop{flex:none}
+@media (max-width:760px){.vertaal{flex-wrap:wrap;justify-content:flex-start}.vertaal label{width:100%}.vertaal select{flex:1 1 auto;min-width:0}}

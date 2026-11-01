@@ -350,13 +350,17 @@ def main():
             continue
         stukken.append(d)
         titel = re.sub(r"(?i)^petitie:\s*", "", d["titel"]) if d["soort"] == "petitie" else d["titel"]
+        titel = titel[:1].upper() + titel[1:]
+        # rommeltitels uit het oude archief (zoals "1 / 2Voorzitter,") niet in de sitemap en niet in zoekmachines
+        d["rommel"] = bool(re.match(r"^\s*\d+\s*/\s*\d+", titel) or re.match(r"^[\W\d_]*$", titel) or (len(titel) < 25 and titel.rstrip().endswith(",")))
         ld = {"@context": "https://schema.org", "@type": "NewsArticle", "headline": kort(titel, 110), "datePublished": d["datum"],
               "inLanguage": "nl", "mainEntityOfPage": SITE + BASE + d["p"], "publisher": {"@type": "Organization", "name": NAAM, "logo": {"@type": "ImageObject", "url": SITE + BASE + "beeld/logo.svg"}}}
         if d.get("beeld"):
             ld["image"] = [d["beeld"]]
         if d.get("indiener"):
             ld["author"] = [{"@type": "Person", "name": n.strip()} for n in d["indiener"].split(" en ")]
-        nieuw += schrijf(d["p"] + "index.html", pagina(d["p"], titel, kort(d.get("samenvatting")), stuk_html(d), d.get("beeld_klein") or d.get("beeld", ""), d["id"], ld, "article"), gemaakt)
+        nieuw += schrijf(d["p"] + "index.html", pagina(d["p"], titel, kort(d.get("samenvatting")), stuk_html(d), d.get("beeld_klein") or d.get("beeld", ""), d["id"], ld, "article",
+                                                       extra='<meta name="robots" content="noindex">' if d["rommel"] and not PROEF else ""), gemaakt)
 
     # pagina's voor eigen berichten (s/w<nummer>/), zodat delen in WhatsApp en op Facebook titel, tekst en foto toont
     eigen = eigen_berichten()
@@ -389,7 +393,7 @@ def main():
     # sitemap en RSS
     vandaag = datetime.date.today().isoformat()
     urls = [(BASE + p, vandaag) for p, _, _ in VAST if not p.startswith("bedankt")] + [(BASE + f"fractie/{slug(f['naam'])}/", vandaag) for f in fractie]
-    urls += [(BASE + d["p"], d["datum"]) for d in stukken]
+    urls += [(BASE + d["p"], d["datum"]) for d in stukken if not d.get("rommel")]
     sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(
         f"<url><loc>{e(SITE + u)}</loc><lastmod>{l}</lastmod></url>\n" for u, l in urls) + "</urlset>\n"
     nieuw += schrijf("sitemap.xml", sitemap, set())
@@ -408,7 +412,9 @@ def main():
 
     # 404 voor de hele website (GitHub Pages gebruikt de 404.html in de hoofdmap). Onder BASE wordt het de app,
     # die het adres zelf leest (zo werken ook s/<id>/ en oude adressen); daarbuiten een eenvoudige melding.
-    vier = pagina("", "Niet gevonden", "Deze pagina bestaat niet (meer).").replace("<title>", '<script>if (!location.pathname.startsWith("' + BASE + '")) document.documentElement.dataset.buiten = "1";</script>\n<title>', 1)
+    # Ook adressen die de app zelf opbouwt (s/<id>/, een eigen bericht vóór zijn deelpagina klaar is) komen hier binnen.
+    # Daarom een algemene deelkaart van de partij in plaats van "Niet gevonden"; de app zet de echte titel in beeld.
+    vier = pagina("", NAAM, "De grootste lokale partij van Den Haag. Ombudspolitiek in alle acht stadsdelen.").replace("<title>", '<script>if (!location.pathname.startsWith("' + BASE + '")) document.documentElement.dataset.buiten = "1";</script>\n<title>', 1)
     vier = vier.replace(f'<link rel="canonical" href="{e(SITE + BASE)}">\n', "")
     vier = vier.replace("<hvdh-kop></hvdh-kop>", '<div id="buiten" hidden><p style="font:600 1.2rem/1.5 system-ui;padding:40px 20px">Deze pagina bestaat niet. <a href="/">Naar de voorpagina</a></p></div>\n<script>if (document.documentElement.dataset.buiten) { document.getElementById("buiten").hidden = false; document.write("<style>hvdh-kop,main,hvdh-voet{display:none}</style>"); }</script>\n<hvdh-kop></hvdh-kop>')
     pad404 = os.path.join(REPO, "404.html")
