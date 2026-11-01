@@ -672,11 +672,13 @@ function eigenEditor(i) {
     const knoppen = $$("#ed button[type=submit]"); knoppen.forEach(k => k.disabled = true);
     const oud = knop.textContent; knop.textContent = "Opslaan…";
     try {
-      await vraag("/items", { method: "POST", body: b });
+      const antwoord = await vraag("/items", { method: "POST", body: b });
       for (const d of extra) await vraag("/items", { method: "POST", body: { ...b, id: undefined, datum: d } });
       concept.wis(); gewijzigd = false; rijenCache = null; tab = "berichten"; opslag.zet("tab", tab);
       await laadRijen(); await berichten();
-      melding($("#m-lijst"), (b.gepubliceerd ? `Gepubliceerd: "${b.titel.trim()}". Het staat binnen een minuut op de site.` : `Opgeslagen als concept: "${b.titel.trim()}".`) + (extra.length ? ` Plus ${extra.length} herhalingen.` : ""));
+      // deellink: nieuws, successen, petities en vacatures krijgen een eigen pagina met titel, tekst en foto voor WhatsApp en LinkedIn
+      const deel = antwoord && antwoord.deelpagina && antwoord.item ? ` Deellink: ${new URL(`./s/w${antwoord.item.id}/`, location.href).href} (het voorbeeld met foto werkt in WhatsApp en LinkedIn ${antwoord.deelpagina === "snel" ? "na ongeveer twee minuten" : "binnen een half uur"}).` : "";
+      melding($("#m-lijst"), (b.gepubliceerd ? `Gepubliceerd: "${b.titel.trim()}". Het staat binnen een minuut op de site.${deel}` : `Opgeslagen als concept: "${b.titel.trim()}".`) + (extra.length ? ` Plus ${extra.length} herhalingen.` : ""));
     } catch (err) { melding(m, err.message, true); knoppen.forEach(k => k.disabled = false); knop.textContent = oud; }
   });
 }

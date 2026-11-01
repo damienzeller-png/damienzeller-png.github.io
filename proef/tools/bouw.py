@@ -200,12 +200,29 @@ def doorsturen(naar, titel="Deze pagina is verhuisd"):
 
 def eigen_berichten():
     """Wat de redactie in de beheeromgeving plaatste (nieuws, succes, petitie, vacature). Geeft None als de Worker
-    niet antwoordt; dan blijven de eerder gemaakte pagina's staan."""
-    try:
-        with urllib.request.urlopen(urllib.request.Request(API + "/inhoud", headers={"User-Agent": "hvdh-bouw"}), timeout=20) as r:
-            items = json.load(r).get("items") or []
-    except Exception as fout:
-        print(f"Eigen berichten niet opgehaald ({fout}); bestaande pagina's blijven staan")
+    niet antwoordt; dan blijven de eerder gemaakte pagina's staan.
+    Start de Worker deze bouw zelf na publiceren, dan staat in VERWACHT bijvoorbeeld "w123:publiceer" of "w123:weg".
+    De Worker houdt zijn lijst tot 30 seconden vast, dus dan wachten we tot het bericht er is (of weg is)."""
+    verwacht = os.environ.get("VERWACHT", "").strip()
+    vid, _, actie = verwacht.partition(":")
+    items = None
+    for poging in range(8 if vid else 1):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(API + "/inhoud", headers={"User-Agent": "hvdh-bouw", "Cache-Control": "no-cache"}), timeout=20) as r:
+                items = json.load(r).get("items") or []
+        except Exception as fout:
+            print(f"Eigen berichten niet opgehaald ({fout})")
+            items = None
+        if not vid or items is None:
+            break
+        aanwezig = any("w" + str(i.get("id")) == vid for i in items)
+        if aanwezig == (actie == "publiceer"):
+            break
+        print(f"{vid} nog niet {'zichtbaar' if actie == 'publiceer' else 'weg'} bij de Worker, even wachten")
+        import time
+        time.sleep(8)
+    if items is None:
+        print("Bestaande pagina's blijven staan")
         return None
     uit = []
     for i in items:

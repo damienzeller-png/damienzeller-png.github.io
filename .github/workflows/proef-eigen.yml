@@ -1,11 +1,16 @@
 name: Proefsite eigen berichten
-# Maakt elk half uur een echte pagina voor wat de redactie in de beheeromgeving plaatste (s/w<nummer>/),
+# Maakt direct na publiceren in de beheeromgeving (de Worker start deze taak) en daarnaast elk half uur een echte pagina voor wat de redactie in de beheeromgeving plaatste (s/w<nummer>/),
 # zodat een gedeelde link in WhatsApp, Facebook of LinkedIn titel, tekst en foto toont in plaats van "Niet gevonden".
 # Haalt niets van hartvoordenhaag.nl op; dat doet "Proefsite partij bijwerken" elke ochtend.
 on:
   schedule:
     - cron: "*/30 * * * *"
   workflow_dispatch:
+    inputs:
+      verwacht:
+        description: "Gestart door de beheeromgeving na publiceren: w<nummer>:publiceer of w<nummer>:weg"
+        required: false
+        default: ""
 permissions:
   contents: write
 concurrency: proef-inhoud
@@ -19,6 +24,8 @@ jobs:
         with:
           python-version: "3.12"
       - name: Pagina's maken
+        env:
+          VERWACHT: ${{ inputs.verwacht }}
         run: python proef/tools/bouw.py
       - name: Opslaan
         run: |
