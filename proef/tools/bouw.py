@@ -210,6 +210,21 @@ def vooraf_lijst(pad, titel, beschrijving, n=20):
             f'<p class="leeg" style="margin-top:22px">De twintig nieuwste stukken. Filteren en ouder werk: even geduld, de pagina laadt.</p></div></section>')
 
 
+def eerste_foto(pad):
+    """De bovenste foto van een lijst is het grootste beeld (LCP). Die laten we meteen laden, met de verbinding naar
+    hartvoordenhaag.nl al open, in plaats van pas als app.js de lijst getekend heeft."""
+    soort, bestand = LIJSTEN[pad]
+    items = sorted(lees(bestand, []) or [], key=lambda d: d.get("datum", ""), reverse=True)
+    d = next((d for d in items[:1] if d.get("beeld")), None)
+    if not d:
+        return ""
+    groot, klein = d["beeld"], d.get("beeld_klein") or d["beeld"]
+    bron = re.match(r"https?://[^/]+", groot)
+    return ((f'<link rel="preconnect" href="{e(bron.group(0))}">\n' if bron else "") +
+            f'<link rel="preload" as="image" href="{e(klein)}" media="(max-width: 760px)" fetchpriority="high">\n'
+            f'<link rel="preload" as="image" href="{e(groot)}" media="(min-width: 761px)" fetchpriority="high">')
+
+
 def vooraf_voorpagina():
     nieuws = sorted(lees("nieuws.json", []) or [], key=lambda d: d.get("datum", ""), reverse=True)[:6]
     vandaag = datetime.date.today().isoformat()
@@ -259,6 +274,23 @@ def doorsturen(naar, titel="Deze pagina is verhuisd"):
             f'<title>{e(titel)}</title>\n<link rel="canonical" href="{e(SITE + doel)}">\n<meta http-equiv="refresh" content="0; url={e(doel)}">\n'
             f'<script>location.replace({json.dumps(doel)} + location.search + location.hash)</script>\n</head>\n<body>\n'
             f'<p>Deze pagina staat nu op <a href="{e(doel)}">{e(SITE + doel)}</a>.</p>\n</body>\n</html>\n')
+
+
+def deel_doorsturen(d, titel, beschrijving, beeld):
+    """Kort adres s/<id>/ (zoeken en de app gebruiken het): deelkaart met titel, tekst en foto van het stuk zelf,
+    canonical naar het gewone adres, en de bezoeker gaat meteen door. Zo geeft s/<id>/ geen 404 meer bij delen of in Google."""
+    doel = BASE + d["p"]
+    url = SITE + doel
+    return ("<!doctype html>\n<html lang=\"nl\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"robots\" content=\"noindex\">\n"
+            f"<title>{e(titel)} | {NAAM}</title>\n"
+            f'<meta name="description" content="{e(beschrijving)}">\n<link rel="canonical" href="{e(url)}">\n'
+            f'<meta property="og:site_name" content="{NAAM}">\n<meta property="og:type" content="article">\n'
+            f'<meta property="og:title" content="{e(titel)}">\n<meta property="og:description" content="{e(beschrijving)}">\n'
+            f'<meta property="og:url" content="{e(url)}">\n<meta property="og:image" content="{e(beeld or STANDAARD_BEELD)}">\n'
+            '<meta property="og:locale" content="nl_NL">\n<meta name="twitter:card" content="summary_large_image">\n'
+            f'<meta http-equiv="refresh" content="0; url={e(doel)}">\n'
+            f'<script>location.replace({json.dumps(doel)} + location.search + location.hash)</script>\n</head>\n<body>\n'
+            f'<p><a href="{e(doel)}">{e(titel)}</a></p>\n</body>\n</html>\n')
 
 
 def eigen_berichten():
@@ -313,7 +345,11 @@ def main():
             f'<link rel="preload" as="image" href="{BASE}beeld/groep-film.webp" media="(min-width: 761px)">')
     for pad, titel, beschrijving in VAST:
         inhoud = vooraf_voorpagina() if pad == "" else vooraf_lijst(pad, titel, beschrijving) if pad in LIJSTEN else ""
-        nieuw += schrijf(pad + "index.html", pagina(pad, titel, beschrijving, inhoud, extra=film if pad == "" else ""), gemaakt)
+        extra = film if pad == "" else eerste_foto(pad) if pad in LIJSTEN else ""
+        nieuw += schrijf(pad + "index.html", pagina(pad, titel, beschrijving, inhoud, extra=extra), gemaakt)
+    # lichte zoekindex zonder tekstknipsel: daarmee staan de eerste zoekresultaten er op een trage verbinding veel eerder
+    licht = [{k: v for k, v in i.items() if k != "x"} for i in index]
+    nieuw += schrijf("data/zoektitels.json", json.dumps(licht, ensure_ascii=False, separators=(",", ":")), set())
     nieuw += schrijf("data/tellingen.json", json.dumps(tellingen(index), ensure_ascii=False, separators=(",", ":"), sort_keys=True), set())
     for sd in STADSDELEN:
         pad = f"stadsdelen/{slug(sd)}/"
@@ -361,6 +397,8 @@ def main():
             ld["author"] = [{"@type": "Person", "name": n.strip()} for n in d["indiener"].split(" en ")]
         nieuw += schrijf(d["p"] + "index.html", pagina(d["p"], titel, kort(d.get("samenvatting")), stuk_html(d), d.get("beeld_klein") or d.get("beeld", ""), d["id"], ld, "article",
                                                        extra='<meta name="robots" content="noindex">' if d["rommel"] and not PROEF else ""), gemaakt)
+        if "/" not in d["id"] and not d["p"].startswith("s/"):
+            nieuw += schrijf(f"s/{d['id']}/index.html", deel_doorsturen(d, titel, kort(d.get("samenvatting")), d.get("beeld_klein") or d.get("beeld", "")), gemaakt)
 
     # pagina's voor eigen berichten (s/w<nummer>/), zodat delen in WhatsApp en op Facebook titel, tekst en foto toont
     eigen = eigen_berichten()

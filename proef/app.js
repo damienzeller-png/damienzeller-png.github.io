@@ -66,7 +66,7 @@ const kaleTitel = p => String(p.titel || "").replace(/^petitie:\s*/i, "").replac
 const cache = {};
 // Aanpassingen uit de beheeromgeving op overgenomen berichten: andere titel, stadsdeel, tekst, foto, of verborgen.
 // De dagelijkse import van hartvoordenhaag.nl overschrijft ze niet, want ze liggen apart bij de achterkant.
-const MET_AANPASSING = new Set(["nieuws", "successen", "moties", "amendementen", "raadsvragen", "spreekteksten", "petities", "agenda", "zoekindex"]);
+const MET_AANPASSING = new Set(["nieuws", "successen", "moties", "amendementen", "raadsvragen", "spreekteksten", "petities", "agenda", "zoekindex", "zoektitels"]);
 const VELDEN = ["titel", "samenvatting", "html", "onderwerpen", "datum", "indiener", "status", "tijd", "plek", "einddatum", "doel", "afloop", "alt"];
 let aanpBelofte = null;
 function aanpassingen() {
@@ -86,7 +86,7 @@ function pasAan(naam, lijst, a) {
     if (!p) { uit.push(x); continue; }
     if (p.verborgen) continue;
     const y = { ...x };
-    if (naam === "zoekindex") {
+    if (naam === "zoekindex" || naam === "zoektitels") {
       if (p.titel != null) y.t = p.titel;
       if (p.samenvatting != null) y.x = p.samenvatting;
       if (p.stadsdelen) y.sd = p.stadsdelen;
@@ -111,16 +111,27 @@ function pasAan(naam, lijst, a) {
 const mislukt = new Set();
 const ophalen = (naam, url, leeg) => fetch(url).then(r => r.ok ? r.json() : r.status >= 500 ? Promise.reject(new Error(String(r.status))) : leeg)
   .catch(() => { mislukt.add(naam); return leeg; });
+// Versturen naar de achterkant met een tijdslimiet: hangt de Worker, dan krijgt de bezoeker na 15 seconden een eerlijke melding
+// in plaats van een knop die eindeloos "Bezig met versturen…" blijft zeggen.
+async function verstuur(pad, data, ms = 15000) {
+  const ctrl = new AbortController(), klok = setTimeout(() => ctrl.abort(), ms);
+  try { return await fetch(API + pad, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data), signal: ctrl.signal }); }
+  catch (err) { if (err.name === "AbortError") { const f = new Error("traag"); f.traag = true; throw f; } throw err; }
+  finally { clearTimeout(klok); }
+}
+const TE_TRAAG = "Het versturen duurde te lang. Misschien is het toch binnengekomen.";
 function opnieuwProberen() {
   for (const n of mislukt) delete cache[n];
   mislukt.clear(); KAART = null;
   route();
 }
 const foutBalk = () => `<div class="wrap"><div class="melding fout net-fout" role="alert"><p>${navigator.onLine === false ? "<b>Geen verbinding.</b> Een deel van deze pagina kon niet laden. Controleer uw internet en probeer het opnieuw." : "<b>Niet alles kon laden.</b> Bij ons ging iets mis, niet bij u. Wat u ziet, kan onvolledig zijn. Probeer het zo opnieuw."}</p><button class="knop lijn klein" type="button" data-opnieuw>Opnieuw proberen</button></div></div>`;
+const geladen = new Set(); // welke databestanden al binnen zijn
 function laad(naam) {
   if (!cache[naam]) {
     const bestand = ophalen(naam, U(`data/${naam}.json`), naam === "kaart" || naam === "archief" || naam === "bewijs" || naam === "bestuur" ? null : []);
     cache[naam] = MET_AANPASSING.has(naam) || naam.startsWith("lijst/") ? Promise.all([bestand, aanpassingen()]).then(([d, a]) => pasAan(naam, d, a)) : bestand;
+    cache[naam].then(() => geladen.add(naam));
   }
   return cache[naam];
 }
@@ -235,7 +246,7 @@ const lijstBeeld = i => i.beeld_klein || i.beeld;
 function logItem(i, eerste, opties = {}) {
   return `<li class="log-item${eerste ? " eerste" : ""}${i.beeld ? "" : " zonder-beeld"}">
     <div class="log-tekst"><h3>${stukLink(i, esc(i.titel))}</h3>${bijschrift(i, opties)}${i.samenvatting ? `<p class="sam">${esc(i.samenvatting)}</p>` : ""}<span class="lees-meer" aria-hidden="true">Lees meer ${PIJL}</span></div>
-    ${i.beeld ? `<img class="log-beeld" src="${esc(eerste && !smal() ? i.beeld : lijstBeeld(i))}" alt="" loading="${eerste ? "eager" : "lazy"}" decoding="async">` : ""}</li>`;
+    ${i.beeld ? `<img class="log-beeld" src="${esc(eerste && !smal() ? i.beeld : lijstBeeld(i))}" alt="" loading="${eerste ? "eager" : "lazy"}"${eerste ? ' fetchpriority="high"' : ""} decoding="async">` : ""}</li>`;
 }
 function stukItem(i, opties = {}) {
   const raad = ["motie", "amendement", "raadsvraag", "spreektekst"].includes(i.soort);
@@ -353,14 +364,14 @@ function koppelFormulier(form, opties) {
     knop.disabled = true; const label = knop.textContent; knop.textContent = "Bezig met versturen…";
     try {
       const robot = await robotToken(); if (robot) data["cf-turnstile-response"] = robot;
-      const r = await fetch(API + "/formulier", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
+      const r = await verstuur("/formulier", data);
       const d = await r.json().catch(() => ({ ok: false }));
       if (!d.ok) { const fout = new Error(""); fout.nl = d.fout && !/token|fetch|json|error/i.test(d.fout) ? d.fout : ""; throw fout; }
       wis(); form.reset(); form.dispatchEvent(new Event("change")); form.dispatchEvent(new Event("input")); wis();
       toon(uit, opties.bedankt(data, d));
       if (opties.na) opties.na(data, uit, d);
     } catch (err) {
-      toon(uit, (err.nl ? err.nl + " " : "Versturen lukte niet. ") + `Probeer het zo nog eens, of bel ${TEL}.`, true);
+      toon(uit, (err.traag ? TE_TRAAG + " " : err.nl ? err.nl + " " : "Versturen lukte niet. ") + `Probeer het zo nog eens, of bel ${TEL}.`, true);
     }
     knop.disabled = false; knop.textContent = label;
   });
@@ -735,13 +746,16 @@ async function detail(id) {
   const i = eigenStuk ? (await eigen()).find(x => String(x.id) === id) : await stuk(id);
   if (!i || !SOORT[i.soort]) return null;
   const s = i.soort, S = SOORT[s];
-  const [alles, tel] = await Promise.all([s === "vacature" || s === "agenda" ? [] : soort(s), s === "petitie" ? tellers() : {}]);
+  // de teller van de petitie wachten we hooguit een halve seconde af: het tekenformulier staat er meteen,
+  // de teller komt erbij zodra de achterkant antwoordt (detail.na)
+  const [alles, tel] = await Promise.all([s === "vacature" || s === "agenda" ? [] : soort(s), s === "petitie" ? Promise.race([tellers(), new Promise(r => setTimeout(() => r(null), 500))]) : {}]);
+  detail.stuk = i; detail.telLaat = s === "petitie" && !tel;
   document.title = i.titel + " | Hart voor Den Haag (proef)";
   const meer = alles.filter(x => x.id !== i.id && x.stadsdelen.some(sd => (i.stadsdelen || []).includes(sd))).slice(0, 4);
   const isPetitie = s === "petitie";
   const open = isPetitie && isOpen(i);
   const wie = wieVan(i);
-  const n = isPetitie ? handtekeningen(i, tel) : 0;
+  const n = isPetitie ? handtekeningen(i, tel || {}) : 0;
   const dictum = i.dictum ? (() => {
     const delen = i.dictum.tekst.split(/\s*;\s*(?=\S)/).map(d => d.replace(/^(en|of)\s+/i, "").trim()).filter(d => d.length > 3);
     return `<div class="dictum"><h2>${s === "amendement" ? "Wat we willen veranderen" : "Wat we het college vragen"}</h2>
@@ -755,7 +769,7 @@ async function detail(id) {
     bijschrift({ ...i, handtekeningen: isPetitie ? 0 : i.handtekeningen }, { soort: !["nieuws", "succes", "petitie"].includes(s) }).replace("</p>", `<span>${lees} min lezen</span></p>`), i.stadsdelen && i.stadsdelen.length === 1 ? i.stadsdelen[0] : "") + `
   <section class="wit"><div class="wrap"><article class="artikel${isPetitie && open && i.beeld ? " petitie-open" : ""}">
     ${i.beeld ? `<span class="poster-lijst artikel-beeld"><img src="${esc(i.beeld)}" alt="${esc(i.alt || "")}" decoding="async"></span>` : ""}
-    ${isPetitie ? `<div class="teken-teller" id="teller-blok" data-n="${n}">${balk(n, i)}${i.handtekeningen ? `<p class="leeg">Inclusief de handtekeningen op hartvoordenhaag.nl.</p>` : ""}${open && (i.beeld || dictum) ? `<button class="knop groen teken-snel" type="button" id="naar-teken">Teken deze petitie</button>` : ""}</div>` : ""}
+    ${isPetitie ? `<div class="teken-teller" id="teller-blok" data-n="${n}"${!tel ? ' aria-busy="true"' : ""}>${balk(n, i)}${i.handtekeningen ? `<p class="leeg">Inclusief de handtekeningen op hartvoordenhaag.nl.</p>` : ""}${open && (i.beeld || dictum) ? `<button class="knop groen teken-snel" type="button" id="naar-teken">Teken deze petitie</button>` : ""}</div>` : ""}
     ${dictum}
     ${isPetitie && !open ? `<div class="melding afloop" style="margin-top:22px"><p><b>Deze petitie is gesloten.</b>${i.afloop ? " " + esc(i.afloop) : ""}</p><p>Bekijk <a href="${U("petities/")}">de petities die nu lopen</a>.</p></div>` : ""}
     ${open ? `<form class="formulier" id="teken" style="margin-top:22px" novalidate><h2 style="font-size:2rem">Teken deze petitie</h2>
@@ -773,6 +787,16 @@ async function detail(id) {
   </article></div></section>`;
 }
 detail.na = () => {
+  const tb0 = $("#teller-blok");
+  if (tb0 && detail.telLaat && detail.stuk) {
+    const i = detail.stuk;
+    tellers().then(tel => {
+      const tb = $("#teller-blok"); if (!tb || detail.stuk !== i) return;
+      const n = handtekeningen(i, tel);
+      if (n !== Number(tb.dataset.n)) { tb.dataset.n = n; tb.querySelector(".voortgang").outerHTML = balk(n, i); }
+      tb.removeAttribute("aria-busy");
+    });
+  }
   const d = $("#deel");
   if (d) d.addEventListener("click", async () => {
     const url = location.href;
@@ -1224,7 +1248,7 @@ pagina["melding-status"].na = () => {
     const k = f.kenmerk.value.replace(/\s+/g, "").toUpperCase().replace(/^([MC])-?(\d{2})-?(\d{4})$/, "$1-$2-$3");
     const knop = $("button[type=submit]", f); knop.disabled = true;
     try {
-      const r = await fetch(API + "/melding-status", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ kenmerk: k, contact: f.contact.value.trim() }) });
+      const r = await verstuur("/melding-status", { kenmerk: k, contact: f.contact.value.trim() });
       const d = await r.json().catch(() => ({}));
       if (!d.ok) { toon(uit, d.fout || `Dat lukte nu niet. Probeer het zo nog eens, of bel ${TEL}.`, true); knop.disabled = false; return; }
       const wat = d.soort === "contact" ? "Uw bericht" : "Uw melding";
@@ -1234,7 +1258,7 @@ pagina["melding-status"].na = () => {
         <p>${wat} ${esc(d.kenmerk)}${d.stadsdeel ? ` over ${esc(d.stadsdeel)}` : ""} kwam binnen op ${dag(d.ontvangen)}.${d.status === "afgehandeld" && d.bijgewerkt ? ` Afgehandeld op ${dag(d.bijgewerkt)}.` : ""}</p>
         ${d.status === "afgehandeld" ? `<p>Niet tevreden over hoe het afliep? <a href="${U("contact/")}">Laat het ons weten</a>.</p>` : `<p>Duurt het lang of is er iets veranderd? Bel <a href="${TEL_LINK}">${TEL}</a> en noem uw kenmerk.</p>`}`;
       uit.tabIndex = -1; uit.focus();
-    } catch { toon(uit, `Geen verbinding. Controleer uw internet en probeer het opnieuw, of bel ${TEL}.`, true); }
+    } catch (err) { toon(uit, err.traag ? `Dat duurde te lang. Probeer het zo nog eens, of bel ${TEL}.` : `Geen verbinding. Controleer uw internet en probeer het opnieuw, of bel ${TEL}.`, true); }
     knop.disabled = false;
   });
 };
@@ -1412,12 +1436,12 @@ async function betaal(f, soortBetaling, extra) {
   knop.disabled = true; knop.textContent = "Even geduld…";
   try {
     const robot = await robotToken();
-    const r = await fetch(API + "/betaling", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ soort: soortBetaling, naam: data.naam, email: data.email, plaats: data.plaats || "", ...extra, ...(robot ? { "cf-turnstile-response": robot } : {}) }) });
+    const r = await verstuur("/betaling", { soort: soortBetaling, naam: data.naam, email: data.email, plaats: data.plaats || "", ...extra, ...(robot ? { "cf-turnstile-response": robot } : {}) });
     const d = await r.json().catch(() => ({}));
     if (d.ok && d.checkout) { opslag.sWeg("concept:" + (soortBetaling === "lid" ? "lid" : "doneren")); f.dataset.vuil = ""; location.href = d.checkout; return; }
     if (d.ok && d.demo) toon(uit, "Dit is een proef: er is niets betaald. Zodra de partij Mollie heeft gekoppeld, gaat u hier naar iDEAL.");
     else toon(uit, (d.fout || "Betalen lukte nu niet.") + ` Probeer het zo nog eens, of bel ${TEL}.`, true);
-  } catch { toon(uit, `Betalen lukte nu niet. Probeer het zo nog eens, of bel ${TEL}.`, true); }
+  } catch (err) { toon(uit, err.traag ? `Het duurde te lang. Er is niets afgeschreven. Probeer het zo nog eens, of bel ${TEL}.` : `Betalen lukte nu niet. Probeer het zo nog eens, of bel ${TEL}.`, true); }
   knop.disabled = false; knop.textContent = label;
 }
 
@@ -1465,7 +1489,13 @@ pagina.zoeken = async (args, q) => {
 };
 async function zoekPagina(args, q, gevraagd = "") {
   const term = (q.get("q") || "").trim(), welk = q.get("soort") || "", sorteer = q.get("sorteer") || "";
-  const [idx, nieuw] = await Promise.all([laad("zoekindex"), eigen()]);
+  // De volle zoekindex (met tekst) is groot. Staat hij er nog niet, dan zoeken we eerst in de titels (een fractie van de grootte)
+  // en vullen we de resultaten aan zodra de tekst binnen is (zoeken.na).
+  // Is de volle index al onderweg (iemand raakte de zoekknop aan), dan wachten we daarop; anders eerst de titels,
+  // en de tekst pas daarna, zodat de twee downloads elkaar op een trage verbinding niet in de weg zitten.
+  const vol = geladen.has("zoekindex") || !term || !!cache.zoekindex;
+  const [idx, nieuw] = await Promise.all([vol ? laad("zoekindex") : laad("zoektitels"), eigen()]);
+  pagina.zoeken.voorlopig = !vol;
   const woorden = PLAT(term.toLowerCase()).split(/\s+/).filter(w => w.length > 1);
   const alles = [...nieuw.filter(i => SOORT[i.soort] && i.soort !== "agenda").map(i => ({ id: i.id, s: i.soort, t: i.titel, d: i.datum, x: i.samenvatting, sd: i.stadsdelen })), ...idx];
   let treffers = woorden.length ? alles.map(i => {
@@ -1483,7 +1513,7 @@ async function zoekPagina(args, q, gevraagd = "") {
     suggestie = woorden.map(w => { if (tel[w]) return w; let best = w, score = 3; for (const [k, n] of Object.entries(tel)) { const a = afstand(w, k); if (a < score || (a === score && n > (tel[best] || 0))) { best = k; score = a; } } return best; }).join(" ");
     if (suggestie === woorden.join(" ")) suggestie = "";
     // tikfout: meteen de resultaten voor het bedoelde woord, met de mogelijkheid toch het getypte te zoeken
-    if (suggestie && !gevraagd && !q.get("exact")) { const q2 = new URLSearchParams(q); q2.set("q", suggestie); return zoekPagina(args, q2, term); }
+    if (suggestie && !gevraagd && !q.get("exact") && !pagina.zoeken.voorlopig) { const q2 = new URLSearchParams(q); q2.set("q", suggestie); return zoekPagina(args, q2, term); }
   }
   const licht = s => {
     if (!woorden.length) return esc(s);
@@ -1498,15 +1528,15 @@ async function zoekPagina(args, q, gevraagd = "") {
   const direct = welk ? [] : directTreffers(woorden);
   const directHtml = direct.length ? `<div class="direct"><h2 class="tussenkop">Direct naar</h2><ul class="direct-lijst">${direct.map(d => `<li><a href="${U(d.pad)}">${d.f ? (d.f.beeld ? `<img src="${esc(d.f.beeld)}" alt="" loading="lazy">` : `<span class="leeg-foto" aria-hidden="true">${initialen(d.f.naam)}</span>`) : d.sd ? `<span class="direct-icoon">${silhouet(d.sd)}</span>` : `<span class="direct-icoon">${HART}</span>`}<span><b>${esc(d.titel)}</b><small>${esc(d.onder)}</small></span></a></li>`).join("")}</ul></div>` : "";
   pagina.zoeken.lijst = treffers.map(i => `<li><h3><a href="${U(i.p || "s/" + encodeURIComponent(i.id) + "/")}" data-stuk="${esc(i.id)}">${licht(i.t)}</a></h3><p class="bijschrift">${i.sd && i.sd.length ? `<span class="plek">${esc(i.sd.join(" en "))}</span>` : ""}<span>${esc(SOORT[i.s].naam)}</span>${i.st ? `<span class="status">${esc(i.st)}</span>` : ""}<time datetime="${esc(i.d)}">${datum(i.d)}</time></p><p class="sam">${licht(knipsel(i.x || ""))}</p></li>`);
-  return paginaKop("Zoeken", term ? (!totaal && direct.length ? `${direct.length === 1 ? "Eén pagina" : direct.length + " pagina's"} gevonden voor "${esc(term)}"` : `${fmt.format(totaal)} ${totaal === 1 ? "resultaat" : "resultaten"} voor "${esc(term)}"`) : "Zoek in al het nieuws, de successen, het raadswerk en de petities sinds 2012.") + `
+  return paginaKop("Zoeken", term && pagina.zoeken.voorlopig ? `Zoeken naar "${esc(term)}"…` : term ? (!totaal && direct.length ? `${direct.length === 1 ? "Eén pagina" : direct.length + " pagina's"} gevonden voor "${esc(term)}"` : `${fmt.format(totaal)} ${totaal === 1 ? "resultaat" : "resultaten"} voor "${esc(term)}"`) : "Zoek in al het nieuws, de successen, het raadswerk en de petities sinds 2012.") + `
     <section class="wit"><div class="wrap">
       <form id="zoek2" role="search" class="zoek2" action="${U("zoeken/")}"><label class="verborgen" for="zoek2-veld">Zoekterm</label><input type="search" id="zoek2-veld" name="q" value="${esc(term)}" placeholder="Bijvoorbeeld Moerwijk, parkeren of Kwartellaan"><button class="knop groen klein" type="submit">Zoeken</button></form>
       ${term ? `<nav class="filters" aria-label="Soort">${ZOEK_SOORTEN.filter(([s]) => !s || perSoort[s]).map(([s, n]) => `<a class="knopje" href="${href({ soort: s })}"${s === welk ? ' aria-current="page"' : ""}>${n}${s ? ` <small>${fmt.format(perSoort[s])}</small>` : ""}</a>`).join("")}</nav>
       <p class="sorteer">Sorteer op: ${sorteer === "datum" ? `<a href="${href({ sorteer: "" })}">beste treffer</a> · <b>nieuwste eerst</b>` : `<b>beste treffer</b> · <a href="${href({ sorteer: "datum" })}">nieuwste eerst</a>`}</p>` : ""}
       ${gevraagd ? `<p class="melding">Niets gevonden voor "${esc(gevraagd)}". Hieronder de resultaten voor <b>${esc(term)}</b>. <a href="${U("zoeken/?q=" + encodeURIComponent(gevraagd))}&exact=1">Toch zoeken op "${esc(gevraagd)}"</a></p>` : ""}
       ${directHtml}
-      ${term && !treffers.length && direct.length ? `<p class="leeg">In het nieuws en raadswerk vonden we niets met "${esc(term)}".</p>` : ""}
-      ${term && !treffers.length && !direct.length ? `<p class="leeg">Niets gevonden${welk ? " in deze soort" : ""}.${suggestie ? ` Bedoelde u <a href="${U("zoeken/?q=" + encodeURIComponent(suggestie))}"><b>${esc(suggestie)}</b></a>?` : " Probeer een ander woord, of zoek op een straat of wijk."}</p>` : ""}
+      ${term && !treffers.length && direct.length && !pagina.zoeken.voorlopig ? `<p class="leeg">In het nieuws en raadswerk vonden we niets met "${esc(term)}".</p>` : ""}
+      ${term && !treffers.length && !direct.length && !pagina.zoeken.voorlopig ? `<p class="leeg">Niets gevonden${welk ? " in deze soort" : ""}.${suggestie ? ` Bedoelde u <a href="${U("zoeken/?q=" + encodeURIComponent(suggestie))}"><b>${esc(suggestie)}</b></a>?` : " Probeer een ander woord, of zoek op een straat of wijk."}</p>` : ""}
       <h2 class="verborgen">Resultaten</h2><ul class="stukken zoek-treffer" id="zoek-lijst"></ul>
       <button class="knop lijn meer-laden" type="button" id="zoek-meer" hidden>Meer resultaten</button>
       <p class="teller" id="zoek-teller" aria-live="polite"></p>
@@ -1516,8 +1546,13 @@ pagina.zoeken.titel = (args, q) => q.get("q") ? `Zoeken: ${q.get("q")}` : "Zoeke
 pagina.zoeken.na = () => {
   const lijst = pagina.zoeken.lijst || [], stap = 30, sleutel = lijstSleutel();
   let n = Math.max(stap, Number(opslag.sLees(sleutel)) || stap);
-  const teken = () => { $("#zoek-lijst").innerHTML = lijst.slice(0, n).join(""); $("#zoek-meer").hidden = n >= lijst.length; $("#zoek-teller").textContent = lijst.length ? `${fmt.format(Math.min(n, lijst.length))} van ${fmt.format(lijst.length)}` : ""; };
+  const voorlopig = pagina.zoeken.voorlopig;
+  const teken = () => { $("#zoek-lijst").innerHTML = lijst.slice(0, n).join(""); $("#zoek-meer").hidden = n >= lijst.length; $("#zoek-teller").textContent = voorlopig ? `${lijst.length ? fmt.format(lijst.length) + " in de titels. " : ""}Ook in de tekst zoeken…` : lijst.length ? `${fmt.format(Math.min(n, lijst.length))} van ${fmt.format(lijst.length)}` : ""; };
   teken();
+  if (voorlopig) {
+    const nr = routeNr, adres = location.href;
+    laad("zoekindex").then(() => { if (nr === routeNr && location.href === adres) { houdVast = { id: "zoek-teller", scroll: scrollY }; route(); } });
+  }
   $("#zoek-meer").addEventListener("click", () => { n += stap; opslag.sZet(sleutel, n); teken(); });
   $("#zoek2").addEventListener("submit", e => { e.preventDefault(); const t = $("#zoek2-veld").value.trim(); if (t) gaNaar(U("zoeken/?q=" + encodeURIComponent(t))); });
 };
