@@ -95,7 +95,7 @@ section{padding-block:80px}
 .datumregel b{color:var(--ink);font-weight:700}
 .datumregel time{font-variant-numeric:tabular-nums}
 .dr-rechts{display:flex;gap:18px}
-.dr-rechts a{color:var(--ink);text-decoration:none;min-height:40px;display:inline-flex;align-items:center;gap:6px}
+.dr-rechts a{color:var(--ink);text-decoration:none;min-height:44px;display:inline-flex;align-items:center;gap:6px}
 .dr-rechts a:hover{text-decoration:underline;text-decoration-color:var(--hart)}
 .dr-rechts svg{width:16px;height:16px;fill:currentColor;color:#1F9D57}
 @media (max-width:760px){.dr-rechts a:not(.wa){display:none}.wa-tekst{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.dr-rechts svg{width:22px;height:22px}.datumregel .wrap{flex-wrap:nowrap}}
@@ -182,6 +182,7 @@ section{padding-block:80px}
 .log-tekst{display:grid;gap:8px;align-content:start;max-width:46em}
 .log-item h3{font-size:clamp(1.3rem,2.3vw,1.65rem);font-stretch:80%;line-height:1.08}
 .log-item h3 a{text-decoration:none}
+h1,h2,h3,.stukken a,.log a,.vtitel,.kruimel{overflow-wrap:anywhere;hyphens:auto}
 .log-item h3 a::after{content:"";position:absolute;inset:0}
 .log-item:hover h3 a{text-decoration:underline;text-decoration-color:var(--hart);text-decoration-thickness:2px}
 .log-item .sam{color:var(--zacht);font-size:.98rem}
@@ -256,6 +257,7 @@ section{padding-block:80px}
 .leeg-foto{display:grid;place-items:center;font:800 1.1rem var(--kop);color:var(--link);background:var(--munt);border:1.5px solid var(--lijn)}
 .mensen b{display:block;line-height:1.2}
 .mensen a{text-decoration:none}.mensen a:hover b{text-decoration:underline}
+.mensen li{position:relative;min-height:52px}.mensen li a::after{content:"";position:absolute;inset:0}
 .mensen span{font-size:.88rem;color:var(--zacht)}
 .berichten{list-style:none;margin:0;padding:0;display:grid;gap:12px}
 .berichten a{font-weight:600;text-decoration:none;line-height:1.3}

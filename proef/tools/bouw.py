@@ -145,7 +145,9 @@ def pagina(pad, titel, beschrijving, inhoud="", beeld="", stuk_id="", ld=None, s
         kop.append('<script type="application/ld+json">' + json.dumps(ld, ensure_ascii=False).replace("</", "<\\/") + "</script>")
     data = f' data-stuk="{e(stuk_id)}"' if stuk_id else ""
     return ("<!doctype html>\n<html lang=\"nl\">\n<head>\n" + "\n".join(k for k in kop if k) + "\n</head>\n<body>\n<hvdh-kop></hvdh-kop>\n"
-            f'<main id="inhoud" tabindex="-1"><div id="app"{data}>{inhoud or LADEN}</div></main>\n'
+            f'<main id="inhoud" tabindex="-1"><noscript><p class="wrap" style="padding-block:16px">Deze site werkt het best met JavaScript aan. '
+            'Bel de fractie op <a href="tel:+31623462139">06 234 621 39</a> of mail <a href="mailto:hartvoordenhaag@denhaag.nl">hartvoordenhaag@denhaag.nl</a>.</p></noscript>'
+            f'<div id="app"{data}>{inhoud or LADEN}</div></main>\n'
             f'<hvdh-voet></hvdh-voet>\n<script src="{BASE}app.js" defer></script>\n</body>\n</html>\n')
 
 
@@ -370,7 +372,7 @@ def main():
     for k in kandidaten:
         oud = re.sub(r"^https?://[^/]+/", "", k.get("link", ""))
         if oud.startswith("kandidaat/"):
-            s = slug(k.get("naam", ""))
+            s = slug(re.sub(r"^\s*\d+[.)]?\s*", "", k.get("naam", "")))
             nieuw += schrijf(oud.rstrip("/") + "/index.html", doorsturen(f"fractie/{s}/" if s in leden else "fractie/"), gemaakt)
     for oud, naar in DOOR.items():
         nieuw += schrijf(oud + "index.html", doorsturen(naar), gemaakt)

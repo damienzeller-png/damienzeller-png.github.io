@@ -121,5 +121,16 @@ HVDH.TURNSTILE = "";
   // Custom elements: de browser vult ze in zodra de parser ze tegenkomt, dus vóór de eerste weergave.
   class Kop extends HTMLElement { connectedCallback() { if (!this.dataset.klaar) { this.dataset.klaar = "1"; this.innerHTML = KOP; } } }
   class Voet extends HTMLElement { connectedCallback() { if (!this.dataset.klaar) { this.dataset.klaar = "1"; this.innerHTML = VOET; } } }
+  // Tikt iemand op Menu of Zoeken voordat app.js er is (trage verbinding), dan openen we ze hier al.
+  // app.js zet daarna HVDH.klaar en neemt het over.
+  document.addEventListener("click", e => {
+    if (HVDH.klaar || !e.target.closest) return;
+    const k = e.target.closest("#menu-knop, #lade-dicht, #zoek-knop, .uitklap > button"); if (!k) return;
+    const $id = id => document.getElementById(id);
+    if (k.id === "menu-knop") { $id("lade").hidden = false; k.setAttribute("aria-expanded", "true"); document.body.style.overflow = "hidden"; $id("lade-dicht").focus(); }
+    else if (k.id === "lade-dicht") { $id("lade").hidden = true; $id("menu-knop").setAttribute("aria-expanded", "false"); document.body.style.overflow = ""; $id("menu-knop").focus(); }
+    else if (k.id === "zoek-knop") { const z = $id("zoekbalk"); z.hidden = !z.hidden; k.setAttribute("aria-expanded", String(!z.hidden)); if (!z.hidden) $id("zoek-veld").focus(); }
+    else { const p = $id(k.getAttribute("aria-controls")), open = k.getAttribute("aria-expanded") === "true"; k.setAttribute("aria-expanded", String(!open)); if (p) p.hidden = open; HVDH.vroegOpen = open ? "" : k.getAttribute("aria-controls"); }
+  });
   if (window.customElements && !customElements.get("hvdh-kop")) { customElements.define("hvdh-kop", Kop); customElements.define("hvdh-voet", Voet); }
 })();

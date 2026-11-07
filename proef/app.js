@@ -336,12 +336,16 @@ function bewaarConcept(form, sleutel) {
   const k = "concept:" + sleutel;
   try {
     const oud = JSON.parse(opslag.sLees(k) || "{}");
-    for (const [n, v] of Object.entries(oud)) { const veld = form.elements[n]; if (veld && !(veld instanceof RadioNodeList) && !veld.value && v) veld.value = v; }
+    for (const [n, v] of Object.entries(oud)) { if (n === "_aan") continue; const veld = form.elements[n]; if (veld && !(veld instanceof RadioNodeList) && !veld.value && v) veld.value = v; }
+    for (const x of oud._aan || []) { const [n, w] = x.split("\u0001"); $$("input[type=checkbox], input[type=radio]", form).filter(i => (i.name || i.id) === n).forEach(i => { if (i.value === w && !i.checked) { i.checked = true; i.dispatchEvent(new Event("change", { bubbles: true })); } }); }
   } catch { /* geen concept */ }
-  form.addEventListener("input", () => {
+  const bewaar = () => {
     const d = {}; $$(CONCEPT_VELDEN, form).forEach(v => { if (v.name && v.name !== "website" && v.value && v.type !== "hidden") d[v.name] = v.value; });
+    const aan = $$("input[type=checkbox]:checked, input[type=radio]:checked", form).filter(i => (i.name || i.id) && !/akkoord|toestemming/.test(i.name || i.id)).map(i => (i.name || i.id) + "\u0001" + i.value);
+    if (aan.length) d._aan = aan;
     opslag.sZet(k, JSON.stringify(d)); form.dataset.vuil = Object.keys(d).length ? "1" : "";
-  });
+  };
+  form.addEventListener("input", bewaar); form.addEventListener("change", bewaar);
   return () => { opslag.sWeg(k); form.dataset.vuil = ""; };
 }
 addEventListener("beforeunload", e => { if ($("form[data-vuil='1']")) { e.preventDefault(); e.returnValue = ""; } });
@@ -385,7 +389,7 @@ function toon(el, tekst, isFout) {
 const pagina = {};
 
 pagina.home = async () => {
-  const [kaart, nieuws, succes, vragen, moties, amend, ag, petities, bewijs, tel] = await Promise.all([laad("kaart"), soort("nieuws"), soort("succes"), soort("raadsvraag"), soort("motie"), soort("amendement"), agenda(), soort("petitie"), laad("bewijs"), tellers()]);
+  const [kaart, nieuws, succes, vragen, moties, amend, ag, petities, bewijs, tel] = await Promise.all([laad("kaart"), soort("nieuws"), soort("succes"), soort("raadsvraag"), soort("motie"), soort("amendement"), agenda(), soort("petitie"), laad("bewijs"), snelTellers()]);
   const ditJaar = succes.filter(s => s.datum.startsWith(String(new Date().getFullYear()))).length;
   const sindsKort = new Date(Date.now() - 14 * 864e5).toISOString().slice(0, 10);
   const recent = succes.filter(s => s.datum.startsWith(String(new Date().getFullYear())) && s.datum >= sindsKort).length;
@@ -433,7 +437,7 @@ pagina.home = async () => {
           return `<li><span class="r-wie${w.length > 1 ? " twee" : ""}" aria-hidden="true">${w.length ? gezichtjes(w) : `<span class="r-plek">${plek ? silhouet(plek) : STAD}</span>`}</span>
           <div><h4>${stukLink(i, esc(i.titel))}</h4>${bijschrift(i, { soort: true, ris: false })}</div></li>`; }).join("")}</ul>
         <p><a class="meer" href="${U("raadswerk/")}">Al het raadswerk ${PIJL}</a></p>
-        ${open.length ? `<div class="teken"><h3 class="kolomkop">Teken mee</h3>${open.slice(0, smal() ? 1 : 2).map(p => `<div class="teken-item">${stukLink(p, esc(kaleTitel(p)))}${balk(handtekeningen(p, tel), p)}</div>`).join("")}</div>` : ""}
+        ${open.length ? `<div class="teken"><h3 class="kolomkop">Teken mee</h3>${open.slice(0, smal() ? 1 : 2).map(p => `<div class="teken-item">${stukLink(p, esc(kaleTitel(p)))}${balkPlek(p, tel)}</div>`).join("")}</div>` : ""}${tel ? "" : (tellersLater(open), "")}
       </div>
     </div>
   </div></section>
@@ -488,6 +492,12 @@ function tellers() {
     tellerBelofte = fetch(API + "/tellers", { signal: ctrl.signal }).then(r => r.json()).then(d => d.petities || {}).catch(() => ({}));
   }
   return tellerBelofte;
+}
+// Tellers van petities: hooguit 0,6 s wachten. Hangt de achterkant, dan staat de lijst er meteen en komen de tellers later.
+const snelTellers = () => Promise.race([tellers(), new Promise(r => setTimeout(() => r(null), 600))]);
+const balkPlek = (p, tel) => `<div class="teller-plek" data-pid="${esc(p.id)}">${balk(handtekeningen(p, tel || {}), p)}</div>`;
+function tellersLater(lijst) {
+  tellers().then(tel => lijst.forEach(p => { const el = document.querySelector(`.teller-plek[data-pid="${CSS.escape(String(p.id))}"]`); if (el) el.innerHTML = balk(handtekeningen(p, tel), p); }));
 }
 const handtekeningen = (p, tel) => (p.handtekeningen || 0) + (tel[p.titel] || 0) + (p.titelOrigineel ? tel[p.titelOrigineel] || 0 : 0);
 function balk(n, p = {}) {
@@ -558,8 +568,8 @@ async function activeerKaart(kaart, start) {
   STADSDELEN.forEach(n => {
     const b = document.createElement("button"); b.type = "button"; b.className = "sd-rij"; b.setAttribute("aria-pressed", "false");
     const mensen = FRACTIE.filter(f => f.stadsdelen.includes(n));
-    b.innerHTML = `${silhouet(n)}<span class="sd-naam">${esc(n)}</span><span class="sd-gezichten" aria-hidden="true">${gezichtjes(mensen, 3)}${mensen.length > 3 ? `<span class="meer-mensen">+${mensen.length - 3}</span>` : ""}</span>`;
-    b.setAttribute("aria-label", `${n}${mensen.length ? ", raadsleden " + mensen.map(f => f.naam).join(", ") : ""}`);
+    b.innerHTML = `${silhouet(n)}<span class="sd-naam">${esc(n)}</span><span class="sd-gezichten" aria-hidden="true">${gezichtjes(mensen, 3)}${mensen.length > 3 ? `<span class="meer-mensen" title="en nog ${mensen.length - 3} ${mensen.length - 3 === 1 ? "raadslid" : "raadsleden"}">+${mensen.length - 3}</span>` : ""}</span>`;
+    b.setAttribute("aria-label", `${n}${mensen.length ? `, ${mensen.length} ${mensen.length === 1 ? "raadslid" : "raadsleden"}: ` + mensen.map(f => f.naam).join(", ") : ""}`);
     b.addEventListener("click", () => kies(n, true)); knoppen.appendChild(b); knop[n] = b;
   });
   const [fractie, wethouders, nieuws, succes, vragen, ag] = await Promise.all([laad("fractie"), laad("wethouders"), soort("nieuws"), soort("succes"), soort("raadsvraag"), agenda()]);
@@ -870,11 +880,11 @@ pagina.raadswerk.na = async ([tab = "moties"], q) => {
 };
 
 pagina.petities = async () => {
-  const [alles, tel] = await Promise.all([soort("petitie"), tellers()]);
+  const [alles, tel] = await Promise.all([soort("petitie"), snelTellers()]);
   const open = alles.filter(isOpen), dicht = alles.filter(p => !isOpen(p));
   return paginaKop("Petities", "Hagenaars die samen iets willen veranderen. Teken mee, dan nemen wij het mee naar de raad.") +
     `<section class="wit"><div class="wrap">
-      ${open.length ? `<h2 class="maand-kop">Loopt nu</h2><ul class="stukken">${open.map(p => `<li><h3>${stukLink(p, esc(kaleTitel(p)))}</h3>${bijschrift(p, { open: true, zonderTelling: true })}${balk(handtekeningen(p, tel), p)}</li>`).join("")}</ul>` : `<p class="leeg">Er loopt nu geen petitie.</p>`}
+      ${open.length ? `<h2 class="maand-kop">Loopt nu</h2><ul class="stukken">${open.map(p => `<li><h3>${stukLink(p, esc(kaleTitel(p)))}</h3>${bijschrift(p, { open: true, zonderTelling: true })}${balkPlek(p, tel)}</li>`).join("")}</ul>${tel ? "" : (tellersLater(open), "")}` : `<p class="leeg">Er loopt nu geen petitie.</p>`}
       ${dicht.length ? `<h2 class="maand-kop">Eerder</h2><ul class="stukken">${dicht.map(p => `<li><h3>${stukLink(p, esc(kaleTitel(p)))}</h3>${bijschrift(p, { open: true })}${p.afloop ? `<p class="sam"><b>Afloop:</b> ${esc(p.afloop)}</p>` : ""}</li>`).join("")}</ul>` : ""}
     </div></section>`;
 };
@@ -1496,7 +1506,7 @@ async function zoekPagina(args, q, gevraagd = "") {
   // en vullen we de resultaten aan zodra de tekst binnen is (zoeken.na).
   // Is de volle index al onderweg (iemand raakte de zoekknop aan), dan wachten we daarop; anders eerst de titels,
   // en de tekst pas daarna, zodat de twee downloads elkaar op een trage verbinding niet in de weg zitten.
-  const vol = geladen.has("zoekindex") || !term || !!cache.zoekindex;
+  const vol = geladen.has("zoekindex") || !term;
   const [idx, nieuw] = await Promise.all([vol ? laad("zoekindex") : laad("zoektitels"), eigen()]);
   pagina.zoeken.voorlopig = !vol;
   const woorden = PLAT(term.toLowerCase()).split(/\s+/).filter(w => w.length > 1);
@@ -1550,11 +1560,34 @@ pagina.zoeken.na = () => {
   const lijst = pagina.zoeken.lijst || [], stap = 30, sleutel = lijstSleutel();
   let n = Math.max(stap, Number(opslag.sLees(sleutel)) || stap);
   const voorlopig = pagina.zoeken.voorlopig;
-  const teken = () => { $("#zoek-lijst").innerHTML = lijst.slice(0, n).join(""); $("#zoek-meer").hidden = n >= lijst.length; $("#zoek-teller").textContent = voorlopig ? `${lijst.length ? fmt.format(lijst.length) + " in de titels. " : ""}Ook in de tekst zoeken…` : lijst.length ? `${fmt.format(Math.min(n, lijst.length))} van ${fmt.format(lijst.length)}` : ""; };
+  let lijst2 = lijst;
+  // alleen aanvullen: wat er al staat, blijft staan (geen verspringen, geen nieuwe opbouw)
+  const teken = () => { const ul = $("#zoek-lijst"); if (!ul) return; ul.insertAdjacentHTML("beforeend", lijst2.slice(ul.children.length, n).join("")); const lijst = lijst2; $("#zoek-meer").hidden = n >= lijst.length; $("#zoek-teller").textContent = pagina.zoeken.voorlopig ? `${lijst.length ? fmt.format(lijst.length) + " in de titels. " : ""}Ook in de tekst zoeken…` : lijst.length ? `${fmt.format(Math.min(n, lijst.length))} van ${fmt.format(lijst.length)}` : ""; };
+  const teken2 = () => teken();
   teken();
   if (voorlopig) {
     const nr = routeNr, adres = location.href;
-    laad("zoekindex").then(() => { if (nr === routeNr && location.href === adres) { houdVast = { id: "zoek-teller", scroll: scrollY }; route(); } });
+    laad("zoekindex").then(async () => {
+      if (nr !== routeNr || location.href !== adres) return;
+      const html = await zoekPagina([], new URLSearchParams(location.search));
+      if (nr !== routeNr || location.href !== adres) return;
+      const nieuw = document.createElement("div"); nieuw.innerHTML = html;
+      // kopregel, soorten, sorteren en meldingen bijwerken; de lijst alleen aanvullen
+      const kop = $(".pagina-kop p:not(.kruimel)", nieuw), oudKop = $(".pagina-kop p:not(.kruimel)");
+      if (kop && oudKop) oudKop.textContent = kop.textContent;
+      const sectie = $("#zoek-lijst").closest(".wrap"), nieuweSectie = $("#zoek-lijst", nieuw).closest(".wrap");
+      [...sectie.children].forEach(el => { if (!["zoek2", "zoek-lijst", "zoek-meer", "zoek-teller"].includes(el.id) && !el.matches("h2.verborgen")) el.remove(); });
+      const voor = $("h2.verborgen", sectie) || $("#zoek-lijst");
+      [...nieuweSectie.children].forEach(el => { if (!["zoek2", "zoek-lijst", "zoek-meer", "zoek-teller"].includes(el.id) && !el.matches("h2.verborgen")) voor.before(el); });
+      const id = s => (s.match(/data-stuk="([^"]*)"/) || [])[1];
+      const al = [...$$("#zoek-lijst > li")].map(li => ($("a[data-stuk]", li) || {}).dataset?.stuk);
+      const rest = pagina.zoeken.lijst.filter(s => !al.includes(id(s)));
+      const bekend = new Map(pagina.zoeken.lijst.map(s => [id(s), s]));
+      const houd = al.filter(x => bekend.has(x));
+      if (houd.length !== al.length) { $("#zoek-lijst").innerHTML = ""; lijst2 = pagina.zoeken.lijst; } else lijst2 = [...houd.map(x => bekend.get(x)), ...rest];
+      pagina.zoeken.voorlopig = false;
+      teken2();
+    });
   }
   $("#zoek-meer").addEventListener("click", () => { n += stap; opslag.sZet(sleutel, n); teken(); });
   $("#zoek2").addEventListener("submit", e => { e.preventDefault(); const t = $("#zoek2-veld").value.trim(); if (t) gaNaar(U("zoeken/?q=" + encodeURIComponent(t))); });
@@ -1680,7 +1713,7 @@ history.scrollRestoration = "manual";
 // opties.houd: na het wisselen van een filter blijft de pagina op dezelfde hoogte en de focus op dat veld
 function gaNaar(url, stukId = null, opties = {}) {
   const u = new URL(url, location.href);
-  history.replaceState({ ...(history.state || {}), scroll: scrollY }, "");
+  history.replaceState({ ...(history.state || {}), scroll: scrollY, vanStuk: stukId || "" }, "");
   history.pushState({ stuk: stukId }, "", u.pathname + u.search + u.hash);
   houdVast = opties.houd ? { id: opties.houd, scroll: scrollY } : null;
   viaLink = true; route();
@@ -1742,6 +1775,15 @@ async function route() {
         else if (voorgebouwd && !(history.state && history.state.stuk)) history.replaceState({ ...(history.state || {}), stuk: stukId }, "");
       }
     } else if (p) html = await p(args, q);
+    if (html == null && voorgebouwd) {
+      // De tekst van het stuk staat al in de pagina (bouw.py). Laadt het databestand niet, dan laten we die gewoon staan,
+      // met bovenaan een kleine melding, in plaats van een foutpagina.
+      html = app.innerHTML; wat = "vooraf";
+    }
+    else if (html == null && stukId && !eersteKeer && navigator.onLine !== false && [...mislukt].some(n => n.startsWith("stuk/"))) {
+      // via een link binnen de site: de pagina zelf laden, want daar staat de tekst al in
+      location.reload(); return;
+    }
     if (html == null && mislukt.size) { html = paginaKop(esc(titel || (navigator.onLine === false ? "Even geen verbinding" : "Er ging iets mis")), "") + foutBalk(); wat = "fout"; }
     else if (html == null && !eersteKeer) {
       // De app kent dit adres niet (bijvoorbeeld een link zonder data-stuk, of een link in de tekst van een bericht).
@@ -1771,7 +1813,11 @@ async function route() {
   telBezoek(location.pathname.slice(BASE.length - 1));
   const terug = !viaLink && history.state && history.state.scroll;
   if (houdVast && document.getElementById(houdVast.id)) { window.scrollTo({ top: houdVast.scroll, behavior: "instant" }); document.getElementById(houdVast.id).focus({ preventScroll: true }); }
-  else if (terug) window.scrollTo({ top: Number(terug), behavior: "instant" });
+  else if (terug) {
+    window.scrollTo({ top: Number(terug), behavior: "instant" });
+    const van = history.state.vanStuk, l = van && $(`#app a[data-stuk="${CSS.escape(van)}"]`);
+    if (l) l.focus({ preventScroll: true });
+  }
   else if (location.hash.length > 1 && document.getElementById(location.hash.slice(1))) document.getElementById(location.hash.slice(1)).scrollIntoView();
   else if (!eersteKeer) {
     window.scrollTo({ top: 0, behavior: "instant" });
@@ -1801,7 +1847,11 @@ function sluitAlles() {
   if ($("#lade") && !$("#lade").hidden) sluitLade(false);
 }
 function koppelKop() {
-  $$(".uitklap-paneel").forEach(p => p.hidden = true);
+  HVDH.klaar = true;
+  const vroegLade = $("#lade") && !$("#lade").hidden, vroegZoek = $("#zoekbalk") && !$("#zoekbalk").hidden;
+  $$(".uitklap-paneel").forEach(p => { if (!(HVDH.vroegOpen && p.id === HVDH.vroegOpen)) p.hidden = true; });
+  if (vroegLade) setTimeout(openLade); // was al open getikt voordat app.js er was
+  if (vroegZoek) $("#zoek-knop").setAttribute("aria-expanded", "true");
   $$(".uitklap button").forEach(b => b.addEventListener("click", e => {
     e.stopPropagation();
     const open = b.getAttribute("aria-expanded") === "true";
@@ -1815,7 +1865,7 @@ function koppelKop() {
     const b = $("button", li); b.setAttribute("aria-expanded", "false"); $("#" + b.getAttribute("aria-controls")).hidden = true;
   }));
   // de zoekindex is groot: we halen hem alvast op zodra iemand naar zoeken gaat, zodat de resultaten er sneller staan
-  const voorladen = () => laad("zoekindex");
+  const voorladen = () => laad("zoektitels");
   ["pointerenter", "focus", "touchstart"].forEach(ev => $("#zoek-knop").addEventListener(ev, voorladen, { once: true, passive: true }));
   $("#zoek-knop").addEventListener("click", () => {
     const z = $("#zoekbalk"); z.hidden = !z.hidden; $("#zoek-knop").setAttribute("aria-expanded", String(!z.hidden));
