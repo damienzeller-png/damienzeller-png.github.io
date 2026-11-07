@@ -294,7 +294,14 @@ function inloggen(boodschap) {
     e.preventDefault();
     // eerst zelf kijken of alles is ingevuld, dan pas naar de achterkant
     const leeg = !tussen ? [["naam", "Vul uw inlognaam in."], ["ww", "Vul uw wachtwoord in."]].find(([id]) => !$("#" + id).value.trim()) : (!/^\d{6}$/.test($("#code2").value.trim()) ? ["code2", "Vul de zes cijfers uit uw app in."] : null);
-    if (leeg) { melding($("#m-ww"), leeg[1], true); $("#" + leeg[0]).focus(); return; }
+    // fout bij het veld zelf, zoals op de formulieren van de site
+    ["naam", "ww", "code2"].forEach(id => { const v = $("#" + id); v.removeAttribute("aria-invalid"); v.removeAttribute("aria-describedby"); const f = $("#" + id + "-fout"); if (f) f.remove(); });
+    $("#m-ww").hidden = true;
+    if (leeg) {
+      const v = $("#" + leeg[0]), f = document.createElement("p");
+      f.className = "fout-tekst"; f.id = leeg[0] + "-fout"; f.textContent = leeg[1];
+      v.closest(".veld").appendChild(f); v.setAttribute("aria-invalid", "true"); v.setAttribute("aria-describedby", f.id); v.focus(); return;
+    }
     const klaar = bezig(e.target.querySelector("button[type=submit]"), "Bezig…");
     try {
       const d = tussen ? await vraag("/login/2fa", { method: "POST", body: { tussen, code: $("#code2").value.trim() } })

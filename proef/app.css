@@ -185,7 +185,7 @@ section{padding-block:80px}
 .log-item h3 a::after{content:"";position:absolute;inset:0}
 .log-item:hover h3 a{text-decoration:underline;text-decoration-color:var(--hart);text-decoration-thickness:2px}
 .log-item .sam{color:var(--zacht);font-size:.98rem}
-.log-beeld{display:block;aspect-ratio:3/2;width:100%;border-radius:14px;object-fit:cover;background:var(--munt)}
+.log-beeld{display:block;aspect-ratio:3/2;width:100%;border-radius:14px;object-fit:cover;object-position:50% 25%;background:var(--munt)}
 .log-item.eerste{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);padding:28px 0 32px}
 .log-item.eerste h3{font-size:clamp(1.9rem,3.4vw,2.7rem);line-height:1}
 .log-item.eerste .log-beeld{border-radius:22px}
@@ -838,7 +838,7 @@ li:hover .lees-meer,.lead:hover .lees-meer{text-decoration:underline}
 .voet-groep>div{display:flex;flex-direction:column}
 .voet-groep a{color:var(--ink);text-decoration:none;min-height:42px;display:inline-flex;align-items:center}
 .voet-groep a:hover{text-decoration:underline;text-decoration-color:var(--hart)}
-@media (min-width:761px){.voet-groep>summary{pointer-events:none}}
+@media (min-width:761px){.voet-groep>summary{pointer-events:none;min-height:44px;display:flex;align-items:center;margin-bottom:0}}
 @media (min-width:761px) and (max-width:860px){.voet-kolommen{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .voet-rij{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px 28px;margin-top:22px;padding-top:18px;border-top:1px solid var(--lijn)}
 .voet-rij .sociaal{margin-top:0;gap:6px}
@@ -857,7 +857,7 @@ li:hover .lees-meer,.lead:hover .lees-meer{text-decoration:underline}
   .voet-groep[open]>summary::after{transform:rotate(-135deg) translate(-2px,-1px)}
   .voet-groep>div{padding-bottom:10px}
   .voet-rij{border-top:0;margin-top:16px;padding-top:0}
-  .voet-rij .sociaal{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:4px;width:100%}
+  .voet-rij .sociaal{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:4px;width:100%}
   .voet-rij .sociaal a{width:auto}
   .vertaal{width:100%;justify-content:space-between}
   .voet-onder{font-size:.85rem}

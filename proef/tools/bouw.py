@@ -171,6 +171,7 @@ def stuk_html(d):
         delen.append(f'<span class="status">{e(d["status"])}</span>')
     delen.append(f'<time datetime="{e(d["datum"])}">{datum_nl(d["datum"])}</time>')
     titel = re.sub(r"(?i)^petitie:\s*", "", d["titel"]) if d["soort"] == "petitie" else d["titel"]
+    titel = titel[:1].upper() + titel[1:]
     beeld = f'<span class="poster-lijst artikel-beeld"><img src="{e(d["beeld"])}" alt="" decoding="async"></span>' if d.get("beeld") else ""
     tekst = d.get("html") or f"<p>{e(d.get('samenvatting'))}</p>"
     return (kop_html(e(titel), kruimel, f'<p class="bijschrift">{"".join(delen)}</p>') +

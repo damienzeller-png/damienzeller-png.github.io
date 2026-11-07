@@ -410,7 +410,7 @@ pagina.home = async () => {
       ${HART.replace('class="sil"', 'class="hart"')}
       <div class="film"><video id="held-video" muted loop playsinline preload="none" poster="${U(smal() ? "beeld/groep-film-800.webp" : "beeld/groep-film.webp")}" aria-label="Campagnefilm van Hart voor Den Haag, zonder geluid"><source src="${VIDEO}" type="video/mp4"></video>
       <button class="speel" type="button" id="speel"><svg viewBox="0 0 16 16" aria-hidden="true"></svg><span>Speel film af</span></button></div>
-      <figcaption><span>De fractie van Hart voor Den Haag. De film speelt zonder geluid.</span><a class="raadslid-link" href="${U("fractie/")}">Wie is uw raadslid?</a></figcaption>
+      <figcaption><span>Hart voor Den Haag in de stad. De film speelt zonder geluid.</span><a class="raadslid-link" href="${U("fractie/")}">Wie is uw raadslid?</a></figcaption>
     </figure>
   </div></section>
 
@@ -585,7 +585,7 @@ async function activeerKaart(kaart, start) {
     ].slice(0, 6);
     paneel.innerHTML = `
       <div><h3>${esc(n)}</h3><p class="feit"><b>${fmt.format(s.inw)}</b> inwoners in ${s.wijken.length} wijken (CBS, 2023)</p></div>
-      <div><p class="tussenkop">Uw raadsleden</p>${mensen.length ? `<ul class="mensen">${mensen.map(f => `<li>${f.beeld ? `<img src="${esc(f.beeld)}" alt="">` : `<span class="leeg-foto" aria-hidden="true">${initialen(f.naam)}</span>`}<div><a href="${U("fractie/" + slug(f.naam) + "/")}"><b>${esc(f.naam)}</b></a><span>${esc(f.portefeuilles.slice(0, 3).join(", "))}</span></div></li>`).join("")}</ul>` : `<p class="leeg">Nog geen raadslid gekoppeld.</p>`}
+      <div><p class="tussenkop">${mensen.length === 1 ? "Uw raadslid" : "Uw raadsleden"}</p>${mensen.length ? `<ul class="mensen">${mensen.map(f => `<li>${f.beeld ? `<img src="${esc(f.beeld)}" alt="">` : `<span class="leeg-foto" aria-hidden="true">${initialen(f.naam)}</span>`}<div><a href="${U("fractie/" + slug(f.naam) + "/")}"><b>${esc(f.naam)}</b></a><span>${esc(f.portefeuilles.slice(0, 3).join(", "))}</span></div></li>`).join("")}</ul>` : `<p class="leeg">Nog geen raadslid gekoppeld.</p>`}
         ${weth ? `<p class="wijken" style="margin-top:12px">Stadsdeelwethouder: <a href="${U("wethouders/")}">${esc(weth.naam)}</a></p>` : ""}</div>
       <div><p class="tussenkop">Wat we hier doen</p>${items.length ? `<ul class="berichten">${items.map(x => `<li>${x.soort === "agenda" ? `<a href="${U("agenda/?stadsdeel=" + encodeURIComponent(n))}">${esc(x.titel)}</a>` : stukLink(x, esc(x.titel))}<small>${esc(SOORT[x.soort].naam)}, ${datum(x.datum)}</small></li>`).join("")}</ul>` : `<p class="leeg">Nog geen berichten uit ${esc(n)}.</p>`}</div>
       <p class="wijken"><b>Wijken:</b> ${s.wijken.map(esc).join(", ")}</p>
@@ -663,6 +663,7 @@ function koppelFilter(pad, f, herteken) {
   let wacht;
   $("#f-zoek").addEventListener("input", () => {
     clearTimeout(wacht);
+    const tel = $("#teller"); if (tel) tel.textContent = "Zoeken…";
     wacht = setTimeout(() => { f.zoek = $("#f-zoek").value.trim(); history.replaceState(history.state, "", filterHref(pad, f)); herteken(); }, 250);
   });
 }
@@ -701,7 +702,7 @@ async function meerLadenStroom(lijst, st, past, maak, stap, filterActief, leeg, 
     const getoond = Math.min(n, zicht.length);
     const tot = st.klaar ? zicht.length : totaal ? await totaal() : null;
     if (doel.dataset.beurt !== beurt) return;
-    if (teller) teller.textContent = tot != null ? `${fmt.format(getoond)} van ${fmt.format(Math.max(tot, getoond))}` : filterActief ? `${fmt.format(getoond)} getoond, met Meer laden zoekt u verder terug` : `${fmt.format(getoond)} van ${fmt.format(st.totaal)}`;
+    if (teller) teller.textContent = mislukt.size ? `${fmt.format(getoond)} getoond` : tot != null ? `${fmt.format(getoond)} van ${fmt.format(Math.max(tot, getoond))}` : filterActief ? `${fmt.format(getoond)} getoond, met Meer laden zoekt u verder terug` : `${fmt.format(getoond)} van ${fmt.format(st.totaal)}`;
     if (knop) knop.hidden = st.klaar && n >= zicht.length;
     if (boven) boven.hidden = getoond <= stap;
   };
@@ -846,7 +847,7 @@ pagina.raadswerk = async ([tab = "moties"], q) => {
       <p class="leeg" id="bron" style="margin-top:22px"></p>
     </div></section>`;
 };
-pagina.raadswerk.titel = ([tab]) => TABS[tab] ? TABS[tab].titel : "Raadswerk";
+pagina.raadswerk.titel = ([tab]) => (TABS[tab] || TABS.moties).titel;
 pagina.raadswerk.na = async ([tab = "moties"], q) => {
   const tabNaam = TABS[tab] ? tab : "moties", t = TABS[tabNaam];
   const fl = leesFilter(q);
@@ -1007,7 +1008,7 @@ pagina.agenda = async ([stap], q) => {
     const id = q.get("id") || "";
     const a = ag.find(x => String(x.id) === id);
     if (!a) return paginaKop("Aanmelden", id ? "Deze afspraak staat niet (meer) op de agenda. Dit zijn de eerstvolgende:" : "Kies de afspraak waarvoor u zich wilt aanmelden.", kruimels(["agenda/", "Agenda"], ["", "Aanmelden"])) +
-      `<section><div class="wrap">${ag.length ? `<ol class="agenda-lijst">${ag.slice(0, 5).map(agendaItem).join("")}</ol>` : `<p class="leeg">Er staat nu niets op de agenda.</p>`}<p style="margin-top:22px"><a class="meer" href="${U("agenda/")}">Hele agenda ${PIJL}</a></p></div></section>`;
+      `<section><div class="wrap"><h2 class="verborgen">Eerstvolgende afspraken</h2>${ag.length ? `<ol class="agenda-lijst">${ag.slice(0, 5).map(agendaItem).join("")}</ol>` : `<p class="leeg">Er staat nu niets op de agenda.</p>`}<p style="margin-top:22px"><a class="meer" href="${U("agenda/")}">Hele agenda ${PIJL}</a></p></div></section>`;
     const x = dt(a.datum);
     return paginaKop("Aanmelden", esc(a.titel), kruimels(["agenda/", "Agenda"], ["", "Aanmelden"])) + `
     <section><div class="wrap formulier-raster">
@@ -1377,7 +1378,9 @@ pagina.lid.na = (args, q) => {
 };
 
 // doneren: het bedrag mag met een komma (12,50) of een punt; boven € 250 vragen we om een bevestiging
-const leesBedrag = v => { const t = String(v || "").trim().replace(/[€\s]/g, ""); if (!/^\d{1,5}([.,]\d{1,2})?$/.test(t)) return NaN; return Math.round(Number(t.replace(",", ".")) * 100) / 100; };
+const leesBedrag = v => { let t = String(v || "").trim().replace(/[€\s]/g, "").replace(/[.,]-$/, "");
+  // Nederlandse schrijfwijze: 1.500 of 1.500,00 betekent vijftienhonderd
+  if (/^\d{1,3}(\.\d{3})+(,\d{1,2})?$/.test(t)) t = t.replace(/\./g, ""); if (!/^\d{1,5}([.,]\d{1,2})?$/.test(t)) return NaN; return Math.round(Number(t.replace(",", ".")) * 100) / 100; };
 pagina.doneren = async () => paginaKop("Doneren", "Geen lid, wel steunen? Elke bijdrage gaat naar acties in de wijk, het ombudsteam en campagnemateriaal.") + `
   <section><div class="wrap formulier-raster">
     <form class="formulier" id="form" novalidate>
