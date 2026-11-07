@@ -1,0 +1,32 @@
+name: Pages-build herstellen
+# Komen twee commits vlak na elkaar binnen (bijvoorbeeld een wijziging en de robot), dan meldt GitHub Pages soms
+# "errored" en blijft de site op de oude stand. Deze taak kijkt elk half uur en na elke robotronde naar de laatste
+# build en start bij "errored" één nieuwe build. Geen Claude nodig.
+on:
+  schedule:
+    - cron: "12,42 * * * *"
+  workflow_run:
+    workflows: ["Proefsite partij bijwerken", "Proefsite eigen berichten", "Nieuws bijwerken"]
+    types: [completed]
+  workflow_dispatch: {}
+permissions:
+  pages: write
+  contents: read
+concurrency:
+  group: pages-herstel
+  cancel-in-progress: false
+jobs:
+  controle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Laatste build bekijken
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          sleep 60
+          status=$(gh api "repos/$GITHUB_REPOSITORY/pages/builds/latest" --jq .status 2>/dev/null || echo onbekend)
+          echo "Laatste build: $status"
+          if [ "$status" = "errored" ]; then
+            gh api -X POST "repos/$GITHUB_REPOSITORY/pages/builds" --input - <<< '{}' && echo "Nieuwe build gestart"
+          fi
