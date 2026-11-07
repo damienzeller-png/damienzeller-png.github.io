@@ -203,7 +203,7 @@ def vooraf_lijst(pad, titel, beschrijving, n=20):
     items = sorted(lees(bestand, []) or [], key=lambda d: d.get("datum", ""), reverse=True)[:n]
     if not items:
         return ""
-    rijen = "".join(f'<li class="log-item zonder-beeld"><div class="log-tekst"><h3><a href="{BASE}{e(d.get("p") or "s/" + d["id"] + "/")}">{e(d["titel"])}</a></h3>'
+    rijen = "".join(f'<li class="log-item zonder-beeld"><div class="log-tekst"><h3><a href="{BASE}{e(d.get("p") or "s/" + d["id"] + "/")}" data-stuk="{e(d["id"])}">{e(d["titel"])}</a></h3>'
                     f'{bijschrift_html(d)}{f"<p class=\"sam\">{e(kort(d.get('samenvatting'), 220))}</p>" if d.get("samenvatting") else ""}</div></li>' for d in items)
     return (kop_html(e(titel), "", f"<p>{e(beschrijving)}</p>") +
             f'<section class="wit"><div class="wrap"><h2 class="verborgen">Berichten</h2><ol class="log vooraf">{rijen}</ol>'
@@ -235,7 +235,7 @@ def vooraf_voorpagina():
             f'<div class="knoppen"><a class="knop geel" href="{BASE}lid/">Word lid vanaf € 12,50 per jaar</a><a class="knop lijn" href="{BASE}contact/melding/">Meld een probleem</a></div></div></div></div></section>')
     ag = "".join(f'<li><h3>{e(a["titel"])}</h3><p class="bijschrift"><time datetime="{e(a["datum"])}">{datum_nl(a["datum"])}</time>'
                  f'{f"<span>{e(a.get('tijd'))} uur</span>" if a.get("tijd") else ""}<span>{e(a.get("plek", ""))}</span></p></li>' for a in agenda)
-    rijen = "".join(f'<li class="log-item zonder-beeld"><div class="log-tekst"><h3><a href="{BASE}{e(d.get("p") or "s/" + d["id"] + "/")}">{e(d["titel"])}</a></h3>{bijschrift_html(d)}</div></li>' for d in nieuws)
+    rijen = "".join(f'<li class="log-item zonder-beeld"><div class="log-tekst"><h3><a href="{BASE}{e(d.get("p") or "s/" + d["id"] + "/")}" data-stuk="{e(d["id"])}">{e(d["titel"])}</a></h3>{bijschrift_html(d)}</div></li>' for d in nieuws)
     return (held + (f'<section class="binnenkort"><div class="wrap"><h2>Binnenkort</h2><ul class="stukken">{ag}</ul></div></section>' if ag else "") +
             f'<section><div class="wrap"><h2>De afgelopen weken</h2><ol class="log vooraf">{rijen}</ol></div></section>')
 

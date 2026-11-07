@@ -1736,9 +1736,15 @@ async function route() {
       if (i && SOORT[i.soort]) {
         sectie = SECTIE_VAN_SOORT[i.soort] || naam; menuPad = U(SOORT[i.soort].lijst);
         const doel = U(stukPad(i)); if (location.pathname !== doel && !voorgebouwd) history.replaceState({ ...(history.state || {}), stuk: stukId }, "", doel + location.hash);
+        else if (voorgebouwd && !(history.state && history.state.stuk)) history.replaceState({ ...(history.state || {}), stuk: stukId }, "");
       }
     } else if (p) html = await p(args, q);
     if (html == null && mislukt.size) { html = paginaKop(esc(titel || (navigator.onLine === false ? "Even geen verbinding" : "Er ging iets mis")), "") + foutBalk(); wat = "fout"; }
+    else if (html == null && !eersteKeer) {
+      // De app kent dit adres niet (bijvoorbeeld een link zonder data-stuk, of een link in de tekst van een bericht).
+      // Dan laden we de pagina zelf: bestaat het stuk, dan staat het daar; anders toont die lading de echte 404.
+      location.reload(); return;
+    }
     else if (html == null) { html = await pagina.nietgevonden(); wat = "niet"; sectie = ""; document.title = "Niet gevonden | Hart voor Den Haag (proef)"; }
     else if (wat === "pagina" && titel) document.title = titel + " | Hart voor Den Haag (proef)";
     else if (wat === "pagina" && naam === "home") document.title = "Hart voor Den Haag (proef)";

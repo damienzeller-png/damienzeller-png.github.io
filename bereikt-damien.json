@@ -1,5 +1,5 @@
 {
- "uitleg": "Resultaten die terug te voeren zijn op mijn eigen vragen en voorstellen in de raad. Alleen wat een openbare bron bevestigt, met die bron erbij.",
+ "uitleg": "Resultaten van mijn eigen vragen en voorstellen in de raad, en van dossiers die ik voor de fractie trok. Bij elk punt staat de bron.",
  "punten": [
   {
    "jaar": 2026,
@@ -7,6 +7,20 @@
    "zin": "Na mijn schriftelijke vragen staat het college open voor persoonlijke wensen van Hagenaars met dementie en roept het de stad op mee te doen.",
    "onderwerp": "zorg",
    "bron": "https://www.hartvoordenhaag.nl/gemeente-zet-de-deur-open-voor-wensen-van-hagenaars-met-dementie/"
+  },
+  {
+   "jaar": 2024,
+   "kop": "Veiliger losloopgebied en hondenstrandje in Ypenburg",
+   "zin": "Na vragen van de fractie over mijn dossier zegde het college hekken toe bij de losloopgebieden in Ypenburg. Ook onderzoekt het een hondenstrandje aan de Blauwe Loper.",
+   "onderwerp": "Leidschenveen-Ypenburg",
+   "bron": "https://www.hartvoordenhaag.nl/succes_post/hart-voor-den-haag-blij-met-toezegging-hondenstrandje-en-veiligere-losloopgebieden-in-zicht/"
+  },
+  {
+   "jaar": 2024,
+   "kop": "Ov-coaches voor jongeren met autisme",
+   "zin": "Na vragen van de fractie over mijn dossier tekenden gemeente, HTM en scholen een intentieverklaring om jongeren met autisme te helpen met het ov.",
+   "onderwerp": "openbaar vervoer",
+   "bron": "https://www.hartvoordenhaag.nl/succes_post/hart-voor-den-haag-zorgt-voor-ov-coaches-voor-jongeren-met-autisme/"
   },
   {
    "jaar": 2019,
@@ -21,6 +35,13 @@
    "zin": "Na mijn raadsvragen startte Bibliotheek Den Haag in 2019 een pilot met voorleeshonden voor kinderen die moeite hebben met hardop lezen.",
    "onderwerp": "onderwijs",
    "bron": "https://www.hartvoordenhaag.nl/succes_post/den-haag-start-pilot-met-voorleeshonden-na-raadsvragen-hart-voor-den-haag-groep-de-mos/"
+  },
+  {
+   "jaar": 2019,
+   "kop": "Den Haag werd partnergemeente van de Week van Respect",
+   "zin": "Na mijn schriftelijke vragen werd Den Haag in 2019 officieel partnergemeente van de Week van Respect.",
+   "onderwerp": "jeugd",
+   "bron": "https://www.hartvoordenhaag.nl/7-november-2019-raad-afscheid-vertrekkend-raadslid-damien-zeller-2/"
   }
  ]
 }
