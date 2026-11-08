@@ -621,6 +621,7 @@ gemeente-den-haag-wil-een-hufterboete-invoeren-tegen-afval-op-straat/index.html
 gemeente-den-haag-wil-wijkbibliotheken-eerder-open/index.html
 gemeente-den-haag-zwabbert-bij-organisatie-provinciale-staten-verkiezingen/index.html
 gemeente-doet-niets-aan-horrorcontainer/index.html
+gemeente-gaat-invloed-van-salafisme-op-haags-jongerenwerk-onderzoeken/index.html
 gemeente-geeft-ado-gratis-weg/index.html
 gemeente-komt-in-beweging-voor-koude-huizen-in-transvaal/index.html
 gemeente-laat-bewoners-leidschenveen-in-de-stank-zitten/index.html
@@ -719,7 +720,6 @@ groep-de-mos-en-christenunie-sgp-treuren-om-afschaffen-scheveningen-vissersdorp-
 groep-de-mos-en-d66-brengen-versoepeling-beleid-parkeerplaatsterrassen-stap-dichterbij/index.html
 groep-de-mos-en-een-groep-ouderen-zorgen-voor-opening-nieuwe-huiskamer-voor-50plussers-in-moerwijk/index.html
 groep-de-mos-en-groenlinks-roepen-wethouder-van-engelshoven-tot-de-orde/index.html
-groep-de-mos-en-het-cda-willen-ben-oude-nijhuis-in-den-haag/index.html
 groep-de-mos-en-pvda-clubhuis-aan-zwembad-zuiderpark-versterkt-zwemvereniging-cwp/index.html
 groep-de-mos-en-pvda-zetten-buurttuin-moerwijk-op-het-bord/index.html
 groep-de-mos-en-pvv-eisen-excuses-van-wethouder-revis/index.html
@@ -1322,7 +1322,6 @@ hart-voor-den-haag-geef-zorgpersoneel-politieagenten-en-leraren-voorrang-op-woni
 hart-voor-den-haag-geeft-50-sponsorloop-mont-ventoux-aan-bribos-verwentasjes-voor-kankerpatienten/index.html
 hart-voor-den-haag-geen-asielopvang-in-soza-gebouw/index.html
 hart-voor-den-haag-geen-enkel-haags-meisje-mag-genitaal-verminkt-worden/index.html
-hart-voor-den-haag-geen-extra-zorgwoningen-op-bedrijventerrein-zichtenburg/index.html
 hart-voor-den-haag-geen-huurverhogingen-tijdens-coronacrisis/index.html
 hart-voor-den-haag-geen-mupi-op-terras/index.html
 hart-voor-den-haag-geen-mystery-guests-handhaving-coronaregels/index.html
@@ -1397,6 +1396,7 @@ hart-voor-den-haag-groep-de-mos-bezorgd-over-spoedeisende-hulp-regio-haaglanden-
 hart-voor-den-haag-groep-de-mos-bezorgd-over-stijging-aantal-files-en-vertragingen/index.html
 hart-voor-den-haag-groep-de-mos-bij-alle-hoogbouw-een-hoed-pet-of-kroon/index.html
 hart-voor-den-haag-groep-de-mos-binnenhof-op-werelderfgoedlijst/index.html
+hart-voor-den-haag-groep-de-mos-blij-dat-erfpacht-kan-worden-afgekocht/index.html
 hart-voor-den-haag-groep-de-mos-blij-dat-erfpacht-ook-in-de-componistenbuurt-kan-worden-afgekocht-2/index.html
 hart-voor-den-haag-groep-de-mos-blij-dat-erfpacht-ook-in-de-componistenbuurt-kan-worden-afgekocht/index.html
 hart-voor-den-haag-groep-de-mos-blij-dat-erfpacht-ook-in-delen-van-escamp-kan-worden-afgekocht/index.html
@@ -1414,6 +1414,7 @@ hart-voor-den-haag-groep-de-mos-blij-met-meer-extra-parkeeruren-voor-visite/inde
 hart-voor-den-haag-groep-de-mos-blij-met-soepelere-sollicitatieplicht-voor-langdurig-werkloze-ouderen/index.html
 hart-voor-den-haag-groep-de-mos-blij-met-strengere-straffen-voor-dierenbeulen/index.html
 hart-voor-den-haag-groep-de-mos-blij-met-succesvolle-bijeenkomst-met-bewoners-in-segbroek/index.html
+hart-voor-den-haag-groep-de-mos-blij-met-verbeteringen-haagse-markt/index.html
 hart-voor-den-haag-groep-de-mos-blij-met-verruiming-haagse-winkeltijden/index.html
 hart-voor-den-haag-groep-de-mos-blijft-tegen-weghalen-40-parkeerplaatsen-gevers-deynootweg/index.html
 hart-voor-den-haag-groep-de-mos-cameratoezicht-en-vliegende-brigades-tegen-afvaldump-rondom-oracs/index.html
@@ -1618,6 +1619,7 @@ hart-voor-den-haag-groep-de-mos-wederom-verkeerschaos-na-vuurwerkfestival/index.
 hart-voor-den-haag-groep-de-mos-weesvoertuigen-horen-niet-thuis-in-de-vogelwijk-2/index.html
 hart-voor-den-haag-groep-de-mos-wie-nam-besluit-tot-subsidie-vluchtelingenwerk/index.html
 hart-voor-den-haag-groep-de-mos-wil-aandacht-voor-geparkeerde-motorfietsen-op-scheveningen-2/index.html
+hart-voor-den-haag-groep-de-mos-wil-aandacht-voor-volle-poepbakken-statenkwartier/index.html
 hart-voor-den-haag-groep-de-mos-wil-aanpak-van-donker-parkeerterrein-recreatiegebied-madestein/index.html
 hart-voor-den-haag-groep-de-mos-wil-actieplan-tegen-laaggeletterdheid/index.html
 hart-voor-den-haag-groep-de-mos-wil-ado-fanshop-bij-rotterdam-the-hague-airport/index.html
@@ -2455,6 +2457,7 @@ hart-voor-den-haag-veiligheidsgevoel-in-haagse-hout-onder-druk-bewoners-ervaren-
 hart-voor-den-haag-verbaasd-over-htm-boerka-instructie/index.html
 hart-voor-den-haag-verbaast-zich-over-sluiting-zwembaden/index.html
 hart-voor-den-haag-verbeter-de-leefbaarheid-in-leidschenveen-ypenburg-jeugdhonk-voor-pubers/index.html
+hart-voor-den-haag-verbeter-eindelijk-verkeersveiligheid-rondom-paul-krugerlaan/index.html
 hart-voor-den-haag-verbeter-onderhoud-in-leidschenveen-ypenburg/index.html
 hart-voor-den-haag-verbijsterd-over-mishandeling-leidschenveen-en-wil-maatregelen/index.html
 hart-voor-den-haag-verbind-leidschenveen-en-ypenburg-met-park-en-toekomstvisie/index.html
@@ -5109,6 +5112,7 @@ pak-wateroverlast-aan-bij-turfmarkt/index.html
 papiercontainers-worden-niet-geleegd/index.html
 parijsplein-vergroenen-en-gezelliger-maken/index.html
 parkeerbeleid-ambassades-faalt/index.html
+parkeergebieden-duindorp-en-scheveningen-worden-samengevoegd/index.html
 parkeeronderzoek-in-laak/index.html
 parkeeroverlast-leidt-tot-levensgevaarlijke-situaties/index.html
 parkeerproblematiek-houtwijk-wordt-genegeerd/index.html
@@ -5338,6 +5342,7 @@ raadsvraag/10-november-2022-schriftelijke-vragen-asielopvang-kijkduin/index.html
 raadsvraag/10-november-2022-schriftelijke-vragen-nationaal-schoolontbijt/index.html
 raadsvraag/10-oktober-2018-schriftelijke-vragen-cirque-du-soleil-voor-heel-den-haag/index.html
 raadsvraag/10-oktober-2018-schriftelijke-vragen-ondersteun-dojo-kamakura/index.html
+raadsvraag/10-oktober-2018-vervolgvragen-johan-cruyff-ris300327/index.html
 raadsvraag/10-oktober-2019-schriftelijke-vragen-ouderen-buurthuis-wings/index.html
 raadsvraag/10-oktober-2022-schriftelijke-vragen-gemeenten-moeten-voedselbank-helpen/index.html
 raadsvraag/10-oktober-schriftelijke-vragen-pak-de-regie-tegen-toenemend-voetbalgeweld/index.html
@@ -5387,7 +5392,6 @@ raadsvraag/11-maart-2015-schriftelijke-vragen-parkeertarieven-in-den-haag/index.
 raadsvraag/11-maart-2019-schriftelijke-vragen-antisemitisme-in-onderwijs/index.html
 raadsvraag/11-maart-2019-schriftelijke-vragen-cameratoezicht-en-vliegende-brigades-tegen-afvaldump-rondom-oracs/index.html
 raadsvraag/11-maart-schriftelijke-vragen-vergunningentraject-ada-doner-erasmusweg/index.html
-raadsvraag/11-mei-2016-schriftelijke-vragen-bocht-rigolettostraat/index.html
 raadsvraag/11-mei-2016-schriftelijke-vragen-lekke-waterleiding-spui/index.html
 raadsvraag/11-mei-2016-schriftelijke-vragen-overlast-scheveningse-boulevard/index.html
 raadsvraag/11-mei-2017-schriftelijke-vragen-geluidsoverlast-tramlijn-12/index.html
@@ -9627,6 +9631,7 @@ s/n106439/index.html
 s/n106441/index.html
 s/n106443/index.html
 s/n106445/index.html
+s/n106446/index.html
 s/n106448/index.html
 s/n106450/index.html
 s/n106452/index.html
@@ -9730,7 +9735,6 @@ s/n106599/index.html
 s/n106601/index.html
 s/n106602/index.html
 s/n106603/index.html
-s/n106605/index.html
 s/n106606/index.html
 s/n106609/index.html
 s/n106610/index.html
@@ -10006,6 +10010,7 @@ s/n107058/index.html
 s/n107060/index.html
 s/n107061/index.html
 s/n107063/index.html
+s/n107065/index.html
 s/n107067/index.html
 s/n107071/index.html
 s/n107074/index.html
@@ -10250,6 +10255,10 @@ s/n107435/index.html
 s/n107436/index.html
 s/n107438/index.html
 s/n107440/index.html
+s/n107442/index.html
+s/n107443/index.html
+s/n107444/index.html
+s/n107445/index.html
 s/n107446/index.html
 s/n107448/index.html
 s/n107449/index.html
@@ -10684,7 +10693,6 @@ s/n108025/index.html
 s/n108026/index.html
 s/n108027/index.html
 s/n108028/index.html
-s/n108029/index.html
 s/n108031/index.html
 s/n108033/index.html
 s/n108035/index.html
@@ -10792,6 +10800,7 @@ s/n108191/index.html
 s/n108192/index.html
 s/n108193/index.html
 s/n108195/index.html
+s/n108196/index.html
 s/n108197/index.html
 s/n108198/index.html
 s/n108200/index.html
@@ -12887,7 +12896,6 @@ s/r111351/index.html
 s/r111352/index.html
 s/r111353/index.html
 s/r111354/index.html
-s/r111355/index.html
 s/r111356/index.html
 s/r111357/index.html
 s/r111358/index.html
@@ -13443,6 +13451,7 @@ s/r111910/index.html
 s/r111911/index.html
 s/r111912/index.html
 s/r111913/index.html
+s/r111914/index.html
 s/r111915/index.html
 s/r111916/index.html
 s/r111917/index.html
@@ -15789,6 +15798,7 @@ zorgen-over-terroristische-dreiging/index.html
 zorgen-over-toename-verwarde-mensen-op-straat/index.html
 zorgen-over-verkeersveiligheid-duindorp/index.html
 zorgen-over-voortbestaan-de-mallemok-op-scheveningen/index.html
+zorgen-vanuit-de-walnootstraat/index.html
 zorgen-ypenburg-weggehoond-in-haagse-gemeenteraad/index.html
 zorgkorporaal-voor-doorverwijzing-juiste-zorg/index.html
 zuiderparktheater-gered/index.html
