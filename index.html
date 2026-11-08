@@ -576,7 +576,17 @@ function wiBereikte(d) {
   }
   document.getElementById("bereikte").hidden = false;
 }
-fetch("bereikt-damien.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : null).catch(() => null).then(wiBereikte);
+/* sinds 8 november 2026: punten die Damiën in Telegram goedkeurde komen via het doorgeefluik erbij */
+Promise.all([
+  fetch("bereikt-damien.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : null).catch(() => null),
+  fetch(API + "/site").then(r => r.ok ? r.json() : null).catch(() => null)
+]).then(([d, s]) => {
+  d = d || { punten: [] };
+  const extra = (s && s.bereikt && Array.isArray(s.bereikt.punten)) ? s.bereikt.punten : [];
+  const koppen = new Set((d.punten || []).map(p => p.kop));
+  for (const p of extra) if (p && p.kop && p.zin && !koppen.has(p.kop) && (!p.bron || /^https:\/\//.test(p.bron))) { d.punten.push(p); koppen.add(p.kop); }
+  wiBereikte(d);
+});
 
 function agenda(lijst) {
   const nu = new Date().toISOString().slice(0, 10);
