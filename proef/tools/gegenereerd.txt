@@ -582,6 +582,7 @@ geef-moerwijk-duidelijkheid-over-kringloopwinkel/index.html
 geef-sportclubs-als-hmsh-in-zuidwest-ruimte-om-te-groeien/index.html
 geef-vergeten-tonnenmonument-op-scheveningen-nieuwe-locatie/index.html
 geef-wateringse-veld-een-extra-tramhalte-en-twee-zebrapaden/index.html
+geef-welzijnsgeld-aan-de-buurt-niet-aan-managers/index.html
 geef-zeggenschap-en-stimuleer-nabuurschap/index.html
 geen-30km-gebodsborden-in-de-bankastraat/index.html
 geen-actie-gemeente-inzake-overlastgevende-boom/index.html
@@ -3029,6 +3030,7 @@ hart-voor-den-haag-zet-ontwikkelingen-binckhorst-on-hold-eerst-een-gebiedspaspoo
 hart-voor-den-haag-zet-postbodes-in-tegen-eenzaamheid-en-voor-vergroten-van-de-leefbaarheid/index.html
 hart-voor-den-haag-zet-reepstraat-in-het-zonnetje/index.html
 hart-voor-den-haag-zet-spuiforum-te-koop/index.html
+hart-voor-den-haag-zet-vaart-achter-minder-papierwerk/index.html
 hart-voor-den-haag-ziet-geen-enkel-aanknopingspunt-om-minderheidscoalitie-aan-meerderheid-te-helpen/index.html
 hart-voor-den-haag-ziet-volop-ruimte-voor-horeca/index.html
 hart-voor-den-haag-zijn-de-digitale-gegevens-van-onze-inwoners-wel-veilig/index.html
@@ -12830,6 +12832,8 @@ s/n114619/index.html
 s/n114623/index.html
 s/n114629/index.html
 s/n114633/index.html
+s/n114636/index.html
+s/n114638/index.html
 s/p109318/index.html
 s/p109585/index.html
 s/p110026/index.html
