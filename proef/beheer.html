@@ -88,12 +88,20 @@ dialog .formulier{margin:0}
 .top-paden span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .code-blok{font:600 1.15rem/1.4 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.08em;padding:12px 14px;background:var(--band);border-radius:12px;word-break:break-all}
 @media (max-width:640px){.tabbalk{gap:6px}.tabbalk .knopje{min-height:40px;padding:6px 12px;font-size:.9rem}.tabbalk .wie{margin-left:0;width:100%;justify-content:space-between}.datumregel p{font-size:.85rem}}
+/* ontwerpronde 10 nov 2026: het werk eerder in beeld. De strook Redactie is een regel, de tabbladen een rij die opzij schuift */
+.beheer{padding-block:16px 80px}
+.datumregel{padding-block:0}
+.datumregel .wrap{min-height:36px}
+.tabbalk{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-bottom:16px;padding-bottom:10px}
+.tabbalk .knopje{flex:none;min-height:44px}
+.tabbalk .wie{flex:none;flex-wrap:nowrap;white-space:nowrap;width:auto;margin-left:auto}
+@media (max-width:760px){.datumregel{display:none}.tabbalk{margin-inline:-16px;padding-inline:16px}}
 </style>
 </head>
 <body>
 <header class="balk"><div class="wrap"><a class="merk" href="./" aria-label="Naar de proefsite"><img class="logo-licht" src="beeld/logo.svg" alt="Hart voor Den Haag" width="155" height="36"><img class="logo-donker" src="beeld/logo-wit.svg" alt="Hart voor Den Haag" width="155" height="36"></a><a class="knop lijn klein" href="./" target="_blank" rel="noopener">Naar de site<span class="verborgen"> (opent in een nieuw tabblad)</span> ↗</a></div></header>
 <section class="datumregel" aria-label="Over deze omgeving"><div class="wrap"><p><b>Redactie</b> · Beheeromgeving van de proefsite. Wat u publiceert, staat binnen een minuut op de site.</p></div></section>
 <main class="beheer"><div class="wrap" id="app"></div></main>
-<script src="beheer.js?v=9"></script>
+<script src="beheer.js?v=10"></script>
 </body>
 </html>

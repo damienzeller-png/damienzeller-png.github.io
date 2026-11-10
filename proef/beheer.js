@@ -359,7 +359,8 @@ async function start() {
   try {
     const pagina = { overzicht, berichten, postvak, bezoek, mensen, account, hulp }[tab];
     await pagina();
-  } catch (e) { if (e.message !== "uitgelogd") app.insertAdjacentHTML("beforeend", `<p class="melding fout" role="alert">${esc(e.message)}</p>`); }
+  } catch (e) { if (e.message !== "uitgelogd") { const technisch = e instanceof TypeError || e instanceof ReferenceError || e instanceof SyntaxError;
+      app.insertAdjacentHTML("beforeend", `<p class="melding fout" role="alert">${esc(technisch ? "Dit onderdeel kon niet laden. Probeer het opnieuw. Blijft het zo, meld het dan bij een beheerder." : e.message)}</p>`); if (technisch) console.error(e); } }
 }
 
 // ---------- overzicht ----------
