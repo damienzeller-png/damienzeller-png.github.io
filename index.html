@@ -90,36 +90,6 @@
   </div>
 </section>
 
-<section class="vragen" id="vragen" hidden>
-  <div class="wrap">
-    <h2>Wat ik vroeg en bereikte</h2>
-    <p class="inleiding">Mijn schriftelijke vragen aan het college en de stand van het antwoord. Het college heeft zes weken; het RIS-nummer is het nummer in het raadsinformatiesysteem.</p>
-    <ul class="vlijst" id="vlijst"></ul>
-    <button class="knop lijn meer-knop" id="vragen-meer" type="button" aria-expanded="false" aria-controls="vlijst" hidden></button>
-    <div class="bereikt" id="bereikt" hidden>
-      <p class="bereikt-zin" id="bereikt-zin"></p>
-      <ul class="vlijst" id="bereikt-lijst"></ul>
-    </div>
-  </div>
-</section>
-
-<section class="bereikte" id="bereikte" hidden aria-labelledby="bereikte-kop">
-  <div class="wrap">
-    <h2 id="bereikte-kop">Wat ik bereikte</h2>
-    <p class="inleiding" id="bereikte-uitleg"></p>
-    <ol class="tijdlijn" id="bereikte-lijst"></ol>
-  </div>
-</section>
-
-<section class="agenda" id="agenda" hidden>
-  <div class="wrap">
-    <h2>Binnenkort in de raad</h2>
-    <p class="inleiding">Vergaderingen van de commissie Samenleving en de gemeenteraad waar het over mijn onderwerpen gaat. U kunt meekijken, en als inwoner kunt u ook <a href="https://denhaag.nl/stadinderaad">inspreken</a>.</p>
-    <ol class="agenda-lijst" id="agenda-lijst"></ol>
-  </div>
-</section>
-
-
 <section id="buurt">
   <div class="wrap">
     <div class="buurt-kop">
@@ -187,6 +157,35 @@
     </form>
   </div>
 </section>
+
+<section class="bereikte" id="bereikte" hidden aria-labelledby="bereikte-kop">
+  <div class="wrap">
+    <h2 id="bereikte-kop">Wat ik bereikte</h2>
+    <p class="bereikt-zin" id="bereikt-zin"></p>
+    <ol class="tijdlijn" id="bereikte-lijst"></ol>
+    <button class="knop lijn meer-knop" id="bereikte-meer" type="button" aria-expanded="false" aria-controls="bereikte-lijst" hidden></button>
+    <p class="noot" id="bereikte-uitleg"></p>
+    <div class="sub" id="vragen" hidden>
+      <h3>Mijn vragen aan het college</h3>
+      <p class="inleiding">Het college heeft zes weken om te antwoorden. Het RIS-nummer is het nummer van het stuk bij de gemeente.</p>
+      <ul class="vlijst" id="vlijst"></ul>
+      <button class="knop lijn meer-knop" id="vragen-meer" type="button" aria-expanded="false" aria-controls="vlijst" hidden></button>
+    </div>
+    <details class="meer-blok" id="bereikt" hidden>
+      <summary>Aangenomen moties en voorstellen</summary>
+      <ul class="vlijst" id="bereikt-lijst"></ul>
+    </details>
+  </div>
+</section>
+
+<section class="agenda" id="agenda" hidden>
+  <div class="wrap">
+    <h2>Binnenkort in de raad</h2>
+    <p class="inleiding">Vergaderingen van de commissie Samenleving en de gemeenteraad waar het over mijn onderwerpen gaat. U kunt meekijken, en als inwoner kunt u ook <a href="https://denhaag.nl/stadinderaad">inspreken</a>.</p>
+    <ol class="agenda-lijst" id="agenda-lijst"></ol>
+  </div>
+</section>
+
 
 <section class="volg" id="volg">
   <div class="wrap">
@@ -530,13 +529,14 @@ function vragen(lijst) {
     li.append(kop, t, regel); ul.append(li);
   }
   const knop = document.getElementById("vragen-meer"), items = [...ul.children];
-  if (items.length > 3) {
+  if (items.length > 2) {
     let open = false;
-    const zet = () => { items.forEach((li, i) => { li.hidden = !open && i >= 3; }); knop.textContent = open ? "Toon minder" : `Toon alle vragen (${items.length})`; knop.setAttribute("aria-expanded", String(open)); };
-    knop.onclick = () => { open = !open; zet(); if (open) { items[3].tabIndex = -1; items[3].focus(); } };
+    const zet = () => { items.forEach((li, i) => { li.hidden = !open && i >= 2; }); knop.textContent = open ? "Toon minder" : `Toon alle vragen (${items.length})`; knop.setAttribute("aria-expanded", String(open)); };
+    knop.onclick = () => { open = !open; zet(); if (open) { items[2].tabIndex = -1; items[2].focus(); } };
     knop.hidden = false; zet();
   }
   document.getElementById("vragen").hidden = false;
+  document.getElementById("bereikte").hidden = false;
 }
 
 function bereikt(b) {
@@ -555,8 +555,8 @@ function bereikt(b) {
     if (x.link) { a.href = x.link; nieuwTab(a); }
     li.append(kop, a); ul.append(li);
   }
-  document.getElementById("bereikt").hidden = false;
-  document.getElementById("vragen").hidden = false;
+  document.getElementById("bereikt").hidden = !(b.recent || []).length;
+  document.getElementById("bereikte").hidden = false;
 }
 
 /* Wat ik bereikte (sinds 2018): uit bereikt-damien.json, alleen punten met een openbare bron */
@@ -573,6 +573,13 @@ function wiBereikte(d) {
     li.append(kop, el("h3", "vtitel", x.kop), el("p", "bzin", x.zin));
     if (x.bron) { const r = el("p", "vregel"), a = nieuwTab(el("a", null, "Lees het bericht")); a.href = x.bron; r.append(a); li.append(r); }
     ol.append(li);
+  }
+  const knop = document.getElementById("bereikte-meer"), items = [...ol.children];
+  if (items.length > 2) {
+    let open = false;
+    const zet = () => { items.forEach((li, i) => { li.hidden = !open && i >= 2; }); knop.textContent = open ? "Toon minder" : `Toon alles sinds ${punten[punten.length - 1].jaar} (${items.length})`; knop.setAttribute("aria-expanded", String(open)); };
+    knop.onclick = () => { open = !open; zet(); if (open) { items[2].tabIndex = -1; items[2].focus(); } };
+    knop.hidden = false; zet();
   }
   document.getElementById("bereikte").hidden = false;
 }
@@ -600,7 +607,8 @@ function agenda(lijst) {
     const h = el("h3"), a = el(v.link ? "a" : "span", null, v.titel); if (v.link) { a.href = v.link; nieuwTab(a); }
     h.append(a);
     tekst.append(h, el("p", "bijschrift", `${DAGEN[d.getDay()]} ${v.tijd ? "om " + v.tijd : ""}`.trim()));
-    if (v.punten && v.punten.length) { const ul = el("ul", "punten"); v.punten.forEach(p => ul.append(el("li", null, p))); tekst.append(ul); }
+    if (v.punten && v.punten.length) { const ul = el("ul", "punten"); v.punten.forEach(p => ul.append(el("li", null, p)));
+      const det = el("details"); det.append(el("summary", null, v.punten.length === 1 ? "1 agendapunt over mijn onderwerpen" : `${v.punten.length} agendapunten over mijn onderwerpen`), ul); tekst.append(det); }
     else if (!v.gepubliceerd) tekst.append(el("p", "leeg", "De agenda volgt."));
     li.append(blok, tekst); ol.append(li);
   }
