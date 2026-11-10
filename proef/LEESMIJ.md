@@ -22,10 +22,10 @@ Er zijn drie delen. Geen framework, geen bouwstap, geen database-server.
    - `kader.js`: kop, menu en voet, één keer voor alle pagina's. Hierin staat ook `HVDH.BASE` (nu `/proef/`).
    - `app.js`, `app.css`: de site zelf. `app.js` leest het adres en bouwt de pagina; links binnen de site wisselen alleen de inhoud (geen nieuwe pagina laden).
    - `beheer.html`, `beheer.js`: de beheeromgeving.
-   - `beeld/`: logo's en vaste foto's. `lettertype/`: Raleway, op de site zelf (geen verzoek naar Google). `data/`: de inhoud als JSON.
+   - `beeld/`: logo's en vaste foto's. `lettertype/`: Archivo (koppen) en Lexend (tekst), op de site zelf (geen verzoek naar Google); Raleway staat er nog als reserve. `data/`: de inhoud als JSON.
    - **Gemaakte pagina's** (niet met de hand aanpassen): de duizenden mappen met een `index.html` in `proef/` maakt `tools/bouw.py`. Elke pagina heeft al de titel, de omschrijving en de foto voor zoekmachines en voor het voorbeeld als iemand de link deelt, plus de tekst van het stuk. De lijst staat in `tools/gegenereerd.txt`; pagina's van stukken die verdwijnen, ruimt het script zelf op. Het maakt ook `sitemap.xml`, `feed.xml` (RSS) en `404.html` in de hoofdmap van de repository.
    - Oude adressen die op de nieuwe site anders heten (`fractieleden/…`, `kandidaat/…`, `stadsdeel/…`, `expats/`, `ik-word-lid/`) sturen door.
-   - Kleuren, letters en maten staan als variabelen bovenaan `app.css` (`:root`). De huisstijl volgt hartvoordenhaag.nl: Raleway, het groen en geel van het logo.
+   - Kleuren, letters en maten staan als variabelen bovenaan `app.css` (`:root`). Het groen en geel volgen het logo van hartvoordenhaag.nl. De letters zijn sinds 10 november 2026 Archivo en Lexend, zoals op damienzeller.nl; terug naar Raleway kan door `--kop` en `--tekst` in `app.css` aan te passen.
 2. **Het hele archief van hartvoordenhaag.nl** staat in `data/`, sinds 2012: ruim 7.800 stukken.
    - `tools/importeer.py` haalt via de openbare WordPress-API nieuws, successen, moties, amendementen, schriftelijke vragen, spreekteksten, petities, de fractie en het bestuur op.
    - Elk stuk heeft een eigen bestand `data/stuk/<id>.json` met de volledige tekst. De site laadt dat pas als iemand het stuk opent.
