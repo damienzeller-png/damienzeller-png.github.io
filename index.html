@@ -595,6 +595,26 @@ Promise.all([
   wiBereikte(d);
 });
 
+/* Agendapunten in gewone taal: de soort stuk wordt een gewone aanloop, "inzake" en het RIS-nummer vallen weg. */
+function gewoneTaal(p) {
+  let t = String(p || "").replace(/\s*\(RIS\s?\d+\)\s*$/i, "").trim();
+  const SOORT = [
+    [/^commissiebrief (inzake|over) /i, "Brief van het college over "],
+    [/^raadsmededeling (inzake|over) /i, "Mededeling van het college over "],
+    [/^(raads)?voorstel van het college (inzake|over) /i, "Voorstel van het college: "],
+    [/^raadsvoorstel (inzake|over) /i, "Voorstel aan de raad: "],
+    [/^initiatiefvoorstel (inzake|over) /i, "Voorstel uit de raad: "],
+    [/^motie (inzake|over) /i, "Motie: "],
+    [/^amendement (inzake|over) /i, "Wijzigingsvoorstel: "],
+    [/^(beantwoording|antwoord op) (schriftelijke vragen|sv) (inzake|over) /i, "Antwoord op vragen over "]
+  ];
+  for (const [re, aanloop] of SOORT) if (re.test(t)) {
+    let rest = t.replace(re, "");
+    if (/^[A-Z][a-z]/.test(rest)) rest = rest.charAt(0).toLowerCase() + rest.slice(1);
+    return aanloop + rest;
+  }
+  return t.replace(/ inzake /i, " over ");
+}
 function agenda(lijst) {
   const nu = new Date().toISOString().slice(0, 10);
   lijst = (Array.isArray(lijst) ? lijst : []).filter(v => v.datum >= nu).slice(0, 3);
@@ -607,8 +627,12 @@ function agenda(lijst) {
     const h = el("h3"), a = el(v.link ? "a" : "span", null, v.titel); if (v.link) { a.href = v.link; nieuwTab(a); }
     h.append(a);
     tekst.append(h, el("p", "bijschrift", `${DAGEN[d.getDay()]} ${v.tijd ? "om " + v.tijd : ""}`.trim()));
-    if (v.punten && v.punten.length) { const ul = el("ul", "punten"); v.punten.forEach(p => ul.append(el("li", null, p)));
-      const det = el("details"); det.append(el("summary", null, v.punten.length === 1 ? "1 agendapunt over mijn onderwerpen" : `${v.punten.length} agendapunten over mijn onderwerpen`), ul); tekst.append(det); }
+    if (v.punten && v.punten.length) {
+      const toon = v.punten.slice(0, 3), rest = v.punten.slice(3);
+      const ul = el("ul", "punten"); toon.forEach(p => ul.append(el("li", null, gewoneTaal(p)))); tekst.append(ul);
+      if (rest.length) { const ul2 = el("ul", "punten"); rest.forEach(p => ul2.append(el("li", null, gewoneTaal(p))));
+        const det = el("details"); det.append(el("summary", null, rest.length === 1 ? "Nog 1 agendapunt" : `Nog ${rest.length} agendapunten`), ul2); tekst.append(det); }
+    }
     else if (!v.gepubliceerd) tekst.append(el("p", "leeg", "De agenda volgt."));
     li.append(blok, tekst); ol.append(li);
   }
