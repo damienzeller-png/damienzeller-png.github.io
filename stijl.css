@@ -530,3 +530,13 @@ footer a{color:#fff}
   .x-lijst>li:nth-child(n+2){display:none}
   .bereikte .sub{margin-top:36px;padding-top:24px}
 }
+
+/* Toegankelijkheidsronde 11 november 2026: contrast op het donkere vlak en tikdoelen van minimaal 44 px */
+.volg .ook-op{color:var(--op-donker)}
+.volg .ook-op a{color:#fff}
+.merk{min-height:44px}
+.onderwerpen-voet a,.op-pagina a{min-height:44px;display:inline-flex;align-items:center}
+a.vtitel{display:flex;align-items:center;min-height:44px}
+#held-sp{min-height:44px}
+/* formulier in één kolom: sneller in te vullen en nergens twee velden naast elkaar */
+.melden .twee{grid-template-columns:1fr}
