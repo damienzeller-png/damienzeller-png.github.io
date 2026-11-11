@@ -3,6 +3,7 @@
 :root{
   --hart:#1E945A; --veld:#137345; --woud:#0B3B25; --nacht:#072A1A; --zon:#FFD237; --zon-licht:#FFE27A;
   --bg:#F3F7F2; --vlak:#FFFFFF; --munt:#E3F1E7; --ink:#10251A; --zacht:#4F6A5B; --lijn:#D6E3D9;
+  --kaart-vlak:#C7E1D0; --kaart-met:#9CCFB0; --kaart-hover:#7FBF99;
   --link:#116B42; --veldrand:#7A9585; --op-donker:#C9E2D2; --kaart-donker:#114330; --fout:#B42318;
   --kop:"Archivo",system-ui,sans-serif;
   --tekst:"Lexend",system-ui,sans-serif;
@@ -11,7 +12,7 @@
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){
-  :root{--bg:#0C1A12;--vlak:#13251A;--munt:#10261A;--ink:#E8F1EA;--zacht:#A3BAAB;--lijn:#284033;--link:#7BD3A2;--veldrand:#5B7A69;--fout:#FF8A80;
+  :root{--kaart-vlak:#1F3D2D;--kaart-met:#2C5A40;--kaart-hover:#37704F;--bg:#0C1A12;--vlak:#13251A;--munt:#10261A;--ink:#E8F1EA;--zacht:#A3BAAB;--lijn:#284033;--link:#7BD3A2;--veldrand:#5B7A69;--fout:#FF8A80;
         --schaduw:0 30px 60px -34px rgba(0,0,0,.85);color-scheme:dark}
 }
 *{box-sizing:border-box}
@@ -262,16 +263,22 @@ a.vtitel:hover{text-decoration:underline;text-decoration-color:var(--hart)}
 .wijk button .n{display:inline-grid;place-items:center;min-width:24px;height:24px;background:var(--zon);color:#10251A;border-radius:999px;
   padding:0 7px;font-size:.9rem;font-weight:700}
 .buurt-vak{display:grid;grid-template-columns:1.25fr .75fr;margin-top:28px;border-radius:28px;overflow:hidden;background:var(--vlak);box-shadow:var(--schaduw)}
-#kaart{min-height:480px;background:#DCE7E0}
+.buurtkaart{display:grid;place-items:center;padding:26px;background:var(--munt)}
+.buurtkaart svg{display:block;width:100%;height:auto;max-height:560px}
+.buurtkaart .bv{fill:var(--kaart-vlak);stroke:var(--munt);stroke-width:5;stroke-linejoin:round;cursor:pointer;transition:fill .15s ease}
+.buurtkaart .bv.met{fill:var(--kaart-met)}
+.buurtkaart .bv:hover{fill:var(--kaart-hover)}
+.buurtkaart .bv[aria-pressed="true"]{fill:var(--veld);stroke:var(--zon);stroke-width:7}
+.buurtkaart .bl{font:800 27px/1 var(--kop);font-stretch:80%;fill:var(--ink);text-anchor:middle;pointer-events:none;paint-order:stroke;stroke:var(--munt);stroke-width:7px;stroke-linejoin:round}
+.buurtkaart .bl.aan{fill:#fff;stroke:var(--veld)}
+@media (prefers-reduced-motion:reduce){.buurtkaart .bv{transition:none}}
 .buurt-info{padding:30px;display:flex;flex-direction:column;gap:14px;align-items:flex-start}
 .buurt-info h3{font-size:2rem;font-stretch:78%}
 .buurt-info .wijknaam{color:var(--zacht);margin-top:-8px}
 .buurt-info ul{list-style:none;margin:0;padding:0;display:grid;gap:14px}
 .buurt-info li a{font-weight:700;text-decoration-color:var(--hart)}
 .buurt-info li .bijschrift{margin-top:2px}
-.leaflet-container{font-family:var(--tekst)}
-.leaflet-touch .leaflet-bar a{width:40px;height:40px;line-height:40px}
-@media (max-width:760px){.wijk{grid-template-columns:1fr}.buurt-vak{grid-template-columns:1fr}#kaart{min-height:300px}.buurt-info{padding:22px}}
+@media (max-width:760px){.wijk{grid-template-columns:1fr}.buurt-vak{grid-template-columns:1fr}.buurtkaart{padding:14px}.buurtkaart .bl{font-size:34px}.buurt-info{padding:22px}}
 
 /* melden */
 .melden{background:var(--munt)}
