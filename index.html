@@ -727,6 +727,16 @@ function formulier() {
       v.onderwerp = v.onderwerp || ""; v.bericht = v.bericht || ""; v.email = v.email || "";
       if (!controle(v)[naam]) zet(naam, "");
     });
+    /* controle bij het verlaten van een veld waar iets in is getypt, niet bij elke toets */
+    if (naam !== "toestemming") {
+      let geraakt = false;
+      veld.addEventListener("input", () => { geraakt = true; });
+      veld.addEventListener("blur", () => {
+        if (!geraakt) return;
+        const v = Object.fromEntries(new FormData(f).entries());
+        zet(naam, controle({ onderwerp: v.onderwerp || "", bericht: v.bericht || "", email: v.email || "", toestemming: f.toestemming.checked })[naam]);
+      });
+    }
   }
   f.addEventListener("submit", async e => {
     e.preventDefault();
