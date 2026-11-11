@@ -30,6 +30,7 @@ Regel: geel staat nooit als kleine tekst op groen. De rolregel in de opening geb
 
 ## Onderdelen
 
+- **Buurtkaart** (`.buurtkaart`): de dertien buurten als vlakken op `--munt`, lichter zonder en donkerder met berichten (`--kaart-vlak`, `--kaart-met`), de gekozen buurt in `--veld` met een gele rand en een wit label. Geen ondergrond van buiten; de knoppen erboven bedienen de kaart.
 - **Bijschrift** (`.bijschrift`): plek in Archivo met een groen ruitje, datum, dossier in linkkleur, gescheiden door een punt. Hetzelfde op Actueel, vragen, de buurtkaart en de nieuwspagina.
 - **Logboek** (`.log`): regels met bijschrift, kop, samenvatting en een beeld rechts. Het eerste item is groter.
 - **Onderbalk** (`.onderbalk`, onder 860px): Spreekuur, Uw buurt, Nieuws en Meld iets (geel). Tikdoelen van minimaal 54px.

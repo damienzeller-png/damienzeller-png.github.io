@@ -24,7 +24,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Lexend:wght@400;600;700&display=swap">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="preload" as="image" href="portret-uit.webp" type="image/webp">
 <link rel="stylesheet" href="stijl.css">
 </head>
@@ -104,7 +103,7 @@
     </div>
     <div class="buurt-kies" id="buurt-kies"></div>
     <div class="buurt-vak">
-      <div id="kaart" role="img" aria-label="Kaart van stadsdeel Leidschenveen-Ypenburg"></div>
+      <div id="kaart" class="buurtkaart"><svg id="kaart-svg" role="img" aria-label="Kaart van stadsdeel Leidschenveen-Ypenburg met dertien buurten. Kies een buurt met de knoppen hierboven."></svg></div>
       <div class="buurt-info" id="buurt-info" aria-live="polite"></div>
     </div>
   </div>
@@ -244,7 +243,7 @@
     </div>
     <nav class="onderwerpen-voet" aria-label="Onderwerpen"><a href="zorg.html">Zorg en welzijn</a><a href="onderwijs.html">Onderwijs</a><a href="sport.html">Sport en bewegen</a><a href="media.html">Lokale media</a><a href="joodse-gemeenschap.html">Joodse gemeenschap</a><a href="leidschenveen-ypenburg.html">Leidschenveen-Ypenburg</a></nav>
     <p>Wat u via het formulier stuurt, komt rechtstreeks bij Damiën en zijn team binnen. Uw naam en e-mailadres gebruiken we alleen om u te antwoorden. Video's en berichten van TikTok en X staan hier zonder cookies; een video speelt pas via TikTok als u op afspelen drukt.</p>
-    <p>Nieuws: hartvoordenhaag.nl. Buurtgrenzen: CBS Wijk- en buurtkaart 2024. Kaart: BRT-Achtergrondkaart van het Kadaster via PDOK. <a href="privacy.html">Privacy</a> en <a href="voorwaarden.html">voorwaarden</a>.</p>
+    <p>Nieuws: hartvoordenhaag.nl. Buurtgrenzen: CBS Wijk- en buurtkaart 2024 via PDOK. <a href="privacy.html">Privacy</a> en <a href="voorwaarden.html">voorwaarden</a>.</p>
   </div>
 </footer>
 
@@ -255,7 +254,6 @@
   <a class="meld" href="#melden"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h15v10h-8l-4.5 4v-4h-2.5z"/><path d="M9 10.5h6"/></svg>Meld iets</a>
 </nav>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="dossiers.js"></script>
 <script>
 (() => {
@@ -270,7 +268,7 @@ const KORTE_DAG = ["zo","ma","di","wo","do","vr","za"];
 const STADSDEEL = "Leidschenveen-Ypenburg";
 let API = "https://telegram-doorgeefluik.damienzeller.workers.dev";
 let data = { berichten: [], spreekuur: {}, tiktok: [], x: [] };
-let gekozen = null, kaart = null, laag = null;
+let gekozen = null, laag = null;
 const el = (t, cls, txt) => { const e = document.createElement(t); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
 const wijkVan = b => Object.keys(WIJKEN).find(w => WIJKEN[w].includes(b)) || (WIJKEN[b] ? b : "");
 const inBuurt = (bericht, buurt) => bericht.buurt === buurt;
@@ -300,7 +298,7 @@ function knoppenBuurt() {
 function infoBuurt() {
   const box = document.getElementById("buurt-info"); box.textContent = "";
   if (!gekozen) {
-    const tot = laag ? laag.getLayers().reduce((s, l) => s + (l.feature.properties.inwoners || 0), 0) : 0;
+    const tot = laag ? laag.reduce((s, f) => s + f.inwoners, 0) : 0;
     box.append(el("h3", null, "Leidschenveen-Ypenburg"),
       el("p", null, (tot ? `Ongeveer ${(Math.round(tot / 1000) * 1000).toLocaleString("nl-NL")} inwoners in ` : "") +
         "dertien buurten, van Bosweide tot Rietbuurt. Kies een buurt op de kaart of hierboven."));
@@ -315,8 +313,8 @@ function infoBuurt() {
     if (alg.length) box.append(lijstje(alg));
     return;
   }
-  const f = laag && laag.getLayers().find(l => l.feature.properties.buurt === gekozen);
-  const inw = f && f.feature.properties.inwoners;
+  const f = laag && laag.find(x => x.buurt === gekozen);
+  const inw = f && f.inwoners;
   box.append(el("h3", null, gekozen), el("p", "wijknaam", wijkVan(gekozen) + (inw ? `, ongeveer ${inw.toLocaleString("nl-NL")} inwoners` : "")));
   const hier = data.berichten.filter(x => inBuurt(x, gekozen)).sort(nieuwste);
   if (hier.length) box.append(lijstje(hier.slice(0, 5), true));
@@ -338,35 +336,57 @@ function lijstje(items, zonderPlek) {
   return ul;
 }
 
-function stijl(f) {
-  const b = f.properties.buurt, n = data.berichten.filter(x => inBuurt(x, b)).length, actief = b === gekozen;
-  return { color: actief ? "#FFD237" : "#0B3B25", weight: actief ? 4 : 1.5, fillColor: "#1E945A",
-           fillOpacity: actief ? .55 : (n ? .38 : .16) };
+/* Buurtkaart als eigen tekening (sinds november 2026, zoals de stadsdelenkaart op de proefsite): geen kaarttegels en
+   geen bibliotheek van buiten. De knoppen hierboven bedienen de kaart voor toetsenbord en schermlezer. */
+const NS = "http://www.w3.org/2000/svg";
+const tel = b => data.berichten.filter(x => inBuurt(x, b)).length;
+function kleurKaart() {
+  if (!laag) return;
+  for (const f of laag) {
+    f.vlak.setAttribute("aria-pressed", String(f.buurt === gekozen));
+    f.vlak.classList.toggle("met", tel(f.buurt) > 0);
+    f.lbl.classList.toggle("aan", f.buurt === gekozen);
+  }
+  const aan = laag.find(f => f.buurt === gekozen);
+  if (aan) aan.vlak.parentNode.appendChild(aan.vlak);   /* de gekozen buurt bovenop, zodat de rand heel blijft */
 }
 
 function kies(b) {
-  gekozen = b; knoppenBuurt(); infoBuurt();
-  if (laag) {
-    laag.setStyle(stijl);
-    const l = b && laag.getLayers().find(x => x.feature.properties.buurt === b);
-    if (l) { l.bringToFront(); kaart.flyToBounds(l.getBounds(), { padding: [30, 30], maxZoom: 15, duration: .6 }); }
-    else kaart.flyToBounds(laag.getBounds(), { padding: [10, 10], duration: .6 });
-  }
+  gekozen = b; knoppenBuurt(); infoBuurt(); kleurKaart();
 }
 
 function maakKaart() {
-  if (!window.L) return;
-  kaart = L.map("kaart", { scrollWheelZoom: false, attributionControl: true }).setView([52.06, 4.38], 13);
-  L.tileLayer("https://service.pdok.nl/brt/achtergrondkaart/wmts/v2_0/grijs/EPSG:3857/{z}/{x}/{y}.png", {
-    maxZoom: 19, attribution: 'Kaart: <a href="https://www.pdok.nl">PDOK</a> BRT-Achtergrondkaart, Kadaster'
-  }).addTo(kaart);
+  const svg = document.getElementById("kaart-svg"); if (!svg) return;
   fetch("buurten.geojson").then(r => r.json()).then(g => {
-    laag = L.geoJSON(g, { style: stijl, onEachFeature: (f, l) => {
-      l.bindTooltip(f.properties.buurt, { sticky: true });
-      l.on("click", () => kies(f.properties.buurt));
-    } }).addTo(kaart);
-    kaart.fitBounds(laag.getBounds(), { padding: [10, 10] });
-    infoBuurt();
+    const ringen = f => (f.geometry.type === "MultiPolygon" ? f.geometry.coordinates : [f.geometry.coordinates]).map(p => p[0]);
+    let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
+    for (const f of g.features) for (const r of ringen(f)) for (const [x, y] of r) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
+    const kx = Math.cos((y0 + y1) / 2 * Math.PI / 180), B = 1000, schaal = B / ((x1 - x0) * kx), H = Math.round((y1 - y0) * schaal);
+    const px = ([x, y]) => [(x - x0) * kx * schaal, (y1 - y) * schaal];
+    svg.setAttribute("viewBox", `-24 -24 ${B + 48} ${H + 48}`);
+    const vlakken = document.createElementNS(NS, "g"), namen = document.createElementNS(NS, "g");
+    laag = g.features.map(f => {
+      const rs = ringen(f).map(r => r.map(px));
+      const d = rs.map(r => "M" + r.map(p => p[0].toFixed(1) + " " + p[1].toFixed(1)).join("L") + "Z").join("");
+      /* het label komt in het zwaartepunt van het grootste vlak */
+      let beste = null;
+      for (const r of rs) {
+        let a = 0, cx = 0, cy = 0;
+        for (let i = 0, n = r.length; i < n; i++) { const [xa, ya] = r[i], [xb, yb] = r[(i + 1) % n], k = xa * yb - xb * ya; a += k; cx += (xa + xb) * k; cy += (ya + yb) * k; }
+        if (a && (!beste || Math.abs(a) > Math.abs(beste.a))) beste = { a, x: cx / (3 * a), y: cy / (3 * a) };
+      }
+      const buurt = f.properties.buurt, vlak = document.createElementNS(NS, "path"), lbl = document.createElementNS(NS, "text");
+      vlak.setAttribute("d", d); vlak.setAttribute("class", "bv"); vlak.setAttribute("aria-pressed", "false");
+      const t = document.createElementNS(NS, "title"); t.textContent = buurt; vlak.appendChild(t);
+      vlak.addEventListener("click", () => kies(gekozen === buurt ? null : buurt));
+      lbl.setAttribute("class", "bl"); lbl.setAttribute("x", beste.x.toFixed(1)); lbl.setAttribute("y", beste.y.toFixed(1));
+      const delen = buurt.includes("-") ? buurt.split("-").map((w, i, a) => i < a.length - 1 ? w + "-" : w) : (buurt.length > 9 && buurt.includes(" ") ? buurt.split(" ") : [buurt]);
+      delen.forEach((w, i) => { const ts = document.createElementNS(NS, "tspan"); ts.setAttribute("x", beste.x.toFixed(1)); ts.setAttribute("dy", i ? "1.05em" : (delen.length > 1 ? "-.2em" : ".35em")); ts.textContent = w; lbl.appendChild(ts); });
+      vlakken.appendChild(vlak); namen.appendChild(lbl);
+      return { buurt, inwoners: f.properties.inwoners || 0, vlak, lbl };
+    });
+    svg.append(vlakken, namen);
+    kleurKaart(); infoBuurt();
   }).catch(() => {});
 }
 
@@ -399,7 +419,7 @@ function spreekuur() {
         "END:VEVENT", "END:VCALENDAR"].join("\r\n");
       const a = el("a"); a.href = URL.createObjectURL(new Blob([ics], { type: "text/calendar" })); a.download = "spreekuur.ics"; a.click();
     };
-  } else if (sp.volgende) {
+  } else if (sp.volgende && !d) {   /* een datum die voorbij is tonen we niet meer */
     document.getElementById("sp-plek").textContent = "Volgende: " + sp.volgende + (sp.plek ? ", " + sp.plek : "");
     document.getElementById("held-sp-wanneer").textContent = sp.volgende;
     document.getElementById("held-sp-waar").textContent = kortePlek;
@@ -767,7 +787,7 @@ fetch("links.json", { cache: "no-cache" }).then(r => r.json()).catch(() => ({}))
     vragen(s.vragen); bereikt(s.bereikt); agenda(s.agenda);
   }
   spreekuur(); knoppenBuurt(); infoBuurt(); berichten(); feeds();
-  if (laag) laag.setStyle(stijl);
+  kleurKaart();
 });
 knoppenBuurt(); maakKaart();
 /* ?buurt=Bosweide (vanaf de stadsdeelpagina): die buurt meteen kiezen */
