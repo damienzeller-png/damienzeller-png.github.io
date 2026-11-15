@@ -601,6 +601,10 @@ function wiBereikte(d) {
     knop.onclick = () => { open = !open; zet(); if (open) { items[2].tabIndex = -1; items[2].focus(); } };
     knop.hidden = false; zet();
   }
+  /* groot getal naast de tijdlijn: hoeveel resultaten, en sinds wanneer */
+  let getal = document.getElementById("bereikte-getal");
+  if (!getal) { getal = el("p", "bereikt-getal"); getal.id = "bereikte-getal"; document.getElementById("bereikte-kop").after(getal); }
+  getal.textContent = ""; getal.append(el("b", null, String(punten.length)), el("span", null, (punten.length === 1 ? "resultaat" : "resultaten") + " sinds " + punten[punten.length - 1].jaar));
   document.getElementById("bereikte").hidden = false;
 }
 /* sinds 8 november 2026: punten die Damiën in Telegram goedkeurde komen via het doorgeefluik erbij */

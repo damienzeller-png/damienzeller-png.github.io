@@ -540,3 +540,21 @@ a.vtitel{display:flex;align-items:center;min-height:44px}
 #held-sp{min-height:44px}
 /* formulier in één kolom: sneller in te vullen en nergens twee velden naast elkaar */
 .melden .twee{grid-template-columns:1fr}
+
+/* 15 november 2026: strakker. Op desktop geen geel hart achter het portret maar een rustig vlak in groen;
+   de spreekuurpil in de opening is weg (de kaart eronder zegt hetzelfde); Wat ik bereikte in twee kolommen. */
+@media (min-width:861px){
+  .held-foto .hart{fill:var(--hart);opacity:.5;transform:none;left:-2%;top:6%;width:94%}
+}
+.held #held-sp{display:none}
+@media (min-width:1000px){
+  .bereikte>.wrap{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);column-gap:64px;align-items:start}
+  .bereikte>.wrap{grid-template-rows:auto auto auto auto 1fr}
+  .bereikte>.wrap>h2,.bereikte>.wrap>.bereikt-getal,.bereikte>.wrap>.bereikt-zin,.bereikte>.wrap>.noot{grid-column:1}
+  .bereikte>.wrap>.tijdlijn{grid-column:2;grid-row:1/span 5;margin-top:8px}
+  .bereikte>.wrap>.meer-knop{grid-column:2;justify-self:start}
+  .bereikte>.wrap>.sub,.bereikte>.wrap>.meer-blok{grid-column:1/-1}
+  .bereikte>.wrap>.bereikt-zin{font-size:clamp(1.3rem,2vw,1.6rem);line-height:1.35}
+}
+.bereikt-getal{display:flex;align-items:baseline;gap:12px;margin:14px 0 0;color:var(--zacht)}
+.bereikt-getal b{font:900 clamp(3rem,7vw,4.6rem)/.9 var(--kop);font-stretch:70%;color:var(--veld);font-variant-numeric:tabular-nums}
