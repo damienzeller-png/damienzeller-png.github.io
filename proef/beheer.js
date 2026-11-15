@@ -156,17 +156,16 @@ function tekstVeld(html, id) {
   const knop = (cmd, arg, label, titel) => `<button type="button" class="knopje" data-cmd="${cmd}"${arg ? ` data-arg="${arg}"` : ""} title="${titel || label}">${label}</button>`;
   return `<div class="re">
     <div class="re-balk" role="toolbar" aria-label="Opmaak van de tekst">
-      ${knop("formatBlock", "p", "Gewone tekst")}${knop("formatBlock", "h2", "Kop")}${knop("formatBlock", "h3", "Tussenkop")}
-      ${knop("bold", "", "<b>Vet</b>", "Vet")}${knop("italic", "", "<i>Schuin</i>", "Schuin")}
-      ${knop("insertUnorderedList", "", "Opsomming")}${knop("insertOrderedList", "", "Genummerd")}${knop("formatBlock", "blockquote", "Citaat")}
-      ${knop("link", "", "Link")}${knop("unlink", "", "Link weg")}${knop("foto", "", "Foto in de tekst")}
-      ${knop("undo", "", "Ongedaan maken")}</div>
+      ${knop("formatBlock", "h2", "Kop")}${knop("bold", "", "<b>Vet</b>", "Vet")}${knop("insertUnorderedList", "", "Opsomming")}${knop("link", "", "Link")}${knop("foto", "", "Foto in de tekst")}${knop("undo", "", "Ongedaan maken")}
+      <button type="button" class="knopje re-meer" data-meer aria-expanded="false">Meer opmaak</button>
+      <span class="re-extra" hidden>${knop("formatBlock", "p", "Gewone tekst")}${knop("formatBlock", "h3", "Tussenkop")}${knop("italic", "", "<i>Schuin</i>", "Schuin")}${knop("insertOrderedList", "", "Genummerd")}${knop("formatBlock", "blockquote", "Citaat")}${knop("unlink", "", "Link weg")}</span></div>
     <div class="re-tekst artikel-tekst" id="${id}" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Tekst van het bericht">${html || "<p><br></p>"}</div>
     <input type="file" class="re-foto" accept="image/jpeg,image/png,image/webp" hidden></div>`;
 }
 function koppelTekstVeld(wrap, opVerandering) {
   const veld = $(".re-tekst", wrap), balk = $(".re-balk", wrap), fotoKiezer = $(".re-foto", wrap);
   try { document.execCommand("defaultParagraphSeparator", false, "p"); } catch { /* oudere browser */ }
+  balk.addEventListener("click", e => { const k = e.target.closest("[data-meer]"); if (!k) return; const ex = $(".re-extra", balk); ex.hidden = !ex.hidden; k.setAttribute("aria-expanded", String(!ex.hidden)); k.textContent = ex.hidden ? "Meer opmaak" : "Minder opmaak"; });
   let selectie = null;
   const bewaarSelectie = () => { const s = getSelection(); if (s.rangeCount && veld.contains(s.anchorNode)) selectie = s.getRangeAt(0).cloneRange(); };
   const herstel = () => { veld.focus(); if (selectie) { const s = getSelection(); s.removeAllRanges(); s.addRange(selectie); } };
@@ -331,11 +330,27 @@ function inloggen(boodschap) {
 
 // ---------- kader met tabs ----------
 let tab = location.hash.slice(1) || opslag.lees("tab") || "overzicht";
-const TABS = () => [["overzicht", "Overzicht"], ["berichten", "Berichten"], ["postvak", "Postvak"], ["bezoek", "Bezoek"], ...(magBeheren() ? [["mensen", "Mensen"]] : []), ["account", "Mijn account"], ["hulp", "Hulp"]];
+const TABS = () => [["overzicht", "Start"], ["berichten", "Berichten"], ["postvak", "Postvak"], ["bezoek", "Bezoek"], ...(magBeheren() ? [["mensen", "Mensen"]] : []), ["account", "Mijn account"], ["hulp", "Hulp"]];
 addEventListener("hashchange", () => { const t = location.hash.slice(1); if (t && t !== tab && sessie) { if (gewijzigd && !confirm("Uw wijzigingen zijn nog niet opgeslagen. Toch weggaan?")) { history.replaceState(null, "", "#" + tab); return; } gaNaar(t, { adres: false }); } });
+let openPost = null; // aantal open berichten in het postvak, voor het bolletje op het tabblad
+const IKOON = {
+  nieuws: '<path d="M5 4h11l3 3v13H5z"/><path d="M8 9h8M8 13h8M8 17h5"/>',
+  agenda: '<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M8 3v4M16 3v4"/>',
+  succes: '<path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8 20h8"/>',
+  petitie: '<path d="M4 20h16M6 16l9-9 3 3-9 9H6z"/><path d="m13 9 3 3"/>',
+  vacature: '<rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V5h6v3M3 13h18"/>',
+  bewerk: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13 7 4 4"/>',
+  post: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 7 9-7"/>',
+};
+const ikoon = k => `<svg class="ik" viewBox="0 0 24 24" aria-hidden="true">${IKOON[k] || ""}</svg>`;
 function kader(inhoud) {
-  return `<nav class="tabbalk" aria-label="Onderdelen">${TABS().map(([k, n]) => `<button class="knopje" type="button" data-tab="${k}" aria-pressed="${tab === k}">${n}</button>`).join("")}
-    <span class="wie">Ingelogd als <b>${esc(sessie.naam)}</b> (${esc((ROL_NAAM[sessie.rol] || sessie.rol).toLowerCase())})<button class="knop lijn klein" type="button" id="uit">Uitloggen</button></span></nav>
+  const hoofd = TABS().filter(([k]) => k !== "mensen" && k !== "account");
+  const onderNaam = TABS().filter(([k]) => k === "mensen" || k === "account");
+  return `<nav class="tabbalk" aria-label="Onderdelen">${hoofd.map(([k, n]) => `<button class="knopje" type="button" data-tab="${k}" aria-pressed="${tab === k}">${n}${k === "postvak" && openPost ? ` <span class="bol" aria-label="${openPost} open">${openPost}</span>` : ""}</button>`).join("")}
+    <details class="wie-menu"><summary><span class="verborgen">Ingelogd als </span><b>${esc(sessie.naam)}</b></summary><div class="wie-lijst">
+      <p>${esc(ROL_NAAM[sessie.rol] || sessie.rol)}</p>
+      ${onderNaam.map(([k, n]) => `<button class="link-knop" type="button" data-tab="${k}" aria-pressed="${tab === k}">${k === "mensen" ? "Wie mag inloggen" : n}</button>`).join("")}
+      <button class="link-knop" type="button" id="uit">Uitloggen</button></div></details></nav>
     ${sessie.waarschuwing2fa && tab !== "account" ? `<p class="melding waarschuwing" role="status"><b>Zet tweestapsverificatie aan.</b> Als beheerder kunt u bij persoonsgegevens. <button class="knop lijn klein" type="button" data-naar-tab="account">Nu aanzetten</button></p>` : ""}${inhoud}`;
 }
 function koppelKader() {
@@ -344,6 +359,8 @@ function koppelKader() {
     if (gewijzigd && !zeker(b, "Wijzigingen weggooien?")) return;
     gaNaar(b.dataset.tab);
   }));
+  const wm = $(".wie-menu");
+  if (wm) { document.addEventListener("click", e => { if (wm.isConnected && wm.open && !wm.contains(e.target)) wm.open = false; }); wm.addEventListener("keydown", e => { if (e.key === "Escape") { wm.open = false; $("summary", wm).focus(); } }); }
   $("#uit").addEventListener("click", async () => { try { await vraag("/uitloggen", { method: "POST" }); } catch { /* toch uitloggen */ } bewaar(null); inloggen("U bent uitgelogd."); });
 }
 function gaNaar(t, opties = {}) {
@@ -365,28 +382,43 @@ async function start() {
 
 // ---------- overzicht ----------
 async function overzicht() {
-  const [{ berichten: post }, { logboek }, mensenLijst, telling] = await Promise.all([
+  const [{ berichten: post }, { logboek }, mensenLijst, telling, eigen] = await Promise.all([
     vraag("/inbox?status=nieuw&n=200"), vraag("/logboek").catch(() => ({ logboek: [] })),
-    magBeheren() ? vraag("/gebruikers").then(d => d.gebruikers).catch(() => null) : Promise.resolve(null), vraag("/inbox/telling").catch(() => null)]);
+    magBeheren() ? vraag("/gebruikers").then(d => d.gebruikers).catch(() => null) : Promise.resolve(null), vraag("/inbox/telling").catch(() => null),
+    vraag("/items").then(d => d.items || []).catch(() => [])]);
   const t = telling && (telling.soorten || telling.telling);
   const open = post.filter(b => (b.status || "nieuw") !== "afgehandeld");
   const tel = k => t && t[k] ? t[k].nieuw || 0 : open.filter(b => b.soort === k).length;
   const openTotaal = t ? Object.values(t).reduce((s2, x) => s2 + (x.nieuw || 0), 0) : open.length;
+  openPost = openTotaal;
   const beheerders = mensenLijst ? mensenLijst.filter(g => g.rol === "beheerder").length : null;
-  app.innerHTML = kader(`${H1("Overzicht")}
-    <p class="inleiding">Hier ziet u wat er binnenkwam en wat er laatst veranderde. Alles wat u op de site wilt aanpassen, staat onder Berichten.</p>
+  const concepten = eigen.filter(i => !i.gepubliceerd);
+  const uur = new Date().getHours();
+  const groet = uur < 12 ? "Goedemorgen" : uur < 18 ? "Goedemiddag" : "Goedenavond";
+  const taak = (attr, ik, kop, uitleg) => `<button class="taak-tegel" type="button" ${attr}>${ikoon(ik)}<span><b>${kop}</b><small>${uitleg}</small></span></button>`;
+  const teDoen = [];
+  if (openTotaal) teDoen.push(`<li><button class="te-doen" type="button" data-naar="postvak"><b>${openTotaal}</b><span>${openTotaal === 1 ? "bericht wacht" : "berichten wachten"} op antwoord<small>${[[tel("melding"), "meldingen"], [tel("contact"), "vragen"], [tel("aanmelding"), "aanmeldingen"], [tel("doemee"), "vrijwilligers"]].filter(x => x[0]).map(x => x[0] + " " + x[1]).join(" · ")}</small></span></button></li>`);
+  for (const c of concepten.slice(0, 3)) teDoen.push(`<li><button class="te-doen" type="button" data-concept="${esc(c.id)}"><b>✎</b><span>Concept afmaken: ${esc(c.titel || "zonder titel")}<small>Nog niet op de site</small></span></button></li>`);
+  app.innerHTML = kader(`${H1(`${groet}, ${esc(String(sessie.naam).split(" ")[0])}`)}
+    <p class="inleiding">Wat wilt u doen?</p>
     ${beheerders === 0 ? `<div class="melding waarschuwing" role="status"><b>Er is nog geen tweede beheerder.</b> Valt de eigenaar weg, dan kan niemand anders mensen toegang geven of een reservekopie maken. <button class="knop lijn klein" type="button" data-naar="mensen">Voeg een beheerder toe</button></div>` : ""}
-    <div class="tegels">
-      <button class="tegel" type="button" data-naar="postvak"><b>${openTotaal}</b><span>open in het postvak</span><small>${tel("melding")} meldingen · ${tel("contact")} vragen · ${tel("aanmelding")} aanmeldingen</small></button>
-      <button class="tegel" type="button" data-nieuw="nieuws"><b>+</b><span>Nieuw bericht</span><small>Nieuws, succes, petitie of vacature</small></button>
-      <button class="tegel" type="button" data-nieuw="agenda"><b>+</b><span>Nieuwe afspraak</span><small>Spreekuur, schouw of bijeenkomst</small></button>
-      <button class="tegel" type="button" data-naar="berichten"><b>✎</b><span>Bestaand bericht aanpassen</span><small>Titel, stadsdeel, tekst, foto of verbergen</small></button>
+    <div class="taak-tegels">
+      ${taak('data-nieuw="nieuws"', "nieuws", "Nieuws plaatsen", "Een bericht met foto")}
+      ${taak('data-nieuw="agenda"', "agenda", "Spreekuur of afspraak", "Komt op de agenda")}
+      ${taak('data-nieuw="succes"', "succes", "Succes melden", "Iets wat gelukt is")}
+      ${taak('data-nieuw="petitie"', "petitie", "Petitie starten", "Handtekeningen verzamelen")}
+      ${taak('data-naar="berichten"', "bewerk", "Bericht aanpassen", "Tekst, foto of stadsdeel")}
+      ${taak('data-naar="postvak"', "post", "Postvak bekijken", openTotaal ? `${openTotaal} open` : "Niets open")}
     </div>
-    <h2 class="sub">Laatste wijzigingen</h2>
-    ${logboek.length ? `<ol class="logboek">${logboek.slice(0, 15).map(l => `<li><time>${esc(tijdNL(l.tijd))}</time><span><b>${esc(l.wie)}</b> ${esc(l.wat.toLowerCase())}${l.titel ? `: ${esc(l.titel)}` : ""}</span></li>`).join("")}</ol>` : `<p class="leeg">Nog geen wijzigingen.</p>`}`);
+    <h2 class="sub">Nog te doen</h2>
+    ${teDoen.length ? `<ul class="te-doen-lijst">${teDoen.join("")}</ul>` : `<p class="leeg">Alles is bij. Niets wacht op u.</p>`}
+    <h2 class="sub">Laatst gedaan</h2>
+    ${logboek.length ? `<ol class="logboek">${logboek.slice(0, 8).map(l => `<li><time>${esc(tijdNL(l.tijd))}</time><span><b>${esc(l.wie)}</b> ${esc(l.wat.toLowerCase())}${l.titel ? `: ${esc(l.titel)}` : ""}</span></li>`).join("")}</ol>` : `<p class="leeg">Nog geen wijzigingen.</p>`}
+    <p style="margin-top:22px"><button class="link-knop" type="button" data-naar="hulp">Hoe werkt dit? Lees de uitleg</button></p>`);
   koppelKader();
   $$("[data-naar]").forEach(b => b.addEventListener("click", () => gaNaar(b.dataset.naar)));
   $$("[data-nieuw]").forEach(b => b.addEventListener("click", () => { tab = "berichten"; opslag.zet("tab", tab); eigenEditor({ soort: b.dataset.nieuw }); }));
+  $$("[data-concept]").forEach(b => b.addEventListener("click", () => { const i = concepten.find(c => String(c.id) === b.dataset.concept); if (i) { tab = "berichten"; opslag.zet("tab", tab); eigenEditor(i); } }));
 }
 
 // ---------- berichten: alles op één lijst ----------
@@ -444,6 +476,7 @@ async function berichten() {
   app.innerHTML = kader(`<div class="kop-rij"><div>${H1("Berichten")}
     <p class="inleiding">Alles wat op de site staat: wat hier is geplaatst en wat elke ochtend van hartvoordenhaag.nl komt. Uw aanpassingen blijven staan, ook na de import.</p></div>
     <div class="knoppen"><button class="knop geel" type="button" id="nieuw">Nieuw bericht</button><button class="knop lijn" type="button" id="nieuw-ag">Nieuwe afspraak</button></div></div>
+    <div class="snel" role="group" aria-label="Snel kiezen">${[["", "Alles"], ["eigen", "Door ons geplaatst"], ["verborgen", "Concepten en verborgen"], ["geraden", "Stadsdeel nakijken"]].map(([k, n]) => `<button class="knopje" type="button" data-snel="${k}" aria-pressed="${lijstFilter.status === k}">${n}</button>`).join("")}</div>
     <form class="filterbalk" id="filters" role="search" onsubmit="return false">
       <div class="veld"><label for="f-q">Zoek</label><input type="search" id="f-q" value="${esc(lijstFilter.q)}" placeholder="Titel, naam of woord"></div>
       <div class="veld"><label for="f-soort">Soort</label><select id="f-soort">${opt("", "Alles", lijstFilter.soort)}${Object.entries(SOORT_NAAM).map(([k, n]) => opt(k, n, lijstFilter.soort)).join("")}</select></div>
@@ -463,6 +496,9 @@ async function berichten() {
   $("#f-q").addEventListener("input", e => { clearTimeout(wacht); wacht = setTimeout(() => { lijstFilter.q = e.target.value.trim(); lijstFilter.n = 30; teken(); }, 200); });
   [["#f-soort", "soort"], ["#f-sd", "sd"], ["#f-status", "status"]].forEach(([s, k]) => $(s).addEventListener("change", e => { lijstFilter[k] = e.target.value; lijstFilter.n = 30; teken(); }));
   $("#meer").addEventListener("click", () => { lijstFilter.n += 30; teken(); });
+  const zetSnel = () => $$("[data-snel]").forEach(k => k.setAttribute("aria-pressed", String(k.dataset.snel === lijstFilter.status)));
+  $$("[data-snel]").forEach(k => k.addEventListener("click", () => { lijstFilter.status = k.dataset.snel; lijstFilter.n = 30; $("#f-status").value = lijstFilter.status; zetSnel(); teken(); }));
+  $("#f-status").addEventListener("change", zetSnel);
   $("#nieuw").addEventListener("click", () => eigenEditor({ soort: "nieuws" }));
   $("#nieuw-ag").addEventListener("click", () => eigenEditor({ soort: "agenda" }));
   $("#lijst").addEventListener("click", async e => {
@@ -598,31 +634,44 @@ function eigenEditor(i) {
   const soortNu = i.soort || "nieuws";
   const html = i.html || (i.tekst ? i.tekst.split(/\n{2,}/).map(p => `<p>${esc(p).replace(/\n/g, "<br>")}</p>`).join("") : "");
   const sd = i.stadsdelen && i.stadsdelen.length ? i.stadsdelen : i.stadsdeel ? [i.stadsdeel] : [];
+  const stap = (n, kop, inhoud, extra = "") => `<section class="ed-stap"${extra}><h2><span class="ed-nr" aria-hidden="true">${n}</span>${kop}</h2>${inhoud}</section>`;
   app.innerHTML = kader(`<p class="kruimel"><button class="link-knop" type="button" id="terug-lijst">Berichten</button> / ${i.id ? "Bewerken" : "Nieuw"}</p>
   ${H1(i.id ? "Bericht bewerken" : soortNu === "agenda" ? "Nieuwe afspraak" : "Nieuw bericht")}
-  <form class="formulier" id="ed" style="margin-top:20px" novalidate>
-    <div class="velden">
-      <div class="veld"><label for="soort">Soort</label><select id="soort">${Object.entries(EIGEN_SOORTEN).map(([k, n]) => `<option value="${k}"${soortNu === k ? " selected" : ""}>${n}</option>`).join("")}</select></div>
-      <div class="veld"><label for="datum">Datum</label><input type="date" id="datum" value="${v("datum", vandaag())}"><small data-agenda>De dag van de afspraak.</small></div>
+  <form class="formulier ed" id="ed" novalidate>
+   <div class="ed-raster"><div class="ed-hoofd">
+    <div class="veld ed-soort"><label for="soort">Wat plaatst u?</label><select id="soort">${Object.entries(EIGEN_SOORTEN).map(([k, n]) => `<option value="${k}"${soortNu === k ? " selected" : ""}>${n}</option>`).join("")}</select></div>
+    ${stap(1, "De tekst", `<div class="velden">
       <div class="veld breed"><label for="titel">Titel</label><input type="text" id="titel" maxlength="160" value="${v("titel")}"></div>
-      <div class="veld" data-agenda><label for="tijd">Tijd</label><input type="time" id="tijd" value="${esc((i.tijd || "").replace(".", ":"))}"></div>
-      <div class="veld" data-agenda><label for="plek">Plek</label><input type="text" id="plek" placeholder="Wijkcentrum, straat" value="${v("plek")}"></div>
-      ${i.id ? "" : `<div class="veld breed" data-agenda><label for="herhaal">Herhalen <small>Bijvoorbeeld een spreekuur dat elke maand terugkomt</small></label><div class="herhaal-rij"><select id="herhaal"><option value="">Niet herhalen</option><option value="week">Elke week</option><option value="2week">Elke twee weken</option><option value="maand">Elke maand op dezelfde weekdag</option></select><label for="herhaal-tot" class="verborgen">Tot en met</label><input type="date" id="herhaal-tot" aria-label="Herhalen tot en met"></div><small id="herhaal-uitleg"></small></div>`}
-      <fieldset class="veld breed"><legend>Stadsdeel <small>Geen vinkje betekent heel Den Haag</small></legend>${vinkjes("sd", STADSDELEN, sd)}</fieldset>
-      <fieldset class="veld breed" data-geen-agenda><legend>Onderwerpen <small>Niet verplicht</small></legend>${vinkjes("ow", ONDERWERPEN, i.onderwerpen || [])}</fieldset>
-      <div class="veld breed"><label for="samenvatting">Korte samenvatting <small>Eén of twee zinnen voor de overzichten</small></label><textarea id="samenvatting" maxlength="400" style="min-height:80px">${v("samenvatting")}</textarea></div>
-      <div class="veld breed" id="tekst-wrap"><span class="label">Tekst</span>${tekstVeld(schoneHtml(html), "tekst")}</div>
-      <div class="veld breed"><label for="link">Link <small>Niet verplicht, begint met https://</small></label><input type="url" id="link" value="${v("link")}"></div>
-      <div class="veld breed"><span class="label">Foto <small>JPG, PNG of WebP. Wordt automatisch verkleind.</small></span><div id="voorbeeld">${i.foto ? `<img class="foto-voorbeeld" src="${fotoUrl(i.foto)}" alt="Huidige foto">` : ""}</div>
+      <div class="veld breed"><label for="samenvatting">Korte samenvatting <small>Eén of twee zinnen. Staat in de overzichten en bij het delen.</small></label><textarea id="samenvatting" maxlength="400" style="min-height:80px">${v("samenvatting")}</textarea></div>
+      <div class="veld breed" id="tekst-wrap"><span class="label">Tekst</span>${tekstVeld(schoneHtml(html), "tekst")}</div></div>`)}
+    ${stap(2, "De foto", `<div class="velden"><div class="veld breed"><span class="label">Foto <small>JPG, PNG of WebP. Wordt automatisch verkleind.</small></span><div id="voorbeeld">${i.foto ? `<img class="foto-voorbeeld" src="${fotoUrl(i.foto)}" alt="Huidige foto">` : ""}</div>
         <div class="knoppen"><label class="knop lijn klein" for="foto">Foto kiezen</label><input type="file" id="foto" accept="image/jpeg,image/png,image/webp" class="verborgen-input">${i.foto ? `<button class="knop lijn klein" type="button" id="foto-weg">Geen foto</button>` : ""}</div>
-        <label for="alt" style="margin-top:10px">Wat staat er op de foto? <small>Voor mensen die de foto niet kunnen zien.</small></label><input type="text" id="alt" maxlength="200" value="${v("alt")}"></div>
-      ${petitieVelden(i)}
+        <label for="alt" style="margin-top:10px">Wat staat er op de foto? <small>Voor mensen die de foto niet kunnen zien.</small></label><input type="text" id="alt" maxlength="200" value="${v("alt")}"></div></div>`)}
+    ${stap(3, "Waar en wanneer", `<div class="velden">
+      <div class="veld"><label for="datum">Datum</label><input type="date" id="datum" value="${v("datum", vandaag())}"><small data-agenda>De dag van de afspraak.</small></div>
+      <div class="veld" data-agenda><label for="tijd">Tijd</label><input type="time" id="tijd" value="${esc((i.tijd || "").replace(".", ":"))}"></div>
+      <div class="veld breed" data-agenda><label for="plek">Plek</label><input type="text" id="plek" placeholder="Wijkcentrum, straat" value="${v("plek")}"></div>
+      ${i.id ? "" : `<div class="veld breed" data-agenda><label for="herhaal">Herhalen <small>Bijvoorbeeld een spreekuur dat elke maand terugkomt</small></label><div class="herhaal-rij"><select id="herhaal"><option value="">Niet herhalen</option><option value="week">Elke week</option><option value="2week">Elke twee weken</option><option value="maand">Elke maand op dezelfde weekdag</option></select><label for="herhaal-tot" class="verborgen">Tot en met</label><input type="date" id="herhaal-tot" aria-label="Herhalen tot en met"></div><small id="herhaal-uitleg"></small></div>`}
+      <fieldset class="veld breed"><legend>Stadsdeel <small>Geen vinkje betekent heel Den Haag</small></legend>${vinkjes("sd", STADSDELEN, sd)}</fieldset></div>`)}
+    <div class="velden">${petitieVelden(i)}</div>
+    <details class="ed-meer"${(i.link || (i.onderwerpen || []).length || i.vast) ? " open" : ""}><summary>Meer opties <small>onderwerpen, link, bovenaan zetten</small></summary><div class="velden">
+      <fieldset class="veld breed" data-geen-agenda><legend>Onderwerpen <small>Niet verplicht</small></legend>${vinkjes("ow", ONDERWERPEN, i.onderwerpen || [])}</fieldset>
+      <div class="veld breed"><label for="link">Link <small>Niet verplicht, begint met https://</small></label><input type="url" id="link" value="${v("link")}"></div>
       <fieldset class="veld breed" data-vast><legend>Op de site</legend><label class="vink"><input type="checkbox" id="vast"${i.vast ? " checked" : ""}><span>Bovenaan zetten (komt als eerste in de lijst en op de voorpagina)</span></label>
         <div class="veld" id="tot-veld"${i.vast ? "" : " hidden"}><label for="bovenaanTot">Bovenaan tot en met <small>Leeg: tot u het vinkje weghaalt</small></label><input type="date" id="bovenaanTot" value="${v("bovenaanTot")}"></div></fieldset>
-    </div>
-    <div class="knoppen"><button class="knop groen" type="submit" data-publiceer="1">${i.id && i.gepubliceerd ? "Opslaan" : "Publiceren"}</button><button class="knop lijn" type="button" id="bekijk">Voorbeeld</button><button class="knop lijn" type="submit" data-publiceer="0">${i.id && i.gepubliceerd ? "Terugzetten naar concept" : "Opslaan als concept"}</button><button class="knop lijn" type="button" id="annuleer">Annuleren</button>
-      ${i.id ? `<button class="knop lijn" type="button" id="weg">Verwijderen</button>` : ""}
-      ${i.id && i.gepubliceerd ? `<a class="meer" href="${i.soort === "agenda" ? "./agenda/" : `./s/w${i.id}/`}" target="_blank" rel="noopener">Bekijk op de site</a>` : ""}</div>
+    </div></details>
+   </div>
+   <aside class="ed-zij" aria-label="Controle">
+    <h2>Klaar om te plaatsen?</h2>
+    <ul class="ed-check" id="ed-check"></ul>
+    <div data-geen-agenda><h2>Zo ziet het eruit bij delen</h2>
+    <div class="deelkaart" id="deelkaart" aria-hidden="true"><div class="dk-beeld"></div><div class="dk-tekst"><b></b><span></span><small>hartvoordenhaag.nl</small></div></div>
+    <p class="zacht" style="font-size:.86rem;margin-top:8px">Dit voorbeeld krijgen mensen in WhatsApp, LinkedIn en Facebook te zien als iemand de link deelt.</p></div>
+   </aside></div>
+    <div class="ed-balk"><div class="knoppen"><button class="knop groen" type="submit" data-publiceer="1">${i.id && i.gepubliceerd ? "Opslaan" : "Publiceren"}</button><button class="knop lijn" type="button" id="bekijk">Voorbeeld</button><button class="knop lijn" type="submit" data-publiceer="0">${i.id && i.gepubliceerd ? "Terugzetten naar concept" : "Opslaan als concept"}</button></div>
+      <div class="knoppen ed-klein"><button class="link-knop" type="button" id="annuleer">Annuleren</button>
+      ${i.id ? `<button class="link-knop" type="button" id="weg">Verwijderen</button>` : ""}
+      ${i.id && i.gepubliceerd ? `<a class="meer" href="${i.soort === "agenda" ? "./agenda/" : `./s/w${i.id}/`}" target="_blank" rel="noopener">Bekijk op de site</a>` : ""}</div></div>
     <p id="m-ed" hidden></p><p id="m-concept" hidden></p></form>`);
   koppelKader();
   const form = $("#ed"), m = $("#m-ed");
@@ -638,7 +687,22 @@ function eigenEditor(i) {
     $$("[data-petitie]").forEach(el => el.hidden = s !== "petitie");
     const tv = $("#tot-veld"); if (tv) tv.hidden = !$("#vast").checked;
   };
+  const werkZijBij = () => {
+    const s = $("#soort").value, ag = s === "agenda";
+    const heeftTekst = leesTekst().replace(/<[^>]+>/g, "").trim().length > 0;
+    const foto = $("#voorbeeld img");
+    const punten = ag
+      ? [[$("#titel").value.trim().length >= 4, "Titel"], [!!$("#datum").value, "Datum"], [!!$("#tijd").value, "Tijd"], [!!$("#plek").value.trim(), "Plek"]]
+      : [[$("#titel").value.trim().length >= 4, "Titel"], [!!$("#samenvatting").value.trim(), "Korte samenvatting"], [heeftTekst, "Tekst"], [!!foto, "Foto"], [!foto || !!$("#alt").value.trim(), "Beschrijving van de foto"]];
+    const sdn = gevinkt(form, "sd");
+    $("#ed-check").innerHTML = punten.map(([ok, n]) => `<li class="${ok ? "ok" : "mist"}"><span aria-hidden="true">${ok ? "✓" : "○"}</span>${n}<span class="verborgen">${ok ? " is ingevuld" : " ontbreekt nog"}</span></li>`).join("") + `<li class="info"><span aria-hidden="true">●</span>${sdn.length ? esc(sdn.join(", ")) : "Heel Den Haag"}</li>`;
+    const dk = $("#deelkaart");
+    $(".dk-beeld", dk).innerHTML = foto ? `<img src="${esc(foto.src)}" alt="">` : `<span>Nog geen foto</span>`;
+    $("b", dk).textContent = $("#titel").value.trim() || "Titel van het bericht";
+    $(".dk-tekst span", dk).textContent = $("#samenvatting").value.trim() || "De korte samenvatting komt hier.";
+  };
   $("#soort").addEventListener("change", toonVelden); form.addEventListener("change", toonVelden); toonVelden();
+  form.addEventListener("input", werkZijBij); form.addEventListener("change", werkZijBij); new MutationObserver(werkZijBij).observe($("#voorbeeld"), { childList: true }); werkZijBij(); setTimeout(werkZijBij, 400);
   form.addEventListener("input", () => { gewijzigd = true; concept.bewaar(); });
   $("#bekijk").addEventListener("click", () => voorbeeld({ soort: $("#soort").value, ...staat(), stadsdelen: gevinkt(form, "sd"), beeld: $("#voorbeeld img") ? $("#voorbeeld img").src : "" }));
   // herhalende afspraak: de data die eruit komen, staan meteen onder het veld
@@ -702,12 +766,35 @@ function eigenEditor(i) {
       const antwoord = await vraag("/items", { method: "POST", body: b });
       for (const d of extra) await vraag("/items", { method: "POST", body: { ...b, id: undefined, datum: d } });
       concept.wis(); gewijzigd = false; rijenCache = null; tab = "berichten"; opslag.zet("tab", tab);
-      await laadRijen(); await berichten();
+      await laadRijen();
+      if (b.gepubliceerd && antwoord && antwoord.item && s !== "agenda") return gepubliceerdScherm(b, antwoord);
+      await berichten();
       // deellink: nieuws, successen, petities en vacatures krijgen een eigen pagina met titel, tekst en foto voor WhatsApp en LinkedIn
       const deel = antwoord && antwoord.deelpagina && antwoord.item ? ` Deellink: ${new URL(`./s/w${antwoord.item.id}/`, location.href).href} (het voorbeeld met foto werkt in WhatsApp en LinkedIn ${antwoord.deelpagina === "snel" ? "na ongeveer twee minuten" : "binnen een half uur"}).` : "";
       melding($("#m-lijst"), (b.gepubliceerd ? `Gepubliceerd: "${b.titel.trim()}". Het staat binnen een minuut op de site.${deel}` : `Opgeslagen als concept: "${b.titel.trim()}".`) + (extra.length ? ` Plus ${extra.length} herhalingen.` : ""));
     } catch (err) { melding(m, err.message, true); knoppen.forEach(k => k.disabled = false); knop.textContent = oud; }
   });
+}
+
+// ---------- na publiceren: de link om te delen ----------
+function gepubliceerdScherm(b, antwoord) {
+  const url = new URL(`./s/w${antwoord.item.id}/`, location.href).href;
+  const wacht = antwoord.deelpagina === "snel" ? "na ongeveer twee minuten" : "binnen een half uur";
+  app.innerHTML = kader(`<div class="klaar"><p class="klaar-vink" aria-hidden="true">✓</p>${H1("Gepubliceerd")}
+    <p class="inleiding"><b>${esc(b.titel.trim())}</b> staat binnen een minuut op de site.</p>
+    <div class="klaar-link"><label for="deel-url">Link om te delen</label><div class="nb-rij"><input type="text" id="deel-url" readonly value="${esc(url)}"><button class="knop groen" type="button" id="kopieer">Kopieer link</button></div>
+      <small>Het voorbeeld met foto werkt in WhatsApp en LinkedIn ${wacht}.</small><p id="m-klaar" hidden></p></div>
+    <div class="knoppen" style="margin-top:18px"><a class="knop lijn" href="https://wa.me/?text=${encodeURIComponent(b.titel.trim() + " " + url)}" target="_blank" rel="noopener">Deel via WhatsApp</a><a class="knop lijn" href="${esc(url)}" target="_blank" rel="noopener">Bekijk op de site</a></div>
+    <div class="knoppen" style="margin-top:26px"><button class="knop geel" type="button" id="nog-een">Nog een bericht plaatsen</button><button class="link-knop" type="button" id="naar-lijst">Naar alle berichten</button><button class="link-knop" type="button" id="naar-start">Naar Start</button></div></div>`);
+  koppelKader();
+  const h = $("#app h1"); if (h) h.focus({ preventScroll: true }); scrollTo(0, 0);
+  $("#kopieer").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(url); melding($("#m-klaar"), "De link is gekopieerd."); }
+    catch { $("#deel-url").select(); melding($("#m-klaar"), "Kopiëren lukte niet vanzelf. De link is geselecteerd: kopieer hem met Ctrl+C."); }
+  });
+  $("#nog-een").addEventListener("click", () => eigenEditor({ soort: b.soort }));
+  $("#naar-lijst").addEventListener("click", () => gaNaar("berichten"));
+  $("#naar-start").addEventListener("click", () => gaNaar("overzicht"));
 }
 
 // ---------- postvak ----------
@@ -727,6 +814,7 @@ async function postvak() {
   const post = [...d.berichten, ...postExtra];
   const open = telling && (telling.soorten || telling.telling) ? (telling.soorten || telling.telling) : null;
   const aantal = k => open && open[k] ? (open[k].nieuw || 0) : "";
+  if (open) openPost = Object.values(open).reduce((t, x) => t + (x.nieuw || 0), 0);
   const veld = (k, v) => k === "email" ? `<a href="mailto:${esc(v)}">${esc(v)}</a>` : k === "telefoon" ? `<a href="tel:${esc(String(v).replace(/[^\d+]/g, ""))}">${esc(v)}</a>` : esc(v);
   // voor petities en aanmeldingen: kiezen welke, zodat de lijst te downloaden is voor de overhandiging of de organisator
   const petities = [...new Set(post.filter(b => b.soort === "petitie" && b.petitie).map(b => b.petitie))];
@@ -914,7 +1002,7 @@ async function hulp() {
       <h2>Wat kan ik hier?</h2>
       <p>U regelt hier wat er op de site staat. De berichten van hartvoordenhaag.nl komen elke ochtend vanzelf binnen. U kunt ze aanpassen, een stadsdeel geven of verbergen. Eigen berichten, afspraken en petities plaatst u hier zelf.</p>
       <h2>Een nieuw bericht of een afspraak plaatsen</h2>
-      <ol><li>Kies <b>Berichten</b> en dan <b>Nieuw bericht</b> of <b>Nieuwe afspraak</b>.</li><li>Vul een titel, datum en korte samenvatting in. Vink het stadsdeel aan waar het over gaat.</li><li>Schrijf de tekst. Met de knoppen boven het tekstvak maakt u een kop, een opsomming of een link.</li><li>Kies <b>Publiceren</b>. Binnen een minuut staat het op de site. Nog niet klaar? Kies <b>Opslaan als concept</b>.</li></ol>
+      <ol><li>Kies op <b>Start</b> wat u wilt plaatsen, bijvoorbeeld <b>Nieuws plaatsen</b> of <b>Spreekuur of afspraak</b>.</li><li>Stap 1: vul de titel, een korte samenvatting en de tekst in. Met de knoppen boven het tekstvak maakt u een kop, een opsomming of een link.</li><li>Stap 2: kies een foto en schrijf in een paar woorden wat erop staat.</li><li>Stap 3: kies de datum en vink het stadsdeel aan waar het over gaat.</li><li>Rechts ziet u wat er nog ontbreekt en hoe het bericht eruitziet als iemand de link deelt.</li><li>Kies <b>Publiceren</b>. U krijgt meteen de link om te delen, bijvoorbeeld via WhatsApp. Nog niet klaar? Kies <b>Opslaan als concept</b>; het concept staat daarna op Start onder Nog te doen.</li></ol>
       <h2>Een bestaand bericht aanpassen</h2>
       <p>Zoek het bericht onder <b>Berichten</b>, bijvoorbeeld op een woord uit de titel. Kies <b>Bewerken</b>. Verander wat nodig is en kies <b>Opslaan</b>. Het origineel op hartvoordenhaag.nl blijft gewoon staan. Spijt? Kies <b>Terug naar het origineel</b>.</p>
       <h2>Stadsdeel kiezen</h2>
@@ -934,7 +1022,7 @@ async function hulp() {
       <h2>Bezoek</h2>
       <p>Onder <b>Bezoek</b> ziet u hoe vaak pagina's zijn bekeken en hoeveel formulieren er binnenkwamen. De site telt zonder cookies en zonder IP-adressen.</p>
       <h2>Veilig inloggen</h2>
-      <p>Zet onder <b>Mijn account</b> tweestapsverificatie aan: dan vraagt de site na uw wachtwoord ook een code uit een app op uw telefoon. Vink <b>Ingelogd blijven</b> alleen aan op uw eigen computer.</p>
+      <p>Klik rechtsboven op uw naam en kies <b>Mijn account</b>. Zet daar tweestapsverificatie aan: dan vraagt de site na uw wachtwoord ook een code uit een app op uw telefoon. Vink <b>Ingelogd blijven</b> alleen aan op uw eigen computer.</p>
       <h2>Wie mag wat?</h2>
       <p>Een <b>redacteur</b> plaatst en past berichten aan en handelt het postvak af. Een <b>beheerder</b> mag daarnaast mensen toegang geven en een reservekopie maken. Zorg dat er altijd minstens twee beheerders zijn, zodat het werk doorgaat als iemand wegvalt.</p>
       <h2>Als er iets misgaat</h2>
