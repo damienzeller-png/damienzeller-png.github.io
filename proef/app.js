@@ -245,7 +245,7 @@ const stukLink = (i, inhoud, extra = "") => `<a href="${U(stukPad(i))}" data-stu
 const lijstBeeld = i => i.beeld_klein || i.beeld;
 function logItem(i, eerste, opties = {}) {
   return `<li class="log-item${eerste ? " eerste" : ""}${i.beeld ? "" : " zonder-beeld"}">
-    <div class="log-tekst"><h3>${stukLink(i, esc(i.titel))}</h3>${bijschrift(i, opties)}${i.samenvatting ? `<p class="sam">${esc(i.samenvatting)}</p>` : ""}<span class="lees-meer" aria-hidden="true">Lees meer ${PIJL}</span></div>
+    <div class="log-tekst"><h3>${stukLink(i, esc(i.titel))}</h3>${bijschrift(i, opties)}${i.samenvatting ? `<p class="sam">${esc(i.samenvatting)}</p>` : ""}</div>
     ${i.beeld ? `<img class="log-beeld" src="${esc(eerste && !smal() ? i.beeld : lijstBeeld(i))}" alt="" loading="${eerste ? "eager" : "lazy"}"${eerste ? ' fetchpriority="high"' : ""} decoding="async">` : ""}</li>`;
 }
 function stukItem(i, opties = {}) {
@@ -312,6 +312,7 @@ function controleer(form, eisen) {
   return !eerste;
 }
 const verplicht = tekst => v => v ? "" : tekst;
+const telGoed = v => !v || /^\+?[0-9 ()\-]{8,}$/.test(String(v).trim()) ? "" : "Dit telefoonnummer klopt niet. Gebruik alleen cijfers, bijvoorbeeld 06 12345678.";
 const mailOfTel = (v, form) => {
   const tel = (form.elements.telefoon?.value || "").trim();
   if (!v && !tel) return "Vul een e-mailadres of telefoonnummer in, zodat we kunnen reageren.";
@@ -471,7 +472,7 @@ pagina.home.na = async () => {
   const zelf = stil() || smal() || (navigator.connection && navigator.connection.saveData);
   const zet = speelt => { k.querySelector("span").textContent = speelt ? "Pauzeer film" : "Speel film af"; k.querySelector("svg").innerHTML = speelt ? '<rect x="3" y="2" width="3.5" height="12"/><rect x="9.5" y="2" width="3.5" height="12"/>' : '<path d="M4 2l10 6-10 6z"/>'; };
   zet(false);
-  if (!zelf) { v.preload = "metadata"; v.play().then(() => zet(true)).catch(() => zet(false)); }
+  if (!zelf) v.preload = "metadata";
   k.addEventListener("click", () => { if (v.paused) { v.play().then(() => zet(true)).catch(() => zet(false)); } else { v.pause(); zet(false); } });
   activeerKaart(await laad("kaart"), opslag.lees("stadsdeel"));
 };
@@ -798,7 +799,7 @@ async function detail(id) {
       <div class="velden"><div class="veld"><label for="p-naam">Naam</label><input type="text" id="p-naam" name="naam" autocomplete="name"></div>
       <div class="veld"><label for="p-email">E-mailadres</label><input type="email" id="p-email" name="email" autocomplete="email"></div>
       <div class="veld breed"><label for="p-sd">Stadsdeel <small>(niet verplicht)</small></label><select id="p-sd" name="stadsdeel">${stadsdeelOpties((i.stadsdelen || [])[0])}</select></div></div>
-      ${akkoordVeld("petitie")}<button class="knop groen" type="submit">Teken de petitie</button><p class="uitslag" hidden></p></form>` : ""}
+      ${akkoordVeld("petitie")}<p class="uitslag" hidden></p><button class="knop groen" type="submit">Teken de petitie</button></form>` : ""}
     ${(() => { const tekst = i.html || `<p>${esc(i.samenvatting)}</p>`, leegje = isPetitie && zonderTags(tekst).length < 80;
       return leegje ? "" : `${dictum || open ? `<h2 class="volledig">${open ? "Waarom deze petitie" : "Volledige tekst"}</h2>` : ""}<div class="artikel-tekst" style="margin-top:18px">${tekst}</div>`; })()}
     <div class="na-artikel">
@@ -1040,7 +1041,7 @@ pagina.agenda = async ([stap], q) => {
           <div class="veld"><label for="a-tel">Telefoonnummer <small>(niet verplicht)</small></label><input type="tel" id="a-tel" name="telefoon" autocomplete="tel"></div>
           <div class="veld"><label for="a-aantal">Met hoeveel personen?</label><select id="a-aantal" name="aantal">${[1, 2, 3, 4, 5, 6].map(n => `<option>${n}</option>`).join("")}</select></div>
           <div class="veld breed"><label for="a-ber">Vraag of onderwerp dat u wilt bespreken <small>(niet verplicht)</small></label><textarea id="a-ber" name="bericht" maxlength="1500"></textarea></div></div>
-        ${akkoordVeld("aanmelding")}<button class="knop groen" type="submit">Meld mij aan</button><p class="uitslag" hidden></p></form>
+        ${akkoordVeld("aanmelding")}<p class="uitslag" hidden></p><button class="knop groen" type="submit">Meld mij aan</button></form>
       <div><h2>${DAG[x.wd][0].toUpperCase() + DAG[x.wd].slice(1)} ${x.d} ${MAAND[x.m]}</h2>
         <ul class="voordelen"><li>${a.tijd ? esc(a.tijd) + " uur" : "Tijd volgt"}</li><li>${esc(a.plek || "")}${a.stadsdeel ? ", " + esc(a.stadsdeel) : ""}</li>${a.samenvatting ? `<li>${esc(a.samenvatting)}</li>` : ""}</ul>
         <p class="melding" style="margin-top:22px">Aanmelden helpt ons met koffie en stoelen. Zonder aanmelden bent u ook welkom.</p>
@@ -1068,7 +1069,7 @@ pagina.agenda.na = async ([stap], q) => {
   $("#ics").addEventListener("click", () => icsDownload(a));
   koppelFormulier($("#form"), {
     soort: "aanmelding", concept: "aanmelding",
-    eisen: () => ({ naam: verplicht("Vul uw naam in."), email: v => !v ? "Vul uw e-mailadres in, dan sturen we een bevestiging." : EMAIL.test(v) ? "" : "Dit e-mailadres klopt niet.", akkoord: v => v ? "" : "Vink dit aan, zodat we u kunnen laten weten als er iets verandert." }),
+    eisen: () => ({ naam: verplicht("Vul uw naam in."), email: v => !v ? "Vul uw e-mailadres in, dan sturen we een bevestiging." : EMAIL.test(v) ? "" : "Dit e-mailadres klopt niet.", telefoon: telGoed, akkoord: v => v ? "" : "Vink dit aan, zodat we u kunnen laten weten als er iets verandert." }),
     bedankt: () => `U bent aangemeld voor ${a.titel}. Tot ${DAG[dt(a.datum).wd]}!`,
     na: (d, uit) => { uit.insertAdjacentHTML("afterend", `<div class="deel-na"><button class="knop groen" type="button" id="ics2">Zet in mijn agenda</button></div>`); $("#ics2").addEventListener("click", () => icsDownload(a)); },
   });
@@ -1108,7 +1109,7 @@ pagina["doe-mee"] = async () => paginaKop("Doe mee en maak uw buurt beter", "Den
         <div class="veld"><label for="f-sd">Ik woon in stadsdeel</label><select id="f-sd" name="stadsdeel">${stadsdeelOpties(opslag.lees("stadsdeel") || "")}</select></div>
         </div>
       <details class="extra-veld"><summary>Iets toevoegen</summary><div class="veld"><label for="f-ber">Wat moeten we weten? <small>(niet verplicht)</small></label><textarea id="f-ber" name="bericht" maxlength="1500"></textarea></div></details>
-      ${akkoordVeld("doemee")}<button class="knop groen" type="submit">Ik doe mee</button><p class="uitslag" hidden></p></form>
+      ${akkoordVeld("doemee")}<p class="uitslag" hidden></p><button class="knop groen" type="submit">Ik doe mee</button></form>
     <div><h2>Zo werkt het</h2><ol class="uitleg" style="grid-template-columns:1fr;margin-top:22px">
       <li><b>Meld u aan</b><span>Dat duurt een minuut.</span></li>
       <li><b>Kennismaken</b><span>Iemand uit uw stadsdeel belt of mailt u voor een eerste gesprek.</span></li>
@@ -1123,7 +1124,7 @@ pagina["doe-mee"].na = () => {
   f.addEventListener("change", zetTaken); f.addEventListener("submit", zetTaken, true);
   koppelFormulier(f, {
     soort: "doemee", concept: "doemee",
-    eisen: () => ({ takenlijst: v => v ? "" : "Kies hoe u wilt helpen.", naam: verplicht("Vul uw naam in."), email: mailOfTel, stadsdeel: verplicht("Kies uw stadsdeel, dan zoeken we iemand bij u in de buurt."), akkoord: v => v ? "" : "Vink dit aan, zodat we contact mogen opnemen." }),
+    eisen: () => ({ takenlijst: v => v ? "" : "Kies hoe u wilt helpen.", naam: verplicht("Vul uw naam in."), email: mailOfTel, telefoon: telGoed, stadsdeel: verplicht("Kies uw stadsdeel, dan zoeken we iemand bij u in de buurt."), akkoord: v => v ? "" : "Vink dit aan, zodat we contact mogen opnemen." }),
     voor: () => ({ rol: "Vrijwilliger" }),
     bedankt: (d, a) => `Dank u wel! Iemand uit ${d.stadsdeel || "uw stadsdeel"} neemt binnenkort contact met u op.${a.kenmerk ? ` Uw kenmerk is ${a.kenmerk}.` : ""}`,
   });
@@ -1159,7 +1160,7 @@ pagina.contact = async ([sub], q) => {
           <input type="hidden" name="lat" id="c-lat"><input type="hidden" name="lon" id="c-lon"><p class="plek-uitslag" id="plek-uitslag" aria-live="polite"></p></div>
         <div class="veld breed" id="foto-veld"><label for="c-foto">Foto <small>(niet verplicht)</small></label><span class="foto-kies"><label class="knop lijn klein" for="c-foto">Foto kiezen</label><input type="file" id="c-foto" accept="image/*" class="verborgen-input"></span><div id="foto-voorbeeld" class="foto-voorbeeld-rij"></div></div>
         <div class="veld breed"><label for="c-ber">Uw bericht</label><textarea id="c-ber" name="bericht" maxlength="1500">${aan ? `Voor ${esc(aan.naam)}: ` : ""}</textarea><small id="teller-tekst">0 van 1500 tekens</small></div></div>
-      ${akkoordVeld(melding ? "melding" : "contact")}<button class="knop groen" type="submit">Verstuur bericht</button><p class="uitslag" hidden></p></form></div>
+      ${akkoordVeld(melding ? "melding" : "contact")}<p class="uitslag" hidden></p><button class="knop groen" type="submit">Verstuur bericht</button></form></div>
     <div><h2>Bel of mail</h2><ul class="stukken" style="margin-top:20px">
       <li><h3><a href="${TEL_LINK}">${TEL}</a></h3><p class="sam">Voor een snelle vraag</p></li>
       <li><h3><a href="mailto:${MAIL}">${MAIL}</a></h3><p class="sam">Wij lezen elk bericht</p></li>
@@ -1226,7 +1227,7 @@ pagina.contact.na = () => {
   koppelFormulier(form, {
     soort: d => d.onderwerp === "melding" ? "melding" : "contact", concept: "contact",
     eisen: d => ({
-      naam: verplicht("Vul uw naam in."), email: mailOfTel,
+      naam: verplicht("Vul uw naam in."), email: mailOfTel, telefoon: telGoed,
       plek: v => d.onderwerp === "melding" && !v ? "Waar is het? Een straat of herkenningspunt is genoeg." : "",
       stadsdeel: v => d.onderwerp === "melding" && !v ? "Kies het stadsdeel, dan komt het bij de juiste raadsleden." : "",
       bericht: v => v.replace(/^Voor [^:]+:\s*/, "").length < 10 ? "Vertel in een paar woorden waar het over gaat." : "",
@@ -1310,7 +1311,7 @@ pagina.lid = async () => paginaKop("Word lid", "Met meer leden zijn we sterker. 
           <div class="veld"><label for="l-sd">Stadsdeel</label><select id="l-sd" name="stadsdeel">${stadsdeelOpties()}</select><small id="l-sd-hint"></small></div>
           <div class="veld"><label for="l-tel">Telefoonnummer <small>(niet verplicht)</small></label><input type="tel" id="l-tel" name="telefoon" autocomplete="tel"></div></div>
         <fieldset><legend>Wilt u ook actief worden?</legend><div class="keuzes kort">
-          <div class="keuze"><input type="radio" name="actief" id="ac1" value="ja" checked><label for="ac1"><b>Ja, graag</b></label></div>
+          <div class="keuze"><input type="radio" name="actief" id="ac1" value="ja"><label for="ac1"><b>Ja, graag</b></label></div>
           <div class="keuze"><input type="radio" name="actief" id="ac2" value="later"><label for="ac2"><b>Misschien later</b></label></div>
           <div class="keuze"><input type="radio" name="actief" id="ac3" value="nee"><label for="ac3"><b>Nee, alleen lid</b></label></div></div></fieldset>
         <div class="velden">
@@ -1344,7 +1345,7 @@ pagina.lid.na = (args, q) => {
       const l = lidBedrag(f), auto = f.betaal.value === "incasso";
       const vervolg = l.vervolg ? `daarna € ${euro(l.vervolg)} per jaar` : `daarna elk jaar € ${euro(l.bedrag)}`;
       const w = naam => esc((f.elements[naam]?.value || "").trim());
-      const actief = { ja: "Ja, graag", later: "Misschien later", nee: "Nee, alleen lid" }[f.actief.value] || "";
+      const actief = { ja: "Ja, graag", later: "Misschien later", nee: "Nee, alleen lid" }[f.actief.value] || "Niet ingevuld";
       // alles wat u invulde nog één keer op een rij, met een knop om het te wijzigen, voordat u naar iDEAL gaat
       $("#overzicht").innerHTML = `<h3 class="tussenkop">Klopt alles?</h3><dl class="controle">
         <div><dt>Lidmaatschap</dt><dd>${esc(l.naam)}, € ${euro(l.bedrag)} per jaar <button class="knop-tekst" type="button" data-naar="1">Wijzig</button></dd></div>
@@ -1358,7 +1359,7 @@ pagina.lid.na = (args, q) => {
   };
   const zetKeuze = () => { $("#jong-veld").hidden = f.soort.value !== "jong"; $("#ouder-veld").hidden = f.soort.value !== "ouder"; };
   const eisen1 = { vijfenzestig: v => f.soort.value === "ouder" && !v ? "Het ouderenlidmaatschap is voor wie 65 jaar of ouder is. Vink dit aan, of kies Lid of Steunend lid." : "" };
-  const eisen2 = { naam: verplicht("Vul uw naam in."), email: v => EMAIL.test(v) ? "" : "Vul een geldig e-mailadres in.", postcode: v => /^\d{4}\s?[a-z]{2}$/i.test(v) ? "" : "Vul uw postcode in, bijvoorbeeld 2511 BT.", huisnummer: verplicht("Vul uw huisnummer in.") };
+  const eisen2 = { naam: verplicht("Vul uw naam in."), email: v => EMAIL.test(v) ? "" : "Vul een geldig e-mailadres in.", postcode: v => /^\d{4}\s?[a-z]{2}$/i.test(String(v || "").trim()) ? "" : "Vul uw postcode in, bijvoorbeeld 2511 BT.", huisnummer: v => /^\d{1,5}\s?[a-z0-9\- ]{0,8}$/i.test(String(v || "").trim()) ? "" : "Vul uw huisnummer in, bijvoorbeeld 12 of 12a.", telefoon: telGoed };
   const naar = (n, push = true) => {
     let fout = false;
     if (n >= 2 && !controleer(f, eisen1)) { n = 1; fout = true; }
@@ -1543,12 +1544,12 @@ async function zoekPagina(args, q, gevraagd = "") {
     while ((m = re.exec(p))) { uit += esc(String(s).slice(pos, m.index)) + `<mark>${esc(String(s).slice(m.index, m.index + m[0].length))}</mark>`; pos = m.index + m[0].length; }
     return uit + esc(String(s).slice(pos));
   };
-  const knipsel = x => { const l = PLAT((x || "").toLowerCase()); const p = Math.max(0, l.indexOf(woorden[0] || "") - 60); const k = x.slice(p, p + 220); return (p ? "…" : "") + k.slice(0, k.lastIndexOf(" ") > 150 ? k.lastIndexOf(" ") : k.length) + "…"; };
+  const knipsel = x => { if (!x) return ""; const l = PLAT((x || "").toLowerCase()); const p = Math.max(0, l.indexOf(woorden[0] || "") - 60); const k = x.slice(p, p + 220); return (p ? "…" : "") + k.slice(0, k.lastIndexOf(" ") > 150 ? k.lastIndexOf(" ") : k.length) + "…"; };
   const href = (extra) => { const p = new URLSearchParams({ q: term, ...(welk ? { soort: welk } : {}), ...(sorteer ? { sorteer } : {}), ...extra }); for (const [k, v] of [...p]) if (!v) p.delete(k); return U("zoeken/?" + p); };
   const totaal = Object.values(perSoort).reduce((a, b) => a + b, 0);
   const direct = welk ? [] : directTreffers(woorden);
   const directHtml = direct.length ? `<div class="direct"><h2 class="tussenkop">Direct naar</h2><ul class="direct-lijst">${direct.map(d => `<li><a href="${U(d.pad)}">${d.f ? (d.f.beeld ? `<img src="${esc(d.f.beeld)}" alt="" loading="lazy">` : `<span class="leeg-foto" aria-hidden="true">${initialen(d.f.naam)}</span>`) : d.sd ? `<span class="direct-icoon">${silhouet(d.sd)}</span>` : `<span class="direct-icoon">${HART}</span>`}<span><b>${esc(d.titel)}</b><small>${esc(d.onder)}</small></span></a></li>`).join("")}</ul></div>` : "";
-  pagina.zoeken.lijst = treffers.map(i => `<li><h3><a href="${U(i.p || "s/" + encodeURIComponent(i.id) + "/")}" data-stuk="${esc(i.id)}">${licht(i.t)}</a></h3><p class="bijschrift">${i.sd && i.sd.length ? `<span class="plek">${esc(i.sd.join(" en "))}</span>` : ""}<span>${esc(SOORT[i.s].naam)}</span>${i.st ? `<span class="status">${esc(i.st)}</span>` : ""}<time datetime="${esc(i.d)}">${datum(i.d)}</time></p><p class="sam">${licht(knipsel(i.x || ""))}</p></li>`);
+  pagina.zoeken.lijst = treffers.map(i => `<li><h3><a href="${U(i.p || "s/" + encodeURIComponent(i.id) + "/")}" data-stuk="${esc(i.id)}">${licht(i.t)}</a></h3><p class="bijschrift">${i.sd && i.sd.length ? `<span class="plek">${esc(i.sd.join(" en "))}</span>` : ""}<span>${esc(SOORT[i.s].naam)}</span>${i.st ? `<span class="status">${esc(i.st)}</span>` : ""}<time datetime="${esc(i.d)}">${datum(i.d)}</time></p>${i.x ? `<p class="sam">${licht(knipsel(i.x))}</p>` : ""}</li>`);
   return paginaKop("Zoeken", term && pagina.zoeken.voorlopig ? `Zoeken naar "${esc(term)}"…` : term ? (!totaal && direct.length ? `${direct.length === 1 ? "Eén pagina" : direct.length + " pagina's"} gevonden voor "${esc(term)}"` : `${fmt.format(totaal)} ${totaal === 1 ? "resultaat" : "resultaten"} voor "${esc(term)}"`) : "Zoek in al het nieuws, de successen, het raadswerk en de petities sinds 2012.") + `
     <section class="wit"><div class="wrap">
       <form id="zoek2" role="search" class="zoek2" action="${U("zoeken/")}"><label class="verborgen" for="zoek2-veld">Zoekterm</label><input type="search" id="zoek2-veld" name="q" value="${esc(term)}" placeholder="Bijvoorbeeld Moerwijk, parkeren of Kwartellaan"><button class="knop groen klein" type="submit">Zoeken</button></form>
@@ -1593,6 +1594,13 @@ pagina.zoeken.na = () => {
       const bekend = new Map(pagina.zoeken.lijst.map(s => [id(s), s]));
       const houd = al.filter(x => bekend.has(x));
       if (houd.length !== al.length) { $("#zoek-lijst").innerHTML = ""; lijst2 = pagina.zoeken.lijst; } else lijst2 = [...houd.map(x => bekend.get(x)), ...rest];
+      // de treffers die er al staan krijgen nu hun stukje tekst (de lichte lijst had alleen titels)
+      for (const li of $$("#zoek-lijst > li")) {
+        const sid = ($("a[data-stuk]", li) || {}).dataset?.stuk, vol = sid && bekend.get(sid);
+        if (!vol || $(".sam", li)) continue;
+        const t = document.createElement("ul"); t.innerHTML = vol; const sam = $(".sam", t);
+        if (sam) li.append(sam);
+      }
       pagina.zoeken.voorlopig = false;
       teken2();
     });

@@ -3,6 +3,10 @@
    Niet saai: drie kleurmomenten (de film met het gele hart, de stadsdeelband in munt, de successen in woudgroen) en een donkere voet. */
 /* Letters sinds de ontwerpronde van 10 november 2026: Archivo (smal en zwaar) voor koppen, Lexend voor tekst, zoals op damienzeller.nl.
    De bestanden staan op de site zelf (geen verzoek naar Google). Raleway staat nog in lettertype/ als reserve. */
+/* Reserveletters met dezelfde breedte als Archivo en Lexend: zolang de eigen letters laden, blijven regels even lang
+   en verspringt de pagina niet (gemeten 15 nov 2026: Archivo smal is 0,72 tot 0,80 keer Arial, Lexend 1,08 keer). */
+@font-face{font-family:"Archivo Reserve";font-weight:500 900;src:local("Arial Bold"),local("Arial-BoldMT"),local("Liberation Sans Bold"),local("Helvetica Bold"),local("Arial");size-adjust:74%}
+@font-face{font-family:"Lexend Reserve";font-weight:400 700;src:local("Arial"),local("ArialMT"),local("Liberation Sans"),local("Helvetica");size-adjust:108%}
 @font-face{font-family:"Archivo";font-style:normal;font-weight:500 900;font-stretch:62% 125%;font-display:swap;src:url(lettertype/archivo-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 @font-face{font-family:"Archivo";font-style:normal;font-weight:500 900;font-stretch:62% 125%;font-display:swap;src:url(lettertype/archivo-latin-ext.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
 @font-face{font-family:"Lexend";font-style:normal;font-weight:400 700;font-display:swap;src:url(lettertype/lexend-latin.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
@@ -11,8 +15,8 @@
   --hart:#18925A; --veld:#168351; --woud:#0B3B25; --nacht:#072A1A; --zon:#FFD439; --zon-licht:#FFE27A;
   --bg:#FFFFFF; --vlak:#FFFFFF; --band:#F6F1E9; --munt:#E3F1E7; --ink:#10251A; --zacht:#4A5F52; --lijn:#D9DFDA; --regel:#10251A; --veldrand:#768F80;
   --link:#137345; --op-donker:#D3E8DA; --kaart-vlak:#FFFFFF; --kaart-rand:#1E945A; --kaart-hover:#D3EBDC; --fout:#B42318; --goed:#137345;
-  --kop:"Archivo","Arial Narrow",system-ui,sans-serif;
-  --tekst:"Lexend",system-ui,sans-serif;
+  --kop:"Archivo","Archivo Reserve","Arial Narrow",system-ui,sans-serif;
+  --tekst:"Lexend","Lexend Reserve",system-ui,sans-serif;
   --schaduw:0 24px 50px -32px rgba(11,59,37,.45);
   --onderbalk:0px;
   color-scheme:light;
@@ -1054,3 +1058,6 @@ fieldset .ander-onderwerp{margin:12px 0 0}
 .tegels li:hover h3 a{text-decoration:underline;text-decoration-color:var(--hart);text-decoration-thickness:2px}
 .tegels p{font-size:.92rem;color:var(--zacht)}
 @media (max-width:860px){.tegels{grid-template-columns:repeat(2,minmax(0,1fr))}.tegels li{padding:18px 14px 18px 0}.tegels li+li{padding-left:14px}.tegels li:nth-child(odd){padding-left:0;border-left:0}.tegels li:nth-child(n+3){border-top:1.5px solid var(--lijn)}}
+
+/* de twee regels van de naam breken nooit anders af, ook niet met de reserveletter */
+.held h1{white-space:nowrap}.held h1 span{display:block}
