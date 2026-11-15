@@ -24,7 +24,7 @@
 <header class="balk">
   <div class="wrap">
     <a class="merk" href="./"><img src="logo.png" alt="" width="44" height="23"><span>Damiën Zeller</span></a>
-    <a class="kop-over" href="./#over">Over en pers</a>
+    <details class="kop-meer"><summary>Onderwerpen</summary><nav aria-label="Onderwerpen"><a href="zorg.html">Zorg en welzijn</a><a href="onderwijs.html">Onderwijs</a><a href="sport.html">Sport en bewegen</a><a href="media.html">Lokale media</a><a href="joodse-gemeenschap.html">Joodse gemeenschap</a><a href="leidschenveen-ypenburg.html">Leidschenveen-Ypenburg</a><a href="./#over">Over en pers</a></nav></details>
     <nav class="menu" aria-label="Menu">
       <a href="./#spreekuur">Spreekuur</a><a href="nieuws.html">Nieuws</a><a href="./#buurt">Uw buurt</a><a href="./#over">Over Damiën</a><a class="meld" href="./#melden">Meld iets</a>
     </nav>
@@ -88,5 +88,11 @@ const d=sp.start?new Date(sp.start):null;let w="";
 if(d&&!isNaN(d)&&d>new Date())w=D[d.getDay()]+" "+d.getDate()+" "+M[d.getMonth()]+", "+d.toTimeString().slice(0,5);else if(sp.volgende)w=sp.volgende;
 if(!w)return;document.getElementById("ly-sp-wanneer").textContent=w;document.getElementById("ly-sp-waar").textContent=(sp.plek||"").split(",")[0];document.getElementById("ly-sp").hidden=false;}).catch(()=>{});
 </script>
+<script>(() => { const m = document.querySelector(".kop-meer"); if (!m) return;
+  const hier = location.pathname.split("/").pop() || "index.html";
+  m.querySelectorAll("a").forEach(a => { if (a.getAttribute("href") === hier) a.setAttribute("aria-current", "page"); });
+  document.addEventListener("click", e => { if (m.open && !m.contains(e.target)) m.open = false; });
+  m.addEventListener("keydown", e => { if (e.key === "Escape") { m.open = false; m.querySelector("summary").focus(); } });
+  m.querySelectorAll("a").forEach(a => a.addEventListener("click", () => { m.open = false; })); })();</script>
 </body>
 </html>

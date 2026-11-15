@@ -32,7 +32,7 @@
 <header class="balk">
   <div class="wrap">
     <a class="merk" href="./"><img src="logo.png" alt="" width="44" height="23"><span>Damiën Zeller</span></a>
-    <a class="kop-over" href="#over">Over en pers</a>
+    <details class="kop-meer"><summary>Onderwerpen</summary><nav aria-label="Onderwerpen"><a href="zorg.html">Zorg en welzijn</a><a href="onderwijs.html">Onderwijs</a><a href="sport.html">Sport en bewegen</a><a href="media.html">Lokale media</a><a href="joodse-gemeenschap.html">Joodse gemeenschap</a><a href="leidschenveen-ypenburg.html">Leidschenveen-Ypenburg</a><a href="#over">Over en pers</a></nav></details>
     <nav class="menu" aria-label="Menu">
       <a href="#spreekuur">Spreekuur</a><a href="nieuws.html">Nieuws</a><a href="#buurt">Uw buurt</a><a href="#over">Over Damiën</a><a class="meld" href="#melden">Meld iets</a>
     </nav>
@@ -288,7 +288,7 @@ function knoppenBuurt() {
       const k = el("button", null, b); k.type = "button"; k.setAttribute("aria-pressed", String(gekozen === b));
       const n = data.berichten.filter(x => inBuurt(x, b)).length;
       if (n) { k.append(el("span", "n", String(n))); k.setAttribute("aria-label", `${b}, ${n} ${n === 1 ? "bericht" : "berichten"}`); }
-      k.addEventListener("click", () => kies(gekozen === b ? null : b));
+      k.addEventListener("click", () => kies(gekozen === b ? null : b, true));
       bs.append(k);
     }
     box.append(rij);
@@ -351,8 +351,13 @@ function kleurKaart() {
   if (aan) aan.vlak.parentNode.appendChild(aan.vlak);   /* de gekozen buurt bovenop, zodat de rand heel blijft */
 }
 
-function kies(b) {
+function kies(b, doorBezoeker) {
   gekozen = b; knoppenBuurt(); infoBuurt(); kleurKaart();
+  /* op een smal scherm staat de uitkomst onder de kaart: schuif erheen, anders lijkt de tik niets te doen */
+  if (doorBezoeker && gekozen && matchMedia("(max-width:860px)").matches) {
+    const box = document.getElementById("buurt-info"), r = box.getBoundingClientRect();
+    if (r.top > innerHeight * 0.6 || r.top < 80) scrollTo({ top: scrollY + r.top - 96, behavior: matchMedia("(prefers-reduced-motion:reduce)").matches ? "instant" : "smooth" });
+  }
 }
 
 function maakKaart() {
@@ -820,7 +825,27 @@ if (vraagBuurt && Object.values(WIJKEN).flat().includes(vraagBuurt)) {
   setTimeout(() => ro.disconnect(), 6000);
   plak();
 }
+/* Een anker in het adres (/#melden, /#buurt, /#over), ook vanaf een andere pagina: de secties erboven laden later
+   en duwen het doel omlaag. Blijf bij het doel tot de bezoeker zelf scrolt (hooguit 6 seconden). */
+(() => {
+  let id = ""; try { id = decodeURIComponent(location.hash.slice(1)); } catch { id = ""; }
+  const doel = id && document.getElementById(id); if (!doel || vraagBuurt) return;
+  let zelf = false;
+  ["wheel", "touchstart", "keydown", "mousedown"].forEach(ev => addEventListener(ev, () => { zelf = true; }, { once: true, passive: true }));
+  const ruimte = () => parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+  const plak = () => { if (zelf) return; const af = doel.getBoundingClientRect().top - ruimte(); if (Math.abs(af) > 4) scrollTo({ top: scrollY + af, behavior: "instant" }); };
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  const ro = new ResizeObserver(plak); ro.observe(document.body);
+  setTimeout(() => ro.disconnect(), 6000);
+  plak(); addEventListener("load", plak);
+})();
 })();
 </script>
+<script>(() => { const m = document.querySelector(".kop-meer"); if (!m) return;
+  const hier = location.pathname.split("/").pop() || "index.html";
+  m.querySelectorAll("a").forEach(a => { if (a.getAttribute("href") === hier) a.setAttribute("aria-current", "page"); });
+  document.addEventListener("click", e => { if (m.open && !m.contains(e.target)) m.open = false; });
+  m.addEventListener("keydown", e => { if (e.key === "Escape") { m.open = false; m.querySelector("summary").focus(); } });
+  m.querySelectorAll("a").forEach(a => a.addEventListener("click", () => { m.open = false; })); })();</script>
 </body>
 </html>

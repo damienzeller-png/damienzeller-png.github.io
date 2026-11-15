@@ -558,3 +558,26 @@ a.vtitel{display:flex;align-items:center;min-height:44px}
 }
 .bereikt-getal{display:flex;align-items:baseline;gap:12px;margin:14px 0 0;color:var(--zacht)}
 .bereikt-getal b{font:900 clamp(3rem,7vw,4.6rem)/.9 var(--kop);font-stretch:70%;color:var(--veld);font-variant-numeric:tabular-nums}
+
+/* 15 november 2026, na de onafhankelijke meting.
+   Telefoon: Onderwerpen als uitklapmenu in de kop; de twee knoppen in de opening zijn weg (ze staan al in de onderbalk
+   en vielen eronder). Nieuws: de lijst houdt ruimte vrij, zodat de voet niet verspringt. Links naar de partijsite krijgen een pijl. */
+.kop-meer{display:none}
+@media (max-width:860px){
+  .kop-meer{display:block;position:relative}
+  .kop-meer summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 4px;font-weight:600;font-size:.95rem}
+  .kop-meer summary::-webkit-details-marker{display:none}
+  .kop-meer summary::after{content:"";width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg) translateY(-3px);transition:transform .15s ease}
+  .kop-meer[open] summary::after{transform:rotate(225deg) translate(-2px,-1px)}
+  .kop-meer nav{position:absolute;right:0;top:calc(100% + 8px);z-index:1300;display:grid;min-width:240px;padding:8px;background:var(--vlak);color:var(--ink);
+    border:1px solid var(--lijn);border-radius:14px;box-shadow:0 18px 40px -18px rgba(11,59,37,.5)}
+  .kop-meer nav a{display:flex;align-items:center;min-height:46px;padding:0 12px;border-radius:10px;text-decoration:none;font-weight:600;color:var(--ink)}
+  .kop-meer nav a:hover,.kop-meer nav a[aria-current]{background:var(--bg);color:var(--link)}
+  .kop-meer nav a:last-child{border-top:1px solid var(--lijn);border-radius:0 0 10px 10px;margin-top:4px;color:var(--zacht)}
+  .held .knoppen{display:none}
+}
+@media (prefers-reduced-motion:reduce){.kop-meer summary::after{transition:none}}
+#lijst:empty{min-height:120vh}
+#lijst{min-height:70vh}
+a.titel[href*="hartvoordenhaag.nl"]::after,a.vtitel[href*="hartvoordenhaag.nl"]::after{content:"\00a0↗";font-size:.78em;font-weight:600;color:var(--zacht)}
+.kruimel a{display:inline-block;padding-block:13px;margin-block:-13px}

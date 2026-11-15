@@ -9,6 +9,7 @@
 <meta property="og:description" content="Alle nieuwsberichten van Hart voor Den Haag met raadslid Damiën Zeller, per dossier.">
 <meta property="og:image" content="https://damienzeller.nl/deel.jpg">
 <meta name="theme-color" content="#137345">
+<link rel="canonical" href="https://damienzeller.nl/nieuws.html">
 <link rel="icon" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,7 +21,7 @@
 <header class="balk">
   <div class="wrap">
     <a class="merk" href="./"><img src="logo.png" alt="" width="44" height="23"><span>Damiën Zeller</span></a>
-    <a class="kop-over" href="./#over">Over en pers</a>
+    <details class="kop-meer"><summary>Onderwerpen</summary><nav aria-label="Onderwerpen"><a href="zorg.html">Zorg en welzijn</a><a href="onderwijs.html">Onderwijs</a><a href="sport.html">Sport en bewegen</a><a href="media.html">Lokale media</a><a href="joodse-gemeenschap.html">Joodse gemeenschap</a><a href="leidschenveen-ypenburg.html">Leidschenveen-Ypenburg</a><a href="./#over">Over en pers</a></nav></details>
     <nav class="menu" aria-label="Menu">
       <a href="./#spreekuur">Spreekuur</a><a href="nieuws.html" aria-current="page">Nieuws</a><a href="./#buurt">Uw buurt</a><a href="./#over">Over Damiën</a><a class="meld" href="./#melden">Meld iets</a>
     </nav>
@@ -164,5 +165,11 @@ Promise.all([fetch("nieuws.json", { cache: "no-cache" }).then(r => r.json()), Do
 }).catch(() => { document.getElementById("teller").textContent = "Het nieuws kon niet worden geladen. Probeer het later nog eens."; });
 })();
 </script>
+<script>(() => { const m = document.querySelector(".kop-meer"); if (!m) return;
+  const hier = location.pathname.split("/").pop() || "index.html";
+  m.querySelectorAll("a").forEach(a => { if (a.getAttribute("href") === hier) a.setAttribute("aria-current", "page"); });
+  document.addEventListener("click", e => { if (m.open && !m.contains(e.target)) m.open = false; });
+  m.addEventListener("keydown", e => { if (e.key === "Escape") { m.open = false; m.querySelector("summary").focus(); } });
+  m.querySelectorAll("a").forEach(a => a.addEventListener("click", () => { m.open = false; })); })();</script>
 </body>
 </html>
