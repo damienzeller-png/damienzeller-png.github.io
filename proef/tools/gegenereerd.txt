@@ -721,6 +721,7 @@ groep-de-mos-en-christenunie-sgp-treuren-om-afschaffen-scheveningen-vissersdorp-
 groep-de-mos-en-d66-brengen-versoepeling-beleid-parkeerplaatsterrassen-stap-dichterbij/index.html
 groep-de-mos-en-een-groep-ouderen-zorgen-voor-opening-nieuwe-huiskamer-voor-50plussers-in-moerwijk/index.html
 groep-de-mos-en-groenlinks-roepen-wethouder-van-engelshoven-tot-de-orde/index.html
+groep-de-mos-en-het-cda-willen-ben-oude-nijhuis-in-den-haag/index.html
 groep-de-mos-en-pvda-clubhuis-aan-zwembad-zuiderpark-versterkt-zwemvereniging-cwp/index.html
 groep-de-mos-en-pvda-zetten-buurttuin-moerwijk-op-het-bord/index.html
 groep-de-mos-en-pvv-eisen-excuses-van-wethouder-revis/index.html
@@ -783,7 +784,6 @@ groep-de-mos-luidt-noodklok-voor-plein-ondernemers-aangaande-verbouwing-binnenho
 groep-de-mos-maakt-statement-tegen-op-handen-zijnde-beeldenstorm-verander-naam-deltaplein-in-michiel-de-ruyterplein/index.html
 groep-de-mos-maakt-zich-zorgen-over-leegstand-koningstraat/index.html
 groep-de-mos-moties-zorgen-voor-eerste-stap-richting-levensreddende-rook-en-koolmonoxidemelders-in-haagse-woningen/index.html
-groep-de-mos-na-onbegrijpelijk-westlands-besluit-over-komst-honderden-asielzoekers-nabij-wateringse-veld-informeer-burgers-via-zuidwester-krant-en-informatieavond/index.html
 groep-de-mos-na-verontrustend-rapport-wat-doet-den-haag-om-de-illegale-hennepteelt-te-bestrijden/index.html
 groep-de-mos-niet-gerust-over-streep-door-betaald-parkeren-idee-kijkduin/index.html
 groep-de-mos-nu-ook-in-de-provinciale-staten/index.html
@@ -4933,7 +4933,6 @@ nieuw-bestuur-voor-vereniging-groep-de-mos/index.html
 nieuw-kabinet-moet-aan-de-slag/index.html
 nieuw-onderkomen-de-kruin/index.html
 nieuw-park-gewoon-toegankelijk-voor-minder-validen-en-honden/index.html
-nieuwe-afsluitingen-hoefkade-parallelweg-nekken-ondernemers/index.html
 nieuwe-haagse-onderscheiding-voor-jubilerende-ondernemer/index.html
 nieuwe-hoogbouw-op-scheveningen-knettergek/index.html
 nieuwe-locatie-kledingbank-mariahoeve/index.html
@@ -9048,7 +9047,6 @@ s/n105719/index.html
 s/n105720/index.html
 s/n105722/index.html
 s/n105724/index.html
-s/n105725/index.html
 s/n105726/index.html
 s/n105727/index.html
 s/n105728/index.html
@@ -9645,7 +9643,6 @@ s/n106460/index.html
 s/n106461/index.html
 s/n106462/index.html
 s/n106464/index.html
-s/n106465/index.html
 s/n106467/index.html
 s/n106469/index.html
 s/n106471/index.html
@@ -9737,6 +9734,7 @@ s/n106599/index.html
 s/n106601/index.html
 s/n106602/index.html
 s/n106603/index.html
+s/n106605/index.html
 s/n106606/index.html
 s/n106609/index.html
 s/n106610/index.html
@@ -15078,6 +15076,7 @@ s/t110543/index.html
 s/t110550/index.html
 s/t110559/index.html
 s/t111056/index.html
+s/t114643/index.html
 sacramentskerk/index.html
 samen-met-bewoners-en-ondernemers-transvaal-knokt-hart-voor-den-haag-voor-meer-parkeerplaatsen/index.html
 schaamteloosheid-kent-geen-grenzen-krakersgilde-vraagt-parkeergeld-aan-bezoekers-scheveningen/index.html
@@ -15145,6 +15144,7 @@ spreektekst-arjen-dubbelaar-toegankelijkheid-de-vissen/index.html
 spreektekst-carlos-martinez-van-andel-debat-11-april-2024-over-de-zero-emissiezone/index.html
 spreektekst-coen-bom-15-juni-2023-cie-samenleving-uitbreiding-noodopvang-asielzoekers-regulusweg-asieldebat/index.html
 spreektekst-coen-bom-cultuurdebat-5-juli-2023/index.html
+spreektekst-coen-bom-een-politieke-aardverschuiving/index.html
 spreektekst-coen-bom-evenementenbeleid-den-haag-2024-2026/index.html
 spreektekst-coen-bom-raad-8-september-2022-keizerstraat/index.html
 spreektekst-coen-bom-vaststelling-beleidskader-kunst-en-cultuur-2025-2028/index.html
