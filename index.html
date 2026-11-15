@@ -354,9 +354,9 @@ function kleurKaart() {
 function kies(b, doorBezoeker) {
   gekozen = b; knoppenBuurt(); infoBuurt(); kleurKaart();
   /* op een smal scherm staat de uitkomst onder de kaart: schuif erheen, anders lijkt de tik niets te doen */
-  if (doorBezoeker && gekozen && matchMedia("(max-width:860px)").matches) {
-    const box = document.getElementById("buurt-info"), r = box.getBoundingClientRect();
-    if (r.top > innerHeight * 0.6 || r.top < 80) scrollTo({ top: scrollY + r.top - 96, behavior: matchMedia("(prefers-reduced-motion:reduce)").matches ? "instant" : "smooth" });
+  if (doorBezoeker && gekozen) {
+    const box = document.getElementById("buurt-info"), r = box.getBoundingClientRect(), smal = matchMedia("(max-width:860px)").matches;
+    if ((smal && r.top > innerHeight * 0.6) || r.top < 80) scrollTo({ top: scrollY + r.top - 96, behavior: matchMedia("(prefers-reduced-motion:reduce)").matches ? "instant" : "smooth" });
   }
 }
 
@@ -383,7 +383,7 @@ function maakKaart() {
       const buurt = f.properties.buurt, vlak = document.createElementNS(NS, "path"), lbl = document.createElementNS(NS, "text");
       vlak.setAttribute("d", d); vlak.setAttribute("class", "bv"); vlak.setAttribute("aria-pressed", "false");
       const t = document.createElementNS(NS, "title"); t.textContent = buurt; vlak.appendChild(t);
-      vlak.addEventListener("click", () => kies(gekozen === buurt ? null : buurt));
+      vlak.addEventListener("click", () => kies(gekozen === buurt ? null : buurt, true));
       lbl.setAttribute("class", "bl"); lbl.setAttribute("x", beste.x.toFixed(1)); lbl.setAttribute("y", beste.y.toFixed(1));
       const delen = buurt.includes("-") ? buurt.split("-").map((w, i, a) => i < a.length - 1 ? w + "-" : w) : (buurt.length > 9 && buurt.includes(" ") ? buurt.split(" ") : [buurt]);
       delen.forEach((w, i) => { const ts = document.createElementNS(NS, "tspan"); ts.setAttribute("x", beste.x.toFixed(1)); ts.setAttribute("dy", i ? "1.05em" : (delen.length > 1 ? "-.2em" : ".35em")); ts.textContent = w; lbl.appendChild(ts); });
@@ -557,7 +557,7 @@ function vragen(lijst) {
   if (items.length > 2) {
     let open = false;
     const zet = () => { items.forEach((li, i) => { li.hidden = !open && i >= 2; }); knop.textContent = open ? "Toon minder" : `Toon alle vragen (${items.length})`; knop.setAttribute("aria-expanded", String(open)); };
-    knop.onclick = () => { open = !open; zet(); if (open) { items[2].tabIndex = -1; items[2].focus(); } };
+    knop.onclick = () => { open = !open; zet(); if (open) { items[2].tabIndex = -1; items[2].focus(); } else { /* na inklappen terug naar de knop, anders staat de bezoeker opeens ergens anders */ const r = knop.getBoundingClientRect(); if (r.top < 90 || r.bottom > innerHeight) scrollTo({ top: scrollY + r.top - innerHeight / 2, behavior: "instant" }); knop.focus({ preventScroll: true }); } };
     knop.hidden = false; zet();
   }
   document.getElementById("vragen").hidden = false;
@@ -603,7 +603,7 @@ function wiBereikte(d) {
   if (items.length > 2) {
     let open = false;
     const zet = () => { items.forEach((li, i) => { li.hidden = !open && i >= 2; }); knop.textContent = open ? "Toon minder" : `Toon alles sinds ${punten[punten.length - 1].jaar} (${items.length})`; knop.setAttribute("aria-expanded", String(open)); };
-    knop.onclick = () => { open = !open; zet(); if (open) { items[2].tabIndex = -1; items[2].focus(); } };
+    knop.onclick = () => { open = !open; zet(); if (open) { items[2].tabIndex = -1; items[2].focus(); } else { /* na inklappen terug naar de knop, anders staat de bezoeker opeens ergens anders */ const r = knop.getBoundingClientRect(); if (r.top < 90 || r.bottom > innerHeight) scrollTo({ top: scrollY + r.top - innerHeight / 2, behavior: "instant" }); knop.focus({ preventScroll: true }); } };
     knop.hidden = false; zet();
   }
   /* groot getal naast de tijdlijn: hoeveel resultaten, en sinds wanneer */
@@ -717,6 +717,7 @@ function formulier() {
   const start = Date.now(), f = document.getElementById("meld-form"), uit = document.getElementById("melding-uitslag");
   const MAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   const velden = { onderwerp: "f-onderwerp", bericht: "f-bericht", email: "f-email", toestemming: "f-toestemming" };
+  let naarKnop = false;
   const zet = (naam, tekst) => {
     const veld = document.getElementById(velden[naam]), p = document.getElementById("fout-" + naam);
     if (tekst) { veld.setAttribute("aria-invalid", "true"); p.textContent = tekst; p.hidden = false; }
@@ -741,12 +742,15 @@ function formulier() {
       let geraakt = false;
       veld.addEventListener("input", () => { geraakt = true; });
       veld.addEventListener("blur", () => {
-        if (!geraakt) return;
+        /* Wie vanuit een veld meteen op Versturen drukt: niet hier al een melding tonen. Die duwt de knop omlaag,
+           waardoor de klik mist en er niets lijkt te gebeuren. Het versturen controleert zelf en zet de focus goed. */
+        if (!geraakt || naarKnop) return;
         const v = Object.fromEntries(new FormData(f).entries());
         zet(naam, controle({ onderwerp: v.onderwerp || "", bericht: v.bericht || "", email: v.email || "", toestemming: f.toestemming.checked })[naam]);
       });
     }
   }
+  f.querySelector("button[type=submit]").addEventListener("pointerdown", () => { naarKnop = true; setTimeout(() => { naarKnop = false; }, 600); });
   f.addEventListener("submit", async e => {
     e.preventDefault();
     const v = Object.fromEntries(new FormData(f).entries());

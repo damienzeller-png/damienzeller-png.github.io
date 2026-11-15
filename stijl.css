@@ -579,5 +579,18 @@ a.vtitel{display:flex;align-items:center;min-height:44px}
 @media (prefers-reduced-motion:reduce){.kop-meer summary::after{transition:none}}
 #lijst:empty{min-height:120vh}
 #lijst{min-height:70vh}
-a.titel[href*="hartvoordenhaag.nl"]::after,a.vtitel[href*="hartvoordenhaag.nl"]::after{content:"\00a0↗";font-size:.78em;font-weight:600;color:var(--zacht)}
+a.titel[href^="http"]:not([href*="damienzeller.nl"])::after,a.vtitel[href^="http"]:not([href*="damienzeller.nl"])::after{content:"\00a0↗";font-size:.78em;font-weight:600;color:var(--zacht)}
 .kruimel a{display:inline-block;padding-block:13px;margin-block:-13px}
+
+/* 15 november 2026, ronde naar 32. Telefoon: kortere voorpagina (twee berichten, geen sfeerfoto's tussen de blokken).
+   Desktop: de kop van Uw buurt staat naast een kleinere foto, zonder lege zone erboven. Voet: grotere tikvlakken. */
+@media (max-width:860px){
+  #berichten>.log-item:nth-child(n+3){display:none}
+  .buurt-kop .doc-foto,.melden .meld-foto,.over .over-foto{display:none}
+  #lijst{min-height:0}#lijst:empty{min-height:120vh}
+}
+@media (min-width:861px){
+  .buurt-kop{align-items:center;grid-template-columns:minmax(0,1fr) minmax(0,340px)}
+  .buurt-kop .doc-foto img{aspect-ratio:16/10;object-fit:cover}
+}
+.voet p a,.onderwerpen-voet a{display:inline-block;padding-block:12px;margin-block:-12px}

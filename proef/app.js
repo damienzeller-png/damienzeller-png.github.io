@@ -223,6 +223,8 @@ function wieVan(i) {
   });
 }
 const gezichtjes = (mensen, max = 2) => mensen.slice(0, max).map(f => f.beeld ? `<img src="${esc(f.beeld)}" alt="" loading="lazy" decoding="async">` : `<span class="leeg-foto">${initialen(f.naam)}</span>`).join("");
+// Naast een raadsstuk: portretten als elke indiener er een heeft, anders het hart van de partij. Geen initialen of stadsdeelvormen door elkaar.
+const wieBeeld = w => { const m = w.slice(0, 2); return m.length && m.every(f => f.beeld) ? `<span class="r-wie${m.length > 1 ? " twee" : ""}" aria-hidden="true">${gezichtjes(m)}</span>` : `<span class="r-wie" aria-hidden="true"><span class="r-plek r-hart">${HART}</span></span>`; };
 // een petitie loopt tot de einddatum die de redactie zette; zonder einddatum een jaar na plaatsen. Met een afloop is hij klaar.
 const isOpen = p => { if (p.afloop) return false; if (p.einddatum) return p.einddatum >= vandaag(); return !!p.eigen || (Date.now() - new Date(p.datum)) / 864e5 < 365; };
 function bijschrift(i, opties = {}) {
@@ -253,7 +255,7 @@ function stukItem(i, opties = {}) {
   const tekst = `<h3>${stukLink(i, esc(opties.kaal ? kaleTitel(i) : i.titel))}</h3>${bijschrift(i, opties)}${i.samenvatting ? `<p class="sam">${esc(i.samenvatting)}</p>` : ""}`;
   if (!raad || opties.kaal) return `<li>${tekst}</li>`;
   const w = wieVan(i), plek = i.stadsdelen && i.stadsdelen[0];
-  return `<li class="met-wie"><span class="r-wie${w.length > 1 ? " twee" : ""}" aria-hidden="true">${w.length ? gezichtjes(w) : `<span class="r-plek">${plek ? silhouet(plek) : STAD}</span>`}</span><div>${tekst}</div></li>`;
+  return `<li class="met-wie">${wieBeeld(w)}<div>${tekst}</div></li>`;
 }
 const aanmeldLink = a => `<a class="aanmeld" href="${U("agenda/aanmelden/?id=" + encodeURIComponent(a.id))}">Aanmelden<span class="verborgen"> voor ${esc(a.titel)}</span></a>`;
 function agendaItem(a) {
@@ -435,7 +437,7 @@ pagina.home = async () => {
       <div class="krant-zij">
         <h3 class="kolomkop" id="h-raad">Uit de raad</h3>
         <ul class="raad-lijst" aria-labelledby="h-raad">${raad.map(i => { const w = wieVan(i); const plek = i.stadsdelen && i.stadsdelen[0];
-          return `<li><span class="r-wie${w.length > 1 ? " twee" : ""}" aria-hidden="true">${w.length ? gezichtjes(w) : `<span class="r-plek">${plek ? silhouet(plek) : STAD}</span>`}</span>
+          return `<li>${wieBeeld(w)}
           <div><h4>${stukLink(i, esc(i.titel))}</h4>${bijschrift(i, { soort: true, ris: false })}</div></li>`; }).join("")}</ul>
         <p><a class="meer" href="${U("raadswerk/")}">Al het raadswerk ${PIJL}</a></p>
         ${open.length ? `<div class="teken"><h3 class="kolomkop">Teken mee</h3>${open.slice(0, smal() ? 1 : 2).map(p => `<div class="teken-item">${stukLink(p, esc(kaleTitel(p)))}${balkPlek(p, tel)}</div>`).join("")}</div>` : ""}${tel ? "" : (tellersLater(open), "")}
@@ -551,7 +553,7 @@ const lidRegel = () => `<section class="lid-regel-sectie"><div class="wrap"><div
 // stadsdelenkaart
 function kaartBlok(kaart) {
   return `<form class="postcode" id="postcode" novalidate role="search"><div class="veld"><label for="pc">Uw postcode</label>
-      <div class="pc-rij"><input type="text" id="pc" name="pc" inputmode="text" autocomplete="postal-code" placeholder="Bijvoorbeeld 2491 AA" maxlength="7"><button class="knop groen klein" type="submit">Zoek mijn raadsleden</button></div></div>
+      <div class="pc-rij"><input type="text" id="pc" name="pc" inputmode="text" autocomplete="postal-code" placeholder="Bijvoorbeeld 2491 AA" maxlength="12"><button class="knop groen klein" type="submit">Zoek mijn raadsleden</button></div></div>
       <p class="pc-uitslag" id="pc-uitslag" aria-live="polite"></p></form>
     <div class="stad-raster"><div><svg class="kaart" id="kaart" viewBox="0 0 ${kaart.w} ${kaart.h}" aria-hidden="true"></svg>
     <div class="sd-rijen" id="kaart-knoppen" role="group" aria-label="Kies een stadsdeel"></div></div><div class="paneel" id="paneel" aria-live="polite" tabindex="-1"></div></div>`;
@@ -1318,9 +1320,9 @@ pagina.lid = async () => paginaKop("Word lid", "Met meer leden zijn we sterker. 
           <div class="veld"><label for="l-door">Wie bracht u aan? <small>(niet verplicht)</small></label><input type="text" id="l-door" name="aangebracht"></div>
           <div class="veld"><label for="l-waarom">Waarom wordt u lid? <small>(niet verplicht)</small></label><input type="text" id="l-waarom" name="waarom" maxlength="200"></div></div>
         <div class="knoppen"><button class="knop lijn" type="button" data-naar="1">Terug</button><button class="knop groen" type="button" data-naar="3">Volgende: betalen</button></div></fieldset>
-      <fieldset class="stap" data-stap="3" hidden><legend>Hoe wilt u betalen?</legend><div class="keuzes">
-        <div class="keuze"><input type="radio" name="betaal" id="b1" value="incasso" checked><label for="b1"><b>Automatisch elk jaar</b><span>Eerste keer met iDEAL, daarna incasso</span></label></div>
-        <div class="keuze"><input type="radio" name="betaal" id="b2" value="ideal"><label for="b2"><b>Elk jaar zelf</b><span>U krijgt elk jaar een betaalverzoek</span></label></div></div>
+      <fieldset class="stap" data-stap="3" hidden><legend>Controleren en betalen</legend>
+        <input type="hidden" name="betaal" value="incasso">
+        <p class="melding">U betaalt de eerste keer nu met iDEAL. Daarna schrijven we de contributie elk jaar automatisch af. Opzeggen kan altijd met één mail.</p>
         <div class="overzicht" id="overzicht" aria-live="polite"></div>
         <div class="knoppen"><button class="knop lijn" type="button" data-naar="2">Terug</button><button class="knop geel" type="submit" id="lid-knop">Betaal met iDEAL</button></div>
         <p class="uitslag" hidden></p></fieldset>
@@ -1359,7 +1361,7 @@ pagina.lid.na = (args, q) => {
   };
   const zetKeuze = () => { $("#jong-veld").hidden = f.soort.value !== "jong"; $("#ouder-veld").hidden = f.soort.value !== "ouder"; };
   const eisen1 = { vijfenzestig: v => f.soort.value === "ouder" && !v ? "Het ouderenlidmaatschap is voor wie 65 jaar of ouder is. Vink dit aan, of kies Lid of Steunend lid." : "" };
-  const eisen2 = { naam: verplicht("Vul uw naam in."), email: v => EMAIL.test(v) ? "" : "Vul een geldig e-mailadres in.", postcode: v => /^\d{4}\s?[a-z]{2}$/i.test(String(v || "").trim()) ? "" : "Vul uw postcode in, bijvoorbeeld 2511 BT.", huisnummer: v => /^\d{1,5}\s?[a-z0-9\- ]{0,8}$/i.test(String(v || "").trim()) ? "" : "Vul uw huisnummer in, bijvoorbeeld 12 of 12a.", telefoon: telGoed };
+  const eisen2 = { naam: verplicht("Vul uw naam in."), email: v => EMAIL.test(v) ? "" : "Vul een geldig e-mailadres in.", postcode: v => /^\d{4}\s?[a-z]{2}$/i.test(String(v || "").trim()) ? "" : "Vul uw postcode in, bijvoorbeeld 2511 BT.", huisnummer: v => /^[1-9]\d{0,3}\s?[a-z0-9\- ]{0,8}$/i.test(String(v || "").trim()) ? "" : "Vul uw huisnummer in, bijvoorbeeld 12 of 12a.", telefoon: telGoed };
   const naar = (n, push = true) => {
     let fout = false;
     if (n >= 2 && !controleer(f, eisen1)) { n = 1; fout = true; }
@@ -1774,7 +1776,12 @@ async function route() {
   const stukId = stukVoorAdres(delen);
   const app = $("#app"), voorgebouwd = eersteKeer && !!app.dataset.stuk;
   sluitAlles();
-  const p = stukId ? null : pagina[naam];
+  // nieuws/bestaat-niet/ en dergelijke: alleen adressen die de rubriek kent, anders de pagina "bestaat niet"
+  const geenArgs = a => !a.length;
+  const kentAdres = { nieuws: geenArgs, successen: geenArgs, petities: geenArgs, wethouders: geenArgs, bestuur: geenArgs, standpunten: geenArgs, vacatures: geenArgs, pers: geenArgs,
+    raadswerk: a => !a.length || (a.length === 1 && !!TABS[a[0]]), stadsdelen: a => !a.length || (a.length === 1 && !!sdVanSlug(a[0])),
+    onderwerpen: a => !a.length || (a.length === 1 && ONDERWERPEN.some(x => slug(x) === a[0])) }[naam];
+  const p = stukId || (kentAdres && !kentAdres(args)) ? null : pagina[naam];
   const titel = p ? (p.titel ? p.titel(args, q) : TITELS[naam] || ({ raadswerk: "Raadswerk", stadsdelen: "Uw stadsdeel", fractie: "Onze mensen", agenda: "Agenda en spreekuren", contact: "Contact", zoeken: "Zoeken", onderwerpen: "Dossiers" })[naam] || "") : "";
   app.setAttribute("aria-busy", "true"); document.documentElement.classList.add("laadt");
   // duurt het langer dan een tel, dan meteen de kop van de nieuwe pagina met een laadregel
