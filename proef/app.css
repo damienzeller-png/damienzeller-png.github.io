@@ -621,9 +621,11 @@ section{padding-block:34px 64px}
 .agenda-lijst .aanmeld{margin-top:2px}
 
 /* vrijwilligerstaken */
-.taken{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.taken{display:grid;grid-template-columns:1fr;gap:8px}
 .taak{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:center;min-height:48px;padding:10px 14px;border:2px solid var(--veldrand);border-radius:10px;cursor:pointer}
 .taak input{width:20px;height:20px;margin:0}
+.taak span{display:grid;gap:1px}.taak small{font-size:.88rem;color:var(--zacht)}
+.extra-veld{margin:4px 0 14px}.extra-veld summary{cursor:pointer;min-height:44px;display:inline-flex;align-items:center;font-weight:600;color:var(--veld);text-decoration:underline;text-underline-offset:3px}.extra-veld[open] summary{margin-bottom:6px}
 .taak:has(input:checked){border-color:var(--veld);background:var(--munt)}
 .taak:has(input:focus-visible){outline:3px solid var(--zon);outline-offset:2px}
 @media (max-width:640px){.taken{grid-template-columns:1fr}}
@@ -1041,3 +1043,14 @@ fieldset .ander-onderwerp{margin:12px 0 0}
 /* smal scherm of ingezoomd (320 px): Lexend loopt breder dan Raleway, dus iets kleiner en woorden mogen afbreken */
 @media (max-width:360px){html{font-size:14.5px}body{font-size:16px}button,.knop,label,h1,h2,h3,th,td{overflow-wrap:anywhere;hyphens:auto}}
 @media (max-width:360px){.pf-lijst li{overflow-wrap:anywhere;hyphens:auto;min-width:0}}
+
+/* 15 november 2026: rustiger voorpagina en Doe mee. Tegels in plaats van zinnen met getallen. */
+.tegels{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:1.5px solid var(--lijn)}
+.tegels li{position:relative;display:grid;gap:4px;align-content:start;padding:22px 22px 24px 0}
+.tegels li+li{padding-left:22px;border-left:1.5px solid var(--lijn)}
+.tegel-getal{font:900 clamp(2.6rem,5vw,3.8rem)/.95 var(--kop);font-stretch:70%;color:var(--link);font-variant-numeric:tabular-nums}
+.tegels h3{font-size:1.15rem;line-height:1.2}
+.tegels h3 a{text-decoration:none}.tegels h3 a::after{content:"";position:absolute;inset:0}
+.tegels li:hover h3 a{text-decoration:underline;text-decoration-color:var(--hart);text-decoration-thickness:2px}
+.tegels p{font-size:.92rem;color:var(--zacht)}
+@media (max-width:860px){.tegels{grid-template-columns:repeat(2,minmax(0,1fr))}.tegels li{padding:18px 14px 18px 0}.tegels li+li{padding-left:14px}.tegels li:nth-child(odd){padding-left:0;border-left:0}.tegels li:nth-child(n+3){border-top:1.5px solid var(--lijn)}}

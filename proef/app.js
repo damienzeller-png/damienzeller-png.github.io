@@ -455,7 +455,7 @@ pagina.home = async () => {
 
   <section aria-labelledby="h-beloofd" class="beloofd-home"><div class="wrap">
     <div class="sectie-kop"><h2 id="h-beloofd">Beloofd en gedaan</h2><a class="meer" href="${U("standpunten/")}">Alle standpunten ${PIJL}</a><p class="inleiding">Wat in ons programma staat, en wat we er het afgelopen jaar in de raad voor deden.</p></div>
-    ${bewijsLijst(bewijs, PUNTEN.slice(0, smal() ? 2 : 4))}
+    ${bewijsTegels(bewijs, PUNTEN.slice(0, 4))}
   </div></section>
 
   <section class="band podcast" aria-labelledby="h-podcast"><div class="wrap podcast-blok">
@@ -530,6 +530,16 @@ function bewijsLijst(bewijs, punten, metProgramma = false) {
     else rechts = "";
     return `<article><h3>${esc(kop)}</h3><div>${metProgramma ? `<p class="standpunt">${esc(tekst)}</p>` : ""}${rechts}</div></article>`;
   }).join("")}</div>`;
+}
+// Voorpagina: per programmapunt één groot getal in plaats van een zin met drie getallen. De uitleg staat op Standpunten.
+function bewijsTegels(bewijs, punten) {
+  return `<ul class="tegels">${punten.map(([kop]) => {
+    const b = (bewijs && bewijs[kop]) || {};
+    const n = b.successen != null ? b.successen : (b.vragen || 0) + (b.moties || 0) + (b.amendementen || 0);
+    const wat = b.successen != null ? (n === 1 ? "succes" : "successen") + " in een jaar" : "vragen en voorstellen in de raad";
+    const naar = b.onderwerp ? U("onderwerpen/" + slug(b.onderwerp) + "/") : U("standpunten/");
+    return `<li><b class="tegel-getal">${n}</b><h3><a href="${naar}">${esc(kop)}</a></h3><p>${wat}</p></li>`;
+  }).join("")}</ul>`;
 }
 const lidRegel = () => `<section class="lid-regel-sectie"><div class="wrap"><div class="lid-regel">
   <p><b>Eens?</b> Word lid vanaf € 12,50 per jaar en praat mee over de koers, het bestuur en de kandidaten.</p>
@@ -1083,27 +1093,24 @@ pagina.vacatures = async () => {
     <section class="wit"><div class="wrap"><h2 class="verborgen">Open vacatures</h2>${v.length ? `<ul class="stukken">${v.map(x => stukItem(x)).join("")}</ul>` : `<p class="leeg">Er staan nu geen vacatures open. Wilt u toch helpen? Meld u aan als vrijwilliger of wijkvertegenwoordiger.</p><p style="margin-top:18px"><a class="knop groen" href="${U("doe-mee/")}">Ik doe mee</a></p>`}</div></section>`;
 };
 
-const TAKEN = ["Folders bezorgen in mijn buurt", "Aanbellen en gesprekken voeren", "Bellen met leden en kiezers", "Online delen en reageren", "Een raamposter ophangen", "Een tuinbord plaatsen", "Helpen bij bijeenkomsten en spreekuren", "Meldingen uit mijn buurt doorgeven"];
-pagina["doe-mee"] = async () => paginaKop("Doe mee en maak uw buurt beter", "Den Haag wordt beter als u meedoet. Kies wat bij u past: een uur per maand helpt al.") + `
+// Drie keuzes in plaats van acht taken en een tijdvraag: minder vragen, meer aanmeldingen. De rest komt in het kennismakingsgesprek.
+const TAKEN = [["Op straat", "Folders bezorgen, aanbellen of helpen bij een bijeenkomst"], ["Vanuit huis", "Bellen, of berichten delen op sociale media"], ["Met een poster of tuinbord", "Bij u voor het raam of in de tuin"]];
+pagina["doe-mee"] = async () => paginaKop("Doe mee en maak uw buurt beter", "Den Haag wordt beter als u meedoet. Een uur per maand helpt al.") + `
   <section><div class="wrap formulier-raster">
     <form class="formulier" id="form" novalidate>
-      <fieldset><legend>Wat wilt u doen? <small>(kies er een of meer)</small></legend><div class="taken" id="taken">
-        ${TAKEN.map((t, i) => `<label class="taak"><input type="checkbox" class="taak-vink" value="${esc(t)}" id="t${i}"><span>${esc(t)}</span></label>`).join("")}</div>
+      <fieldset><legend>Hoe wilt u helpen?</legend><div class="taken" id="taken">
+        ${TAKEN.map((t, i) => `<label class="taak"><input type="checkbox" class="taak-vink" value="${esc(t[0])}" id="t${i}"><span><b>${esc(t[0])}</b><small>${esc(t[1])}</small></span></label>`).join("")}</div>
         <input type="hidden" name="takenlijst" id="takenlijst"></fieldset>
-      <fieldset><legend>Hoeveel tijd heeft u?</legend><div class="keuzes kort">
-        <div class="keuze"><input type="radio" name="beschikbaar" id="tijd1" value="Af en toe" checked><label for="tijd1"><b>Af en toe</b></label></div>
-        <div class="keuze"><input type="radio" name="beschikbaar" id="tijd2" value="Een paar uur per maand"><label for="tijd2"><b>Een paar uur per maand</b></label></div>
-        <div class="keuze"><input type="radio" name="beschikbaar" id="tijd3" value="Elke week"><label for="tijd3"><b>Elke week</b></label></div>
-        <div class="keuze"><input type="radio" name="beschikbaar" id="tijd4" value="Alleen in campagnetijd"><label for="tijd4"><b>Alleen in campagnetijd</b></label></div></div></fieldset>
       <div class="velden">
         <div class="veld"><label for="f-naam">Naam</label><input type="text" id="f-naam" name="naam" autocomplete="name"></div>
         <div class="veld"><label for="f-tel">Telefoonnummer</label><input type="tel" id="f-tel" name="telefoon" autocomplete="tel"></div>
         <div class="veld"><label for="f-email">E-mailadres</label><input type="email" id="f-email" name="email" autocomplete="email"></div>
         <div class="veld"><label for="f-sd">Ik woon in stadsdeel</label><select id="f-sd" name="stadsdeel">${stadsdeelOpties(opslag.lees("stadsdeel") || "")}</select></div>
-        <div class="veld breed"><label for="f-ber">Iets wat we moeten weten? <small>(niet verplicht)</small></label><textarea id="f-ber" name="bericht" maxlength="1500"></textarea></div></div>
+        </div>
+      <details class="extra-veld"><summary>Iets toevoegen</summary><div class="veld"><label for="f-ber">Wat moeten we weten? <small>(niet verplicht)</small></label><textarea id="f-ber" name="bericht" maxlength="1500"></textarea></div></details>
       ${akkoordVeld("doemee")}<button class="knop groen" type="submit">Ik doe mee</button><p class="uitslag" hidden></p></form>
     <div><h2>Zo werkt het</h2><ol class="uitleg" style="grid-template-columns:1fr;margin-top:22px">
-      <li><b>Meld u aan</b><span>Vink aan wat u wilt doen. Dat duurt een minuut.</span></li>
+      <li><b>Meld u aan</b><span>Dat duurt een minuut.</span></li>
       <li><b>Kennismaken</b><span>Iemand uit uw stadsdeel belt of mailt u voor een eerste gesprek.</span></li>
       <li><b>Aan de slag</b><span>U helpt in uw eigen buurt, op momenten die u uitkomen.</span></li></ol>
       <p style="margin-top:8px"><a class="meer" href="${U("vacatures/")}">Liever een vaste rol of betaald werk? Bekijk de vacatures ${PIJL}</a></p>
@@ -1111,18 +1118,19 @@ pagina["doe-mee"] = async () => paginaKop("Doe mee en maak uw buurt beter", "Den
   </div></section>`;
 pagina["doe-mee"].na = () => {
   const f = $("#form");
+  setTimeout(() => { if ($("#f-ber").value) $(".extra-veld", f).open = true; }, 0);
   const zetTaken = () => { $("#takenlijst").value = $$(".taak-vink:checked", f).map(x => x.value).join(", "); if ($("#takenlijst").value) zetFout($("#takenlijst"), ""); };
   f.addEventListener("change", zetTaken); f.addEventListener("submit", zetTaken, true);
   koppelFormulier(f, {
     soort: "doemee", concept: "doemee",
-    eisen: () => ({ takenlijst: v => v ? "" : "Kies minstens één ding dat u wilt doen.", naam: verplicht("Vul uw naam in."), email: mailOfTel, stadsdeel: verplicht("Kies uw stadsdeel, dan zoeken we iemand bij u in de buurt."), akkoord: v => v ? "" : "Vink dit aan, zodat we contact mogen opnemen." }),
+    eisen: () => ({ takenlijst: v => v ? "" : "Kies hoe u wilt helpen.", naam: verplicht("Vul uw naam in."), email: mailOfTel, stadsdeel: verplicht("Kies uw stadsdeel, dan zoeken we iemand bij u in de buurt."), akkoord: v => v ? "" : "Vink dit aan, zodat we contact mogen opnemen." }),
     voor: () => ({ rol: "Vrijwilliger" }),
     bedankt: (d, a) => `Dank u wel! Iemand uit ${d.stadsdeel || "uw stadsdeel"} neemt binnenkort contact met u op.${a.kenmerk ? ` Uw kenmerk is ${a.kenmerk}.` : ""}`,
   });
 };
 
 // contact en melden. Een melding mag een foto en de plek op de kaart meekrijgen.
-const CONTACT_KEUZES = [["melding", "Iets in mijn buurt"], ["contact", "Een vraag aan de fractie"], ["spreekuur", "Spreekuur aanvragen"], ["lidmaatschap", "Lidmaatschap"], ["pers", "Pers en media"], ["anders", "Iets anders"]];
+const CONTACT_KEUZES = [["melding", "Iets in mijn buurt"], ["contact", "Een vraag aan de fractie"], ["spreekuur", "Spreekuur aanvragen"], ["pers", "Pers en media"]];
 pagina.contact = async ([sub], q) => {
   const onderwerp = sub === "melding" ? "melding" : q.get("onderwerp") || "contact";
   const gekozen = CONTACT_KEUZES.some(k => k[0] === onderwerp) ? onderwerp : "contact";

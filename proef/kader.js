@@ -36,17 +36,15 @@ HVDH.TURNSTILE = "";
         <li>${a("stadsdelen/", "Uw stadsdeel", ' data-sectie="stadsdelen"')}</li>
         <li class="uitklap"><button type="button" aria-expanded="false" aria-controls="m-raad" data-sectie="raadswerk successen petities onderwerpen">Raadswerk</button>
           <div class="uitklap-paneel" id="m-raad"><div>
-            ${a("raadswerk/", "<b>Moties</b>")}${a("raadswerk/amendementen/", "<b>Amendementen</b>")}${a("raadswerk/vragen/", "<b>Schriftelijke vragen</b>")}${a("raadswerk/spreekteksten/", "<b>Spreekteksten</b>")}
-          </div><div>
-            ${a("successen/", "<b>Successen</b>")}${a("petities/", "<b>Petities</b>")}${a("onderwerpen/", "<b>Dossiers</b>")}
+            ${a("raadswerk/", "<b>Moties en vragen</b>")}${a("successen/", "<b>Successen</b>")}${a("petities/", "<b>Petities</b>")}${a("onderwerpen/", "<b>Dossiers</b>")}
           </div></div></li>
         <li class="uitklap"><button type="button" aria-expanded="false" aria-controls="m-wie" data-sectie="standpunten fractie wethouders bestuur pers english">Wie we zijn</button>
           <div class="uitklap-paneel" id="m-wie"><div>
-            ${a("standpunten/", "<b>Standpunten</b>")}${a("fractie/", "<b>Onze mensen</b>")}${a("wethouders/", "<b>Wethouders</b>")}${a("bestuur/", "<b>Bestuur</b>")}${a("pers/", "<b>Pers</b>")}${a("english/", "<b>In English</b>", ' lang="en"')}
+            ${a("standpunten/", "<b>Standpunten</b>")}${a("fractie/", "<b>Onze mensen</b>")}${a("wethouders/", "<b>Wethouders</b>")}${a("pers/", "<b>Pers</b>")}
           </div></div></li>
         <li class="uitklap"><button type="button" aria-expanded="false" aria-controls="m-mee" data-sectie="lid doneren doe-mee vacatures agenda">Doe mee</button>
           <div class="uitklap-paneel" id="m-mee"><div>
-            ${a("lid/", "<b>Word lid</b>")}${a("doneren/", "<b>Doneren</b>")}${a("doe-mee/", "<b>Doe mee in uw buurt</b>")}${a("agenda/", "<b>Agenda en spreekuren</b>")}${a("vacatures/", "<b>Vacatures</b>")}<a href="${WEBSHOP}" target="_blank" rel="noopener"><b>Webshop</b></a>
+            ${a("lid/", "<b>Word lid</b>")}${a("doe-mee/", "<b>Help mee in uw buurt</b>")}${a("doneren/", "<b>Doneren</b>")}
           </div></div></li>
         <li>${a("contact/", "Contact", ' data-sectie="contact"')}</li>
       </ul>
@@ -74,13 +72,13 @@ HVDH.TURNSTILE = "";
 <div class="lade" id="lade" hidden>
   <nav class="lade-paneel" aria-label="Menu" role="dialog" aria-modal="true">
     <div class="lade-kop"><img class="logo-licht" src="${B}beeld/logo.svg" alt="" height="30"><button class="ikoon-knop" type="button" id="lade-dicht" aria-label="Menu sluiten"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
-    ${a("nieuws/", "Nieuws", ' class="hoofd"')}${a("stadsdelen/", "Uw stadsdeel", ' class="hoofd"')}${a("agenda/", "Agenda en spreekuren", ' class="hoofd"')}${a("contact/melding/", "Meld een probleem", ' class="hoofd"')}${a("contact/", "Contact", ' class="hoofd"')}<a class="hoofd" href="${WA}" target="_blank" rel="noopener">WhatsApp-kanaal</a>
+    ${a("nieuws/", "Nieuws", ' class="hoofd"')}${a("stadsdelen/", "Uw stadsdeel", ' class="hoofd"')}${a("agenda/", "Agenda en spreekuren", ' class="hoofd"')}${a("contact/melding/", "Meld een probleem", ' class="hoofd"')}${a("contact/", "Contact", ' class="hoofd"')}
     <p class="lade-groep">Raadswerk</p>
-    <div class="lade-links">${a("raadswerk/", "Moties")}${a("raadswerk/amendementen/", "Amendementen")}${a("raadswerk/vragen/", "Schriftelijke vragen")}${a("raadswerk/spreekteksten/", "Spreekteksten")}${a("successen/", "Successen")}${a("petities/", "Petities")}${a("onderwerpen/", "Dossiers")}</div>
+    <div class="lade-links">${a("raadswerk/", "Moties en vragen")}${a("successen/", "Successen")}${a("petities/", "Petities")}${a("onderwerpen/", "Dossiers")}</div>
     <p class="lade-groep">Wie we zijn</p>
-    <div class="lade-links">${a("standpunten/", "Standpunten")}${a("fractie/", "Onze mensen")}${a("wethouders/", "Wethouders")}${a("bestuur/", "Bestuur")}${a("pers/", "Pers")}${a("english/", "In English", ' lang="en"')}</div>
+    <div class="lade-links">${a("standpunten/", "Standpunten")}${a("fractie/", "Onze mensen")}${a("wethouders/", "Wethouders")}${a("pers/", "Pers")}</div>
     <p class="lade-groep">Doe mee</p>
-    <div class="lade-links">${a("doneren/", "Doneren")}${a("doe-mee/", "Doe mee in uw buurt")}${a("vacatures/", "Vacatures")}<a href="${WEBSHOP}" target="_blank" rel="noopener">Webshop</a></div>
+    <div class="lade-links">${a("doe-mee/", "Help mee in uw buurt")}${a("doneren/", "Doneren")}</div>
     ${a("lid/", "Word lid", ' class="knop geel"')}
   </nav>
 </div>`;
@@ -99,15 +97,15 @@ HVDH.TURNSTILE = "";
     </div>
     <div class="voet-kolommen">
       <div class="voet-contact"><b>Hart voor Den Haag</b><span>Spui 70, 2511 BT Den Haag</span><a href="tel:+31623462139">Bel 06 234 621 39</a><a href="mailto:hartvoordenhaag@denhaag.nl">hartvoordenhaag@denhaag.nl</a></div>
-      ${groep("Wat we doen", a("raadswerk/", "Raadswerk") + a("successen/", "Successen") + a("petities/", "Petities") + a("onderwerpen/", "Dossiers"))}
-      ${groep("Wie we zijn", a("standpunten/", "Standpunten") + a("fractie/", "Onze mensen") + a("agenda/", "Agenda en spreekuren") + a("pers/", "Pers"))}
-      ${groep("Doe mee", a("lid/", "Word lid") + a("doneren/", "Doneren") + a("doe-mee/", "Doe mee in uw buurt") + `<a href="${WEBSHOP}" target="_blank" rel="noopener">Webshop</a>`)}
+      ${groep("Wat we doen", a("raadswerk/", "Raadswerk") + a("standpunten/", "Standpunten") + a("agenda/", "Agenda en spreekuren") + a("doneren/", "Doneren"))}
+      ${groep("Wie we zijn", a("fractie/", "Onze mensen") + a("wethouders/", "Wethouders") + a("bestuur/", "Bestuur") + a("pers/", "Pers"))}
+      ${groep("Doe mee", a("lid/", "Word lid") + a("doe-mee/", "Help mee in uw buurt") + a("vacatures/", "Vacatures") + `<a href="${WEBSHOP}" target="_blank" rel="noopener">Webshop</a>`)}
     </div>
     <div class="voet-rij">
-      <div class="sociaal" role="group" aria-label="Volg Hart voor Den Haag">${SOCIAAL.map(([n, u, p]) => `<a href="${u}" target="_blank" rel="noopener" aria-label="${n}" title="${n}"><svg viewBox="0 0 24 24" aria-hidden="true">${p}</svg></a>`).join("")}</div>
+      <div class="sociaal" role="group" aria-label="Volg Hart voor Den Haag">${SOCIAAL.filter(([n]) => !/WhatsApp|Spotify/.test(n)).map(([n, u, p]) => `<a href="${u}" target="_blank" rel="noopener" aria-label="${n}" title="${n}"><svg viewBox="0 0 24 24" aria-hidden="true">${p}</svg></a>`).join("")}</div>
       <form class="vertaal" id="vertaal"><label for="taal">Lees deze site in</label><select id="taal"><option value="">Nederlands</option>${TALEN.map(([c, n]) => `<option value="${c}" lang="${c}">${n}</option>`).join("")}</select><button class="knop lijn klein" type="submit">Vertaal<span class="verborgen"> (opent Google Vertalen in een nieuw tabblad)</span></button></form>
     </div>
-    <p class="voet-onder">${a("privacy/", "Privacy")}${a("toegankelijkheid/", "Toegankelijkheid")}<a href="${B}beheer.html">Inloggen redactie</a><span>Proefontwerp, niet de officiële site</span></p>
+    <p class="voet-onder">${a("privacy/", "Privacy")}${a("toegankelijkheid/", "Toegankelijkheid")}${a("english/", "English", ' lang="en"')}<a href="${B}beheer.html">Inloggen redactie</a><span>Proefontwerp, niet de officiële site</span></p>
   </div>
 </footer>
 <aside class="zweef weg" id="zweef" aria-label="WhatsApp-kanaal"><div class="ballon-rij" hidden><a class="ballon" href="${B}doe-mee/">Doe mee en volg ons!</a><button class="sluit" type="button" aria-label="Melding sluiten">×</button></div><a class="rond" href="${WA}" target="_blank" rel="noopener" aria-label="Volg ons WhatsApp-kanaal">${WA_SVG}</a></aside>
