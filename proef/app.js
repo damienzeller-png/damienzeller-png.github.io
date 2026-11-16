@@ -404,22 +404,19 @@ pagina.home = async () => {
   const lead = nieuws.find(n => n.beeld) || nieuws[0];
   const rest = nieuws.filter(n => n !== lead).slice(0, smal() ? 3 : 4);
   return `
-  <section class="held" aria-labelledby="titel"><div class="wrap">
-    <div class="held-kop">
+  <section class="held held-vol" aria-labelledby="titel">
+    <div class="held-bg"><video id="held-video" muted loop playsinline preload="none" poster="${U(smal() ? "beeld/groep-film-800.webp" : "beeld/groep-film.webp")}" aria-label="Campagnefilm van Hart voor Den Haag, zonder geluid"><source src="${VIDEO}" type="video/mp4"></video></div>
+    <div class="wrap held-in">
       <h1 id="titel" tabindex="-1">Hart voor <span>Den Haag</span></h1>
-      <div>
-        <p class="held-rol">De grootste lokale partij van Den Haag</p>
-        <p class="intro">Met ombudspolitiek zijn we zichtbaar in de wijken, dicht bij de Hagenaar, Hagenees, Scheveninger en Loosduiner. Zestien raadsleden zetten zich elke dag in voor een veilige, schone en leefbare stad.</p>
-        <div class="knoppen"><a class="knop geel" href="${U("lid/")}">Word lid vanaf € 12,50 per jaar</a><a class="knop lijn" href="${U("contact/melding/")}">Meld een probleem</a></div>
-      </div>
+      <p class="held-rol">De grootste lokale partij van Den Haag</p>
+      <p class="intro">Zestien raadsleden zetten zich elke dag in voor een veilige, schone en leefbare stad.</p>
+      <div class="knoppen"><a class="knop geel" href="${U("lid/")}">Word lid vanaf € 12,50 per jaar</a><a class="knop rand" href="${U("contact/melding/")}">Meld een probleem</a></div>
     </div>
-    <figure class="held-beeld">
-      ${HART.replace('class="sil"', 'class="hart"')}
-      <div class="film"><video id="held-video" muted loop playsinline preload="none" poster="${U(smal() ? "beeld/groep-film-800.webp" : "beeld/groep-film.webp")}" aria-label="Campagnefilm van Hart voor Den Haag, zonder geluid"><source src="${VIDEO}" type="video/mp4"></video>
-      <button class="speel" type="button" id="speel"><svg viewBox="0 0 16 16" aria-hidden="true"></svg><span>Speel film af</span></button></div>
-      <figcaption><span>Hart voor Den Haag in de stad. De film speelt zonder geluid.</span><a class="raadslid-link" href="${U("fractie/")}">Wie is uw raadslid?</a></figcaption>
-    </figure>
-  </div></section>
+    <div class="wrap held-onder">
+      <button class="held-verder" type="button" id="verder"><span>Scroll verder</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M4 9l4 4 4-4"/></svg></button>
+      <button class="speel" type="button" id="speel"><svg viewBox="0 0 16 16" aria-hidden="true"></svg><span>Speel film af</span></button>
+    </div>
+  </section>
 
   ${ag.length ? `<section class="binnenkort" aria-labelledby="h-binnenkort"><div class="wrap">
     <div class="sectie-kop"><h2 id="h-binnenkort">Binnenkort</h2><a class="meer" href="${U("agenda/")}">Hele agenda ${PIJL}</a></div>
@@ -469,13 +466,19 @@ pagina.home = async () => {
   </div></section>`;
 };
 pagina.home.na = async () => {
-  const v = $("#held-video"), k = $("#speel");
-  // Op de telefoon (of met databesparing of "minder beweging") laadt de film pas na een tik: hij is 3 MB.
-  const zelf = stil() || smal() || (navigator.connection && navigator.connection.saveData);
+  const v = $("#held-video"), k = $("#speel"), held = v.closest(".held");
+  // De film is de achtergrond van de opening en start vanzelf, zonder geluid.
+  // Niet bij "minder beweging" of databesparing: dan blijft de foto staan tot iemand op Speel film af tikt.
+  const zelf = stil() || (navigator.connection && navigator.connection.saveData);
+  let gepauzeerd = zelf;
   const zet = speelt => { k.querySelector("span").textContent = speelt ? "Pauzeer film" : "Speel film af"; k.querySelector("svg").innerHTML = speelt ? '<rect x="3" y="2" width="3.5" height="12"/><rect x="9.5" y="2" width="3.5" height="12"/>' : '<path d="M4 2l10 6-10 6z"/>'; };
+  const speel = () => { v.muted = true; return v.play().then(() => zet(true)).catch(() => zet(false)); };
   zet(false);
-  if (!zelf) v.preload = "metadata";
-  k.addEventListener("click", () => { if (v.paused) { v.play().then(() => zet(true)).catch(() => zet(false)); } else { v.pause(); zet(false); } });
+  if (!zelf) speel();
+  k.addEventListener("click", () => { if (v.paused) { gepauzeerd = false; speel(); } else { gepauzeerd = true; v.pause(); zet(false); } });
+  // Uit beeld gescrold: de film staat stil, dat scheelt batterij en data.
+  if ("IntersectionObserver" in window) new IntersectionObserver(([e]) => { if (!v.isConnected || gepauzeerd) return; if (e.isIntersecting) speel(); else v.pause(); }, { threshold: .05 }).observe(held);
+  $("#verder").addEventListener("click", () => { const n = held.nextElementSibling; if (!n) return; n.scrollIntoView({ behavior: stil() ? "auto" : "smooth", block: "start" }); });
   activeerKaart(await laad("kaart"), opslag.lees("stadsdeel"));
 };
 
@@ -1649,7 +1652,7 @@ pagina.toegankelijkheid = async () => paginaKop("Toegankelijkheid", "Deze site m
     <h2>Wat nog niet goed is</h2>
     <ul><li>Foto's die van hartvoordenhaag.nl komen, hebben meestal geen beschrijving. Nieuwe foto's krijgen er een.</li>
       <li>Oudere pdf's (jaarverslagen, verkiezingsprogramma) zijn niet altijd goed leesbaar met een schermlezer.</li></ul>
-    <p>De film bovenaan speelt zonder geluid. Op een telefoon, of als u "minder beweging" hebt ingesteld, start hij pas als u op Speel film af tikt.</p>
+    <p>De film op de voorpagina speelt zonder geluid en is met de knop Pauzeer film stil te zetten. Als u "minder beweging" of databesparing hebt ingesteld, start hij pas als u op Speel film af tikt.</p>
     <p>Loopt u ergens tegenaan? Laat het ons weten via <a href="${U("contact/")}">het contactformulier</a> of bel <a href="${TEL_LINK}">${TEL}</a>.</p>
   </div></div></section>`;
 

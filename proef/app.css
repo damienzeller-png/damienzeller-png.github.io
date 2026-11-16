@@ -1075,3 +1075,27 @@ fieldset .ander-onderwerp{margin:12px 0 0}
   .held .held-beeld .film,.held .held-beeld video{aspect-ratio:592/480;height:auto;width:100%}
   .held .held-beeld video{object-fit:cover}
 }
+
+/* 16 november 2026: de film als achtergrond van de opening, schermvullend. De rest van de voorpagina staat eronder: doorscrollen, niet doorklikken. */
+.held.held-vol{position:relative;display:flex;flex-direction:column;justify-content:flex-end;min-height:calc(100svh - var(--kop-hoogte,120px) - var(--onderbalk,0px));padding-block:48px 0;background:var(--nacht,#072A1A);color:#fff;overflow:clip}
+.held-vol>.wrap{display:block;position:relative;z-index:2;width:100%}
+.held-bg{position:absolute;inset:0;z-index:0}
+.held-bg video,.held-bg img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 35%}
+/* donkergroene waas: de tekst blijft leesbaar (contrast) en het beeld valt minder op als het korrelig is */
+.held-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,42,26,.38) 0%,rgba(7,42,26,.5) 40%,rgba(7,42,26,.9) 100%)}
+.held-vol h1{color:#fff;text-shadow:0 2px 24px rgba(7,42,26,.45)}
+.held-vol h1 span{color:#fff}
+.held-vol .held-rol{margin-top:20px;color:#fff}
+.held-vol .intro{margin-top:8px;max-width:30em;font-size:1.08rem;color:#E8F1EA}
+.held-vol .knoppen{margin-top:24px}
+.held-vol .held-onder{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:40px;padding-block:14px 18px;border-top:1px solid rgba(255,255,255,.28)}
+.held-verder{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:8px 0;border:0;background:none;color:#fff;font:700 .98rem var(--tekst);cursor:pointer}
+.held-verder svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.held-verder:hover span{text-decoration:underline;text-decoration-color:var(--zon);text-decoration-thickness:2px;text-underline-offset:4px}
+@media (prefers-reduced-motion:no-preference){.held-verder svg{animation:held-wijs 1.8s ease-in-out infinite}}
+@keyframes held-wijs{0%,100%{transform:translateY(-2px)}50%{transform:translateY(4px)}}
+.held-vol .speel{position:static;background:rgba(7,42,26,.7);border:1px solid rgba(255,255,255,.4)}
+@media (max-width:760px){.held.held-vol{--kop-hoogte:106px}}
+@media (max-width:900px){.held.held-vol{padding-top:32px}.held-vol .held-onder{margin-top:28px}}
+/* heel laag scherm (telefoon dwars): de opening mag hoger worden dan het scherm */
+@media (max-height:520px){.held.held-vol{min-height:0}}

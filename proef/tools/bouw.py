@@ -233,10 +233,12 @@ def vooraf_voorpagina():
     nieuws = sorted(lees("nieuws.json", []) or [], key=lambda d: d.get("datum", ""), reverse=True)[:6]
     vandaag = datetime.date.today().isoformat()
     agenda = sorted((a for a in (lees("agenda.json", []) or []) if a.get("datum", "") >= vandaag), key=lambda a: a.get("datum", "") + (a.get("tijd") or ""))[:3]
-    held = (f'<section class="held" aria-labelledby="titel"><div class="wrap"><div class="held-kop"><h1 id="titel" tabindex="-1">Hart voor <span>Den Haag</span></h1>'
-            '<div><p class="held-rol">De grootste lokale partij van Den Haag</p><p class="intro">Met ombudspolitiek zijn we zichtbaar in de wijken, dicht bij de Hagenaar, '
-            'Hagenees, Scheveninger en Loosduiner. Zestien raadsleden zetten zich elke dag in voor een veilige, schone en leefbare stad.</p>'
-            f'<div class="knoppen"><a class="knop geel" href="{BASE}lid/">Word lid vanaf € 12,50 per jaar</a><a class="knop lijn" href="{BASE}contact/melding/">Meld een probleem</a></div></div></div></div></section>')
+    # dezelfde opbouw als pagina.home in app.js, zodat de opening niet verspringt als het script het overneemt
+    held = (f'<section class="held held-vol" aria-labelledby="titel"><div class="held-bg"><picture><source media="(max-width: 760px)" srcset="{BASE}beeld/groep-film-800.webp">'
+            f'<img src="{BASE}beeld/groep-film.webp" alt="" width="1200" height="801" fetchpriority="high"></picture></div>'
+            '<div class="wrap held-in"><h1 id="titel" tabindex="-1">Hart voor <span>Den Haag</span></h1>'
+            '<p class="held-rol">De grootste lokale partij van Den Haag</p><p class="intro">Zestien raadsleden zetten zich elke dag in voor een veilige, schone en leefbare stad.</p>'
+            f'<div class="knoppen"><a class="knop geel" href="{BASE}lid/">Word lid vanaf € 12,50 per jaar</a><a class="knop rand" href="{BASE}contact/melding/">Meld een probleem</a></div></div></section>')
     ag = "".join(f'<li><h3>{e(a["titel"])}</h3><p class="bijschrift"><time datetime="{e(a["datum"])}">{datum_nl(a["datum"])}</time>'
                  f'{f"<span>{e(a.get('tijd'))} uur</span>" if a.get("tijd") else ""}<span>{e(a.get("plek", ""))}</span></p></li>' for a in agenda)
     rijen = "".join(f'<li class="log-item zonder-beeld"><div class="log-tekst"><h3><a href="{BASE}{e(d.get("p") or "s/" + d["id"] + "/")}" data-stuk="{e(d["id"])}">{e(d["titel"])}</a></h3>{bijschrift_html(d)}</div></li>' for d in nieuws)
