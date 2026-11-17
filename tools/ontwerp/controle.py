@@ -19,7 +19,7 @@ FOUT = [
     ("e-mailveld zonder spellcheck=false", r"<input(?=[^>]*type=\"email\")(?![^>]*spellcheck)[^>]*>"),
     ("bovenregel boven een kop", r"class=\"(bovenregel|eyebrow|kicker)\""),
     # de as van de tijdlijn en het citaat in een artikel zijn bewuste uitzonderingen
-    ("gekleurde zijstreep op een vlak", r"^(?![^\n]*(tijdlijn|blockquote))[^\n]*border-left\s*:\s*[3-9]px\s+solid\s+var\(--(geel|groen|zon|hart|oppositie|fout)"),
+    ("gekleurde zijstreep op een vlak", r"^(?![^\n]*(tijdlijn|blockquote))[^\n]*border-left\s*:\s*[3-9]px\s+(solid|dashed|dotted)\s+(var\(--|#)"),
 ]
 NAZIEN = [
     ("outline: none (heeft het een vervanging?)", r"outline\s*:\s*(none|0)\b"),

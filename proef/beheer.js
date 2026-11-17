@@ -69,11 +69,11 @@ function opnieuwInloggen() {
     const dlg = document.createElement("dialog"); dlg.className = "herinlog"; dlg.setAttribute("aria-labelledby", "her-kop");
     dlg.innerHTML = `<form method="dialog" class="formulier" id="f-her" novalidate><h2 id="her-kop" style="font-size:1.6rem">U bent uitgelogd</h2>
       <p class="leeg">Uw sessie is verlopen. Log opnieuw in; wat u aan het doen was, blijft staan.</p>
-      ${naam ? `<div class="veld"><label for="her-naam">Inlognaam</label><input type="text" id="her-naam" value="${esc(naam)}" autocomplete="username" autocapitalize="none"></div>
-      <div class="veld"><label for="her-ww">Wachtwoord</label><input type="password" id="her-ww" autocomplete="current-password"></div>
-      <div class="veld" id="her-2fa" hidden><label for="her-code">Code uit uw app</label><input type="text" id="her-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>`
+      ${naam ? `<div class="veld"><label for="her-naam">Inlognaam</label><input spellcheck="false" type="text" id="her-naam" name="her-naam" value="${esc(naam)}" autocomplete="username" autocapitalize="none"></div>
+      <div class="veld"><label for="her-ww">Wachtwoord</label><input type="password" id="her-ww" name="her-ww" autocomplete="current-password"></div>
+      <div class="veld" id="her-2fa" hidden><label for="her-code">Code uit uw app</label><input spellcheck="false" type="text" id="her-code" name="her-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>`
       : `<p>Vraag een nieuwe code aan via Telegram.</p><button class="knop lijn" type="button" id="her-stuur">Stuur mij een code</button>
-      <div class="veld"><label for="her-code">Code uit Telegram</label><input type="text" id="her-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>`}
+      <div class="veld"><label for="her-code">Code uit Telegram</label><input spellcheck="false" type="text" id="her-code" name="her-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>`}
       <button class="knop groen" type="submit">Opnieuw inloggen</button><p id="m-her" hidden></p></form>`;
     document.body.appendChild(dlg); dlg.showModal();
     const m = $("#m-her", dlg); let tussen = "";
@@ -204,7 +204,7 @@ function koppelTekstVeld(wrap, opVerandering) {
 function vraagLink(klaar) {
   const dlg = document.createElement("dialog"); dlg.className = "link-venster";
   dlg.innerHTML = `<form method="dialog" class="formulier" novalidate><h2 style="font-size:1.4rem">Link toevoegen</h2>
-    <div class="veld"><label for="link-adres">Adres <small>Begint met https://, mailto: of tel:</small></label><input type="text" id="link-adres" value="https://" inputmode="url"></div>
+    <div class="veld"><label for="link-adres">Adres <small>Begint met https://, mailto: of tel:</small></label><input spellcheck="false" autocomplete="off" type="text" id="link-adres" name="link-adres" value="https://" inputmode="url"></div>
     <div class="knoppen"><button class="knop groen" type="submit">Link maken</button><button class="knop lijn" type="button" value="weg">Annuleren</button></div><p class="fout-tekst" hidden></p></form>`;
   document.body.appendChild(dlg); dlg.showModal(); const veld = $("#link-adres", dlg); veld.focus(); veld.select();
   const sluit = () => { dlg.close(); dlg.remove(); };
@@ -257,9 +257,9 @@ function conceptBewaring(ref, lees, zet, m) {
   return { bewaar, wis: () => { clearTimeout(wacht); try { localStorage.removeItem(k); } catch { /* */ } } };
 }
 const petitieVelden = nu => `<fieldset class="veld breed" data-petitie><legend>Petitie</legend><div class="velden">
-    <div class="veld"><label for="einddatum">Loopt tot <small>Leeg: een jaar na plaatsen</small></label><input type="date" id="einddatum" value="${esc(nu.einddatum || "")}"></div>
-    <div class="veld"><label for="doel">Doel in handtekeningen <small>Leeg of 0: geen doel tonen</small></label><input type="number" id="doel" min="0" step="1" inputmode="numeric" value="${esc(nu.doel || "")}"></div>
-    <div class="veld breed"><label for="afloop">Afloop <small>Wat er met de petitie gebeurde. Met een afloop staat de petitie als gesloten op de site.</small></label><textarea id="afloop" maxlength="600" style="min-height:80px">${esc(nu.afloop || "")}</textarea></div></div></fieldset>`;
+    <div class="veld"><label for="einddatum">Loopt tot <small>Leeg: een jaar na plaatsen</small></label><input autocomplete="off" type="date" id="einddatum" name="einddatum" value="${esc(nu.einddatum || "")}"></div>
+    <div class="veld"><label for="doel">Doel in handtekeningen <small>Leeg of 0: geen doel tonen</small></label><input autocomplete="off" type="number" id="doel" name="doel" min="0" step="1" inputmode="numeric" value="${esc(nu.doel || "")}"></div>
+    <div class="veld breed"><label for="afloop">Afloop <small>Wat er met de petitie gebeurde. Met een afloop staat de petitie als gesloten op de site.</small></label><textarea autocomplete="off" id="afloop" name="afloop" maxlength="600" style="min-height:80px">${esc(nu.afloop || "")}</textarea></div></div></fieldset>`;
 const leesPetitie = () => ({ einddatum: ($("#einddatum") || {}).value || "", doel: Number(($("#doel") || {}).value) || 0, afloop: (($("#afloop") || {}).value || "").trim() });
 const vinkjes = (naam, opties, gekozen) => `<div class="vinkjes">${opties.map((o, k) => `<label class="vink-klein"><input type="checkbox" name="${naam}" value="${esc(o)}"${(gekozen || []).includes(o) ? " checked" : ""}><span>${esc(o)}</span></label>`).join("")}</div>`;
 const gevinkt = (form, naam) => $$(`input[name="${naam}"]:checked`, form).map(i => i.value);
@@ -273,19 +273,19 @@ function inloggen(boodschap) {
     ${H1("Inloggen redactie")}
     ${boodschap ? `<p class="melding" style="margin-top:16px">${esc(boodschap)}</p>` : ""}
     <form class="formulier" id="f-ww" style="margin-top:24px" novalidate>
-      <div class="veld"><label for="naam">Inlognaam</label><input type="text" id="naam" autocomplete="username" autocapitalize="none"></div>
-      <div class="veld"><label for="ww">Wachtwoord</label><input type="password" id="ww" autocomplete="current-password"></div>
-      <div class="veld" id="code2-veld" hidden><label for="code2">Code uit uw app <small>Zes cijfers uit uw authenticator-app</small></label><input type="text" id="code2" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>
-      <label class="vink"><input type="checkbox" id="blijf"><span>Ingelogd blijven op deze computer (niet op een gedeelde computer)</span></label>
+      <div class="veld"><label for="naam">Inlognaam</label><input spellcheck="false" type="text" id="naam" name="naam" autocomplete="username" autocapitalize="none"></div>
+      <div class="veld"><label for="ww">Wachtwoord</label><input type="password" id="ww" name="ww" autocomplete="current-password"></div>
+      <div class="veld" id="code2-veld" hidden><label for="code2">Code uit uw app <small>Zes cijfers uit uw authenticator-app</small></label><input spellcheck="false" type="text" id="code2" name="code2" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>
+      <label class="vink"><input type="checkbox" id="blijf" name="blijf"><span>Ingelogd blijven op deze computer (niet op een gedeelde computer)</span></label>
       <button class="knop groen" type="submit">Inloggen</button><p id="m-ww" hidden></p>
       <p class="leeg" style="font-size:.92rem">Wachtwoord kwijt? Vraag een beheerder (bijvoorbeeld Damiën Zeller) om een nieuw wachtwoord.</p></form>
     ${ANDERE_TOEGANG ? `<details class="nood" open><summary>Andere manieren van inloggen</summary>
       <form class="formulier" id="f-code" novalidate><h2 style="font-size:1.4rem">Eigenaar: code via Telegram</h2>
         <button class="knop lijn" type="button" id="stuur">Stuur mij een code</button>
-        <div class="veld" id="code-veld" hidden><label for="code">Code uit Telegram</label><input type="text" id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>
+        <div class="veld" id="code-veld" hidden><label for="code">Code uit Telegram</label><input spellcheck="false" type="text" id="code" name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>
         <button class="knop groen" type="submit" id="code-knop" hidden>Inloggen met code</button><p id="m-code" hidden></p></form>
       <form class="formulier" id="f-nood" novalidate><h2 style="font-size:1.4rem">Noodtoegang</h2><p class="leeg">Alleen als niemand meer kan inloggen. De noodsleutel ligt bij het bestuur. Na gebruik krijgt de eigenaar een bericht.</p>
-        <div class="veld"><label for="sleutel">Noodsleutel</label><input type="password" id="sleutel" autocomplete="off"></div>
+        <div class="veld"><label for="sleutel">Noodsleutel</label><input type="password" id="sleutel" name="sleutel" autocomplete="off"></div>
         <button class="knop lijn" type="submit">Inloggen met de noodsleutel</button><p id="m-nood" hidden></p></form></details>` : ""}</div>`;
   let tussen = "";
   const blijf = () => $("#blijf").checked;
@@ -465,7 +465,7 @@ function rijHtml(r) {
   if (r.bron === "import" && r.aanp && !r.verborgen) labels.push(`<span class="status">Aangepast${r.door ? " door " + esc(r.door) : ""}</span>`);
   const link = siteLink(r);
   const verborgen = r.concept || r.verborgen;
-  return `<li class="rij b-rij${verborgen ? " concept" : ""}"><div><h3>${esc(r.titel)}</h3><p class="bijschrift">${labels.join("")}</p></div>
+  return `<li class="rij b-rij${verborgen ? " concept" : ""}"><div><h2>${esc(r.titel)}</h2><p class="bijschrift">${labels.join("")}</p></div>
     <div class="acties">${r.geraden ? `<button class="knop lijn klein" type="button" data-klopt="${esc(r.ref)}" title="Het geraden stadsdeel klopt">Stadsdeel klopt</button>` : ""}<button class="knop groen klein" type="button" data-bewerk="${esc(r.ref)}">Bewerken</button>
     <button class="knop lijn klein" type="button" data-zicht="${esc(r.ref)}">${verborgen ? "Weer tonen" : "Verbergen"}</button>
     ${link ? `<a class="meer" href="${esc(link)}" target="_blank" rel="noopener">Bekijk</a>` : ""}</div></li>`;
@@ -478,10 +478,10 @@ async function berichten() {
     <div class="knoppen"><button class="knop geel" type="button" id="nieuw">Nieuw bericht</button><button class="knop lijn" type="button" id="nieuw-ag">Nieuwe afspraak</button></div></div>
     <div class="snel" role="group" aria-label="Snel kiezen">${[["", "Alles"], ["eigen", "Door ons geplaatst"], ["verborgen", "Concepten en verborgen"], ["geraden", "Stadsdeel nakijken"]].map(([k, n]) => `<button class="knopje" type="button" data-snel="${k}" aria-pressed="${lijstFilter.status === k}">${n}</button>`).join("")}</div>
     <form class="filterbalk" id="filters" role="search" onsubmit="return false">
-      <div class="veld"><label for="f-q">Zoek</label><input type="search" id="f-q" value="${esc(lijstFilter.q)}" placeholder="Titel, naam of woord"></div>
-      <div class="veld"><label for="f-soort">Soort</label><select id="f-soort">${opt("", "Alles", lijstFilter.soort)}${Object.entries(SOORT_NAAM).map(([k, n]) => opt(k, n, lijstFilter.soort)).join("")}</select></div>
-      <div class="veld"><label for="f-sd">Stadsdeel</label><select id="f-sd">${opt("", "Alle stadsdelen", lijstFilter.sd)}${STADSDELEN.map(s => opt(s, s, lijstFilter.sd)).join("")}${opt("-", "Zonder stadsdeel", lijstFilter.sd)}</select></div>
-      <div class="veld"><label for="f-status">Laat zien</label><select id="f-status">${opt("", "Alles", lijstFilter.status)}${opt("zichtbaar", "Zichtbaar op de site", lijstFilter.status)}${opt("verborgen", "Verborgen en concepten", lijstFilter.status)}${opt("aangepast", "Aangepast", lijstFilter.status)}${opt("eigen", "Hier geplaatst", lijstFilter.status)}${opt("vast", "Bovenaan gezet", lijstFilter.status)}${opt("geraden", "Stadsdeel geraden, nakijken", lijstFilter.status)}</select></div>
+      <div class="veld"><label for="f-q">Zoek</label><input autocomplete="off" type="search" id="f-q" name="f-q" value="${esc(lijstFilter.q)}" placeholder="Titel, naam of woord"></div>
+      <div class="veld"><label for="f-soort">Soort</label><select autocomplete="off" id="f-soort" name="f-soort">${opt("", "Alles", lijstFilter.soort)}${Object.entries(SOORT_NAAM).map(([k, n]) => opt(k, n, lijstFilter.soort)).join("")}</select></div>
+      <div class="veld"><label for="f-sd">Stadsdeel</label><select autocomplete="off" id="f-sd" name="f-sd">${opt("", "Alle stadsdelen", lijstFilter.sd)}${STADSDELEN.map(s => opt(s, s, lijstFilter.sd)).join("")}${opt("-", "Zonder stadsdeel", lijstFilter.sd)}</select></div>
+      <div class="veld"><label for="f-status">Laat zien</label><select autocomplete="off" id="f-status" name="f-status">${opt("", "Alles", lijstFilter.status)}${opt("zichtbaar", "Zichtbaar op de site", lijstFilter.status)}${opt("verborgen", "Verborgen en concepten", lijstFilter.status)}${opt("aangepast", "Aangepast", lijstFilter.status)}${opt("eigen", "Hier geplaatst", lijstFilter.status)}${opt("vast", "Bovenaan gezet", lijstFilter.status)}${opt("geraden", "Stadsdeel geraden, nakijken", lijstFilter.status)}</select></div>
     </form>
     <p class="teller" id="teller" aria-live="polite"></p><ul class="b-lijst" id="lijst"></ul>
     <button class="knop lijn" type="button" id="meer" hidden>Meer laden</button><p id="m-lijst" hidden></p>`);
@@ -541,26 +541,26 @@ async function importEditor(r) {
   ${r.aanp ? `<p class="melding">Laatst aangepast${r.aanp.door ? " door " + esc(r.aanp.door) : ""}${r.aanp.bijgewerkt ? " op " + esc(tijdNL(r.aanp.bijgewerkt)) : ""}.</p>` : ""}
   <form class="formulier" id="ed" style="margin-top:20px" novalidate>
     <div class="velden">
-      <div class="veld breed"><label for="titel">Titel</label><input type="text" id="titel" maxlength="200" value="${esc(nu.titel)}"></div>
-      <div class="veld"><label for="datum">Datum</label><input type="date" id="datum" value="${esc(nu.datum)}"></div>
-      ${isAgenda ? `<div class="veld"><label for="tijd">Tijd</label><input type="time" id="tijd" value="${esc((nu.tijd || "").replace(".", ":"))}"></div>
-        <div class="veld breed"><label for="plek">Plek</label><input type="text" id="plek" value="${esc(nu.plek || "")}"></div>` : ""}
-      ${isRaad ? `<div class="veld"><label for="indiener">Ingediend door</label><input type="text" id="indiener" value="${esc(nu.indiener || "")}" placeholder="Naam van het raadslid"></div>` : ""}
-      ${r.soort === "motie" || r.soort === "amendement" ? `<div class="veld"><label for="status">Uitslag</label><select id="status"><option value="">Nog niet bekend of niet vermeld</option>${STATUSSEN.map(s => `<option${nu.status === s ? " selected" : ""}>${s}</option>`).join("")}</select></div>` : ""}
+      <div class="veld breed"><label for="titel">Titel</label><input autocomplete="off" type="text" id="titel" name="titel" maxlength="200" value="${esc(nu.titel)}"></div>
+      <div class="veld"><label for="datum">Datum</label><input autocomplete="off" type="date" id="datum" name="datum" value="${esc(nu.datum)}"></div>
+      ${isAgenda ? `<div class="veld"><label for="tijd">Tijd</label><input autocomplete="off" type="time" id="tijd" name="tijd" value="${esc((nu.tijd || "").replace(".", ":"))}"></div>
+        <div class="veld breed"><label for="plek">Plek</label><input autocomplete="off" type="text" id="plek" name="plek" value="${esc(nu.plek || "")}"></div>` : ""}
+      ${isRaad ? `<div class="veld"><label for="indiener">Ingediend door</label><input autocomplete="off" type="text" id="indiener" name="indiener" value="${esc(nu.indiener || "")}" placeholder="Naam van het raadslid"></div>` : ""}
+      ${r.soort === "motie" || r.soort === "amendement" ? `<div class="veld"><label for="status">Uitslag</label><select autocomplete="off" id="status" name="status"><option value="">Nog niet bekend of niet vermeld</option>${STATUSSEN.map(s => `<option${nu.status === s ? " selected" : ""}>${s}</option>`).join("")}</select></div>` : ""}
       <fieldset class="veld breed"><legend>Stadsdeel <small>Geen vinkje betekent heel Den Haag</small></legend>${vinkjes("sd", STADSDELEN, nu.stadsdelen)}</fieldset>
       ${isAgenda ? "" : `<fieldset class="veld breed"><legend>Onderwerpen <small>Bepalen bij welke filters het bericht verschijnt</small></legend>${vinkjes("ow", ONDERWERPEN, nu.onderwerpen)}</fieldset>`}
-      <div class="veld breed"><label for="samenvatting">Korte samenvatting <small>Eén of twee zinnen voor de overzichten</small></label><textarea id="samenvatting" maxlength="600" style="min-height:90px">${esc(nu.samenvatting || "")}</textarea></div>
+      <div class="veld breed"><label for="samenvatting">Korte samenvatting <small>Eén of twee zinnen voor de overzichten</small></label><textarea autocomplete="off" id="samenvatting" name="samenvatting" maxlength="600" style="min-height:90px">${esc(nu.samenvatting || "")}</textarea></div>
       ${isAgenda ? "" : `<div class="veld breed" id="tekst-wrap"><span class="label">Tekst</span>
         ${heeftEmbed(o.html) && !a.html ? `<p class="melding" style="margin:6px 0 8px">Deze tekst bevat een video of ingesloten onderdeel. Past u de tekst aan, dan verdwijnt dat onderdeel op de nieuwe site.</p>` : ""}
         ${tekstVeld(schoneHtml(nu.html || ""), "tekst")}</div>`}
       ${isAgenda ? "" : `<div class="veld breed"><span class="label">Foto</span><div id="beeld-blok"></div>
         <div class="knoppen"><label class="knop lijn klein" for="foto">Andere foto kiezen</label><input type="file" id="foto" accept="image/jpeg,image/png,image/webp" class="verborgen-input"><button class="knop lijn klein" type="button" id="foto-weg">Geen foto</button></div>
-        <label for="alt" style="margin-top:10px">Wat staat er op de foto? <small>Voor mensen die de foto niet kunnen zien. Bijvoorbeeld: Raadslid Coen Bom bij de nieuwe speeltuin in Moerwijk.</small></label><input type="text" id="alt" maxlength="200" value="${esc(nu.alt || "")}"></div>`}
+        <label for="alt" style="margin-top:10px">Wat staat er op de foto? <small>Voor mensen die de foto niet kunnen zien. Bijvoorbeeld: Raadslid Coen Bom bij de nieuwe speeltuin in Moerwijk.</small></label><input autocomplete="off" type="text" id="alt" name="alt" maxlength="200" value="${esc(nu.alt || "")}"></div>`}
       ${r.soort === "petitie" ? petitieVelden(nu) : ""}
       <fieldset class="veld breed"><legend>Op de site</legend>
-        ${r.soort === "nieuws" || r.soort === "succes" ? `<label class="vink"><input type="checkbox" id="vast"${nu.vast ? " checked" : ""}><span>Bovenaan zetten (komt als eerste in de lijst en op de voorpagina)</span></label>
-        <div class="veld" id="tot-veld"${nu.vast ? "" : " hidden"}><label for="bovenaanTot">Bovenaan tot en met <small>Leeg: tot u het vinkje weghaalt</small></label><input type="date" id="bovenaanTot" value="${esc(nu.bovenaanTot || "")}"></div>` : ""}
-        <label class="vink"><input type="checkbox" id="verborgen"${nu.verborgen ? " checked" : ""}><span>Verbergen op de site</span></label></fieldset>
+        ${r.soort === "nieuws" || r.soort === "succes" ? `<label class="vink"><input type="checkbox" id="vast" name="vast"${nu.vast ? " checked" : ""}><span>Bovenaan zetten (komt als eerste in de lijst en op de voorpagina)</span></label>
+        <div class="veld" id="tot-veld"${nu.vast ? "" : " hidden"}><label for="bovenaanTot">Bovenaan tot en met <small>Leeg: tot u het vinkje weghaalt</small></label><input autocomplete="off" type="date" id="bovenaanTot" name="bovenaanTot" value="${esc(nu.bovenaanTot || "")}"></div>` : ""}
+        <label class="vink"><input type="checkbox" id="verborgen" name="verborgen"${nu.verborgen ? " checked" : ""}><span>Verbergen op de site</span></label></fieldset>
     </div>
     <div class="knoppen"><button class="knop groen" type="submit">Opslaan</button><button class="knop lijn" type="button" id="bekijk">Voorbeeld</button><button class="knop lijn" type="button" id="annuleer">Annuleren</button>
       ${r.aanp ? `<button class="knop lijn" type="button" id="herstel">Terug naar het origineel</button>` : ""}
@@ -639,26 +639,26 @@ function eigenEditor(i) {
   ${H1(i.id ? "Bericht bewerken" : soortNu === "agenda" ? "Nieuwe afspraak" : "Nieuw bericht")}
   <form class="formulier ed" id="ed" novalidate>
    <div class="ed-raster"><div class="ed-hoofd">
-    <div class="veld ed-soort"><label for="soort">Wat plaatst u?</label><select id="soort">${Object.entries(EIGEN_SOORTEN).map(([k, n]) => `<option value="${k}"${soortNu === k ? " selected" : ""}>${n}</option>`).join("")}</select></div>
+    <div class="veld ed-soort"><label for="soort">Wat plaatst u?</label><select autocomplete="off" id="soort" name="soort">${Object.entries(EIGEN_SOORTEN).map(([k, n]) => `<option value="${k}"${soortNu === k ? " selected" : ""}>${n}</option>`).join("")}</select></div>
     ${stap(1, "De tekst", `<div class="velden">
-      <div class="veld breed"><label for="titel">Titel</label><input type="text" id="titel" maxlength="160" value="${v("titel")}"></div>
-      <div class="veld breed"><label for="samenvatting">Korte samenvatting <small>Eén of twee zinnen. Staat in de overzichten en bij het delen.</small></label><textarea id="samenvatting" maxlength="400" style="min-height:80px">${v("samenvatting")}</textarea></div>
+      <div class="veld breed"><label for="titel">Titel</label><input autocomplete="off" type="text" id="titel" name="titel" maxlength="160" value="${v("titel")}"></div>
+      <div class="veld breed"><label for="samenvatting">Korte samenvatting <small>Eén of twee zinnen. Staat in de overzichten en bij het delen.</small></label><textarea autocomplete="off" id="samenvatting" name="samenvatting" maxlength="400" style="min-height:80px">${v("samenvatting")}</textarea></div>
       <div class="veld breed" id="tekst-wrap"><span class="label">Tekst</span>${tekstVeld(schoneHtml(html), "tekst")}</div></div>`)}
     ${stap(2, "De foto", `<div class="velden"><div class="veld breed"><span class="label">Foto <small>JPG, PNG of WebP. Wordt automatisch verkleind.</small></span><div id="voorbeeld">${i.foto ? `<img class="foto-voorbeeld" src="${fotoUrl(i.foto)}" alt="Huidige foto">` : ""}</div>
         <div class="knoppen"><label class="knop lijn klein" for="foto">Foto kiezen</label><input type="file" id="foto" accept="image/jpeg,image/png,image/webp" class="verborgen-input">${i.foto ? `<button class="knop lijn klein" type="button" id="foto-weg">Geen foto</button>` : ""}</div>
-        <label for="alt" style="margin-top:10px">Wat staat er op de foto? <small>Voor mensen die de foto niet kunnen zien.</small></label><input type="text" id="alt" maxlength="200" value="${v("alt")}"></div></div>`)}
+        <label for="alt" style="margin-top:10px">Wat staat er op de foto? <small>Voor mensen die de foto niet kunnen zien.</small></label><input autocomplete="off" type="text" id="alt" name="alt" maxlength="200" value="${v("alt")}"></div></div>`)}
     ${stap(3, "Waar en wanneer", `<div class="velden">
-      <div class="veld"><label for="datum">Datum</label><input type="date" id="datum" value="${v("datum", vandaag())}"><small data-agenda>De dag van de afspraak.</small></div>
-      <div class="veld" data-agenda><label for="tijd">Tijd</label><input type="time" id="tijd" value="${esc((i.tijd || "").replace(".", ":"))}"></div>
-      <div class="veld breed" data-agenda><label for="plek">Plek</label><input type="text" id="plek" placeholder="Wijkcentrum, straat" value="${v("plek")}"></div>
-      ${i.id ? "" : `<div class="veld breed" data-agenda><label for="herhaal">Herhalen <small>Bijvoorbeeld een spreekuur dat elke maand terugkomt</small></label><div class="herhaal-rij"><select id="herhaal"><option value="">Niet herhalen</option><option value="week">Elke week</option><option value="2week">Elke twee weken</option><option value="maand">Elke maand op dezelfde weekdag</option></select><label for="herhaal-tot" class="verborgen">Tot en met</label><input type="date" id="herhaal-tot" aria-label="Herhalen tot en met"></div><small id="herhaal-uitleg"></small></div>`}
+      <div class="veld"><label for="datum">Datum</label><input autocomplete="off" type="date" id="datum" name="datum" value="${v("datum", vandaag())}"><small data-agenda>De dag van de afspraak.</small></div>
+      <div class="veld" data-agenda><label for="tijd">Tijd</label><input autocomplete="off" type="time" id="tijd" name="tijd" value="${esc((i.tijd || "").replace(".", ":"))}"></div>
+      <div class="veld breed" data-agenda><label for="plek">Plek</label><input autocomplete="off" type="text" id="plek" name="plek" placeholder="Wijkcentrum, straat" value="${v("plek")}"></div>
+      ${i.id ? "" : `<div class="veld breed" data-agenda><label for="herhaal">Herhalen <small>Bijvoorbeeld een spreekuur dat elke maand terugkomt</small></label><div class="herhaal-rij"><select autocomplete="off" id="herhaal" name="herhaal"><option value="">Niet herhalen</option><option value="week">Elke week</option><option value="2week">Elke twee weken</option><option value="maand">Elke maand op dezelfde weekdag</option></select><label for="herhaal-tot" class="verborgen">Tot en met</label><input autocomplete="off" type="date" id="herhaal-tot" name="herhaal-tot" aria-label="Herhalen tot en met"></div><small id="herhaal-uitleg"></small></div>`}
       <fieldset class="veld breed"><legend>Stadsdeel <small>Geen vinkje betekent heel Den Haag</small></legend>${vinkjes("sd", STADSDELEN, sd)}</fieldset></div>`)}
     <div class="velden">${petitieVelden(i)}</div>
     <details class="ed-meer"${(i.link || (i.onderwerpen || []).length || i.vast) ? " open" : ""}><summary>Meer opties <small>onderwerpen, link, bovenaan zetten</small></summary><div class="velden">
       <fieldset class="veld breed" data-geen-agenda><legend>Onderwerpen <small>Niet verplicht</small></legend>${vinkjes("ow", ONDERWERPEN, i.onderwerpen || [])}</fieldset>
-      <div class="veld breed"><label for="link">Link <small>Niet verplicht, begint met https://</small></label><input type="url" id="link" value="${v("link")}"></div>
-      <fieldset class="veld breed" data-vast><legend>Op de site</legend><label class="vink"><input type="checkbox" id="vast"${i.vast ? " checked" : ""}><span>Bovenaan zetten (komt als eerste in de lijst en op de voorpagina)</span></label>
-        <div class="veld" id="tot-veld"${i.vast ? "" : " hidden"}><label for="bovenaanTot">Bovenaan tot en met <small>Leeg: tot u het vinkje weghaalt</small></label><input type="date" id="bovenaanTot" value="${v("bovenaanTot")}"></div></fieldset>
+      <div class="veld breed"><label for="link">Link <small>Niet verplicht, begint met https://</small></label><input spellcheck="false" autocomplete="off" type="url" id="link" name="link" value="${v("link")}"></div>
+      <fieldset class="veld breed" data-vast><legend>Op de site</legend><label class="vink"><input type="checkbox" id="vast" name="vast"${i.vast ? " checked" : ""}><span>Bovenaan zetten (komt als eerste in de lijst en op de voorpagina)</span></label>
+        <div class="veld" id="tot-veld"${i.vast ? "" : " hidden"}><label for="bovenaanTot">Bovenaan tot en met <small>Leeg: tot u het vinkje weghaalt</small></label><input autocomplete="off" type="date" id="bovenaanTot" name="bovenaanTot" value="${v("bovenaanTot")}"></div></fieldset>
     </div></details>
    </div>
    <aside class="ed-zij" aria-label="Controle">
@@ -782,7 +782,7 @@ function gepubliceerdScherm(b, antwoord) {
   const wacht = antwoord.deelpagina === "snel" ? "na ongeveer twee minuten" : "binnen een half uur";
   app.innerHTML = kader(`<div class="klaar"><p class="klaar-vink" aria-hidden="true">✓</p>${H1("Gepubliceerd")}
     <p class="inleiding"><b>${esc(b.titel.trim())}</b> staat binnen een minuut op de site.</p>
-    <div class="klaar-link"><label for="deel-url">Link om te delen</label><div class="nb-rij"><input type="text" id="deel-url" readonly value="${esc(url)}"><button class="knop groen" type="button" id="kopieer">Kopieer link</button></div>
+    <div class="klaar-link"><label for="deel-url">Link om te delen</label><div class="nb-rij"><input spellcheck="false" autocomplete="off" type="text" id="deel-url" name="deel-url" readonly value="${esc(url)}"><button class="knop groen" type="button" id="kopieer">Kopieer link</button></div>
       <small>Het voorbeeld met foto werkt in WhatsApp en LinkedIn ${wacht}.</small><p id="m-klaar" hidden></p></div>
     <div class="knoppen" style="margin-top:18px"><a class="knop lijn" href="https://wa.me/?text=${encodeURIComponent(b.titel.trim() + " " + url)}" target="_blank" rel="noopener">Deel via WhatsApp</a><a class="knop lijn" href="${esc(url)}" target="_blank" rel="noopener">Bekijk op de site</a></div>
     <div class="knoppen" style="margin-top:26px"><button class="knop geel" type="button" id="nog-een">Nog een bericht plaatsen</button><button class="link-knop" type="button" id="naar-lijst">Naar alle berichten</button><button class="link-knop" type="button" id="naar-start">Naar Start</button></div></div>`);
@@ -823,11 +823,11 @@ async function postvak() {
     <p class="inleiding">Berichten via de formulieren op de site. Afgehandelde berichten gaan naar het archief en zijn terug te zetten. Na een jaar wist het postvak berichten vanzelf (behalve aanmeldingen voor de nieuwsbrief).</p>
     ${ongedaan && ongedaan.tot > Date.now() ? `<p class="melding toast" role="status">Bericht van ${esc(ongedaan.naam)} staat in het archief. <button class="knop lijn klein" type="button" id="ongedaan">Ongedaan maken</button></p>` : ""}
     <form class="filterbalk" id="pf" role="search" onsubmit="return false" style="margin-top:18px">
-      <div class="veld"><label for="p-q">Zoek</label><input type="search" id="p-q" value="${esc(postFilter.q)}" placeholder="Naam, e-mail, straat of kenmerk"></div>
-      <div class="veld"><label for="p-soort">Soort</label><select id="p-soort"><option value="">Alles</option>${Object.entries(FORM_NAAM).map(([k, n]) => `<option value="${k}"${postFilter.soort === k ? " selected" : ""}>${n}${aantal(k) !== "" ? ` (${aantal(k)} open)` : ""}</option>`).join("")}</select></div>
-      <div class="veld"><label for="p-status">Status</label><select id="p-status"><option value="nieuw"${postFilter.status === "nieuw" ? " selected" : ""}>Open</option><option value="afgehandeld"${postFilter.status === "afgehandeld" ? " selected" : ""}>Archief</option><option value=""${!postFilter.status ? " selected" : ""}>Alles</option></select></div>
-      ${postFilter.soort === "petitie" ? `<div class="veld"><label for="p-pet">Petitie</label><select id="p-pet"><option value="">Alle petities</option>${petities.map(t => `<option${t === postFilter.petitie ? " selected" : ""}>${esc(t)}</option>`).join("")}</select></div>` : ""}
-      ${postFilter.soort === "aanmelding" ? `<div class="veld"><label for="p-act">Bijeenkomst</label><select id="p-act"><option value="">Alle bijeenkomsten</option>${activiteiten.map(t => `<option${t === postFilter.activiteit ? " selected" : ""}>${esc(t)}</option>`).join("")}</select></div>` : ""}
+      <div class="veld"><label for="p-q">Zoek</label><input autocomplete="off" type="search" id="p-q" name="p-q" value="${esc(postFilter.q)}" placeholder="Naam, e-mail, straat of kenmerk"></div>
+      <div class="veld"><label for="p-soort">Soort</label><select autocomplete="off" id="p-soort" name="p-soort"><option value="">Alles</option>${Object.entries(FORM_NAAM).map(([k, n]) => `<option value="${k}"${postFilter.soort === k ? " selected" : ""}>${n}${aantal(k) !== "" ? ` (${aantal(k)} open)` : ""}</option>`).join("")}</select></div>
+      <div class="veld"><label for="p-status">Status</label><select autocomplete="off" id="p-status" name="p-status"><option value="nieuw"${postFilter.status === "nieuw" ? " selected" : ""}>Open</option><option value="afgehandeld"${postFilter.status === "afgehandeld" ? " selected" : ""}>Archief</option><option value=""${!postFilter.status ? " selected" : ""}>Alles</option></select></div>
+      ${postFilter.soort === "petitie" ? `<div class="veld"><label for="p-pet">Petitie</label><select autocomplete="off" id="p-pet" name="p-pet"><option value="">Alle petities</option>${petities.map(t => `<option${t === postFilter.petitie ? " selected" : ""}>${esc(t)}</option>`).join("")}</select></div>` : ""}
+      ${postFilter.soort === "aanmelding" ? `<div class="veld"><label for="p-act">Bijeenkomst</label><select autocomplete="off" id="p-act" name="p-act"><option value="">Alle bijeenkomsten</option>${activiteiten.map(t => `<option${t === postFilter.activiteit ? " selected" : ""}>${esc(t)}</option>`).join("")}</select></div>` : ""}
     </form>
     <div class="knoppen" style="margin:6px 0 10px"><button class="knop lijn klein" type="button" id="download">Download deze lijst (Excel)</button><span class="zacht" style="font-size:.9rem">${postFilter.soort === "petitie" ? "Bijvoorbeeld voor het overhandigen van een petitie." : "Alleen met wat u hierboven koos."} Bevat persoonsgegevens: bewaar het bestand niet langer dan nodig.</span></div>
     <p class="teller" aria-live="polite">${post.length}${d.meer ? "+" : ""} ${post.length === 1 ? "bericht" : "berichten"}</p>
@@ -913,13 +913,13 @@ async function mensen() {
     <p class="inleiding">Wie mag inloggen en wat ze mogen. Geef iemand een inlognaam en een wachtwoord van minstens tien tekens. Stuur het wachtwoord apart, bijvoorbeeld via Signal.</p>
     <dl class="rollen"><dt>Redacteur</dt><dd>Berichten plaatsen en aanpassen, het postvak afhandelen.</dd><dt>Beheerder</dt><dd>Alles wat een redacteur mag, plus mensen toegang geven of intrekken en een reservekopie maken. Zorg dat er altijd minstens twee zijn.</dd></dl>
     ${beheerders === 0 ? `<p class="melding waarschuwing" role="status"><b>Er is nog geen beheerder naast de eigenaar.</b> Voeg er minstens één toe, bijvoorbeeld de fractievoorzitter of de secretaris.</p>` : ""}
-    <ul class="b-lijst" style="margin-top:20px">${gebruikers.length ? gebruikers.map(g => `<li class="rij b-rij"><div><h3>${esc(g.weergave)}</h3><p class="bijschrift"><span>inlognaam ${esc(g.naam)}</span><span class="status">${esc(ROL_NAAM[g.rol] || g.rol)}</span>${g.gemaakt ? `<span class="zacht">sinds ${esc(datumNL(g.gemaakt))}</span>` : ""}</p></div>
+    <ul class="b-lijst" style="margin-top:20px">${gebruikers.length ? gebruikers.map(g => `<li class="rij b-rij"><div><h2>${esc(g.weergave)}</h2><p class="bijschrift"><span>inlognaam ${esc(g.naam)}</span><span class="status">${esc(ROL_NAAM[g.rol] || g.rol)}</span>${g.gemaakt ? `<span class="zacht">sinds ${esc(datumNL(g.gemaakt))}</span>` : ""}</p></div>
       <div class="acties"><button class="knop lijn klein" type="button" data-wijzig="${esc(g.naam)}">Rol of wachtwoord</button><button class="knop lijn klein" type="button" data-weg="${esc(g.naam)}">Toegang intrekken</button></div></li>`).join("") : `<li class="leeg">Nog niemand anders.</li>`}</ul>
     <form class="formulier" id="nieuw" style="margin-top:28px;max-width:680px" novalidate><h2 style="font-size:1.6rem" id="nieuw-kop">Iemand toegang geven</h2>
-      <div class="velden"><div class="veld"><label for="g-weergave">Naam</label><input type="text" id="g-weergave" placeholder="Voor- en achternaam"></div>
-      <div class="veld"><label for="g-naam">Inlognaam</label><input type="text" id="g-naam" autocapitalize="none" placeholder="bijvoorbeeld voornaam"></div>
-      <div class="veld"><label for="g-rol">Rol</label><select id="g-rol"><option value="redacteur">Redacteur</option><option value="beheerder">Beheerder</option></select></div>
-      <div class="veld"><label for="g-ww">Wachtwoord</label><input type="text" id="g-ww" autocomplete="new-password"><small id="ww-uitleg">Bij een bestaande inlognaam: leeg laten houdt het oude wachtwoord.</small><small><button class="knop lijn klein" type="button" id="bedenk" style="margin-top:6px">Bedenk een sterk wachtwoord</button></small></div></div>
+      <div class="velden"><div class="veld"><label for="g-weergave">Naam</label><input autocomplete="off" type="text" id="g-weergave" name="g-weergave" placeholder="Voor- en achternaam"></div>
+      <div class="veld"><label for="g-naam">Inlognaam</label><input spellcheck="false" autocomplete="off" type="text" id="g-naam" name="g-naam" autocapitalize="none" placeholder="bijvoorbeeld voornaam"></div>
+      <div class="veld"><label for="g-rol">Rol</label><select autocomplete="off" id="g-rol" name="g-rol"><option value="redacteur">Redacteur</option><option value="beheerder">Beheerder</option></select></div>
+      <div class="veld"><label for="g-ww">Wachtwoord</label><input spellcheck="false" type="text" id="g-ww" name="g-ww" autocomplete="new-password"><small id="ww-uitleg">Bij een bestaande inlognaam: leeg laten houdt het oude wachtwoord.</small><small><button class="knop lijn klein" type="button" id="bedenk" style="margin-top:6px">Bedenk een sterk wachtwoord</button></small></div></div>
       <button class="knop groen" type="submit">Opslaan</button><p id="m-g" hidden></p></form>`);
   koppelKader();
   $("#bedenk").addEventListener("click", () => {
@@ -949,8 +949,8 @@ async function account() {
   app.innerHTML = kader(`${H1("Mijn account")}
     <p class="inleiding">U bent ingelogd als <b>${esc(sessie.naam)}</b>, ${esc((ROL_NAAM[sessie.rol] || sessie.rol).toLowerCase())}.</p>
     ${sessie.login ? `<form class="formulier" id="f-ww" style="margin-top:20px;max-width:520px" novalidate><h2 style="font-size:1.6rem">Wachtwoord wijzigen</h2>
-      <div class="veld"><label for="oud">Huidig wachtwoord</label><input type="password" id="oud" autocomplete="current-password"></div>
-      <div class="veld"><label for="nieuw-ww">Nieuw wachtwoord <small>Minstens tien tekens</small></label><input type="password" id="nieuw-ww" autocomplete="new-password"></div>
+      <div class="veld"><label for="oud">Huidig wachtwoord</label><input type="password" id="oud" name="oud" autocomplete="current-password"></div>
+      <div class="veld"><label for="nieuw-ww">Nieuw wachtwoord <small>Minstens tien tekens</small></label><input type="password" id="nieuw-ww" name="nieuw-ww" autocomplete="new-password"></div>
       <button class="knop groen" type="submit">Wachtwoord wijzigen</button><p id="m-ww" hidden></p></form>`
       : `<p class="leeg" style="margin-top:16px">U logt in met een code via Telegram of met de noodsleutel, dus u heeft hier geen wachtwoord.</p>`}
     ${sessie.login ? `<section class="formulier" id="f-2fa" style="margin-top:24px;max-width:620px"><h2 style="font-size:1.6rem">Tweestapsverificatie</h2>
@@ -967,7 +967,7 @@ async function account() {
         $("#tfa").innerHTML = `<ol class="uitleg-lijst"><li>Open de app op uw telefoon en kies <b>account toevoegen</b>.</li>
           <li>Tik op uw telefoon op <a href="${esc(url)}">deze link</a>, of typ deze sleutel over: <div class="code-blok">${esc(geheim.replace(/(.{4})/g, "$1 ").trim())}</div></li>
           <li>Vul de code van zes cijfers in die de app nu laat zien.</li></ol>
-          <div class="veld"><label for="tfa-code">Code uit de app</label><input type="text" id="tfa-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>
+          <div class="veld"><label for="tfa-code">Code uit de app</label><input spellcheck="false" type="text" id="tfa-code" name="tfa-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div>
           <button class="knop groen" type="button" id="tfa-aan">Aanzetten</button>`;
         $("#tfa-aan").addEventListener("click", async e2 => {
           const k2 = bezig(e2.target, "Bezig…");
@@ -977,7 +977,7 @@ async function account() {
       } catch (err) { klaar(); melding($("#m-2fa"), err.message, true); }
     });
     $("#tfa-uit-knop").addEventListener("click", () => {
-      $("#tfa").innerHTML = `<div class="veld"><label for="tfa-uit-code">Code uit de app om uit te zetten</label><input type="text" id="tfa-uit-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div><button class="knop lijn" type="button" id="tfa-uit">Uitzetten</button>`;
+      $("#tfa").innerHTML = `<div class="veld"><label for="tfa-uit-code">Code uit de app om uit te zetten</label><input spellcheck="false" type="text" id="tfa-uit-code" name="tfa-uit-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></div><button class="knop lijn" type="button" id="tfa-uit">Uitzetten</button>`;
       $("#tfa-uit").addEventListener("click", async e => {
         const klaar = bezig(e.target, "Bezig…");
         try { await vraag("/2fa/uit", { method: "POST", body: { code: $("#tfa-uit-code").value.trim() } }); melding($("#m-2fa"), "Tweestapsverificatie staat uit."); $("#tfa").innerHTML = ""; }
