@@ -65,6 +65,10 @@ Er zijn drie delen. Geen framework, geen bouwstap, geen database-server.
 
 **Mails.** De teksten van de bevestigingsmails staan bovenin `worker.js` in `MAILTEKSTEN`. Ze gaan pas de deur uit als `BREVO_KEY` en `MAIL_AFZENDER` zijn gezet.
 
+## Ontwerpregels
+
+Wie aan de vormgeving werkt, houdt zich aan `ONTWERPREGELS.md` in de hoofdmap van de repository: een afvinklijst voor toegankelijkheid, formulieren, tikken, beweging, beeld en tekst, plus wat er niet in hoort. Snelle controle: `python3 tools/ontwerp/controle.py`.
+
 ## Lokaal testen
 
 ```

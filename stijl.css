@@ -594,3 +594,8 @@ a.titel[href^="http"]:not([href*="damienzeller.nl"])::after,a.vtitel[href^="http
   .buurt-kop .doc-foto img{aspect-ratio:16/10;object-fit:cover}
 }
 .voet p a,.onderwerpen-voet a{display:inline-block;padding-block:12px;margin-block:-12px}
+
+/* 17 november 2026: Web Interface Guidelines (Vercel) naast Impeccable. Zie DESIGN.md, Regels. */
+/* tikken zonder vertraging van dubbeltik-zoom, en een eigen tikkleur in plaats van de grijze van de browser */
+a,button,input,select,textarea,summary,label,[role="button"]{touch-action:manipulation}
+html{-webkit-tap-highlight-color:rgba(30,148,90,.18)}

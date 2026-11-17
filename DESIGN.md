@@ -57,3 +57,7 @@ dossiers.json is de enige bron voor de zeventien dossiers, de thema's en de herk
 - portret-uit.webp, portret.jpg, foto.jpg, deel.jpg en logo.png: aangeleverd door Damiën.
 - fotos/*.jpg (Rietbuurt, team in het stadsdeel, flyer Ypenburg, politieke avond): aangeleverd door Damiën op 25 okt 2026. Verkleind naar 1400 en 720 px, zonder metadata. Gebruik: Rietbuurt bij Uw buurt, politieke avond bij Over, team en flyer bovenaan de stadsdeelpagina. Twee andere foto's (sportveld met jongeren, keukentafel) staan bewust niet op de site tot er toestemming is van de mensen die erop staan.
 - **Doc-foto** (`.doc-foto`): eigen foto, 4:3, radius 18, met het gewone bijschrift (plek · wat). Nooit stockfoto's of gegenereerde beelden.
+
+## Regels
+
+Elke wijziging haalt de lijst in ONTWERPREGELS.md (Impeccable plus de Web Interface Guidelines van Vercel). Snelle controle: `python3 tools/ontwerp/controle.py`.

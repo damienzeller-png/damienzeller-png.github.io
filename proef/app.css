@@ -801,7 +801,6 @@ li:hover .lees-meer,.lead:hover .lees-meer{text-decoration:underline}
 .podcast-hoes{display:block;border-radius:6px;overflow:hidden;box-shadow:0 10px 28px rgba(0,0,0,.14);transition:transform .2s ease}
 .podcast-hoes:hover{transform:translateY(-3px)}
 .podcast-hoes img{display:block;width:100%;height:auto}
-.podcast .bovenregel{font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:.85rem;color:var(--link);margin:0 0 6px}
 .podcast h2{margin:0 0 10px}
 .podcast .knoppen{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
 @media (max-width:640px){.podcast-blok{grid-template-columns:1fr}.podcast-hoes{max-width:220px}}
@@ -1099,3 +1098,10 @@ fieldset .ander-onderwerp{margin:12px 0 0}
 @media (max-width:900px){.held.held-vol{padding-top:32px}.held-vol .held-onder{margin-top:28px}}
 /* heel laag scherm (telefoon dwars): de opening mag hoger worden dan het scherm */
 @media (max-height:520px){.held.held-vol{min-height:0}}
+
+/* 17 november 2026: Web Interface Guidelines (Vercel) naast Impeccable. Zie DESIGN.md, Regels. */
+/* tikken zonder vertraging van dubbeltik-zoom, en een eigen tikkleur in plaats van de grijze van de browser */
+a,button,input,select,textarea,summary,label,[role="button"]{touch-action:manipulation}
+html{-webkit-tap-highlight-color:rgba(30,148,90,.18)}
+/* het menu scrolt zelf, de pagina erachter niet mee */
+.lade-paneel{overscroll-behavior:contain}

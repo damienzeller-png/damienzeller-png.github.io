@@ -71,7 +71,7 @@ HVDH.TURNSTILE = "";
 </div></aside>
 <div class="lade" id="lade" hidden>
   <nav class="lade-paneel" aria-label="Menu" role="dialog" aria-modal="true">
-    <div class="lade-kop"><img class="logo-licht" src="${B}beeld/logo.svg" alt="" height="30"><button class="ikoon-knop" type="button" id="lade-dicht" aria-label="Menu sluiten"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <div class="lade-kop"><img class="logo-licht" src="${B}beeld/logo.svg" alt="" width="132" height="30"><button class="ikoon-knop" type="button" id="lade-dicht" aria-label="Menu sluiten"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
     ${a("nieuws/", "Nieuws", ' class="hoofd"')}${a("stadsdelen/", "Uw stadsdeel", ' class="hoofd"')}${a("agenda/", "Agenda en spreekuren", ' class="hoofd"')}${a("contact/melding/", "Meld een probleem", ' class="hoofd"')}${a("contact/", "Contact", ' class="hoofd"')}
     <p class="lade-groep">Raadswerk</p>
     <div class="lade-links">${a("raadswerk/", "Moties en vragen")}${a("successen/", "Successen")}${a("petities/", "Petities")}${a("onderwerpen/", "Dossiers")}</div>
@@ -90,7 +90,7 @@ HVDH.TURNSTILE = "";
       <div><img class="logo-licht" src="${B}beeld/logo.svg" alt="Hart voor Den Haag" width="172" height="40" loading="lazy"><p class="zin">De grootste lokale partij van Den Haag. Zichtbaar in de wijken, dicht bij de Hagenaar.</p></div>
       <form class="nieuwsbrief" id="nieuwsbrief" novalidate>
         <label for="nb-email">Nieuwsbrief: elke maand wat we deden</label>
-        <div class="nb-rij"><input type="email" id="nb-email" name="email" autocomplete="email" placeholder="uw@email.nl"><button class="knop geel klein" type="submit">Aanmelden</button></div>
+        <div class="nb-rij"><input type="email" id="nb-email" name="email" autocomplete="email" spellcheck="false" autocapitalize="off" placeholder="uw@email.nl"><button class="knop geel klein" type="submit">Aanmelden</button></div>
         <p class="uitslag" hidden></p>
         <a class="nb-wa" href="${WA}" target="_blank" rel="noopener">${WA_SVG}Of volg ons WhatsApp-kanaal</a>
       </form>

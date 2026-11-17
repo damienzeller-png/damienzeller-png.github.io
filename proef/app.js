@@ -460,7 +460,7 @@ pagina.home = async () => {
 
   <section class="band podcast" aria-labelledby="h-podcast"><div class="wrap podcast-blok">
     <a class="podcast-hoes" href="https://open.spotify.com/show/0GI8mwNvxU1g3YUPhiJCeV" target="_blank" rel="noopener"><img src="${U("beeld/den-haag-inside.webp")}" alt="Hoes van de podcast Den Haag Inside" width="640" height="640" loading="lazy" decoding="async"></a>
-    <div><p class="bovenregel">Podcast</p><h2 id="h-podcast">Den Haag Inside</h2>
+    <div><h2 id="h-podcast">Podcast Den Haag Inside</h2>
       <p class="inleiding">Elke twee weken gaat Richard de Mos achter de schermen van Den Haag, met openhartige gesprekken en scherpe vragen aan bekende Hagenaars, raadsleden en politici.</p>
       <p class="knoppen"><a class="knop groen" href="https://open.spotify.com/show/0GI8mwNvxU1g3YUPhiJCeV" target="_blank" rel="noopener">Luister op Spotify</a><a class="knop lijn" href="https://www.youtube.com/@hartvoordenhaag" target="_blank" rel="noopener">Kijk op YouTube</a></p></div>
   </div></section>`;
@@ -676,7 +676,7 @@ function filterBalk(pad, f, tel = null, s = "") {
     <div class="filterrij">
       <div class="veld"><label for="f-sd">Stadsdeel</label><select id="f-sd"><option value="">Hele stad${aantal("", f.onderwerp)}</option>${STADSDELEN.map(x => `<option value="${x}"${x === f.stadsdeel ? " selected" : ""}>${x}${aantal(x, f.onderwerp)}</option>`).join("")}</select></div>
       <div class="veld"><label for="f-o">Onderwerp</label><select id="f-o"><option value="">Alle onderwerpen${aantal(f.stadsdeel, "")}</option>${ONDERWERPEN.map(x => `<option value="${x}"${x === f.onderwerp ? " selected" : ""}>${x}${aantal(f.stadsdeel, x)}</option>`).join("")}</select></div>
-      <div class="veld"><label for="f-zoek">Zoek in deze lijst</label><input type="search" id="f-zoek" value="${esc(f.zoek)}" placeholder="Bijvoorbeeld parkeren of Moerwijk"></div>
+      <div class="veld"><label for="f-zoek">Zoek in deze lijst</label><input type="search" id="f-zoek" autocomplete="off" value="${esc(f.zoek)}" placeholder="Bijvoorbeeld parkeren of Moerwijk"></div>
       ${n ? `<p class="wis-filters"><a class="meer" href="${U(pad)}">Wis filters</a></p>` : ""}
     </div></details>
     <p class="teller" id="teller" aria-live="polite"></p>`;
@@ -802,7 +802,7 @@ async function detail(id) {
     ${open ? `<form class="formulier" id="teken" style="margin-top:22px" novalidate><h2 style="font-size:2rem">Teken deze petitie</h2>
       <input type="hidden" name="petitie" value="${esc(i.titel)}">
       <div class="velden"><div class="veld"><label for="p-naam">Naam</label><input type="text" id="p-naam" name="naam" autocomplete="name"></div>
-      <div class="veld"><label for="p-email">E-mailadres</label><input type="email" id="p-email" name="email" autocomplete="email"></div>
+      <div class="veld"><label for="p-email">E-mailadres</label><input type="email" id="p-email" name="email" autocomplete="email" spellcheck="false" autocapitalize="off"></div>
       <div class="veld breed"><label for="p-sd">Stadsdeel <small>(niet verplicht)</small></label><select id="p-sd" name="stadsdeel">${stadsdeelOpties((i.stadsdelen || [])[0])}</select></div></div>
       ${akkoordVeld("petitie")}<p class="uitslag" hidden></p><button class="knop groen" type="submit">Teken de petitie</button></form>` : ""}
     ${(() => { const tekst = i.html || `<p>${esc(i.samenvatting)}</p>`, leegje = isPetitie && zonderTags(tekst).length < 80;
@@ -969,7 +969,7 @@ pagina.fractie = async ([wie]) => {
   const alle = [...new Set(fractie.flatMap(f => f.portefeuilles))].sort((a, b) => a.localeCompare(b, "nl"));
   return paginaKop("Onze mensen", "Zestien raadsleden van Hart voor Den Haag. Zoek op onderwerp wie erover gaat, of kies een stadsdeel.") + `
     <section class="wit"><div class="wrap">
-      <div class="filterrij"><div class="veld"><label for="wie">Wie gaat over…</label><input type="search" id="wie" list="pf-lijst" placeholder="Bijvoorbeeld parkeren, onderwijs of strand"><datalist id="pf-lijst">${alle.map(p => `<option value="${esc(p)}">`).join("")}</datalist></div>
+      <div class="filterrij"><div class="veld"><label for="wie">Wie gaat over…</label><input type="search" id="wie" autocomplete="off" list="pf-lijst" placeholder="Bijvoorbeeld parkeren, onderwijs of strand"><datalist id="pf-lijst">${alle.map(p => `<option value="${esc(p)}">`).join("")}</datalist></div>
         <div class="veld"><label for="wie-sd">Stadsdeel</label><select id="wie-sd"><option value="">Alle stadsdelen</option>${STADSDELEN.map(x => `<option>${x}</option>`).join("")}<option>Hele stad</option></select></div>
         <p class="teller" id="teller" aria-live="polite"></p></div>
       <div id="groepen"></div>
@@ -1042,7 +1042,7 @@ pagina.agenda = async ([stap], q) => {
         <input type="hidden" name="activiteit" value="${esc(a.titel)}"><input type="hidden" name="datum" value="${esc(a.datum)}">
         <div class="velden">
           <div class="veld"><label for="a-naam">Naam</label><input type="text" id="a-naam" name="naam" autocomplete="name"></div>
-          <div class="veld"><label for="a-email">E-mailadres</label><input type="email" id="a-email" name="email" autocomplete="email"></div>
+          <div class="veld"><label for="a-email">E-mailadres</label><input type="email" id="a-email" name="email" autocomplete="email" spellcheck="false" autocapitalize="off"></div>
           <div class="veld"><label for="a-tel">Telefoonnummer <small>(niet verplicht)</small></label><input type="tel" id="a-tel" name="telefoon" autocomplete="tel"></div>
           <div class="veld"><label for="a-aantal">Met hoeveel personen?</label><select id="a-aantal" name="aantal">${[1, 2, 3, 4, 5, 6].map(n => `<option>${n}</option>`).join("")}</select></div>
           <div class="veld breed"><label for="a-ber">Vraag of onderwerp dat u wilt bespreken <small>(niet verplicht)</small></label><textarea id="a-ber" name="bericht" maxlength="1500"></textarea></div></div>
@@ -1110,7 +1110,7 @@ pagina["doe-mee"] = async () => paginaKop("Doe mee en maak uw buurt beter", "Den
       <div class="velden">
         <div class="veld"><label for="f-naam">Naam</label><input type="text" id="f-naam" name="naam" autocomplete="name"></div>
         <div class="veld"><label for="f-tel">Telefoonnummer</label><input type="tel" id="f-tel" name="telefoon" autocomplete="tel"></div>
-        <div class="veld"><label for="f-email">E-mailadres</label><input type="email" id="f-email" name="email" autocomplete="email"></div>
+        <div class="veld"><label for="f-email">E-mailadres</label><input type="email" id="f-email" name="email" autocomplete="email" spellcheck="false" autocapitalize="off"></div>
         <div class="veld"><label for="f-sd">Ik woon in stadsdeel</label><select id="f-sd" name="stadsdeel">${stadsdeelOpties(opslag.lees("stadsdeel") || "")}</select></div>
         </div>
       <details class="extra-veld"><summary>Iets toevoegen</summary><div class="veld"><label for="f-ber">Wat moeten we weten? <small>(niet verplicht)</small></label><textarea id="f-ber" name="bericht" maxlength="1500"></textarea></div></details>
@@ -1158,7 +1158,7 @@ pagina.contact = async ([sub], q) => {
       <div class="velden">
         <div class="veld"><label for="c-naam">Naam</label><input type="text" id="c-naam" name="naam" autocomplete="name"></div>
         <div class="veld"><label for="c-tel">Telefoonnummer</label><input type="tel" id="c-tel" name="telefoon" autocomplete="tel"></div>
-        <div class="veld"><label for="c-email">E-mailadres</label><input type="email" id="c-email" name="email" autocomplete="email"></div>
+        <div class="veld"><label for="c-email">E-mailadres</label><input type="email" id="c-email" name="email" autocomplete="email" spellcheck="false" autocapitalize="off"></div>
         <div class="veld"><label for="c-sd">Stadsdeel</label><select id="c-sd" name="stadsdeel">${stadsdeelOpties(sd)}</select></div>
         <div class="veld breed" id="plek-veld"><label for="c-plek">Waar is het? <small>Straat en huisnummer of een herkenningspunt</small></label>
           <div class="plek-rij"><input type="text" id="c-plek" name="plek" autocomplete="street-address"><button class="knop lijn klein" type="button" id="mijn-plek">Gebruik mijn locatie</button></div>
@@ -1310,9 +1310,9 @@ pagina.lid = async () => paginaKop("Word lid", "Met meer leden zijn we sterker. 
       <fieldset class="stap" data-stap="2" hidden><legend>Uw gegevens</legend>
         <div class="velden">
           <div class="veld"><label for="l-naam">Naam</label><input type="text" id="l-naam" name="naam" autocomplete="name"></div>
-          <div class="veld"><label for="l-email">E-mailadres</label><input type="email" id="l-email" name="email" autocomplete="email"></div>
+          <div class="veld"><label for="l-email">E-mailadres</label><input type="email" id="l-email" name="email" autocomplete="email" spellcheck="false" autocapitalize="off"></div>
           <div class="veld"><label for="l-pc">Postcode</label><input type="text" id="l-pc" name="postcode" autocomplete="postal-code"></div>
-          <div class="veld"><label for="l-nr">Huisnummer</label><input type="text" id="l-nr" name="huisnummer"></div>
+          <div class="veld"><label for="l-nr">Huisnummer</label><input type="text" id="l-nr" name="huisnummer" autocomplete="off"></div>
           <div class="veld"><label for="l-sd">Stadsdeel</label><select id="l-sd" name="stadsdeel">${stadsdeelOpties()}</select><small id="l-sd-hint"></small></div>
           <div class="veld"><label for="l-tel">Telefoonnummer <small>(niet verplicht)</small></label><input type="tel" id="l-tel" name="telefoon" autocomplete="tel"></div></div>
         <fieldset><legend>Wilt u ook actief worden?</legend><div class="keuzes kort">
@@ -1320,8 +1320,8 @@ pagina.lid = async () => paginaKop("Word lid", "Met meer leden zijn we sterker. 
           <div class="keuze"><input type="radio" name="actief" id="ac2" value="later"><label for="ac2"><b>Misschien later</b></label></div>
           <div class="keuze"><input type="radio" name="actief" id="ac3" value="nee"><label for="ac3"><b>Nee, alleen lid</b></label></div></div></fieldset>
         <div class="velden">
-          <div class="veld"><label for="l-door">Wie bracht u aan? <small>(niet verplicht)</small></label><input type="text" id="l-door" name="aangebracht"></div>
-          <div class="veld"><label for="l-waarom">Waarom wordt u lid? <small>(niet verplicht)</small></label><input type="text" id="l-waarom" name="waarom" maxlength="200"></div></div>
+          <div class="veld"><label for="l-door">Wie bracht u aan? <small>(niet verplicht)</small></label><input type="text" id="l-door" name="aangebracht" autocomplete="off"></div>
+          <div class="veld"><label for="l-waarom">Waarom wordt u lid? <small>(niet verplicht)</small></label><input type="text" id="l-waarom" name="waarom" autocomplete="off" maxlength="200"></div></div>
         <div class="knoppen"><button class="knop lijn" type="button" data-naar="1">Terug</button><button class="knop groen" type="button" data-naar="3">Volgende: betalen</button></div></fieldset>
       <fieldset class="stap" data-stap="3" hidden><legend>Controleren en betalen</legend>
         <input type="hidden" name="betaal" value="incasso">
@@ -1419,7 +1419,7 @@ pagina.doneren = async () => paginaKop("Doneren", "Geen lid, wel steunen? Elke b
       <div class="velden">
         <div class="veld"><label for="d-naam">Naam</label><input type="text" id="d-naam" name="naam" autocomplete="name"></div>
         <div class="veld"><label for="d-plaats">Woonplaats</label><input type="text" id="d-plaats" name="plaats" autocomplete="address-level2"></div>
-        <div class="veld breed"><label for="d-email">E-mailadres</label><input type="email" id="d-email" name="email" autocomplete="email"></div></div>
+        <div class="veld breed"><label for="d-email">E-mailadres</label><input type="email" id="d-email" name="email" autocomplete="email" spellcheck="false" autocapitalize="off"></div></div>
       <label class="vink" id="groot-veld" hidden><input type="checkbox" name="grootbevestigd" id="d-groot" value="1"><span id="groot-tekst"></span></label>
       <button class="knop geel" type="submit" id="doneer-knop">Doneer € 25 met iDEAL</button><p class="uitslag" hidden></p></form>
     <div><h2>Waar uw geld heen gaat</h2><ul class="voordelen">
@@ -1557,7 +1557,7 @@ async function zoekPagina(args, q, gevraagd = "") {
   pagina.zoeken.lijst = treffers.map(i => `<li><h3><a href="${U(i.p || "s/" + encodeURIComponent(i.id) + "/")}" data-stuk="${esc(i.id)}">${licht(i.t)}</a></h3><p class="bijschrift">${i.sd && i.sd.length ? `<span class="plek">${esc(i.sd.join(" en "))}</span>` : ""}<span>${esc(SOORT[i.s].naam)}</span>${i.st ? `<span class="status">${esc(i.st)}</span>` : ""}<time datetime="${esc(i.d)}">${datum(i.d)}</time></p>${i.x ? `<p class="sam">${licht(knipsel(i.x))}</p>` : ""}</li>`);
   return paginaKop("Zoeken", term && pagina.zoeken.voorlopig ? `Zoeken naar "${esc(term)}"…` : term ? (!totaal && direct.length ? `${direct.length === 1 ? "Eén pagina" : direct.length + " pagina's"} gevonden voor "${esc(term)}"` : `${fmt.format(totaal)} ${totaal === 1 ? "resultaat" : "resultaten"} voor "${esc(term)}"`) : "Zoek in al het nieuws, de successen, het raadswerk en de petities sinds 2012.") + `
     <section class="wit"><div class="wrap">
-      <form id="zoek2" role="search" class="zoek2" action="${U("zoeken/")}"><label class="verborgen" for="zoek2-veld">Zoekterm</label><input type="search" id="zoek2-veld" name="q" value="${esc(term)}" placeholder="Bijvoorbeeld Moerwijk, parkeren of Kwartellaan"><button class="knop groen klein" type="submit">Zoeken</button></form>
+      <form id="zoek2" role="search" class="zoek2" action="${U("zoeken/")}"><label class="verborgen" for="zoek2-veld">Zoekterm</label><input type="search" id="zoek2-veld" autocomplete="off" name="q" value="${esc(term)}" placeholder="Bijvoorbeeld Moerwijk, parkeren of Kwartellaan"><button class="knop groen klein" type="submit">Zoeken</button></form>
       ${term ? `<nav class="filters" aria-label="Soort">${ZOEK_SOORTEN.filter(([s]) => !s || perSoort[s]).map(([s, n]) => `<a class="knopje" href="${href({ soort: s })}"${s === welk ? ' aria-current="page"' : ""}>${n}${s ? ` <small>${fmt.format(perSoort[s])}</small>` : ""}</a>`).join("")}</nav>
       <p class="sorteer">Sorteer op: ${sorteer === "datum" ? `<a href="${href({ sorteer: "" })}">beste treffer</a> · <b>nieuwste eerst</b>` : `<b>beste treffer</b> · <a href="${href({ sorteer: "datum" })}">nieuwste eerst</a>`}</p>` : ""}
       ${gevraagd ? `<p class="melding">Niets gevonden voor "${esc(gevraagd)}". Hieronder de resultaten voor <b>${esc(term)}</b>. <a href="${U("zoeken/?q=" + encodeURIComponent(gevraagd))}&exact=1">Toch zoeken op "${esc(gevraagd)}"</a></p>` : ""}
@@ -1690,7 +1690,7 @@ pagina.english.titel = () => "In English";
 
 pagina.nietgevonden = async () => paginaKop("Deze pagina bestaat niet (meer)", "Misschien is het adres veranderd, of zit er een tikfout in.") + `
   <section class="wit"><div class="wrap">
-    <form class="zoek2" role="search" id="zoek404" action="${U("zoeken/")}"><label for="zoek404-veld">Zoek op de site</label><input type="search" id="zoek404-veld" name="q" placeholder="Bijvoorbeeld parkeren of Moerwijk"><button class="knop groen klein" type="submit">Zoeken</button></form>
+    <form class="zoek2" role="search" id="zoek404" action="${U("zoeken/")}"><label for="zoek404-veld">Zoek op de site</label><input type="search" id="zoek404-veld" autocomplete="off" name="q" placeholder="Bijvoorbeeld parkeren of Moerwijk"><button class="knop groen klein" type="submit">Zoeken</button></form>
     <ul class="dossiers" style="margin-top:26px"><li><a href="${U("nieuws/")}"><b>Nieuws</b>${PIJL}</a></li><li><a href="${U("raadswerk/")}"><b>Raadswerk</b>${PIJL}</a></li><li><a href="${U("stadsdelen/")}"><b>Uw stadsdeel</b>${PIJL}</a></li><li><a href="${U("contact/")}"><b>Contact</b>${PIJL}</a></li></ul>
   </div></section>`;
 pagina.nietgevonden.na = () => $("#zoek404").addEventListener("submit", e => { e.preventDefault(); const t = $("#zoek404-veld").value.trim(); if (t) gaNaar(U("zoeken/?q=" + encodeURIComponent(t))); });
