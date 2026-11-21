@@ -266,6 +266,7 @@ buurt-en-sportverenigingen-massaal-tegen-schrappen-daal-en-bergselaan/index.html
 buurt-vraagt-om-verkeersdrempels-in-onveilige-oudemansstraat/index.html
 buurtclubs-te-hulp-te-schieten/index.html
 buurthuis-puntzuid-moet-sociale-functie-behouden/index.html
+buurtkamer-de-luyk-kan-ook-in-2027-door/index.html
 buurtonderzoek-in-segbroek/index.html
 buurtonderzoek-in-waterwijk-ypenburg/index.html
 bvnl-en-hart-voor-den-haag-eisen-onmiddellijke-sluiting-van-haagse-moskee-die-wilde-meewerken-aan-kortstondig-uithuwelijken-voor-seks-en-geld/index.html
@@ -969,6 +970,7 @@ haagse-wannabe-jihadis-preventief-behandelen-als-verwarde-personen/index.html
 haagse-woningcorporatie-vestia-is-gek-geworden/index.html
 haal-dat-popmuseum-nu-eindelijk-eens-hierheen/index.html
 haal-de-haagse-klimaatweek-door-de-papiershredder/index.html
+haal-dumpafval-weg-voor-de-eerste-jaarwisseling-met-vuurwerkverbod/index.html
 haal-meer-toeristen-naar-zuid-holland/index.html
 haast-maken-met-restauratie-verzetsmonument-nassauplein/index.html
 hagenaars-te-lang-in-onzekerheid-over-gevonden-voorwerpen-gemeente-den-haag/index.html
@@ -6051,6 +6053,7 @@ raadsvraag/20-november-2019-schriftelijke-vragen-ijsbaan-op-het-plein-afgeblazen
 raadsvraag/20-november-2019-schriftelijke-vragen-weesvoertuigen-vogelwijk/index.html
 raadsvraag/20-november-2020-schriftelijke-vragen-20-parkeerplaatsen-verdwenen-nabij-buurthuis-morgenstond/index.html
 raadsvraag/20-november-2020-schriftelijke-vragen-studentenvoorzieningen-blijven-achter/index.html
+raadsvraag/20-november-schriftelijke-vragen-brandstichting-in-bijplaatsingen-en-gedumpt-grofvuil-rond-de-jaarwisseling/index.html
 raadsvraag/20-oktober-2016-schriftelijke-vragen-voorstel-htm-schrappen-bussen-in-avonduren/index.html
 raadsvraag/20-oktober-2020-schriftelijke-vragen-behoud-parkeerplaatsen-zwarte-pad/index.html
 raadsvraag/20-oktober-2021-schriftelijke-vragen-weer-racende-fietsers-uit-smalle-halstraat/index.html
@@ -12833,6 +12836,8 @@ s/n114633/index.html
 s/n114636/index.html
 s/n114638/index.html
 s/n114650/index.html
+s/n114676/index.html
+s/n114679/index.html
 s/p109318/index.html
 s/p109585/index.html
 s/p110026/index.html
@@ -14764,6 +14769,7 @@ s/r114571/index.html
 s/r114595/index.html
 s/r114601/index.html
 s/r114618/index.html
+s/r114675/index.html
 s/s100257/index.html
 s/s100261/index.html
 s/s100400/index.html
