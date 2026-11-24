@@ -573,6 +573,7 @@ gebiedsverbod-bij-winkelcentrum-leidschenveen/index.html
 gebiedsverbod-voor-reltuig/index.html
 gebrekkige-vastgoedcommunicatie-binnen-de-gemeente/index.html
 gebroken-verkiezingsbelofte-hsp/index.html
+geef-a1-supermarkt-een-plek-in-de-ley/index.html
 geef-anarchistisch-tuig-een-gebiedsverbod-voor-de-schilderswijk/index.html
 geef-de-keizerstraat-haar-glans-terug/index.html
 geef-de-oude-puch-weer-ruim-baan/index.html
@@ -3333,6 +3334,7 @@ meer-beschutting-bij-nieuwe-tramhalte-leyweg/index.html
 meer-concierges/index.html
 meer-dan-21-000-euro-opgehaald-door-hart-voor-den-haag-voor-bestrijding-kanker/index.html
 meer-investeringen-om-ploftrams-tegen-te-gaan/index.html
+meer-licht-op-donkere-plekken-aanpak-gaat-vier-jaar-door/index.html
 meer-mogelijkheden-voor-duindorpers-om-in-de-wijk-te-blijven-wonen/index.html
 meer-muziekkoepels-bestaande-muziektenten-vaker-gebruiken/index.html
 meer-samenwerking-tussen-den-haag-en-rotterdam/index.html
@@ -6296,6 +6298,7 @@ raadsvraag/24-mei-2022-schriftelijke-vragen-onmiddellijke-sluiting-van-haagse-mo
 raadsvraag/24-mei-schriftelijke-vragen-terrassen-om-en-nabij-de-maliebrug/index.html
 raadsvraag/24-november-schriftelijke-vragen-blokkade-woningbouwprojecten-neherkade-en-loosduinsekade/index.html
 raadsvraag/24-november-schriftelijke-vragen-toekomst-van-de-mets-tennisbanen-bij-het-100-jarig-jubileum/index.html
+raadsvraag/24-november-schriftelijke-vragen-verdwijnen-a1-supermarkt-ongewenst-voor-de-buurt/index.html
 raadsvraag/24-oktober-2017-schriftelijke-vragen-luchtalarm/index.html
 raadsvraag/24-oktober-2020-schriftelijke-vragen-containers-naast-snackkiosk-loosduinen/index.html
 raadsvraag/24-oktober-2022-schriftelijke-vragen-islamitische-priveschool/index.html
@@ -12843,6 +12846,10 @@ s/n114638/index.html
 s/n114650/index.html
 s/n114676/index.html
 s/n114679/index.html
+s/n114683/index.html
+s/n114685/index.html
+s/n114690/index.html
+s/n114698/index.html
 s/p109318/index.html
 s/p109585/index.html
 s/p110026/index.html
@@ -14775,6 +14782,7 @@ s/r114595/index.html
 s/r114601/index.html
 s/r114618/index.html
 s/r114675/index.html
+s/r114697/index.html
 s/s100257/index.html
 s/s100261/index.html
 s/s100400/index.html
@@ -15232,6 +15240,7 @@ stadsdelen/scheveningen/index.html
 stadsdelen/segbroek/index.html
 standpunten/index.html
 start-hart-voor-den-haag-afval-challenge-op-de-internationale-dag-van-het-milieu/index.html
+starterslening-voorrang-voor-haagse-jongeren/index.html
 statement-haagse-pjos/index.html
 statement-ismet-bingol-bij-persconferentie/index.html
 statement-mairan-sewtahal-bij-persconferentie/index.html
@@ -15254,6 +15263,7 @@ steun-voor-richard-de-mos-en-rachid-guernaoui/index.html
 stop-bezuinigingen-openbaar-vervoer/index.html
 stop-de-afvalterreur/index.html
 stop-de-heksenjacht-op-onze-partij-onderzoeken-guernaoui-en-davituliani-moeten-direct-worden-geseponeerd/index.html
+stop-het-geweld-in-wateringse-veld/index.html
 stop-kansloos-gestapel-met-strandbedden-laat-ondernemers-zelf-strand-schoonmaken/index.html
 stop-karaktermoord-hardwerkende-ondernemers/index.html
 stop-mega-zonnepark-naast-leidschenveen-hart-voor-den-haag-steunt-bewonersoproep-tegen-aantasting-groene-buffer/index.html
