@@ -673,6 +673,7 @@ gevaarlijke-kruispunten-in-segbroek/index.html
 gevaarlijke-plekken-rond-de-savornin-lohmanplein-snel-aanpakken/index.html
 gevaarlijke-speeltuin-hannemanplantsoen-vereist-dringend-aandacht/index.html
 geweld-achter-de-voordeur-mag-nooit-normaal-worden/index.html
+geweld-tegen-vrouwen-moet-stoppen/index.html
 gezicht-vreugdevuur-scheveningen-op-kandidatenlijst-groep-de-mos/index.html
 goede-burgerparticipatie-op-scheveningen/index.html
 goede-zaken-bij-legoland-debat/index.html
@@ -12850,6 +12851,9 @@ s/n114683/index.html
 s/n114685/index.html
 s/n114690/index.html
 s/n114698/index.html
+s/n114701/index.html
+s/n114703/index.html
+s/n114706/index.html
 s/p109318/index.html
 s/p109585/index.html
 s/p110026/index.html
@@ -15286,6 +15290,7 @@ striktere-handhaving-bedelverbod-centrum-den-haag/index.html
 strukton-bij-het-grofvuil/index.html
 studeerkamerpoliticologie/index.html
 succes-aanstelling-winkelstraatmanager-loosduinen/index.html
+succes-met-hondenstrandje-aan-de-blauwe-loper/index.html
 succes_post/30kmu-in-bankastraat/index.html
 succes_post/aangenomen-hart-voor-den-haag-motie-zorgt-voor-compensatie-scheveningers-voor-verruimen-betaald-parkeren/index.html
 succes_post/aangenomen-hart-voor-den-haag-motie-zorgt-voor-meer-aandacht-herdenken-en-vieren-80-jaar-vrijheid/index.html
@@ -15767,6 +15772,7 @@ wethouders-komen-hun-belofte-niet-na-en-duperen-de-leyweg/index.html
 wethouders-revis-en-baldewsingh-moeten-huiswaarts-na-zoveelste-verlies/index.html
 wethouders/index.html
 wie-het-kleine-niet-eert-is-het-grote-niet-weerd/index.html
+wie-op-een-rolstoel-of-scootmobiel-wacht-moet-op-de-gemeente-kunnen-rekenen/index.html
 wieringsepad-veiliger-na-aandacht-van-groep-de-mos/index.html
 wijkaanpak-nieuwe-stijl/index.html
 wijkje-koningstraat-heeft-aandacht-nodig/index.html
